@@ -1,0 +1,300 @@
+.info {
+    background: rgb(239, 239, 239);
+}
+
+.info-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.guide-title {
+    padding: 0.3em 0 0.1em 0.3em;
+    width: 50%;
+    float: left;
+}
+
+.header-buttons {
+    width: 50%;
+    float: right;
+    display: flex;
+    flex-direction: row;
+}
+
+.reporting-button {
+    margin-top: 3%;
+    left: 0%;
+    margin-right: 5%;
+    margin-left: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    height: fit-content;
+}
+
+.info-header .close-button {
+    align-self: center;
+    cursor: pointer;
+    padding-right: 1em;
+    padding-top: 0.05em;
+    width: 10%;
+}
+
+.info-header .edit-button {
+    align-self: center;
+    cursor: pointer;
+    padding-right: 1em;
+    padding-top: 0.05em;
+    width: 15%;
+}
+
+.header-buttons:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.info-header:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.flow-weather-section {
+    display: flex;
+    flex-direction: row;
+}
+
+.flow-graph {
+    width: 50%;
+    float: left;
+    height: 300px;
+}
+weather-forecast {
+    width: 50%;
+    float: right;
+    height: 300px;
+}
+
+.weather-info {
+    float: right;
+    text-align: center;
+}
+
+.tag-container {
+    display: flex;
+    flex-direction: row;
+    margin-left: 1em;
+}
+
+.tag-item {
+    width: fit-content;
+    margin-right: 2%;
+}
+
+.last-updated-flow {
+    margin-left: 1em;
+    margin-top: 1em;
+    font-size: 0.8em;
+}
+
+.info-content {
+    padding: 2em 4em 2em 1em;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.guide-description {
+    height: fit-content;
+}
+
+.guide-map {
+    height: 300px;
+}
+
+.edit-icon {
+    height: 50px;
+    right: 5%;
+}
+.close-icon {
+    height: 50px;
+    left: 0%;
+    align-self: left;
+}
+
+.info-map {
+    height: 300px;
+    display: flex;
+    flex-direction: row;
+}
+
+.info-map-buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.weather-info {
+    display: flex;
+    flex-direction: column;
+    border-style: none;
+    padding: 10px;
+    width: 50%;
+}
+
+.weather-data {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.forecast-element {
+    /* background-color: rgb(185, 224, 238); */
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+    width: 120px;
+    padding: 10px;
+    height: 300px;
+}
+
+.weather-element {
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+}
+
+.weather-temp {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    width: 60px;
+}
+
+.current-weather-temp {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.weather-details {
+    font-size: 15px;
+    text-align: left;
+}
+
+
+.weather-credit-button {
+    background-color: lightblue;
+    border-radius: 10px;
+    margin-left: 10px;
+    border: none;
+}
+.weather-credit-button:focus {
+    outline: none
+}
+
+.weather-wind{
+    border-radius: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: rgb(162, 186, 172);
+    align-self: center;
+    position: relative;
+}
+
+
+.wind-speed {
+    z-index: 10;
+    vertical-align: -webkit-baseline-middle;
+}
+
+.temp-text {
+    font-size: 12px;
+}
+
+.wind-text {
+    display: inline-flex;
+    font-size: 12px;
+}
+
+.weather-day {
+    font-size: 14px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.weather-wind-direction {
+    display: flex;
+    flex-direction: column;
+}
+
+.icon-summary {
+    display: flex;
+    flex-direction: column;
+}
+
+.summary-text {
+    font-size: 12px;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.current-temp {
+    font-size: 20px;
+    display: inline-flex;
+    padding: 10px 10px 2px 8px;
+}
+
+.current-wind-details {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 10px 20px 2px;
+}
+
+.current-wind-text {
+    font-size: 20px;
+    display: inline-flex;
+    width: fit-content;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.weather-icon {
+    height: 60px;
+}
+
+.current-weather-icon {
+    height: 50px;
+    margin-top: 10px;
+}
+
+.sunrise-icon {
+    height: 30px;
+}
+
+.map-marker {
+    color: #007bff99;
+}
+
+.current-weather-card {
+    display: inline-flex;
+    margin-left: 20px;
+    height: fit-content;
+    align-self: bottom;
+}
+
+.flow-badge {
+    margin-left: 10px;
+}
+
+.tags {
+    display: inline-flex;
+}
+
+.map-cluster {
+    background-color: green;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    text-align: center;
+    align-content: center;
+}

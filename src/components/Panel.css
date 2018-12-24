@@ -1,0 +1,156 @@
+.control-bar {
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.panel-layout {
+    display: flex;
+}
+
+.right-panel {
+    float: right;
+    width: 70%;
+    overflow-y: auto;
+}
+
+.left-panel {
+    width: 30%;
+    float: left;
+    z-index: 1;
+    overflow-y: auto;
+    border: 1px solid lightgrey;
+}
+
+.panel-layout:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.searchBar {
+    padding-left: 3%;
+    padding-top: 5px;
+    position: relative;
+    background-color: white;
+    height: 30px;
+    width: 30%;
+    border: 0;
+}
+
+.searchBox {
+    padding-left: 3%;
+    padding-top: 5px;
+    position: relative;
+    background-color: white;
+    height: 30px;
+    border: 0;
+}
+
+input.form-control-lg.form-control {
+    border: 1px solid #343a40;
+}
+.flowBadge {
+    float: right;
+    margin-right: 1em;
+}
+.gradeBadge {
+    float: right;
+}
+
+.list-container {
+    height: 76vh;
+    padding: 0 0 0 0;
+    width: 100%;
+    background-color: white;
+    align-content: left;
+}
+
+.person-button {
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+}
+
+.person-button-hover {
+    height: 40px;
+    width: 40px;
+    background-color: #a7d7f9;
+    border-radius: 20px;
+}
+
+.person-icon {
+    float: right;
+    position: relative;
+    right: 40%;
+    cursor: pointer;
+    padding-right: 1em;
+    padding-top: 0.05em;
+}
+
+.person-count {
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.person-count-value {
+    float: right;
+    position: relative;
+    right: 40%;
+    cursor: pointer;
+    padding-right: 1em;
+    padding-top: 0.05em;
+    border-radius: 20px;
+}
+
+.control-bar-drop-down {
+    float: right;
+    position: relative;
+    border: 0;
+    min-width: 100px;
+    border-radius: 0px;
+    padding-right: 1em;
+}
+
+.control-bar-drop-down__control {
+    border: 0;
+    border-color: white !important;
+    min-width: 130px;
+    border-radius: 0px !important;
+    float: right;
+    position: relative;
+}
+
+.drop-down-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.report-button {
+    display: inline-flex;
+    background-color: green;
+    border: 0;
+    cursor: pointer;
+    border-radius: 5px;
+    height: 40px;
+    color: white;
+    align-self: center;
+    margin-top: 3%;
+    left: 0%;
+    margin-right: 10%;
+    margin-left: 5%;
+    width: 25%;
+}
+
+/* Transition styles */
+.slide-appear {
+    transform: translateX(-100%);
+}
+
+.slide-appear.slide-appear-active {
+    transform: translate(0%);
+    transition: transform 500ms ease-in-out;
+}

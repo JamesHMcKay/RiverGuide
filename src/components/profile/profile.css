@@ -1,0 +1,45 @@
+.container {
+    max-width: 720px !important;
+    padding-top: 50px;
+    overflow: auto;
+}
+
+.profile-banner p {
+    font-size: 0.8em;
+    text-align: center;
+}
+
+.profile-img {
+    border-radius: 5px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.logbook-title {
+    padding-top: 20px;
+}
+
+.logbook-content {
+    padding-top: 20px;
+}
+
+.logbook-content .list-group {
+    width: 720px;
+    overflow: auto;
+}
+
+.card-header {
+    cursor: pointer;
+}
+
+.card-header .open-icon {
+    color: #212529;
+    display: inline;
+    float: right;
+}
+
+.card-body .button-group {
+    float: right;
+    margin: 0.5em;
+}
