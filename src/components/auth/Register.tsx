@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import classnames from "classnames";
 import zxcvbn from "zxcvbn";
-
+import { State } from '../../reducers/index';
 import { toggleModal, registerUser } from "../../actions/actions";
+import { IRegisterData, IAuth } from '../../utils/types';
 
 import {
     Button,
@@ -21,11 +22,30 @@ import {
     Progress
 } from "reactstrap";
 
-class Register extends Component {
-    constructor() {
-        super();
+interface IRegisterState {
+    name: string;
+    email: string;
+    password: string;
+    password2: string;
+    showPassword: boolean;
+    passwordScore: number;
+    passwordColor:  string;
+    errors: any;
+}
+
+interface IReigsterProps {
+    isOpen: boolean;
+    toggleModal: (modal: string) => void;
+    registerUser: (userData: IRegisterData) => void,
+    auth: IAuth,
+    errors: any
+}
+
+class Register extends Component<IReigsterProps, IRegisterState> {
+    constructor(props: IReigsterProps) {
+        super(props);
         this.state = {
-            username: "",
+            name: "",
             email: "",
             password: "",
             password2: "",
@@ -36,7 +56,6 @@ class Register extends Component {
         };
 
         this.closeModal = this.closeModal.bind(this);
-        this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.togglePassword = this.togglePassword.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
@@ -48,7 +67,7 @@ class Register extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps: IReigsterProps) {
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
         }
@@ -58,11 +77,19 @@ class Register extends Component {
         this.setState({ showPassword: !this.state.showPassword });
     }
 
-    onChange(e) {
-        this.setState({ [e.target.name]: e.target.value });
+    onNameChange = (e: any): void => {
+        this.setState({ name: e.target.value });
     }
 
-    onPasswordChange(e) {
+    onEmailChange = (e: any): void => {
+        this.setState({ email: e.target.value });
+    }
+
+    onPassword2Change = (e: any): void => {
+        this.setState({ password2: e.target.value });
+    }
+
+    onPasswordChange(e: any) {
         var checkPassword = zxcvbn(e.target.value),
             score = checkPassword.score + 1,
             color;
@@ -91,27 +118,27 @@ class Register extends Component {
         }
 
         this.setState({
-            [e.target.name]: e.target.value,
+            password: e.target.value,
             passwordScore: score,
             passwordColor: color
         });
     }
 
-    onSubmit(e) {
+    onSubmit(e: any) {
         e.preventDefault();
 
-        const newUser = {
+        const newUser: IRegisterData = {
             name: this.state.name,
             email: this.state.email,
             password: this.state.password,
             password2: this.state.password2
         };
 
-        this.props.registerUser(newUser, this.props.history);
+        this.props.registerUser(newUser);
     }
 
     closeModal() {
-        this.props.toggleModal();
+        this.props.toggleModal("registerModal");
     }
 
     render() {
@@ -133,7 +160,7 @@ class Register extends Component {
                                 name="name"
                                 id="name"
                                 value={this.state.name}
-                                onChange={this.onChange}
+                                onChange={this.onNameChange}
                             />
                             {errors.data &&
                                 errors.data.name && (
@@ -153,7 +180,7 @@ class Register extends Component {
                                 name="email"
                                 id="email"
                                 value={this.state.email}
-                                onChange={this.onChange}
+                                onChange={this.onEmailChange}
                             />
                             {errors.data &&
                                 errors.data.email && (
@@ -221,7 +248,7 @@ class Register extends Component {
                                     name="password2"
                                     id="password2"
                                     value={this.state.password2}
-                                    onChange={this.onChange}
+                                    onChange={this.onPassword2Change}
                                 />
                                 {errors.data &&
                                     errors.data.password2 && (
@@ -253,7 +280,7 @@ Register.propTypes = {
     errors: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: State) => ({
     isOpen: state.openModal === "registerModal",
     auth: state.auth,
     errors: state.errors

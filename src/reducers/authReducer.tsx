@@ -5,11 +5,16 @@ import {
     ADD_TO_FAVOURITES,
     REMOVE_FROM_FAVOURITES
 } from "../actions/types";
-import { IAuth } from "../utils/types";
+import { IAuth, IUser } from "../utils/types";
+
+const initialUser: IUser = {
+    favourites: [],
+    email: "",
+}
 
 const initialState: IAuth = {
     isAuthenticated: false,
-    user: {}
+    user: initialUser,
 };
 
 export default function(state = initialState, action: any) {

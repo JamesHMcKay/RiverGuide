@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import classnames from "classnames";
 import zxcvbn from "zxcvbn";
+import { State } from '../../reducers/index';
+import { IAuth, IUserData } from '../../utils/types';
 
 import { toggleModal, changePassword } from "../../actions/actions";
 
@@ -21,9 +23,29 @@ import {
     Progress
 } from "reactstrap";
 
-class ChangePassword extends Component {
-    constructor() {
-        super();
+interface IChangePasswordState {
+    password: string;
+    newPassword: string;
+    newPassword2: string;
+    passwordScore: number;
+    passwordColor: string;
+    showPassword: boolean;
+    showOldPassword: boolean;
+    errors: any;
+}
+
+interface IChangePasswordProps {
+    isOpen: boolean;
+    toggleModal: (modal: string) => void;
+    changePassword: (userData: IUserData) => void,
+    auth: IAuth,
+    errors: any
+}
+
+
+class ChangePassword extends Component<IChangePasswordProps, IChangePasswordState> {
+    constructor(props: IChangePasswordProps) {
+        super(props);
         this.state = {
             password: "",
             newPassword: "",
@@ -36,14 +58,13 @@ class ChangePassword extends Component {
         };
 
         this.closeModal = this.closeModal.bind(this);
-        this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.togglePassword = this.togglePassword.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
         this.toggleOldPassword = this.toggleOldPassword.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps: IChangePasswordProps) {
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
         }
@@ -57,11 +78,15 @@ class ChangePassword extends Component {
         this.setState({ showPassword: !this.state.showPassword });
     }
 
-    onChange(e) {
-        this.setState({ [e.target.name]: e.target.value });
+    onChangePassword = (e: any): void => {
+        this.setState({ password: e.target.value });
     }
 
-    onPasswordChange(e) {
+    onChangeNewPassWord2 = (e: any): void => {
+        this.setState({ newPassword2: e.target.value });
+    }
+
+    onPasswordChange(e: any) {
         var checkPassword = zxcvbn(e.target.value),
             score = checkPassword.score + 1,
             color;
@@ -90,27 +115,28 @@ class ChangePassword extends Component {
         }
 
         this.setState({
-            [e.target.name]: e.target.value,
+            newPassword: e.target.value,
             passwordScore: score,
             passwordColor: color
         });
     }
 
-    onSubmit(e) {
+    onSubmit(e: any) {
         e.preventDefault();
 
-        const updateUser = {
+        const updateUser: IUserData = {
             email: this.props.auth.user.email,
             password: this.state.password,
             newPassword: this.state.newPassword,
             newPassword2: this.state.newPassword2
         };
 
-        this.props.changePassword(updateUser, this.props.history);
+        //this.props.changePassword(updateUser, this.props.history);
+        this.props.changePassword(updateUser);
     }
 
     closeModal() {
-        this.props.toggleModal();
+        this.props.toggleModal("changePasswordModal");
     }
 
     render() {
@@ -139,7 +165,7 @@ class ChangePassword extends Component {
                                     name="password"
                                     id="password"
                                     value={this.state.password}
-                                    onChange={this.onChange}
+                                    onChange={this.onChangePassword}
                                 />
                                 <InputGroupAddon addonType="append">
                                     <Button onClick={this.toggleOldPassword}>
@@ -213,7 +239,7 @@ class ChangePassword extends Component {
                                 name="newPassword2"
                                 id="newPassword2"
                                 value={this.state.newPassword2}
-                                onChange={this.onChange}
+                                onChange={this.onChangeNewPassWord2}
                             />
                             {errors.data &&
                                 errors.data.newPassword2 && (
@@ -244,7 +270,7 @@ ChangePassword.propTypes = {
     errors: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: State) => ({
     isOpen: state.openModal === "changePasswordModal",
     auth: state.auth,
     errors: state.errors

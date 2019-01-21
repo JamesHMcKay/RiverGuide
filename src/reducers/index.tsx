@@ -26,6 +26,7 @@ export interface State {
     mapBounds: IMapBounds;
     openLog: boolean;
     category: string;
+    errors: any;
 }
 
 export default combineReducers({

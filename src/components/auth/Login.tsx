@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import classnames from "classnames";
+import { State } from '../../reducers/index';
+import { ILoginDetails } from '../../utils/types';
 
 import { toggleModal, loginUser } from "../../actions/actions";
 
@@ -19,23 +21,36 @@ import {
     ModalHeader
 } from "reactstrap";
 
-class Welcome extends Component {
-    constructor() {
-        super();
+interface ILoginState {
+    email: string;
+    password: string;
+    showPassword: boolean;
+    errors: any;
+}
+
+interface ILoginProps {
+    errors: any;
+    isOpen: boolean;
+    toggleModal: (modal: string) => void;
+    loginUser: (details: ILoginDetails) => void;
+}
+
+class Login extends Component<ILoginProps, ILoginState> {
+    constructor(props: ILoginProps) {
+        super(props);
         this.state = {
             email: "",
             password: "",
-            showPassword: "",
+            showPassword: false,
             errors: {}
         };
 
         this.closeModal = this.closeModal.bind(this);
-        this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.togglePassword = this.togglePassword.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps: ILoginProps) {
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
         }
@@ -45,14 +60,18 @@ class Welcome extends Component {
         this.setState({ showPassword: !this.state.showPassword });
     }
 
-    onChange(e) {
-        this.setState({ [e.target.name]: e.target.value });
+    onChangeEmail = (e: any): void => {
+        this.setState({ email: e.target.value });
     }
 
-    onSubmit(e) {
+    onChangePassword = (e: any): void => {
+        this.setState({ password: e.target.value });
+    }
+
+    onSubmit(e: any) {
         e.preventDefault();
 
-        const userData = {
+        const userData: ILoginDetails = {
             email: this.state.email,
             password: this.state.password
         };
@@ -61,7 +80,7 @@ class Welcome extends Component {
     }
 
     closeModal() {
-        this.props.toggleModal();
+        this.props.toggleModal("loginModal");
     }
 
     render() {
@@ -69,10 +88,11 @@ class Welcome extends Component {
 
         return (
             <Modal isOpen={this.props.isOpen} toggle={this.closeModal}>
-                <ModalHeader toggle={this.closeModal}>Welcome!</ModalHeader>
+                <ModalHeader toggle={this.closeModal}>
+                    Welcome back!
+                </ModalHeader>
                 <Form onSubmit={this.onSubmit}>
                     <ModalBody>
-                        <p>Please login to begin</p>
                         <FormGroup>
                             <Label for="email">Email</Label>
                             <Input
@@ -84,7 +104,7 @@ class Welcome extends Component {
                                 name="email"
                                 id="email"
                                 value={this.state.email}
-                                onChange={this.onChange}
+                                onChange={this.onChangeEmail}
                             />
                             {errors.data &&
                                 errors.data.email && (
@@ -109,7 +129,7 @@ class Welcome extends Component {
                                     name="password"
                                     id="password"
                                     value={this.state.password}
-                                    onChange={this.onChange}
+                                    onChange={this.onChangePassword}
                                 />
                                 <InputGroupAddon addonType="append">
                                     <Button onClick={this.togglePassword}>
@@ -141,15 +161,15 @@ class Welcome extends Component {
     }
 }
 
-Welcome.propTypes = {
+Login.propTypes = {
     toggleModal: PropTypes.func.isRequired,
     loginUser: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
-    isOpen: state.openModal === "welcomeModal",
+const mapStateToProps = (state: State) => ({
+    isOpen: state.openModal === "loginModal",
     auth: state.auth,
     errors: state.errors
 });
@@ -157,4 +177,4 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     { toggleModal, loginUser }
-)(Welcome);
+)(Login);

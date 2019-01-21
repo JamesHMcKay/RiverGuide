@@ -1,3 +1,5 @@
+import { string } from "prop-types";
+
 export interface IMarker {
     title: string;
 }
@@ -44,13 +46,31 @@ export interface IFilter {
     values: string,
 }
 
+export interface ILoginDetails {
+    email: string;
+    password: string;
+}
+
+export interface IRegisterData {
+    name: string;
+    email: string;
+    password: string;
+    password2: string;
+}
+
+export interface IUserData extends ILoginDetails {
+    newPassword: string;
+    newPassword2: string;
+}
+
 export interface IUser {
-    favourites: IGuide[];
+    favourites: string[];
+    email: string;
 }
 
 export interface IAuth {
     isAuthenticated: boolean;
-    user: any;
+    user: IUser;
 }
 
 export interface ILatLon {

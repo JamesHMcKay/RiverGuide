@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import MapGL, { Marker, FlyToInterpolator } from "react-map-gl";
-import ReactDOM from "react-dom";
+import MapGL, { Marker, FlyToInterpolator, ViewState } from "react-map-gl";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import MapMarker from './MapMarker';
 import MapCluster from './MapCluster';
 import * as kmeans from 'node-kmeans';
 import WebMercatorViewport from 'viewport-mercator-project';
 import { IGuide } from '../../utils/types';
-import { IMapBounds, IMarker, ILatLon } from '../../models';
+import { IMapBounds, ILatLon } from '../../models';
 import { IMapDimensions } from '../Panel';
 import { IViewport } from "./InfoMapComponent";
 
@@ -19,8 +18,6 @@ const TOKEN =
     "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqbXZ0bnp6dzA3NG0zc3BiYjMxaWJrcTIifQ.BKESeoXyOqkiB8j1sjbxQg";
 
 interface IMapComponentProps {
-    // mapWidth: number;
-    // mapHeight: number;
     guides: IGuide[];
     filteredGuides: IGuide[];
     onClick: (guide: IGuide) => void;
@@ -55,7 +52,6 @@ interface IBoundingBox {
     minLat: number;
     minLon: number;
 }
-
 
 export class MapComponent extends Component<IMapComponentProps, IMapComponentState> {
     prevZoom: number = 0;
@@ -292,6 +288,17 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
         }
     }
 
+    setViewport(newViewport: ViewState): void {
+        let viewport: IViewport = {
+            width: this.state.viewport.width,
+            height: this.state.viewport.height,
+            latitude: newViewport.latitude,
+            longitude: newViewport.longitude,
+            zoom: newViewport.zoom,
+        };
+        this.setState({ viewport });
+    }
+
     render() {
         let viewport: IViewport = {
             width: this.props.mapDimensions.width,
@@ -306,7 +313,7 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
                 ref={map => this.mapRef = map}
                 mapStyle="mapbox://styles/mapbox/outdoors-v9"
                 {...viewport}
-                // onViewportChange={viewport => this.setState({ viewport })}
+                onViewportChange={viewport => this.setViewport(viewport)}
                 mapboxApiAccessToken={TOKEN}
             >
                 {this.getMarkersOrCluster()}

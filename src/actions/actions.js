@@ -45,7 +45,7 @@ export const toggleModal = modal => dispatch => {
 };
 
 // Register User
-export const registerUser = (userData, history) => dispatch => {
+export const registerUser = (userData) => dispatch => {
     axios
         .post(serverLocation + "/users/register", userData)
         .then(res => {
