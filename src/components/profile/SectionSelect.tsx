@@ -1,10 +1,17 @@
 import React, { Component } from "react";
 import Select from "react-select";
 import { connect } from "react-redux";
+import { State } from '../../reducers/index';
+import { IGuide } from '../../utils/types';
 
 import { FormGroup, Label } from "reactstrap";
 
-class SectionSelect extends Component {
+interface ISectionSelectProps {
+    handleChange: (e: any) => void;
+    guides: IGuide[];
+}
+
+class SectionSelect extends Component<ISectionSelectProps> {
     render() {
         const SEPERATOR = " - ";
 
@@ -32,7 +39,7 @@ class SectionSelect extends Component {
     }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: State) => ({
     guides: state.guides
 });
 

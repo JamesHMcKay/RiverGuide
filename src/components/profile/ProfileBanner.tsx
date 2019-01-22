@@ -1,9 +1,14 @@
-import React from "react";
-import moment from "moment";
+import React from 'react';
+import moment from 'moment';
+import { IUserProfile } from '../../utils/types';
 
-import { Col, Row } from "reactstrap";
+import { Col, Row } from 'reactstrap';
 
-const ProfileBanner = props => (
+interface IProfileBannerProps {
+    user: IUserProfile
+}
+
+const ProfileBanner = (props: IProfileBannerProps) => (
     <div className="profile-banner">
         <Row>
             <Col

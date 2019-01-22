@@ -10,6 +10,9 @@ import { IAuth, IUser } from "../utils/types";
 const initialUser: IUser = {
     favourites: [],
     email: "",
+    name: "",
+    avatar: "",
+    creationDate: "",
 }
 
 const initialState: IAuth = {

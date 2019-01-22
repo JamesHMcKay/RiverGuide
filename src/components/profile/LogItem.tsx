@@ -4,7 +4,9 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { toggleModal, updateOpenLog } from "../../actions/actions";
 import { library } from "@fortawesome/fontawesome-svg-core";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { State } from '../../reducers/index';
+import { ILogEntry } from '../../utils/types';
+
 import {
     faCaretDown,
     faCaretRight,
@@ -25,9 +27,19 @@ import "./profile.css";
 
 library.add(faCaretDown, faCaretRight, faStar, faUser);
 
-class LogItem extends Component {
-    constructor() {
-        super();
+interface ILogItemProps {
+    toggleModal: (modal: string) => void;
+    updateOpenLog: (item: ILogEntry) => void;
+    item: ILogEntry;
+}
+
+interface ILogItemState {
+    isOpen: boolean;
+}
+
+class LogItem extends Component<ILogItemProps, ILogItemState> {
+    constructor(props: ILogItemProps) {
+        super(props);
         this.state = { isOpen: false };
 
         this.toggleContent = this.toggleContent.bind(this);
@@ -41,7 +53,7 @@ class LogItem extends Component {
         this.setState({ isOpen: !this.state.isOpen });
     }
 
-    parseDate(date) {
+    parseDate(date: string) {
         return moment(date).format("DD MMMM YYYY");
     }
 
@@ -55,9 +67,9 @@ class LogItem extends Component {
         this.props.updateOpenLog(this.props.item);
     }
 
-    renderStars(rating) {
-        let stars = [];
-        for (var i = 0; i < parseInt(rating, 10); i++) {
+    renderStars(rating: number) {
+        let stars : number[] = [];
+        for (var i = 0; i < Math.floor(rating); i++) {
             // stars.push(<FontAwesomeIcon icon="star" />);
         }
         return stars;
@@ -77,7 +89,7 @@ class LogItem extends Component {
                 <Card>
                     <CardHeader onClick={this.toggleContent}>
                         {this.parseDate(date)} - {section}
-                        <div class="open-icon">
+                        {/* <div class="open-icon"> */}
                             {/* <FontAwesomeIcon
                                 icon={
                                     this.state.isOpen
@@ -85,7 +97,7 @@ class LogItem extends Component {
                                         : "caret-right"
                                 }
                             /> */}
-                        </div>
+                        {/* </div> */}
                     </CardHeader>
                     <Collapse isOpen={this.state.isOpen}>
                         <CardBody>
@@ -124,7 +136,7 @@ LogItem.propTypes = {
     updateOpenLog: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: State) => ({
     openModal: state.openModal
 });
 

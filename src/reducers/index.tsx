@@ -12,7 +12,7 @@ import openLogReducer from "./openLogReducer";
 import categoryReducer from "./categoryReducer";
 import mapBoundsReducer from "./mapBoundsReducer";
 
-import { IGuide, IInfoPage, IFilter, IAuth } from "../utils/types";
+import { IGuide, IInfoPage, IFilter, IAuth, IOpenLog, ILogEntry } from "../utils/types";
 import { IMapBounds } from "../models";
 
 export interface State {
@@ -24,9 +24,10 @@ export interface State {
     auth: IAuth;
     openModal: string;
     mapBounds: IMapBounds;
-    openLog: boolean;
+    openLog: IOpenLog;
     category: string;
     errors: any;
+    log: ILogEntry[];
 }
 
 export default combineReducers({

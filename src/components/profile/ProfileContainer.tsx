@@ -2,13 +2,20 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { makeLogbookRequest } from "../../actions/actions";
+import { State } from '../../reducers/index';
+import { IAuth } from '../../utils/types';
 
 import ProfileBanner from "./ProfileBanner";
 import Logbook from "./Logbook";
 
 import "./profile.css";
 
-class ProfileContainer extends Component {
+interface IProfileContainerProps {
+    makeLogbookRequest: () => void;
+    auth: IAuth;
+}
+
+class ProfileContainer extends Component<IProfileContainerProps> {
     componentDidMount() {
         this.props.makeLogbookRequest();
     }
@@ -28,7 +35,7 @@ ProfileContainer.propTypes = {
     makeLogbookRequest: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: State) => ({
     auth: state.auth
 });
 

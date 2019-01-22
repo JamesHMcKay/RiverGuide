@@ -63,7 +63,17 @@ export interface IUserData extends ILoginDetails {
     newPassword2: string;
 }
 
-export interface IUser {
+export interface IOpenLog {
+    _id: string;
+}
+
+export interface IUserProfile {
+    name: string;
+    avatar: string;
+    creationDate: string;
+}
+
+export interface IUser extends IUserProfile {
     favourites: string[];
     email: string;
 }
@@ -77,4 +87,13 @@ export interface ILatLon {
     lat: number;
     lon?: number;
     lng?: number;
+}
+
+export interface ILogEntry {
+    _id: string;
+    date: string;
+    participantCount: number;
+    rating: number;
+    description: string;
+    section: string;
 }

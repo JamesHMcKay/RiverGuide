@@ -2,15 +2,22 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
+import { State } from '../../reducers/index';
+import { ILogEntry } from '../../utils/types';
 
 import { Badge, Button, ListGroup, Row, Col } from "reactstrap";
 import "./profile.css";
 
 import LogItem from "./LogItem";
 
-class Logbook extends Component {
-    constructor() {
-        super();
+interface ILogBookProps {
+    toggleModal: (modal: string) => void;
+    log: ILogEntry[];
+}
+
+class Logbook extends Component<ILogBookProps> {
+    constructor(props: ILogBookProps) {
+        super(props);
         this.openModal = this.openModal.bind(this);
     }
 
@@ -57,7 +64,7 @@ Logbook.propTypes = {
     toggleModal: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: State) => ({
     log: state.log,
     openModal: state.openModal
 });

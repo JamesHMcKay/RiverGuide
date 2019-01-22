@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { editLogEntry, toggleModal } from "../../actions/actions";
+import { State } from '../../reducers/index';
+import { ILogEntry } from '../../utils/types';
 
 import SectionSelect from "./SectionSelect";
 
@@ -14,7 +16,7 @@ import {
     Form,
     FormGroup,
     Label,
-    Input
+    Input,
 } from "reactstrap";
 
 const FORM_CONTENT = [
@@ -28,30 +30,54 @@ const FORM_CONTENT = [
     { name: "description", type: "textarea", label: "Description" }
 ];
 
-class EditTripModal extends Component {
-    constructor() {
-        super();
-        this.state = {};
+interface IEditTripModalProps {
+    isOpen: boolean;
+    toggleModal: (modal: string) => void;
+    editLogEntry: (entry: ILogEntry) => void;
+}
 
+interface IEditTripModalState {
+    logEntry?: ILogEntry;
+}
+
+class EditTripModal extends Component<IEditTripModalProps, IEditTripModalState> {
+    constructor(props: IEditTripModalProps) {
+        super(props);
+        this.state = {};
         this.closeModal = this.closeModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSave = this.handleSave.bind(this);
     }
 
     closeModal() {
-        this.props.toggleModal();
+        this.props.toggleModal("editTrip");
     }
 
-    handleChange(e) {
+    handleChange(e: any) {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    handleSectionChange(e) {
-        this.setState({ section: e.value });
+    handleSectionChange(e: any) {
+        if (this.state.logEntry) {
+            let logEntry = this.state.logEntry;
+            logEntry = {
+                ...logEntry,
+                section: e.value,
+            }
+            this.setState({ logEntry });
+        }
     }
 
     handleSave() {
-        this.props.editLogEntry(this.state);
+        this.props.editLogEntry(this.state as ILogEntry);
+    }
+
+    getValue = (key: string): string => {
+        if (this.state.logEntry && key in Object.keys(this.state.logEntry)) {
+            return this.state.logEntry[key as keyof ILogEntry] as string;
+        } else {
+            return "";
+        }
     }
 
     render() {
@@ -72,10 +98,10 @@ class EditTripModal extends Component {
                                         {field.label}
                                     </Label>
                                     <Input
-                                        type={field.type}
+                                        type={'text'}
                                         name={field.name}
                                         onChange={this.handleChange}
-                                        value={this.state[field.name]}
+                                        value={this.getValue(field.name)}
                                     />
                                 </FormGroup>
                             ))}
@@ -98,7 +124,7 @@ EditTripModal.propTypes = {
     editLogEntry: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: State) => ({
     isOpen: state.openModal === "editTrip",
     openLog: state.openLog
 });
