@@ -3,22 +3,29 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import ReactHighcharts from "react-highcharts";
 import moment from "moment";
+import { State } from '../../reducers/index';
+import { IHistory } from '../../utils/types';
 
 // Material UI
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 
-class HistoryCard extends Component {
-    mapHistory = history =>
-        history.map(reading => [
-            moment.utc(moment(reading.time, "DD/MM/YYYY h:mma")).valueOf(),
-            reading.data.currentFlow
-                ? parseFloat(reading.data.currentFlow)
-                : parseFloat(reading.data.currentLevel)
-        ]);
+interface IHistoryCardProps {
+    history: IHistory[];
+}
 
-    createConfig = history => ({
+
+class HistoryCard extends Component<IHistoryCardProps> {
+    mapHistory = (history: IHistory[]) =>
+        history.map(reading =>
+            (moment.utc(moment(reading.time, "DD/MM/YYYY h:mma")).valueOf(),
+            reading.data.currentFlow
+                ? parseFloat(reading.data.currentFlow.toString())
+                : parseFloat(reading.data.currentLevel.toString()))
+        );
+
+    createConfig = (history: IHistory[]) => ({
         chart: {
             zoomType: "x",
             height: 300
@@ -70,7 +77,7 @@ HistoryCard.propTypes = {
     history: PropTypes.array.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: State) => ({
     history: state.infoPage.history
 });
 

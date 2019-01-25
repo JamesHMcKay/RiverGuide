@@ -9,6 +9,11 @@ export interface IGradeRange {
     to: string;
 }
 
+export interface IHistory {
+    time: string;
+    data: IGauge;
+}
+
 export interface IGuide {
     _id: string;
     author: string;
@@ -37,8 +42,8 @@ export interface IGauge {
 export interface IInfoPage {
     selectedGuide: IGuide,
     infoSelected: boolean,
-    history: IGuide[],
-    selectedHistory: IGuide[],
+    history: IHistory[],
+    selectedHistory: IHistory[],
 }
 
 export interface IFilter {
