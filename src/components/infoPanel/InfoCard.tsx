@@ -17,19 +17,32 @@ marked.setOptions({
     sanitize: true
 });
 
-class InfoCard extends Component {
-    state = {
+interface IInfoCardState {
+    editIconShowing: boolean;
+    editMode: boolean;
+    value: string;
+    tempValue: string;
+}
+
+
+interface IInfoCardProps {
+    content: string;
+    title: string;
+}
+
+class InfoCard extends Component<IInfoCardProps, IInfoCardState> {
+    state: IInfoCardState = {
         editIconShowing: false,
         editMode: false,
         value: "",
         tempValue: ""
     };
 
-    componentWillReceiveProps = props => {
+    componentWillReceiveProps = (props: IInfoCardProps) => {
         this.setState({ value: props.content });
     };
 
-    handleChange = event => {
+    handleChange = (event: any) => {
         this.setState({ tempValue: event.target.value });
     };
 
@@ -54,7 +67,7 @@ class InfoCard extends Component {
                                     placement="left"
                                 >
                                     <IconButton
-                                        size="small"
+                                        // size="small"
                                         style={{ float: "right" }}
                                         onClick={() =>
                                             this.setState({

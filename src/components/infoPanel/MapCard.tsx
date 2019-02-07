@@ -7,8 +7,14 @@ import Typography from "@material-ui/core/Typography";
 
 // Component
 import InfoMapComponent from "../map/InfoMapComponent";
+import { IMarker } from '../../models';
 
-class HistoryCard extends Component {
+interface IMapCardProps {
+    markers: IMarker[];
+}
+
+
+class MapCard extends Component<IMapCardProps> {
     render() {
         return (
             <Card>
@@ -24,4 +30,4 @@ class HistoryCard extends Component {
     }
 }
 
-export default HistoryCard;
+export default MapCard;

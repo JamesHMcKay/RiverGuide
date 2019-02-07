@@ -12,8 +12,10 @@ import {
 import "./Info.css";
 import { WeatherForecast } from './WeatherForecast'
 import { CurrentWeather } from './CurrentWeather';
-import { WeatherStore } from './WeatherStore';
+import { WeatherStore, IWeatherStore } from './WeatherStore';
 import FlowBadge from "../common/FlowBadge";
+import { State } from '../../reducers/index';
+import { IAuth, IGauge, IInfoPage, IGuide } from '../../utils/types';
 
 // Material UI
 import { Button, Chip, Paper, Tooltip, IconButton } from "@material-ui/core";
@@ -27,10 +29,26 @@ import InfoCard from "./InfoCard";
 import HistoryCard from "./HistoryCard";
 import MapCard from "./MapCard";
 
-class Info extends Component {
-    constructor(props) {
+interface IInfoState {
+    weatherStore: WeatherStore;
+    favourited: boolean;
+}
+
+interface IInfoProps {
+    auth: IAuth,
+    toggleModal: (modal?: string) => void;
+    gauges: IGauge[];
+    infoPage: IInfoPage;
+    closeInfoPage: () => void;
+    guide: IGuide;
+    removeFromFavourites: (guideId: string, email: string) => void;
+    addToFavourites: (guideId: string, email: string) => void;
+}
+
+class Info extends Component<IInfoProps, IInfoState> {
+    constructor(props: IInfoProps) {
         super(props);
-        let favourited = [];
+        let favourited: boolean = false;
         if (props.auth.isAuthenticated) {
             favourited = props.auth.user.favourites.indexOf(
                 props.infoPage.selectedGuide._id
@@ -45,7 +63,7 @@ class Info extends Component {
         };
     }
 
-    openModal(modalName) {
+    openModal(modalName: string) {
         this.props.toggleModal(modalName);
     }
 
@@ -70,8 +88,8 @@ class Info extends Component {
 
         return this.props.gauges.filter(
             gauge =>
-                gauge.siteName.toLowerCase() ===
-                this.props.guide.gaugeName.toLowerCase()
+                (this.props.guide.gaugeName && gauge.siteName.toLowerCase() ===
+                this.props.guide.gaugeName.toLowerCase())
         );
     }
 
@@ -89,7 +107,7 @@ class Info extends Component {
         }
     };
 
-    getTags = (activity, grade, catch_type) => {
+    getTags = (activity?: string, grade?: string, catch_type?: string) => {
         let gradeTag = grade && 'Grade ' + grade;
         return (
         [activity, gradeTag, catch_type]
@@ -118,7 +136,6 @@ class Info extends Component {
             markers
         } = this.props.infoPage.selectedGuide;
 
-        console.log('selected guide = ', this.props.infoPage.selectedGuide);
         const testDisplay = (
             <div>
                 <div
@@ -190,8 +207,8 @@ class Info extends Component {
                 </Button>
                 <FlowBadge siteName={this.props.guide.gaugeName} />
                 <CurrentWeather
-                        lat={this.props.guide.lat}
-                        lon={this.props.guide.lng}
+                        lat={this.props.guide.lat || 0}
+                        lon={this.props.guide.lng || 0}
                         weatherStore={this.state.weatherStore}
                 />
                 <Report />
@@ -200,8 +217,8 @@ class Info extends Component {
                 <div className='flow-weather-section'>
                     {gaugeName && (<HistoryCard />)}
                     <WeatherForecast
-                        lat={this.props.guide.lat}
-                        lon={this.props.guide.lng}
+                        lat={this.props.guide.lat || 0}
+                        lon={this.props.guide.lng || 0}
                         weatherStore={this.state.weatherStore}
                     />
                 </div>
@@ -260,7 +277,7 @@ Info.propTypes = {
     infoPage: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: State) => ({
     auth: state.auth,
     gauges: state.gauges,
     infoPage: state.infoPage

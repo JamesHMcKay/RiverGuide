@@ -174,10 +174,6 @@ class Panel extends Component<IPanelProps, IPanelState> {
                             >
                                 <Info
                                     guide={this.props.infoPage.selectedGuide}
-                                    history={
-                                        this.props.infoPage.selectedHistory
-                                    }
-                                    closeInfo={this.closeInfo}
                                 />
                             </CSSTransition>
                         ) : (

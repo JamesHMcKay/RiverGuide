@@ -1,7 +1,10 @@
 import { string } from "prop-types";
 
 export interface IMarker {
-    title: string;
+    name: string,
+    lat: number,
+    lng: number,
+    id: string,
 }
 
 export interface IGradeRange {
@@ -30,12 +33,15 @@ export interface IGuide {
     lng?: number,
     description: string,
     dateCreated: Date;
+    catch_type?: string,
+    activity?: string,
 }
 
 export interface IGauge {
     siteName: string;
     currentFlow: number;
     currentLevel: number;
+    lastUpdated: string;
 }
 
 
