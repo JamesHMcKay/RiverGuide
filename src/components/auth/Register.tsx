@@ -35,7 +35,7 @@ interface IRegisterState {
 
 interface IReigsterProps {
     isOpen: boolean;
-    toggleModal: (modal: string) => void;
+    toggleModal: (modal?: string) => void;
     registerUser: (userData: IRegisterData) => void,
     auth: IAuth,
     errors: any
@@ -138,7 +138,7 @@ class Register extends Component<IReigsterProps, IRegisterState> {
     }
 
     closeModal() {
-        this.props.toggleModal("registerModal");
+        this.props.toggleModal();
     }
 
     render() {

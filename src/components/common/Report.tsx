@@ -25,7 +25,7 @@ interface IReportState {
 }
 
 interface IReportProps {
-    toggleModal: (modal: string) => void;
+    toggleModal: (modal?: string) => void;
     isOpen: boolean;
 }
 
@@ -51,7 +51,7 @@ class Report extends Component<IReportProps, IReportState> {
 	}
 
 	closeModal() {
-		this.props.toggleModal('reportModal');
+		this.props.toggleModal();
 	}
 
 	setHover(key: number) {

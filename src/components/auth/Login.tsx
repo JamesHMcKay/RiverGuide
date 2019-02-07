@@ -31,7 +31,7 @@ interface ILoginState {
 interface ILoginProps {
     errors: any;
     isOpen: boolean;
-    toggleModal: (modal: string) => void;
+    toggleModal: (modal?: string) => void;
     loginUser: (details: ILoginDetails) => void;
 }
 
@@ -80,7 +80,7 @@ class Login extends Component<ILoginProps, ILoginState> {
     }
 
     closeModal() {
-        this.props.toggleModal("loginModal");
+        this.props.toggleModal();
     }
 
     render() {

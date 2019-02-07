@@ -31,7 +31,7 @@ interface IWelcomeState {
 interface IWelcomeProps {
     errors: any;
     isOpen: boolean;
-    toggleModal: (modal: string) => void;
+    toggleModal: (modal?: string) => void;
     loginUser: (details: ILoginDetails) => void;
 }
 
@@ -81,7 +81,7 @@ class Welcome extends Component<IWelcomeProps, IWelcomeState> {
     }
 
     closeModal() {
-        this.props.toggleModal("welcomeModal");
+        this.props.toggleModal();
     }
 
     render() {

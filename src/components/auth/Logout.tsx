@@ -9,7 +9,7 @@ import { Button, Form, Modal, ModalFooter, ModalHeader } from "reactstrap";
 
 interface ILogoutProps {
     logoutUser: () => void;
-    toggleModal: (modal: string) => void;
+    toggleModal: (modal?: string) => void;
     isOpen: boolean;
 }
 
@@ -26,7 +26,7 @@ class Logout extends Component<ILogoutProps> {
     }
 
     closeModal() {
-        this.props.toggleModal("logoutModal");
+        this.props.toggleModal();
     }
 
     onSubmit(e: any) {

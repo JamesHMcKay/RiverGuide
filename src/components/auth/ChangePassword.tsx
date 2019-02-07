@@ -36,7 +36,7 @@ interface IChangePasswordState {
 
 interface IChangePasswordProps {
     isOpen: boolean;
-    toggleModal: (modal: string) => void;
+    toggleModal: (modal?: string) => void;
     changePassword: (userData: IUserData) => void,
     auth: IAuth,
     errors: any
@@ -136,7 +136,7 @@ class ChangePassword extends Component<IChangePasswordProps, IChangePasswordStat
     }
 
     closeModal() {
-        this.props.toggleModal("changePasswordModal");
+        this.props.toggleModal();
     }
 
     render() {

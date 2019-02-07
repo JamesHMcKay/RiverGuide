@@ -21,7 +21,7 @@ const Transition = (props: any) => <Slide direction="up" {...props} />;
 
 interface ICreateWhitewaterProps {
     isOpen: boolean;
-    toggleModal: (modal: string) => void;
+    toggleModal: (modal?: string) => void;
     category: any
 }
 
@@ -42,7 +42,7 @@ class CreateWhitewater extends Component<ICreateWhitewaterProps, ICreateWhitewat
         };
     }
 
-    handleClose = () => this.props.toggleModal("createModal");
+    handleClose = () => this.props.toggleModal();
 
     handleChange = (event: any) => this.setState({});
 
