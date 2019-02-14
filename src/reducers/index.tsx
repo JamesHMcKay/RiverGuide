@@ -12,8 +12,14 @@ import openLogReducer from "./openLogReducer";
 import categoryReducer from "./categoryReducer";
 import mapBoundsReducer from "./mapBoundsReducer";
 
-import { IGuide, IInfoPage, IFilter, IAuth, IOpenLog, ILogEntry } from "../utils/types";
-import { IMapBounds } from "../models";
+import {
+    IMapBounds,
+    IGuide,
+    IInfoPage,
+    IFilter,
+    IAuth,
+    IOpenLog,
+    ILogEntry } from "../utils/types";
 
 export interface State {
     guides: IGuide[];

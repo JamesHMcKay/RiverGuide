@@ -1,4 +1,27 @@
-import { string } from "prop-types";
+export default interface Todo {
+    id: number,
+    name: string,
+    done: boolean
+  }
+
+export interface ILatLon {
+    lat: number;
+    lon?: number;
+    lng?: number;
+}
+
+
+export interface IMapBounds {
+    _ne: ILatLon;
+    _sw: ILatLon;
+}
+
+export interface IMarker {
+    name: string,
+    lat: number,
+    lng: number,
+    id: string,
+}
 
 export interface IMarker {
     name: string,

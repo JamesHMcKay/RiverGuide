@@ -1,9 +1,14 @@
 import React, { Component } from "react";
 import PropTypes, { string } from "prop-types";
 import { connect } from "react-redux";
-import { makeGaugeRequest, makeGuideRequest, setMapBounds, generateFilteredList, openInfoPage } from "../actions/actions";
+import {
+    makeGaugeRequest,
+    makeGuideRequest,
+    setMapBounds,
+    generateFilteredList,
+    openInfoPage
+} from "../actions/actions";
 import { CSSTransition } from "react-transition-group";
-import { IMapBounds, ILatLon } from "../models";
 // Components
 import ReactDOM from 'react-dom';
 import { State } from '../reducers/index';
@@ -16,7 +21,13 @@ import ControlBar from "./ControlBar";
 import Info from "./infoPanel/Info";
 import { MapComponent } from "./map/MapComponent";
 
-import { IGuide, IGauge, IInfoPage, IFilter } from './../utils/types';
+import { 
+    IGuide,
+    IGauge,
+    IInfoPage,
+    IFilter,
+    IMapBounds,
+    ILatLon } from './../utils/types';
 
 // Styles
 import "./Panel.css";
@@ -52,7 +63,11 @@ export interface IPanelProps {
     makeGaugeRequest: () => void;
     makeGuideRequest: (guide: string) => void;
     setMapBounds: (mapBounds: IMapBounds) => void;
-    generateFilteredList: (guides: IGuide[],filters: IFilter[],mapBounds: IMapBounds) => void;
+    generateFilteredList: (
+        guides: IGuide[],
+        filters: IFilter[],
+        mapBounds: IMapBounds
+    ) => void;
     openInfoPage: (guide: IGuide) => void;
 }
 
@@ -179,7 +194,10 @@ class Panel extends Component<IPanelProps, IPanelState> {
                         ) : (
                             <MapComponent
                                 guides={this.props.guides || this.props.guides}
-                                filteredGuides={this.props.filterdGuides || this.props.guides}
+                                filteredGuides={
+                                    this.props.filterdGuides ||
+                                    this.props.guides
+                                }
                                 onClick={this.onClick}
                                 mapDimensions={this.state.mapDimensions}
                                 setMapBounds={this.updateMapBounds}
@@ -210,5 +228,10 @@ const mapStateToProps = (state: State) => ({
 
 export default connect(
     mapStateToProps,
-    ({generateFilteredList, makeGaugeRequest, makeGuideRequest, setMapBounds, openInfoPage})
+    ({
+        generateFilteredList,
+        makeGaugeRequest,
+        makeGuideRequest,
+        setMapBounds,
+        openInfoPage})
 )(Panel);

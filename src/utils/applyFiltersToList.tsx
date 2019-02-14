@@ -1,5 +1,4 @@
-import { IGuide } from "./types";
-import { IMapBounds } from "../models/index";
+import { IGuide, IMapBounds } from "./types";
 
 const hasIndex = (obj: string, str: string) => {
     return obj.toLowerCase().indexOf(str) > -1;

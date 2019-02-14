@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 
 // Component
 import InfoMapComponent from "../map/InfoMapComponent";
-import { IMarker } from '../../models';
+import { IMarker } from '../../utils/types';
 
 interface IMapCardProps {
     markers: IMarker[];

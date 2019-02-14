@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import { PropTypes } from '@material-ui/core';
 import uuid from 'uuidv4';
-import { IMarker } from '../../models';
+import { IMarker } from '../../utils/types';
 
 const TOKEN =
     "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqbXZ0bnp6dzA3NG0zc3BiYjMxaWJrcTIifQ.BKESeoXyOqkiB8j1sjbxQg";

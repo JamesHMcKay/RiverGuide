@@ -5,8 +5,7 @@ import {
     searchGuideList,
     setCategory
 } from "../actions/actions";
-import { IMapBounds, ILatLon } from "../models";
-import { IGuide, IFilter } from './../utils/types';
+import { IGuide, IFilter, IMapBounds, ILatLon } from './../utils/types';
 
 // Material UI
 import { AppBar, Toolbar, TextField, Tabs, Tab } from "@material-ui/core";

@@ -5,8 +5,7 @@ import MapMarker from './MapMarker';
 import MapCluster from './MapCluster';
 import * as kmeans from 'node-kmeans';
 import WebMercatorViewport from 'viewport-mercator-project';
-import { IGuide } from '../../utils/types';
-import { IMapBounds, ILatLon } from '../../models';
+import { IGuide, IMapBounds, ILatLon } from '../../utils/types';
 import { IMapDimensions } from '../Panel';
 import { IViewport } from "./InfoMapComponent";
 
