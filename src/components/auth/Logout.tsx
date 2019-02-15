@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 
 import { logoutUser, toggleModal } from "../../actions/actions";
 
@@ -59,7 +59,7 @@ Logout.propTypes = {
     logoutUser: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     isOpen: state.openModal === "logoutModal",
 });
 

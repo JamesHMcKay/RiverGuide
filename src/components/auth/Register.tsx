@@ -2,9 +2,9 @@ import classnames from "classnames";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import zxcvbn from "zxcvbn";
+import zxcvbn, { ZXCVBNResult } from "zxcvbn";
 import { registerUser, toggleModal } from "../../actions/actions";
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 import { IAuth, IRegisterData } from "../../utils/types";
 
 import {
@@ -90,9 +90,9 @@ class Register extends Component<IReigsterProps, IRegisterState> {
     }
 
     public onPasswordChange(e: any) {
-        let checkPassword = zxcvbn(e.target.value),
-            score = checkPassword.score + 1,
-            color;
+        const checkPassword: ZXCVBNResult = zxcvbn(e.target.value);
+        let score: number = checkPassword.score + 1;
+        let color: string;
 
         score = e.target.value === "" ? 0 : score;
 
@@ -280,7 +280,7 @@ Register.propTypes = {
     errors: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     isOpen: state.openModal === "registerModal",
     auth: state.auth,
     errors: state.errors,

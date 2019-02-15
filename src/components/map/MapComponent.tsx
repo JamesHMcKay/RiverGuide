@@ -164,9 +164,10 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
         const guides: IGuide[] = this.props.guides;
         const locations: Array<Array<number | undefined>> = [];
 
-        for (let i = 0 ; i < guides.length ; i++) {
-        locations.push([ guides[i].lat , guides[i].lng]);
+        for (const guide of guides) {
+            locations.push([ guide.lat , guide.lng]);
         }
+
         if (locations.length < numberOfClusters) {
             numberOfClusters = locations.length;
         }

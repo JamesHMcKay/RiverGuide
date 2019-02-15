@@ -3,8 +3,22 @@
     "extends": [
         "tslint:recommended"
     ],
-    "jsRules": {},
-    "rules": {},
+    "jsRules": {
+        "object-literal-sort-keys": false,
+        "no-shadowed-variable": false
+    },
+    "rules": {
+        "object-literal-sort-keys": false,
+        "no-shadowed-variable": false,
+        "no-console": [true, "log"]
+    },
     "rulesDirectory": [],
-    "tslint.jsEnable": false
+    "tslint.jsEnable": false,
+    "linterOptions": {
+        "exclude": [
+            "bin",
+            "*/*.js",
+            "*/*/*.js"
+        ]
+    }
 }

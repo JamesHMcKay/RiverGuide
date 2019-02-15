@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 import { ILogEntry } from "../../utils/types";
 
 import { Badge, Button, Col, ListGroup, Row } from "reactstrap";
@@ -64,7 +64,7 @@ Logbook.propTypes = {
     toggleModal: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     log: state.log,
     openModal: state.openModal,
 });

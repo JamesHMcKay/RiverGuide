@@ -1,5 +1,10 @@
 import { IGuide, IMapBounds } from "./types";
 
+interface IFilterValues {
+    filters: string[];
+    searchString: string;
+}
+
 const hasIndex = (obj: string, str: string) => {
     return obj.toLowerCase().indexOf(str) > -1;
 };
@@ -28,7 +33,7 @@ const applyMapBounds = (mapBounds: IMapBounds) => (guide: IGuide) =>
     !mapBounds._ne || checkIfInBounds(mapBounds, guide);
 
 // apply filters + search
-const applyFiltersToList = (guideList: IGuide[], filterValues: { filters: string[], searchString: string }, mapBounds: IMapBounds) => {
+const applyFiltersToList = (guideList: IGuide[], filterValues: IFilterValues, mapBounds: IMapBounds) => {
     // const { filters: string[], searchString: string } = filterValues;
     return guideList.filter(applyMapBounds(mapBounds)).filter((guide) => {
         if (filterValues.searchString === "") {

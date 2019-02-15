@@ -11,7 +11,7 @@ import {
     openInfoPage,
     setMapBounds,
 } from "../actions/actions";
-import { State } from "../reducers/index";
+import { IState } from "../reducers/index";
 
 import * as darksky from "dark-sky-api";
 import * as weather from "openweather-apis";
@@ -218,7 +218,7 @@ Panel.propTypes = {
     infoPage: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     guides: state.guides,
     gauges: state.gauges,
     infoPage: state.infoPage,

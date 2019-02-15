@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 import { IGauge, IGuide } from "../../utils/types";
 import FlowBadge from "../common/FlowBadge";
 import { GradeBadge } from "../common/GradeBadge";
@@ -25,7 +25,7 @@ class MapPopup extends Component<IMapPopupProps, {}> {
     }
 }
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     gauges: state.gauges,
 });
 

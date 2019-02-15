@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { deleteLogEntry, toggleModal } from "../../actions/actions";
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 import { IOpenLog } from "../../utils/types";
 
 import { Button, Modal, ModalBody, ModalHeader } from "reactstrap";
@@ -54,7 +54,7 @@ DeleteModal.propTypes = {
     deleteLogEntry: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     isOpen: state.openModal === "deleteTrip",
     openLog: state.openLog,
 });

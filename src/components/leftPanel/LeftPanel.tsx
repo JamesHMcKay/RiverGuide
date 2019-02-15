@@ -8,7 +8,7 @@ import { Button, CircularProgress, List, Tooltip } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 
 // Components
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 import { IAuth, IGauge, IGuide, IInfoPage } from "./../../utils/types";
 // Styles
 import "./LeftPanel.css";
@@ -111,7 +111,7 @@ LeftPanel.propTypes = {
     auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     auth: state.auth,
     guides: state.guides,
     infoPage: state.infoPage,

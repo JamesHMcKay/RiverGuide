@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 import { IFilter } from "../../utils/types";
 
 // Material UI
@@ -76,7 +76,7 @@ FiltersModal.propTypes = {
     toggleModal: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     isOpen: state.openModal === "filterModal",
     openLog: state.openLog,
     category: state.category,

@@ -14,7 +14,7 @@ import PlaceIcon from "@material-ui/icons/PlaceOutlined";
 import { IGuide } from "../../utils/types";
 import FlowBadge from "../common/FlowBadge";
 
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 
 interface IGuideItemProps {
     openInfoPage: (guide: IGuide) => void;
@@ -46,7 +46,7 @@ GuideItem.propTypes = {
     auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     auth: state.auth,
 });
 

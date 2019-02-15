@@ -185,7 +185,7 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
     }
 
     public getDayOfWeek(dayNumber: number): string {
-        return (function(value) {
+        return ((value) => {
             switch (value) {
             case 0:
             return "Sunday";
@@ -211,16 +211,16 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
         if (forecast && forecast.time) {
             const forecastTime = moment.unix(forecast.time);
             const currentTime = moment();
-            const __this = this;
+            const localState = this;
             const difference = moment.duration(forecastTime.diff(currentTime)).asHours();
-            const title = (function(value, forecastTime) {
+            const title = ((value, forecastTime) => {
                 switch (true) {
                 case value < 0:
                     return "Today";
                 case value < 24 && value > 0:
                     return "Tomorrow";
                 case value > 24:
-                    return __this.getDayOfWeek(forecastTime.day());
+                    return localState.getDayOfWeek(forecastTime.day());
                 default:
                     return "";
             }})(difference, forecastTime);
@@ -263,12 +263,12 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
     }
 
     public _loadUserData() {
-        const __this = this;
+        const localState = this;
         this.props.weatherStore.getWeatherAtLocation(this.props.lat, this.props.lon).then(
-            function(result: IWeatherStore) {
-                __this.setState({
+            (result: IWeatherStore) => {
+                localState.setState({
                     weather: result,
-                    lat: __this.props.lat,
+                    lat: localState.props.lat,
                 });
             },
         );

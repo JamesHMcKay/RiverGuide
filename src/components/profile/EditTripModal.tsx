@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { editLogEntry, toggleModal } from "../../actions/actions";
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 import { ILogEntry } from "../../utils/types";
 
 import SectionSelect from "./SectionSelect";
@@ -124,7 +124,7 @@ EditTripModal.propTypes = {
     editLogEntry: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     isOpen: state.openModal === "editTrip",
     openLog: state.openLog,
 });

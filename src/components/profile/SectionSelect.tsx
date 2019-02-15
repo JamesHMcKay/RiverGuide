@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Select from "react-select";
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 import { IGuide } from "../../utils/types";
 
 import { FormGroup, Label } from "reactstrap";
@@ -39,7 +39,7 @@ class SectionSelect extends Component<ISectionSelectProps> {
     }
 }
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     guides: state.guides,
 });
 

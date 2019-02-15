@@ -1,9 +1,3 @@
-export default interface Todo {
-    id: number;
-    name: string;
-    done: boolean;
-  }
-
 export interface ILatLon {
     lat: number;
     lon?: number;

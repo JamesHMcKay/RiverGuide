@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { makeLogbookRequest } from "../../actions/actions";
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 import { IAuth } from "../../utils/types";
 
 import Logbook from "./Logbook";
@@ -35,7 +35,7 @@ ProfileContainer.propTypes = {
     makeLogbookRequest: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     auth: state.auth,
 });
 

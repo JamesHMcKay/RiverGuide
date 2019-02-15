@@ -246,12 +246,12 @@ export class CurrentWeather extends React.Component<ICurrentWeatherProps, ICurre
 
     }
     public _loadUserData() {
-        const __this = this;
+        const localState = this;
         this.props.weatherStore.getWeatherAtLocation(this.props.lat, this.props.lon).then(
-            function(result: IWeatherStore) {
-                __this.setState({
+            (result: IWeatherStore) => {
+                localState.setState({
                     weather: result,
-                    lat: __this.props.lat,
+                    lat: localState.props.lat,
                 });
             },
         );

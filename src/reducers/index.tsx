@@ -21,7 +21,7 @@ import {
     IMapBounds,
     IOpenLog } from "../utils/types";
 
-export interface State {
+export interface IState {
     guides: IGuide[];
     gauges: any;
     infoPage: IInfoPage;

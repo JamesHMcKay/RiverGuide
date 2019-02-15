@@ -9,7 +9,7 @@ import {
     removeFromFavourites,
     toggleModal,
 } from "../../actions/actions";
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 import { IAuth, IGauge, IGuide, IInfoPage } from "../../utils/types";
 import FlowBadge from "../common/FlowBadge";
 import { CurrentWeather } from "./CurrentWeather";
@@ -106,10 +106,10 @@ class Info extends Component<IInfoProps, IInfoState> {
         }
     }
 
-    public getTags = (activity?: string, grade?: string, catch_type?: string) => {
+    public getTags = (activity?: string, grade?: string, catchType?: string) => {
         const gradeTag = grade && "Grade " + grade;
         return (
-        [activity, gradeTag, catch_type]
+        [activity, gradeTag, catchType]
         .filter((tag) => tag)
         .map((tag) => (
             <Chip
@@ -276,7 +276,7 @@ Info.propTypes = {
     infoPage: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     auth: state.auth,
     gauges: state.gauges,
     infoPage: state.infoPage,

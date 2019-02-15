@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
-import React, { Component, ReactChild } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 import { IGauge } from "./../../utils/types";
 
 // Material UI
@@ -23,7 +23,7 @@ class FlowBadge extends Component<IFlowBadgeProps> {
 
     public getFlowValue = (siteName: string): string | null => {
         const gauge = this.props.gauges.filter(
-            (gauge) => gauge.siteName === siteName,
+            (site) => site.siteName === siteName,
         )[0];
 
         if (gauge) {
@@ -56,7 +56,7 @@ FlowBadge.propTypes = {
     gauges: PropTypes.array.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     gauges: state.gauges,
 });
 

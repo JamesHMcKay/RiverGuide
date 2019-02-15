@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 
 // Material UI
 import AppBar from "@material-ui/core/AppBar";
@@ -100,7 +100,7 @@ CreateWhitewater.propTypes = {
     category: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     isOpen: state.openModal === "createModal",
     category: state.category,
 });

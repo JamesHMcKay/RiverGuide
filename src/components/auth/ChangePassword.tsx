@@ -2,8 +2,8 @@ import classnames from "classnames";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import zxcvbn from "zxcvbn";
-import { State } from "../../reducers/index";
+import zxcvbn, { ZXCVBNResult } from "zxcvbn";
+import { IState } from "../../reducers/index";
 import { IAuth, IUserData } from "../../utils/types";
 
 import { changePassword, toggleModal } from "../../actions/actions";
@@ -86,9 +86,9 @@ class ChangePassword extends Component<IChangePasswordProps, IChangePasswordStat
     }
 
     public onPasswordChange(e: any) {
-        let checkPassword = zxcvbn(e.target.value),
-            score = checkPassword.score + 1,
-            color;
+        const checkPassword: ZXCVBNResult = zxcvbn(e.target.value);
+        let score: number = checkPassword.score + 1;
+        let color: string;
 
         score = e.target.value === "" ? 0 : score;
 
@@ -269,7 +269,7 @@ ChangePassword.propTypes = {
     errors: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     isOpen: state.openModal === "changePasswordModal",
     auth: state.auth,
     errors: state.errors,

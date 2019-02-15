@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal, updateOpenLog } from "../../actions/actions";
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 import { ILogEntry } from "../../utils/types";
 
 import {
@@ -136,7 +136,7 @@ LogItem.propTypes = {
     updateOpenLog: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     openModal: state.openModal,
 });
 

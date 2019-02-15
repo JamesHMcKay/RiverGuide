@@ -10,7 +10,7 @@ import { IFilter, IGuide, ILatLon, IMapBounds } from "./../utils/types";
 // Material UI
 import { AppBar, Tab, Tabs, TextField, Toolbar } from "@material-ui/core";
 
-import { State } from "../reducers/index";
+import { IState } from "../reducers/index";
 
 // styles
 import "react-dropdown/style.css";
@@ -117,7 +117,7 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
 
 ControlBar.propTypes = {};
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     openModal: state.openModal,
     guides: state.guides,
     filters: state.filteredGuides,

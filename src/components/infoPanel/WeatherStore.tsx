@@ -141,34 +141,35 @@ export class WeatherStore {
     }
 
     public getWeatherAtLocation(lat: number, lon: number): Promise<IWeatherStore> {
-        const __this = this;
+        const localState = this;
 
         if (this.weatherLocations[this.makeKey(lat, lon)]) {
-            return new Promise((resolve) => {resolve(__this.weatherLocations[__this.makeKey(lat, lon)]); });
+            return new Promise((resolve) => {resolve(localState.weatherLocations[localState.makeKey(lat, lon)]); });
         }
 
         openweather.setCoordinate(lat, lon);
         return new Promise((resolve) => {
-            openweather.getAllWeather(function(err: any, JSONObj: IOpenWeather) {
-                __this.weatherLocations[__this.makeKey(lat, lon)] = {
+            openweather.getAllWeather((err: any, JSONObj: IOpenWeather) => {
+                localState.weatherLocations[localState.makeKey(lat, lon)] = {
                     position: {
                         lat,
                         lon,
                     },
-                    openweather: __this.openWeatherConverter(JSONObj),
+                    openweather: localState.openWeatherConverter(JSONObj),
                 };
                 const position: {latitude: number, longitude: number} = {
                     latitude: lat,
                     longitude: lon,
                   };
 
-                darksky.loadCurrent(position).then(function(result: IDarkSkyWeather) {
-                    __this.weatherLocations[__this.makeKey(lat, lon)].darksky
-                        = __this.darkskyWeatherConverter(result);
+                darksky.loadCurrent(position).then((result: IDarkSkyWeather) => {
+                    localState.weatherLocations[localState.makeKey(lat, lon)].darksky
+                        = localState.darkskyWeatherConverter(result);
                     darksky.loadForecast(position)
-                        .then(function(result: IDarkSkyForecastList) {
-                        __this.weatherLocations[__this.makeKey(lat, lon)].forecast = __this.createForecast(result);
-                        resolve(__this.weatherLocations[__this.makeKey(lat, lon)]);
+                        .then((result: IDarkSkyForecastList) => {
+                            localState.weatherLocations[localState.makeKey(lat, lon)].forecast =
+                                localState.createForecast(result);
+                            resolve(localState.weatherLocations[localState.makeKey(lat, lon)]);
                     });
                     });
         }); });

@@ -11,7 +11,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Toolbar from "@material-ui/core/Toolbar";
 
-import { State } from "../reducers/index";
+import { IState } from "../reducers/index";
 import { IAuth } from "../utils/types";
 
 // Components
@@ -218,7 +218,7 @@ NavBar.propTypes = {
     auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     auth: state.auth,
 });
 

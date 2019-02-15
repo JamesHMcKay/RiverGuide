@@ -68,11 +68,11 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
         }
     }
 
-    public onMarkerDragStart = (event: any) => {
-    }
+    // public onMarkerDragStart = (event: any) => {
+    // }
 
-    public onMarkerDrag = (event: any) => {
-    }
+    // public onMarkerDrag = (event: any) => {
+    // }
 
     public onMarkerDragEnd = (markerId: string, event: any) => {
         const markers = {...this.state.markers};
@@ -95,9 +95,9 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
                         longitude={marker.lng}
                         latitude={marker.lat}
                         draggable
-                        onDragStart={this.onMarkerDragStart}
+                        // onDragStart={this.onMarkerDragStart}
                         onDragEnd={(event) => this.onMarkerDragEnd(marker.id, event)}
-                        onDrag={this.onMarkerDrag}
+                        // onDrag={this.onMarkerDrag}
                     >
                         <MapMarker
                             size={30}
@@ -206,7 +206,6 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
 
     public onDragOver = (event: any) => {
         event.preventDefault();
-        console.log(event);
     }
 
     public render() {
@@ -225,7 +224,7 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
                 <ReactMapGL
                     mapStyle="mapbox://styles/mapbox/outdoors-v9"
                     {...viewport}
-                    onViewportChange={(viewport) => {}}
+                    onViewportChange={(viewport) => null}
                     mapboxApiAccessToken={TOKEN}
                     onClick={this.onMapClick}
                     // onDragOver={(e) => this.onDragOver()}

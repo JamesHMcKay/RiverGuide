@@ -3,7 +3,7 @@
 
 # RiverWiki
 
-The application provides up to date and detailed information on New Zealand rivers.  This includes river flow, weather and community sourced descriptions.  By signing in users have access to a logbook feature and the ability to contribute to the database of river guides.
+This application provides up to date and detailed information on New Zealand rivers.  This includes river flow, weather and community sourced descriptions.  By signing in users have access to a logbook feature and the ability to contribute to the database of river guides.
 
 ## Quick Start
 

@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 
 import { Modal, ModalHeader } from "reactstrap";
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 
 interface ISuccessProps {
     toggleModal: (modal: string) => void;
@@ -34,7 +34,7 @@ Success.propTypes = {
     toggleModal: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     isOpen: state.openModal === "successModal",
 });
 

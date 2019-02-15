@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { createLogEntry, toggleModal } from "../../actions/actions";
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 import { ILogEntry } from "../../utils/types";
 
 import SectionSelect from "./SectionSelect";
@@ -142,7 +142,7 @@ TripDetailsModal.propTypes = {
     createLogEntry: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     isOpen: state.openModal === "addTrip",
 });
 

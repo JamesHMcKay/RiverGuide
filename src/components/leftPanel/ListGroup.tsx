@@ -13,7 +13,7 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 
 // Components
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 import { IAuth, IGauge, IGuide, IInfoPage } from "./../../utils/types";
 import GuideItem from "./ListItem";
 
@@ -100,7 +100,7 @@ ListGroup.propTypes = {
     auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     auth: state.auth,
     filters: state.filteredGuides,
     filteredList: state.filteredList,

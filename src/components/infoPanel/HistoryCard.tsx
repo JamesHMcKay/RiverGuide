@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import ReactHighcharts from "react-highcharts";
 import { connect } from "react-redux";
-import { State } from "../../reducers/index";
+import { IState } from "../../reducers/index";
 import { IHistory } from "../../utils/types";
 
 // Material UI
@@ -76,7 +76,7 @@ HistoryCard.propTypes = {
     history: PropTypes.array.isRequired,
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: IState) => ({
     history: state.infoPage.history,
 });
 
