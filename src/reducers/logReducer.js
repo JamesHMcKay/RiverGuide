@@ -11,7 +11,7 @@ export default (state = initialState, action) => {
             return [...state, action.payload];
         case EDIT_LOG:
             return state.map(
-                log => (log._id === action.payload._id ? action.payload : log)
+                log => (log._id === action.payload._id ? action.payload : log),
             );
         case DELETE_LOG:
             return state.filter(log => log._id !== action.payload);

@@ -1,18 +1,18 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 
 // Material UI
-import { CircularProgress, Button, List, Tooltip } from "@material-ui/core";
+import { Button, CircularProgress, List, Tooltip } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 
 // Components
-import ListGroup from "./ListGroup";
-import { IGuide, IGauge, IInfoPage, IAuth } from './../../utils/types';
-import { State } from '../../reducers/index';
+import { State } from "../../reducers/index";
+import { IAuth, IGauge, IGuide, IInfoPage } from "./../../utils/types";
 // Styles
 import "./LeftPanel.css";
+import ListGroup from "./ListGroup";
 
 // Icons
 // import { library } from "@fortawesome/fontawesome-svg-core";
@@ -33,26 +33,26 @@ interface ILeftPanelProps {
     onClick: (guide: IGuide) => void;
 }
 
-class LeftPanel extends Component<ILeftPanelProps,{}> {
-    getRegion = (guide: IGuide) => guide.region;
+class LeftPanel extends Component<ILeftPanelProps, {}> {
+    public getRegion = (guide: IGuide) => guide.region;
 
-    onlyUnique = (value: string, index: number, self: string[]) => self.indexOf(value) === index;
+    public onlyUnique = (value: string, index: number, self: string[]) => self.indexOf(value) === index;
 
-    sortAlphbetically = (a: string, b: string) => {
-        if (a < b) return -1;
-        if (a > b) return 1;
+    public sortAlphbetically = (a: string, b: string) => {
+        if (a < b) { return -1; }
+        if (a > b) { return 1; }
         return 0;
-    };
+    }
 
-    handleClick = (modalName: string) => {
+    public handleClick = (modalName: string) => {
         this.props.toggleModal(modalName);
-    };
+    }
 
-    renderListGroup = (region: string, idx: number) => <ListGroup key={idx} region={region} />;
+    public renderListGroup = (region: string, idx: number) => <ListGroup key={idx} region={region} />;
 
-    render() {
+    public render() {
         const { isAuthenticated } = this.props.auth;
-        let isLoading = this.props.guides.length < 1;
+        const isLoading = this.props.guides.length < 1;
 
         const renderedList = (
             <List>
@@ -108,17 +108,17 @@ class LeftPanel extends Component<ILeftPanelProps,{}> {
 }
 
 LeftPanel.propTypes = {
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
     auth: state.auth,
     guides: state.guides,
     infoPage: state.infoPage,
-    filteredGuides: state.filteredList
+    filteredGuides: state.filteredList,
 });
 
 export default connect(
     mapStateToProps,
-    { toggleModal }
+    { toggleModal },
 )(LeftPanel);

@@ -1,22 +1,22 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { createLogEntry, toggleModal } from "../../actions/actions";
-import { State } from '../../reducers/index';
-import { ILogEntry } from '../../utils/types';
+import { State } from "../../reducers/index";
+import { ILogEntry } from "../../utils/types";
 
 import SectionSelect from "./SectionSelect";
 
 import {
     Button,
+    Form,
+    FormGroup,
+    Input,
+    Label,
     Modal,
     ModalBody,
     ModalFooter,
     ModalHeader,
-    Form,
-    FormGroup,
-    Label,
-    Input
 } from "reactstrap";
 
 const FORM_CONTENT = [
@@ -24,10 +24,10 @@ const FORM_CONTENT = [
     {
         name: "participantCount",
         type: "number",
-        label: "Number of Participants"
+        label: "Number of Participants",
     },
     { name: "rating", type: "number", label: "Rating (0 - 5)" },
-    { name: "description", type: "textarea", label: "Description" }
+    { name: "description", type: "textarea", label: "Description" },
 ];
 
 const initialState = {
@@ -36,7 +36,7 @@ const initialState = {
     date: "",
     participantCount: 1,
     rating: 3,
-    description: ""
+    description: "",
 };
 
 interface ITripDetailsModelProps {
@@ -62,36 +62,35 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         this.handleSave = this.handleSave.bind(this);
     }
 
-    closeModal() {
+    public closeModal() {
         this.props.toggleModal("addTrip");
     }
 
-    handleChange(e: any) {
+    public handleChange(e: any) {
         const key = e.target.name;
         if (this.state.logEntry && key in Object.keys(this.state.logEntry)) {
-            let logEntry = this.state.logEntry;
+            const logEntry = this.state.logEntry;
             logEntry[key as keyof ILogEntry] = e.target.value;
-            this.setState({ logEntry: logEntry });
+            this.setState({ logEntry });
         }
     }
 
-    handleSectionChange(e: any) {
+    public handleSectionChange(e: any) {
         if (this.state.logEntry) {
             let logEntry = this.state.logEntry;
             logEntry = {
                 ...logEntry,
                 section: e.value,
-            }
+            };
             this.setState({ logEntry });
         }
     }
 
-    handleSave() {
+    public handleSave() {
         this.props.createLogEntry(this.state.logEntry as ILogEntry);
     }
 
-
-    getValue = (key: string): string => {
+    public getValue = (key: string): string => {
         if (this.state.logEntry && key in Object.keys(this.state.logEntry)) {
             return this.state.logEntry[key as keyof ILogEntry] as string;
         } else {
@@ -99,7 +98,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         }
     }
 
-    render() {
+    public render() {
         return (
             <div>
                 <Modal isOpen={this.props.isOpen} toggle={this.closeModal}>
@@ -140,14 +139,14 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
 
 TripDetailsModal.propTypes = {
     toggleModal: PropTypes.func.isRequired,
-    createLogEntry: PropTypes.func.isRequired
+    createLogEntry: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
-    isOpen: state.openModal === "addTrip"
+    isOpen: state.openModal === "addTrip",
 });
 
 export default connect(
     mapStateToProps,
-    { createLogEntry, toggleModal }
+    { createLogEntry, toggleModal },
 )(TripDetailsModal);

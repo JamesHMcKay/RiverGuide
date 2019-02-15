@@ -1,20 +1,20 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { openInfoPage } from "../../actions/actions";
 
 // Material UI
+import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import PlaceIcon from "@material-ui/icons/PlaceOutlined";
-import Divider from "@material-ui/core/Divider";
 
 // Components
-import FlowBadge from "../common/FlowBadge";
 import { IGuide } from "../../utils/types";
+import FlowBadge from "../common/FlowBadge";
 
-import { State } from '../../reducers/index';
+import { State } from "../../reducers/index";
 
 interface IGuideItemProps {
     openInfoPage: (guide: IGuide) => void;
@@ -22,11 +22,11 @@ interface IGuideItemProps {
 }
 
 class GuideItem extends Component<IGuideItemProps, {}> {
-    handleClick = () => {
+    public handleClick = () => {
         this.props.openInfoPage(this.props.guide);
-    };
+    }
 
-    render() {
+    public render() {
         return (
             <div>
                 <ListItem button onClick={this.handleClick}>
@@ -43,14 +43,14 @@ class GuideItem extends Component<IGuideItemProps, {}> {
 }
 
 GuideItem.propTypes = {
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
-    auth: state.auth
+    auth: state.auth,
 });
 
 export default connect(
     mapStateToProps,
-    { openInfoPage }
+    { openInfoPage },
 )(GuideItem);

@@ -1,11 +1,11 @@
-import React from 'react';
-import moment from 'moment';
-import { IUserProfile } from '../../utils/types';
+import moment from "moment";
+import React from "react";
+import { IUserProfile } from "../../utils/types";
 
-import { Col, Row } from 'reactstrap';
+import { Col, Row } from "reactstrap";
 
 interface IProfileBannerProps {
-    user: IUserProfile
+    user: IUserProfile;
 }
 
 const ProfileBanner = (props: IProfileBannerProps) => (
@@ -15,7 +15,7 @@ const ProfileBanner = (props: IProfileBannerProps) => (
                 md="3"
                 lg="3"
                 style={{
-                    justifyContent: "center"
+                    justifyContent: "center",
                 }}
             >
                 <img

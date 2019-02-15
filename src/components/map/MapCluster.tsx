@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {PureComponent} from "react";
 
 export interface IMapClusterProps {
     size: number;
@@ -7,10 +7,10 @@ export interface IMapClusterProps {
 }
 
 export default class MapCluster extends PureComponent<IMapClusterProps> {
-    render() {
+    public render() {
         const {size = 80} = this.props;
         return (
-            <div 
+            <div
                 className="map-cluster"
                 onClick={() => this.props.onClick()}
                 style={{transform: `translate(${-size / 2}px,${-size}px)`}}

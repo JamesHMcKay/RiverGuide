@@ -1,17 +1,17 @@
-import React, { Component } from "react";
+import { library } from "@fortawesome/fontawesome-svg-core";
 import moment from "moment";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal, updateOpenLog } from "../../actions/actions";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { State } from '../../reducers/index';
-import { ILogEntry } from '../../utils/types';
+import { State } from "../../reducers/index";
+import { ILogEntry } from "../../utils/types";
 
 import {
     faCaretDown,
     faCaretRight,
     faStar,
-    faUser
+    faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import {
     Badge,
@@ -20,7 +20,7 @@ import {
     CardBody,
     CardHeader,
     CardText,
-    Collapse
+    Collapse,
 } from "reactstrap";
 
 import "./profile.css";
@@ -49,39 +49,39 @@ class LogItem extends Component<ILogItemProps, ILogItemState> {
         this.renderStars = this.renderStars.bind(this);
     }
 
-    toggleContent() {
+    public toggleContent() {
         this.setState({ isOpen: !this.state.isOpen });
     }
 
-    parseDate(date: string) {
+    public parseDate(date: string) {
         return moment(date).format("DD MMMM YYYY");
     }
 
-    handleEdit() {
+    public handleEdit() {
         this.props.toggleModal("editTrip");
         this.props.updateOpenLog(this.props.item);
     }
 
-    handleDelete() {
+    public handleDelete() {
         this.props.toggleModal("deleteTrip");
         this.props.updateOpenLog(this.props.item);
     }
 
-    renderStars(rating: number) {
-        let stars : number[] = [];
-        for (var i = 0; i < Math.floor(rating); i++) {
+    public renderStars(rating: number) {
+        const stars: number[] = [];
+        for (let i = 0; i < Math.floor(rating); i++) {
             // stars.push(<FontAwesomeIcon icon="star" />);
         }
         return stars;
     }
 
-    render() {
+    public render() {
         const {
             date,
             section,
             participantCount,
             rating,
-            description
+            description,
         } = this.props.item;
 
         return (
@@ -133,14 +133,14 @@ class LogItem extends Component<ILogItemProps, ILogItemState> {
 
 LogItem.propTypes = {
     toggleModal: PropTypes.func.isRequired,
-    updateOpenLog: PropTypes.func.isRequired
+    updateOpenLog: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
-    openModal: state.openModal
+    openModal: state.openModal,
 });
 
 export default connect(
     mapStateToProps,
-    { toggleModal, updateOpenLog }
+    { toggleModal, updateOpenLog },
 )(LogItem);

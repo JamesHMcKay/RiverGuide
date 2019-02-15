@@ -1,7 +1,7 @@
 export default interface Todo {
-    id: number,
-    name: string,
-    done: boolean
+    id: number;
+    name: string;
+    done: boolean;
   }
 
 export interface ILatLon {
@@ -10,24 +10,23 @@ export interface ILatLon {
     lng?: number;
 }
 
-
 export interface IMapBounds {
     _ne: ILatLon;
     _sw: ILatLon;
 }
 
 export interface IMarker {
-    name: string,
-    lat: number,
-    lng: number,
-    id: string,
+    name: string;
+    lat: number;
+    lng: number;
+    id: string;
 }
 
 export interface IMarker {
-    name: string,
-    lat: number,
-    lng: number,
-    id: string,
+    name: string;
+    lat: number;
+    lng: number;
+    id: string;
 }
 
 export interface IGradeRange {
@@ -50,14 +49,14 @@ export interface IGuide {
     grade?: string;
     minFlow?: number;
     maxFlow?: number;
-    markers: IMarker[],
-    flowSpecificGrades?: IGradeRange[],
-    lat?: number,
-    lng?: number,
-    description: string,
+    markers: IMarker[];
+    flowSpecificGrades?: IGradeRange[];
+    lat?: number;
+    lng?: number;
+    description: string;
     dateCreated: Date;
-    catch_type?: string,
-    activity?: string,
+    catch_type?: string;
+    activity?: string;
 }
 
 export interface IGauge {
@@ -67,17 +66,16 @@ export interface IGauge {
     lastUpdated: string;
 }
 
-
 export interface IInfoPage {
-    selectedGuide: IGuide,
-    infoSelected: boolean,
-    history: IHistory[],
-    selectedHistory: IHistory[],
+    selectedGuide: IGuide;
+    infoSelected: boolean;
+    history: IHistory[];
+    selectedHistory: IHistory[];
 }
 
 export interface IFilter {
-    attribute: string,
-    values: string,
+    attribute: string;
+    values: string;
 }
 
 export interface ILoginDetails {

@@ -1,13 +1,13 @@
-import React from "react";
 import moment from "moment";
+import React from "react";
 import cloudy from "../../img/cloudy.svg";
 import fog from "../../img/fog.svg";
+import partlyCloudy from "../../img/partlyCloudy.svg";
 import rain from "../../img/rain.svg";
 import sleet from "../../img/sleet.svg";
 import snow from "../../img/snow.svg";
-import wind from "../../img/wind.svg";
 import sun from "../../img/sun.svg";
-import partlyCloudy from "../../img/partlyCloudy.svg";
+import wind from "../../img/wind.svg";
 import { IWeather, IWeatherStore, WeatherStore } from "./WeatherStore";
 
 // Material UI
@@ -16,20 +16,20 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 
 const WEATHER_ICONS = [
-    {icon: 'cloudy', element: <img src={cloudy} alt="" className="weather-icon"/>},
-    {icon: 'clear-day', element: <img src={sun} alt="" className="weather-icon"/>},
-    {icon: 'clear-night',element: <img src={sun} alt="" className="weather-icon"/>},
-    {icon: 'rain', element: <img src={rain} alt="" className="weather-icon"/>},
-    {icon: 'snow', element: <img src={snow} alt="" className="weather-icon"/>},
-    {icon: 'sleet', element: <img src={sleet} alt="" className="weather-icon"/>},
-    {icon: 'wind', element: <img src={wind} alt="" className="weather-icon"/>},
-    {icon: 'fog', element: <img src={fog} alt="" className="weather-icon"/>},
-    {icon: 'partly-cloudy-day', element: <img src={partlyCloudy} alt="" className="weather-icon"/>},
-    {icon: 'partly-cloudy-night', element: <img src={partlyCloudy} alt="" className="weather-icon"/>},
+    {icon: "cloudy", element: <img src={cloudy} alt="" className="weather-icon"/>},
+    {icon: "clear-day", element: <img src={sun} alt="" className="weather-icon"/>},
+    {icon: "clear-night", element: <img src={sun} alt="" className="weather-icon"/>},
+    {icon: "rain", element: <img src={rain} alt="" className="weather-icon"/>},
+    {icon: "snow", element: <img src={snow} alt="" className="weather-icon"/>},
+    {icon: "sleet", element: <img src={sleet} alt="" className="weather-icon"/>},
+    {icon: "wind", element: <img src={wind} alt="" className="weather-icon"/>},
+    {icon: "fog", element: <img src={fog} alt="" className="weather-icon"/>},
+    {icon: "partly-cloudy-day", element: <img src={partlyCloudy} alt="" className="weather-icon"/>},
+    {icon: "partly-cloudy-night", element: <img src={partlyCloudy} alt="" className="weather-icon"/>},
 ];
 
 interface IWeatherForecastState {
-    weatherStore: any
+    weatherStore: any;
     weatherProvider: string;
     weather: IWeatherStore | null;
     lat: number;
@@ -47,25 +47,25 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
         super(props);
         this.state = ({
             weatherStore: props.weatherStore,
-            weatherProvider: 'DarkSky',
+            weatherProvider: "DarkSky",
             lat: 0,
             lon: 0,
             weather: null,
         });
     }
-  
-    componentDidMount() {
+
+    public componentDidMount() {
       this._loadUserData();
     }
-  
-    componentDidUpdate(prevProps: IWeatherForecastProps) {
+
+    public componentDidUpdate(prevProps: IWeatherForecastProps) {
         if (this.props.lat !== prevProps.lat) {
             this.setState({weather: null, lat: this.props.lat});
             this._loadUserData();
         }
     }
 
-    alternateProvider() {
+    public alternateProvider() {
         if (this.state.weatherProvider === "OpenWeather") {
             this.setState({weatherProvider: "DarkSky"});
         } else if (this.state.weatherProvider === "DarkSky") {
@@ -73,7 +73,7 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
         }
     }
 
-    getWeatherObject (): Partial<IWeather> | null {
+    public getWeatherObject(): Partial<IWeather> | null {
         if (this.state.weather && this.state.weatherProvider === "OpenWeather") {
             return this.state.weather.openweather || null;
         } else if (this.state.weather && this.state.weatherProvider === "DarkSky") {
@@ -83,24 +83,24 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
         }
     }
 
-    getForecastDay (day: number): Partial<IWeather> | null {
+    public getForecastDay(day: number): Partial<IWeather> | null {
         if (this.state.weather && this.state.weather.forecast) {
-            return this.state.weather.forecast[day] ||null;
+            return this.state.weather.forecast[day] || null;
         } else {
             return null;
         }
     }
 
-    getForecastMaxTemp = (day: number): JSX.Element | null => {
-        let forecast: Partial<IWeather> | null = this.getForecastDay(day);
+    public getForecastMaxTemp = (day: number): JSX.Element | null => {
+        const forecast: Partial<IWeather> | null = this.getForecastDay(day);
         if (forecast && forecast.maxTemp) {
-            let temp = Math.round(forecast.maxTemp * 10) / 10
+            const temp = Math.round(forecast.maxTemp * 10) / 10;
             return (
-                <div className='weather-temp'>
+                <div className="weather-temp">
                     <span>
                         {temp} <span>&deg;C</span>
                     </span>
-                    <span className='temp-text'>High</span>
+                    <span className="temp-text">High</span>
                 </div>
             );
         } else {
@@ -108,16 +108,16 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
         }
     }
 
-    getForecastMinTemp = (day: number): JSX.Element | null => {
-        let forecast: Partial<IWeather> | null = this.getForecastDay(day);
+    public getForecastMinTemp = (day: number): JSX.Element | null => {
+        const forecast: Partial<IWeather> | null = this.getForecastDay(day);
         if (forecast && forecast.minTemp) {
-            let temp = Math.round(forecast.minTemp * 10) / 10
+            const temp = Math.round(forecast.minTemp * 10) / 10;
             return (
-                <div className='weather-temp'>
+                <div className="weather-temp">
                     <span>
                         {temp} <span>&deg;C</span>
                     </span>
-                    <span className='temp-text'>Low</span>
+                    <span className="temp-text">Low</span>
                 </div>
             );
         } else {
@@ -125,13 +125,13 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
         }
     }
 
-    getForecastWindSpeed = (day: number): JSX.Element | null => {
-        let forecast: Partial<IWeather> | null = this.getForecastDay(day);
+    public getForecastWindSpeed = (day: number): JSX.Element | null => {
+        const forecast: Partial<IWeather> | null = this.getForecastDay(day);
         if (forecast && forecast.wind) {
-            let wind = Math.round(forecast.wind.speed * 10) / 10
+            const wind = Math.round(forecast.wind.speed * 10) / 10;
             return (
-                <span className='wind-speed'>
-                    {wind + ' km/h'}
+                <span className="wind-speed">
+                    {wind + " km/h"}
                 </span>
             );
         } else {
@@ -139,33 +139,32 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
         }
     }
 
-    getForecastWindDirection = (day: number): JSX.Element | null => {
-        let forecast: Partial<IWeather> | null = this.getForecastDay(day);
+    public getForecastWindDirection = (day: number): JSX.Element | null => {
+        const forecast: Partial<IWeather> | null = this.getForecastDay(day);
         if (forecast && forecast.wind) {
             return (
-                <div className='weather-wind-direction'>
-                    <span className='wind-text'>Wind</span>
-                    <span className='wind-direction'>
+                <div className="weather-wind-direction">
+                    <span className="wind-text">Wind</span>
+                    <span className="wind-direction">
                         {forecast.wind.direction}
                     </span>
-                    <span className='wind-text'>Direction</span>
+                    <span className="wind-text">Direction</span>
                 </div>);
         } else {
             return null;
         }
     }
 
-
-    getForecastIcon(day: number): JSX.Element | null {
-        let forecast: Partial<IWeather> | null = this.getForecastDay(day);
+    public getForecastIcon(day: number): JSX.Element | null {
+        const forecast: Partial<IWeather> | null = this.getForecastDay(day);
         if (forecast && forecast.icon) {
-            let icon = forecast.icon;
-            for (let weatherIcon of WEATHER_ICONS) {
+            const icon = forecast.icon;
+            for (const weatherIcon of WEATHER_ICONS) {
                 if (icon === weatherIcon.icon) {
                     return (
-                        <div className='icon-summary'>
+                        <div className="icon-summary">
                             {weatherIcon.element}
-                            <span className='summary-text'>
+                            <span className="summary-text">
                                 {forecast.summary}
                             </span>
                         </div>
@@ -173,9 +172,9 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
                 }
             }
             return (
-                <div className='icon-summary'>
+                <div className="icon-summary">
                  <img src={cloudy} alt="" className="weather-icon"/>
-                <span className='summary-text'>
+                <span className="summary-text">
                     {forecast.summary}
                 </span>
                 </div>
@@ -185,56 +184,56 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
         }
     }
 
-    getDayOfWeek(dayNumber: number): string {
+    public getDayOfWeek(dayNumber: number): string {
         return (function(value) {
-            switch(value) {
+            switch (value) {
             case 0:
-            return 'Sunday';
+            return "Sunday";
             case 1:
-            return 'Monday';
+            return "Monday";
             case 2:
-            return 'Tuesday';
+            return "Tuesday";
             case 3:
-            return 'Wednesday';
+            return "Wednesday";
             case 4:
-            return 'Thursday';
+            return "Thursday";
             case 5:
-            return 'Friday';
+            return "Friday";
             case 6:
-            return 'Saturday';
+            return "Saturday";
             default:
-            return '';
+            return "";
         }})(dayNumber);
     }
 
-    getForecastTime(day: number): JSX.Element | null {
-        let forecast: Partial<IWeather> | null = this.getForecastDay(day);
+    public getForecastTime(day: number): JSX.Element | null {
+        const forecast: Partial<IWeather> | null = this.getForecastDay(day);
         if (forecast && forecast.time) {
-            let forecastTime = moment.unix(forecast.time);
-            let currentTime = moment();
-            let __this = this;
-            let difference = moment.duration(forecastTime.diff(currentTime)).asHours();
-            let title = (function(value, forecastTime) {
-                switch(true) {
+            const forecastTime = moment.unix(forecast.time);
+            const currentTime = moment();
+            const __this = this;
+            const difference = moment.duration(forecastTime.diff(currentTime)).asHours();
+            const title = (function(value, forecastTime) {
+                switch (true) {
                 case value < 0:
-                    return 'Today';
+                    return "Today";
                 case value < 24 && value > 0:
-                    return "Tomorrow"
+                    return "Tomorrow";
                 case value > 24:
                     return __this.getDayOfWeek(forecastTime.day());
                 default:
-                    return '';
+                    return "";
             }})(difference, forecastTime);
-            return (<div className='weather-day'>{title}</div>);
+            return (<div className="weather-day">{title}</div>);
         } else {
             return null;
         }
     }
 
-    getForecastElement(day: number): JSX.Element {
+    public getForecastElement(day: number): JSX.Element {
         return (
             <Card>
-                <CardContent className='forecast-element'>
+                <CardContent className="forecast-element">
                 {this.getForecastIcon(day)}
                 {this.getForecastTime(day)}
                 {this.getForecastMaxTemp(day)}
@@ -246,9 +245,9 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
         );
     }
 
-    render(): JSX.Element {
+    public render(): JSX.Element {
         return (
-            <Card style={{width:'50%'}}>
+            <Card style={{width: "50%"}}>
                 <CardContent>
                 <Typography color="textSecondary" gutterBottom>
                     Forecast
@@ -263,15 +262,15 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
         );
     }
 
-    _loadUserData() {
-        let __this = this;
+    public _loadUserData() {
+        const __this = this;
         this.props.weatherStore.getWeatherAtLocation(this.props.lat, this.props.lon).then(
             function(result: IWeatherStore) {
                 __this.setState({
                     weather: result,
-                    lat: __this.props.lat
+                    lat: __this.props.lat,
                 });
-            }
+            },
         );
     }
   }

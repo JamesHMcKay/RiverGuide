@@ -6,16 +6,15 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 
 // Component
+import { IMarker } from "../../utils/types";
 import InfoMapComponent from "../map/InfoMapComponent";
-import { IMarker } from '../../utils/types';
 
 interface IMapCardProps {
     markers: IMarker[];
 }
 
-
 class MapCard extends Component<IMapCardProps> {
-    render() {
+    public render() {
         return (
             <Card>
                 <CardContent>

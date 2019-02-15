@@ -1,39 +1,39 @@
-import React, { Component } from "react";
 import PropTypes, { string } from "prop-types";
+import React, { Component } from "react";
+// Components
+import ReactDOM from "react-dom";
 import { connect } from "react-redux";
+import { CSSTransition } from "react-transition-group";
 import {
+    generateFilteredList,
     makeGaugeRequest,
     makeGuideRequest,
+    openInfoPage,
     setMapBounds,
-    generateFilteredList,
-    openInfoPage
 } from "../actions/actions";
-import { CSSTransition } from "react-transition-group";
-// Components
-import ReactDOM from 'react-dom';
-import { State } from '../reducers/index';
+import { State } from "../reducers/index";
 
-import * as weather from 'openweather-apis';
-import * as darksky from 'dark-sky-api';
+import * as darksky from "dark-sky-api";
+import * as weather from "openweather-apis";
 
-import LeftPanel from "./leftPanel/LeftPanel";
 import ControlBar from "./ControlBar";
 import Info from "./infoPanel/Info";
+import LeftPanel from "./leftPanel/LeftPanel";
 import { MapComponent } from "./map/MapComponent";
 
-import { 
-    IGuide,
-    IGauge,
-    IInfoPage,
+import {
     IFilter,
-    IMapBounds,
-    ILatLon } from './../utils/types';
+    IGauge,
+    IGuide,
+    IInfoPage,
+    ILatLon,
+    IMapBounds } from "./../utils/types";
 
 // Styles
 import "./Panel.css";
 
 const getDimensions = (element: any) => {
-    let { width, height } = element.getBoundingClientRect();
+    const { width, height } = element.getBoundingClientRect();
     return { width, height };
 };
 
@@ -59,14 +59,14 @@ export interface IPanelProps {
     gauges: IGauge[];
     infoPage: IInfoPage;
     filterdGuides: IGuide[];
-    filters: IFilter[],
+    filters: IFilter[];
     makeGaugeRequest: () => void;
     makeGuideRequest: (guide: string) => void;
     setMapBounds: (mapBounds: IMapBounds) => void;
     generateFilteredList: (
         guides: IGuide[],
         filters: IFilter[],
-        mapBounds: IMapBounds
+        mapBounds: IMapBounds,
     ) => void;
     openInfoPage: (guide: IGuide) => void;
 }
@@ -83,16 +83,16 @@ class Panel extends Component<IPanelProps, IPanelState> {
             units: "",
             mapDimensions: {
                 width: 0,
-                height: 0
+                height: 0,
             },
-            searchApplied: false
+            searchApplied: false,
         };
-        
-        weather.setAPPID('521cea2fce8675d0fe0678216dc01d5c');
-        weather.setLang('en');
 
-        darksky.units = 'si';
-        darksky.apiKey = 'ab0e334c507c7f0de8fde5e61f27d6df';
+        weather.setAPPID("521cea2fce8675d0fe0678216dc01d5c");
+        weather.setLang("en");
+
+        darksky.units = "si";
+        darksky.apiKey = "ab0e334c507c7f0de8fde5e61f27d6df";
 
         this.onChange = this.onChange.bind(this);
         this.onClick = this.onClick.bind(this);
@@ -101,28 +101,28 @@ class Panel extends Component<IPanelProps, IPanelState> {
         this.updateDimensions = this.updateDimensions.bind(this);
     }
 
-    updateDimensions() {
-        let element = ReactDOM.findDOMNode(this.refs.mapView);
+    public updateDimensions() {
+        const element = ReactDOM.findDOMNode(this.refs.mapView);
         this.setState({
-            mapDimensions: getDimensions(element)
+            mapDimensions: getDimensions(element),
         });
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.props.makeGaugeRequest();
         this.props.makeGuideRequest("whitewater");
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
     }
 
-    componentWillReceiveProps(props: IPanelProps) {
+    public componentWillReceiveProps(props: IPanelProps) {
         this.setState({
             searchList: props.guides,
-            gaugeList: props.gauges
+            gaugeList: props.gauges,
         });
     }
 
-    searchMatchesGuide(guide: IGuide, searchText: string) {
+    public searchMatchesGuide(guide: IGuide, searchText: string) {
         return (
             guide.title.toLowerCase().indexOf(searchText) > 0 ||
             guide.river.toLowerCase().indexOf(searchText) > 0 ||
@@ -130,9 +130,9 @@ class Panel extends Component<IPanelProps, IPanelState> {
         );
     }
 
-    onChange(ev: any) {
-        let searchResults = this.props.guides.filter(guide =>
-            this.searchMatchesGuide(guide, ev.target.value.toLowerCase())
+    public onChange(ev: any) {
+        const searchResults = this.props.guides.filter((guide) =>
+            this.searchMatchesGuide(guide, ev.target.value.toLowerCase()),
         );
         let searchApplied = false;
         if (ev.target.value && ev.target.value !== "") {
@@ -141,11 +141,11 @@ class Panel extends Component<IPanelProps, IPanelState> {
         this.setState({
             searchText: ev.target.value,
             searchList: searchResults,
-            searchApplied: searchApplied
+            searchApplied,
         });
     }
 
-    closeInfo() {
+    public closeInfo() {
         // this.setState({
         //     selectedGuide: {},
         //     selectedHistory: [],
@@ -153,20 +153,20 @@ class Panel extends Component<IPanelProps, IPanelState> {
         // });
     }
 
-    onClick(guide: IGuide) {
+    public onClick(guide: IGuide) {
         this.props.openInfoPage(guide);
     }
 
-    updateMapBounds = (mapBounds: IMapBounds) => {
+    public updateMapBounds = (mapBounds: IMapBounds) => {
             this.props.setMapBounds(mapBounds);
             this.props.generateFilteredList(
                 this.props.guides,
                 this.props.filters,
-                mapBounds
+                mapBounds,
             );
     }
 
-    render() {
+    public render() {
         return (
             <div className="middle-section">
                 <ControlBar/>
@@ -215,7 +215,7 @@ Panel.propTypes = {
     makeGaugeRequest: PropTypes.func.isRequired,
     guides: PropTypes.array.isRequired,
     gauges: PropTypes.array.isRequired,
-    infoPage: PropTypes.object.isRequired
+    infoPage: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
@@ -233,5 +233,5 @@ export default connect(
         makeGaugeRequest,
         makeGuideRequest,
         setMapBounds,
-        openInfoPage})
+        openInfoPage}),
 )(Panel);

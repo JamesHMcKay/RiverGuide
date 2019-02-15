@@ -1,21 +1,21 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 
 // Material UI components
+import Chip from "@material-ui/core/Chip";
+import Collapse from "@material-ui/core/Collapse";
+import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-import Collapse from "@material-ui/core/Collapse";
-import Chip from "@material-ui/core/Chip";
-import Divider from "@material-ui/core/Divider";
 
 // Components
+import { State } from "../../reducers/index";
+import { IAuth, IGauge, IGuide, IInfoPage } from "./../../utils/types";
 import GuideItem from "./ListItem";
-import { IGuide, IGauge, IInfoPage, IAuth } from './../../utils/types';
-import { State } from '../../reducers/index';
 
 interface IListGroupProps {
     region: string;
@@ -31,36 +31,36 @@ class ListGroup extends Component<IListGroupProps, IListGroupState> {
     constructor(props: IListGroupProps) {
         super(props);
         this.state = {
-            isExpanded: props.region === "Favourites" ? true : false
+            isExpanded: props.region === "Favourites" ? true : false,
         };
     }
 
-    handleClick = () => {
+    public handleClick = () => {
         this.setState({ isExpanded: !this.state.isExpanded });
-    };
+    }
 
-    getChildren = () => {
+    public getChildren = () => {
         const { region } = this.props;
         const filterdGuides = this.props.filteredList;
 
         if (region === "Favourites") {
             return filterdGuides.filter(
-                guide => this.props.auth.user.favourites.indexOf(guide._id) > -1
+                (guide) => this.props.auth.user.favourites.indexOf(guide._id) > -1,
             );
         }
 
-        return filterdGuides.filter(guide => guide.region === region);
-    };
+        return filterdGuides.filter((guide) => guide.region === region);
+    }
 
-    renderListItem = (guide: IGuide, idx: number) => <GuideItem key={idx} guide={guide} />;
+    public renderListItem = (guide: IGuide, idx: number) => <GuideItem key={idx} guide={guide} />;
 
-    sortAlphbetically = (a: IGuide, b: IGuide) => {
-        if (a.title < b.title) return -1;
-        if (a.title > b.title) return 1;
+    public sortAlphbetically = (a: IGuide, b: IGuide) => {
+        if (a.title < b.title) { return -1; }
+        if (a.title > b.title) { return 1; }
         return 0;
-    };
+    }
 
-    render() {
+    public render() {
         const children = this.getChildren();
 
         return (
@@ -97,13 +97,13 @@ class ListGroup extends Component<IListGroupProps, IListGroupState> {
 }
 
 ListGroup.propTypes = {
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
     auth: state.auth,
     filters: state.filteredGuides,
-    filteredList: state.filteredList
+    filteredList: state.filteredList,
 });
 
 export default connect(mapStateToProps)(ListGroup);

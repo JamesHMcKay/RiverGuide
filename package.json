@@ -2,6 +2,13 @@
   "name": "riverwikits",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "tslint -c tslint.json --project ."
+  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.6",
     "@fortawesome/free-solid-svg-icons": "^5.4.1",
@@ -53,15 +60,11 @@
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
     "riek": "^1.1.0",
+    "tslint": "^5.12.1",
+    "tslint-react": "^3.6.0",
     "typescript": "^3.2.1",
     "uuidv4": "^2.0.0",
     "zxcvbn": "^4.4.2"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"

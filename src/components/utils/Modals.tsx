@@ -1,23 +1,23 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
-import { State } from '../../reducers/index';
+import { State } from "../../reducers/index";
 
 // import Modals
-import Register from "../auth/Register";
-import Login from "../auth/Login";
-import Welcome from "../auth/Welcome";
 import ChangePassword from "../auth/ChangePassword";
-import Success from "../utils/Success";
+import Login from "../auth/Login";
 import Logout from "../auth/Logout";
-import TripDetailsModal from "../profile/TripDetailsModal";
+import Register from "../auth/Register";
+import Welcome from "../auth/Welcome";
 import FiltersModal from "../list/FiltersModal";
+import TripDetailsModal from "../profile/TripDetailsModal";
+import Success from "../utils/Success";
 // import Create from "../create/Create";
 // import CreateModal from "../create/CreateModal";
 
 class Modals extends Component {
-    render() {
+    public render() {
         return (
             <div>
                 <ChangePassword />
@@ -36,14 +36,14 @@ class Modals extends Component {
 }
 
 Modals.propTypes = {
-    toggleModal: PropTypes.func.isRequired
+    toggleModal: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
-    openModal: state.openModal
+    openModal: state.openModal,
 });
 
 export default connect(
     mapStateToProps,
-    { toggleModal }
+    { toggleModal },
 )(Modals);

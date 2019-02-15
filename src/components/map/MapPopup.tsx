@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { GradeBadge } from "../common/GradeBadge";
+import { State } from "../../reducers/index";
+import { IGauge, IGuide } from "../../utils/types";
 import FlowBadge from "../common/FlowBadge";
-import { IGuide, IGauge } from '../../utils/types';
-import { State } from '../../reducers/index';
+import { GradeBadge } from "../common/GradeBadge";
 
 interface IMapPopupProps {
     guide: IGuide;
@@ -12,7 +12,7 @@ interface IMapPopupProps {
 
 class MapPopup extends Component<IMapPopupProps, {}> {
 
-    render() {
+    public render() {
         const { guide, gauges } = this.props;
 
         return (
@@ -26,10 +26,10 @@ class MapPopup extends Component<IMapPopupProps, {}> {
 }
 
 const mapStateToProps = (state: State) => ({
-    gauges: state.gauges
+    gauges: state.gauges,
 });
 
 export default connect(
     mapStateToProps,
-    {}
+    {},
 )(MapPopup);

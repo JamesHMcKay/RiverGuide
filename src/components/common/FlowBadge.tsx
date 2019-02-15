@@ -1,9 +1,9 @@
-import React, { Component, ReactChild } from "react";
 import PropTypes from "prop-types";
+import React, { Component, ReactChild } from "react";
 import { connect } from "react-redux";
 
-import { IGauge } from './../../utils/types';
-import { State } from '../../reducers/index';
+import { State } from "../../reducers/index";
+import { IGauge } from "./../../utils/types";
 
 // Material UI
 import Chip from "@material-ui/core/Chip";
@@ -21,9 +21,9 @@ class FlowBadge extends Component<IFlowBadgeProps> {
         super(props);
     }
 
-    getFlowValue = (siteName: string): string | null => {
+    public getFlowValue = (siteName: string): string | null => {
         const gauge = this.props.gauges.filter(
-            gauge => gauge.siteName === siteName
+            (gauge) => gauge.siteName === siteName,
         )[0];
 
         if (gauge) {
@@ -33,15 +33,15 @@ class FlowBadge extends Component<IFlowBadgeProps> {
         }
 
         return null;
-    };
+    }
 
-    render(): JSX.Element | null {
+    public render(): JSX.Element | null {
         const { siteName } = this.props;
         const flow: string | null | undefined = siteName && this.getFlowValue(siteName);
         if (flow) {
             return (
                 <Chip
-                    label={flow} 
+                    label={flow}
                     color="primary"
                     className="flow-badge"
                 />
@@ -53,14 +53,14 @@ class FlowBadge extends Component<IFlowBadgeProps> {
 }
 
 FlowBadge.propTypes = {
-    gauges: PropTypes.array.isRequired
+    gauges: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
-    gauges: state.gauges
+    gauges: state.gauges,
 });
 
 export default connect(
     mapStateToProps,
-    {}
+    {},
 )(FlowBadge);

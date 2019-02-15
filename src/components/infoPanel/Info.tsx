@@ -1,32 +1,32 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import Report from "../common/Report";
 
 import {
-    toggleModal,
-    closeInfoPage,
     addToFavourites,
-    removeFromFavourites
+    closeInfoPage,
+    removeFromFavourites,
+    toggleModal,
 } from "../../actions/actions";
-import "./Info.css";
-import { WeatherForecast } from './WeatherForecast'
-import { CurrentWeather } from './CurrentWeather';
-import { WeatherStore, IWeatherStore } from './WeatherStore';
+import { State } from "../../reducers/index";
+import { IAuth, IGauge, IGuide, IInfoPage } from "../../utils/types";
 import FlowBadge from "../common/FlowBadge";
-import { State } from '../../reducers/index';
-import { IAuth, IGauge, IInfoPage, IGuide } from '../../utils/types';
+import { CurrentWeather } from "./CurrentWeather";
+import "./Info.css";
+import { WeatherForecast } from "./WeatherForecast";
+import { IWeatherStore, WeatherStore } from "./WeatherStore";
 
 // Material UI
-import { Button, Chip, Paper, Tooltip, IconButton } from "@material-ui/core";
+import { Button, Chip, IconButton, Paper, Tooltip } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
 import StarBorderIcon from "@material-ui/icons/StarBorderRounded";
 import StarIcon from "@material-ui/icons/StarRounded";
 
 // Components
-import InfoCard from "./InfoCard";
 import HistoryCard from "./HistoryCard";
+import InfoCard from "./InfoCard";
 import MapCard from "./MapCard";
 
 interface IInfoState {
@@ -35,7 +35,7 @@ interface IInfoState {
 }
 
 interface IInfoProps {
-    auth: IAuth,
+    auth: IAuth;
     toggleModal: (modal?: string) => void;
     gauges: IGauge[];
     infoPage: IInfoPage;
@@ -51,7 +51,7 @@ class Info extends Component<IInfoProps, IInfoState> {
         let favourited: boolean = false;
         if (props.auth.isAuthenticated) {
             favourited = props.auth.user.favourites.indexOf(
-                props.infoPage.selectedGuide._id
+                props.infoPage.selectedGuide._id,
             ) > -1
                 ? true
                 : false;
@@ -59,17 +59,17 @@ class Info extends Component<IInfoProps, IInfoState> {
 
         this.state = {
             weatherStore: new WeatherStore(),
-            favourited: favourited
+            favourited,
         };
     }
 
-    openModal(modalName: string) {
+    public openModal(modalName: string) {
         this.props.toggleModal(modalName);
     }
 
-    handleClose = () => this.props.closeInfoPage();
+    public handleClose = () => this.props.closeInfoPage();
 
-    getLastUpdated() {
+    public getLastUpdated() {
         return (
             <p className="last-updated-flow">
                 <em>
@@ -79,7 +79,7 @@ class Info extends Component<IInfoProps, IInfoState> {
         );
     }
 
-    filterGauges() {
+    public filterGauges() {
         const guide = this.props.guide;
 
         if (!guide.gaugeName) {
@@ -87,14 +87,13 @@ class Info extends Component<IInfoProps, IInfoState> {
         }
 
         return this.props.gauges.filter(
-            gauge =>
+            (gauge) =>
                 (this.props.guide.gaugeName && gauge.siteName.toLowerCase() ===
-                this.props.guide.gaugeName.toLowerCase())
+                this.props.guide.gaugeName.toLowerCase()),
         );
     }
 
-
-    toggleFavourite = () => {
+    public toggleFavourite = () => {
         const { favourited } = this.state;
         const guideId = this.props.infoPage.selectedGuide._id;
         const { email } = this.props.auth.user;
@@ -105,14 +104,14 @@ class Info extends Component<IInfoProps, IInfoState> {
         } else {
             this.props.addToFavourites(guideId, email);
         }
-    };
+    }
 
-    getTags = (activity?: string, grade?: string, catch_type?: string) => {
-        let gradeTag = grade && 'Grade ' + grade;
+    public getTags = (activity?: string, grade?: string, catch_type?: string) => {
+        const gradeTag = grade && "Grade " + grade;
         return (
         [activity, gradeTag, catch_type]
-        .filter(tag => tag)
-        .map(tag => (
+        .filter((tag) => tag)
+        .map((tag) => (
             <Chip
                 key={tag}
                 color="secondary"
@@ -123,7 +122,7 @@ class Info extends Component<IInfoProps, IInfoState> {
         )));
     }
 
-    render() {
+    public render() {
         const {
             title,
             description,
@@ -133,7 +132,7 @@ class Info extends Component<IInfoProps, IInfoState> {
             catch_type,
             activity,
             gaugeName,
-            markers
+            markers,
         } = this.props.infoPage.selectedGuide;
 
         const testDisplay = (
@@ -142,13 +141,13 @@ class Info extends Component<IInfoProps, IInfoState> {
                     style={{
                         width: "100%",
                         height: "10em",
-                        backgroundColor: "#459BE8"
+                        backgroundColor: "#459BE8",
                     }}
                 >
                     <div
                         style={{
                             position: "fixed",
-                            margin: ".5em"
+                            margin: ".5em",
                         }}
                     >
                         <Tooltip
@@ -172,7 +171,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                         style={{
                             textAlign: "center",
                             color: "#fff",
-                            paddingTop: "1em"
+                            paddingTop: "1em",
                         }}
                     >
                         {title}
@@ -180,7 +179,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                     <p
                         style={{
                             textAlign: "center",
-                            color: "#fff"
+                            color: "#fff",
                         }}
                     >
                         {`----- ${river}  •  ${region} -----`}
@@ -214,7 +213,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                 <Report />
                 </div>
                 {this.filterGauges().length > 0 && this.getLastUpdated()}
-                <div className='flow-weather-section'>
+                <div className="flow-weather-section">
                     {gaugeName && (<HistoryCard />)}
                     <WeatherForecast
                         lat={this.props.guide.lat || 0}
@@ -234,7 +233,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                 <div
                     style={{
                         marginLeft: "93%",
-                        padding: "1em 0"
+                        padding: "1em 0",
                     }}
                 >
                     <Tooltip title={"Edit " + title} placement="left">
@@ -252,15 +251,15 @@ class Info extends Component<IInfoProps, IInfoState> {
                     style={{
                         position: "fixed",
                         marginLeft: "65%",
-                        marginTop: "1vh"
+                        marginTop: "1vh",
                     }}
                 >
-                    
+
                     <IconButton
                         onClick={this.handleClose}
                         style={{
                             color: "#fff",
-                            cursor: "pointer"
+                            cursor: "pointer",
                         }}
                     >
                         <CloseIcon />
@@ -274,16 +273,16 @@ class Info extends Component<IInfoProps, IInfoState> {
 Info.propTypes = {
     auth: PropTypes.object.isRequired,
     gauges: PropTypes.array.isRequired,
-    infoPage: PropTypes.object.isRequired
+    infoPage: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
     auth: state.auth,
     gauges: state.gauges,
-    infoPage: state.infoPage
+    infoPage: state.infoPage,
 });
 
 export default connect(
     mapStateToProps,
-    { closeInfoPage, addToFavourites, removeFromFavourites, toggleModal }
+    { closeInfoPage, addToFavourites, removeFromFavourites, toggleModal },
 )(Info);

@@ -26,7 +26,7 @@ import {
     LOADING_GUIDES,
     ADD_TO_FAVOURITES,
     REMOVE_FROM_FAVOURITES,
-    SET_MAP_BOUNDS
+    SET_MAP_BOUNDS,
 } from "./types";
 
 const serverLocation = process.env.REACT_APP_SERVER_URL;
@@ -36,7 +36,7 @@ export const toggleModal = modal => dispatch => {
     if (modal) {
         dispatch({
             type: OPEN_MODAL,
-            payload: modal
+            payload: modal,
         });
     } else {
         dispatch({ type: CLOSE_MODAL });
@@ -51,22 +51,22 @@ export const registerUser = (userData) => dispatch => {
         .then(res => {
             dispatch({
                 type: CLOSE_MODAL,
-                payload: "registerModal"
+                payload: "registerModal",
             });
             dispatch({ type: CLEAR_ERRORS });
             dispatch({
                 type: OPEN_MODAL,
-                payload: "welcomeModal"
+                payload: "welcomeModal",
             });
         })
         .catch(err => {
             dispatch({
                 type: GET_ERRORS,
-                payload: err.response
+                payload: err.response,
             });
             dispatch({
                 type: OPEN_MODAL,
-                payload: "registerModal"
+                payload: "registerModal",
             });
         });
 };
@@ -88,18 +88,18 @@ export const loginUser = userData => dispatch => {
             dispatch(setCurrentUser(decoded));
             dispatch({
                 type: CLOSE_MODAL,
-                payload: "loginModal"
+                payload: "loginModal",
             });
             dispatch({ type: CLEAR_ERRORS });
         })
         .catch(err => {
             dispatch({
                 type: GET_ERRORS,
-                payload: err.response
+                payload: err.response,
             });
             dispatch({
                 type: OPEN_MODAL,
-                payload: "loginModal"
+                payload: "loginModal",
             });
         });
 };
@@ -108,7 +108,7 @@ export const loginUser = userData => dispatch => {
 export const setCurrentUser = decoded => {
     return {
         type: SET_CURRENT_USER,
-        payload: decoded
+        payload: decoded,
     };
 };
 
@@ -129,22 +129,22 @@ export const changePassword = userData => dispatch => {
         .then(res => {
             dispatch({
                 type: CLOSE_MODAL,
-                payload: "changePasswordModal"
+                payload: "changePasswordModal",
             });
             dispatch({ type: CLEAR_ERRORS });
             dispatch({
                 type: OPEN_MODAL,
-                payload: "successModal"
+                payload: "successModal",
             });
         })
         .catch(err => {
             dispatch({
                 type: GET_ERRORS,
-                payload: err.response
+                payload: err.response,
             });
             dispatch({
                 type: OPEN_MODAL,
-                payload: "changePasswordModal"
+                payload: "changePasswordModal",
             });
         });
 };
@@ -156,7 +156,7 @@ export const makeGuideRequest = category => dispatch => {
         .then(res => {
             dispatch({
                 type: GET_GUIDES,
-                payload: res.data
+                payload: res.data,
             });
         })
         .catch(err => console.log(err));
@@ -169,15 +169,15 @@ export const createGuide = (guideData, category) => dispatch => {
         .then(res => {
             dispatch({
                 type: CLOSE_MODAL,
-                payLoad: "createModal"
+                payLoad: "createModal",
             });
             dispatch({
                 type: OPEN_MODAL,
-                payload: "successModal"
+                payload: "successModal",
             });
             dispatch({
                 type: APPEND_GUIDES,
-                payload: res.data
+                payload: res.data,
             });
         })
         .catch(err => {
@@ -189,7 +189,7 @@ export const makeGaugeRequest = () => dispatch => {
     axios.get(process.env.REACT_APP_AGG_FLOW_URL).then(res => {
         dispatch({
             type: GET_GAUGES,
-            payload: res.data.data
+            payload: res.data.data,
         });
     });
 };
@@ -199,7 +199,7 @@ export const makeLogbookRequest = () => dispatch => {
     axios.get(serverLocation + "/logbook").then(res => {
         dispatch({
             type: GET_LOGS,
-            payload: res.data
+            payload: res.data,
         });
     });
 };
@@ -209,10 +209,10 @@ export const createLogEntry = logEntry => dispatch => {
     axios.post(serverLocation + "/logbook", logEntry).then(res => {
         dispatch({
             type: APPEND_LOGS,
-            payload: res.data
+            payload: res.data,
         });
         dispatch({
-            type: CLOSE_MODAL
+            type: CLOSE_MODAL,
         });
     });
 };
@@ -221,7 +221,7 @@ export const createLogEntry = logEntry => dispatch => {
 export const searchGuideList = searchString => dispatch => {
     dispatch({
         type: SEARCH_GUIDES,
-        payload: searchString
+        payload: searchString,
     });
 };
 
@@ -229,7 +229,7 @@ export const searchGuideList = searchString => dispatch => {
 export const setMapBounds = mapBounds => dispatch => {
     dispatch({
         type: SET_MAP_BOUNDS,
-        payload: mapBounds
+        payload: mapBounds,
     });
 };
 
@@ -239,8 +239,8 @@ export const filterGuideList = (attribute, values) => dispatch => {
         type: FILTER_GUIDES,
         payload: {
             attribute,
-            values
-        }
+            values,
+        },
     });
 };
 
@@ -250,8 +250,8 @@ export const generateFilteredList = (guides, filters, mapBounds) => dispatch => 
         payload: {
             guides,
             filters,
-            mapBounds
-        }
+            mapBounds,
+        },
     });
 };
 
@@ -261,8 +261,8 @@ export const openInfoPage = guide => dispatch => {
         type: OPEN_INFO,
         payload: {
             selectedGuide: guide,
-            infoSelected: true
-        }
+            infoSelected: true,
+        },
     });
 
     // check for gauge data
@@ -271,12 +271,12 @@ export const openInfoPage = guide => dispatch => {
             .get(
                 `${process.env.REACT_APP_AGG_FLOW_URL}/${
                     guide.gaugeName
-                }/history`
+                }/history`,
             )
             .then(res => {
                 dispatch({
                     type: ADD_HISTORIC_FLOW,
-                    payload: res.data.data
+                    payload: res.data.data,
                 });
             })
             .then(() => dispatch({ type: CLEAR_ERRORS }));
@@ -286,7 +286,7 @@ export const openInfoPage = guide => dispatch => {
 // close info page
 export const closeInfoPage = () => dispatch => {
     dispatch({
-        type: CLOSE_INFO
+        type: CLOSE_INFO,
     });
 };
 
@@ -294,7 +294,7 @@ export const closeInfoPage = () => dispatch => {
 export const updateOpenLog = openLog => dispatch => {
     dispatch({
         type: UPDATE_OPEN_LOG,
-        payload: openLog
+        payload: openLog,
     });
 };
 
@@ -303,15 +303,15 @@ export const editLogEntry = updatedLogEntry => dispatch => {
     axios
         .put(
             serverLocation + "/logbook/" + updatedLogEntry._id,
-            updatedLogEntry
+            updatedLogEntry,
         )
         .then(res => {
             dispatch({
                 type: EDIT_LOG,
-                payload: res.data
+                payload: res.data,
             });
             dispatch({
-                type: CLOSE_MODAL
+                type: CLOSE_MODAL,
             });
         });
 };
@@ -321,7 +321,7 @@ export const deleteLogEntry = logId => dispatch => {
     axios.delete(serverLocation + "/logbook/" + logId).then(res => {
         dispatch({
             type: DELETE_LOG,
-            payload: logId
+            payload: logId,
         });
     });
 };
@@ -329,10 +329,10 @@ export const deleteLogEntry = logId => dispatch => {
 // Set category
 export const setCategory = category => dispatch => {
     dispatch({
-        type: LOADING_GUIDES
+        type: LOADING_GUIDES,
     });
     dispatch({
-        type: CLOSE_INFO
+        type: CLOSE_INFO,
     });
 
     axios
@@ -340,14 +340,14 @@ export const setCategory = category => dispatch => {
         .then(res => {
             dispatch({
                 type: GET_GUIDES,
-                payload: res.data
+                payload: res.data,
             });
         })
         .catch(err => console.log(err));
 
     dispatch({
         type: SET_CATEGORY,
-        payload: category
+        payload: category,
     });
 };
 
@@ -355,12 +355,12 @@ export const setCategory = category => dispatch => {
 export const addToFavourites = (guideId, email) => dispatch => {
     axios
         .put(`${serverLocation}/users/current/add-favourite/${guideId}`, {
-            email
+            email,
         })
         .then(res => {
             dispatch({
                 type: ADD_TO_FAVOURITES,
-                payload: guideId
+                payload: guideId,
             });
         })
         .catch(err => console.log(err));
@@ -370,13 +370,13 @@ export const addToFavourites = (guideId, email) => dispatch => {
 export const removeFromFavourites = (guideId, email) => dispatch => {
     axios
         .delete(`${serverLocation}/users/current/delete-favourite/${guideId}`, {
-            email
+            email,
         })
         .then(res =>
             dispatch({
                 type: REMOVE_FROM_FAVOURITES,
-                payload: guideId
-            })
+                payload: guideId,
+            }),
         )
         .catch(err => console.log(err));
 };

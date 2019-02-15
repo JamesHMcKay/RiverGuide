@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import Select from "react-select";
 import { connect } from "react-redux";
-import { State } from '../../reducers/index';
-import { IGuide } from '../../utils/types';
+import Select from "react-select";
+import { State } from "../../reducers/index";
+import { IGuide } from "../../utils/types";
 
 import { FormGroup, Label } from "reactstrap";
 
@@ -12,7 +12,7 @@ interface ISectionSelectProps {
 }
 
 class SectionSelect extends Component<ISectionSelectProps> {
-    render() {
+    public render() {
         const SEPERATOR = " - ";
 
         return (
@@ -23,15 +23,15 @@ class SectionSelect extends Component<ISectionSelectProps> {
                     placeholder="eg. Taieri at Outram"
                     onChange={this.props.handleChange}
                     options={[{ label: "Other", value: "" }].concat(
-                        this.props.guides.map(guide => ({
+                        this.props.guides.map((guide) => ({
                             label:
                                 guide.title +
                                 SEPERATOR +
                                 guide.river +
                                 SEPERATOR +
                                 guide.region,
-                            value: guide.title
-                        }))
+                            value: guide.title,
+                        })),
                     )}
                 />
             </FormGroup>
@@ -40,10 +40,10 @@ class SectionSelect extends Component<ISectionSelectProps> {
 }
 
 const mapStateToProps = (state: State) => ({
-    guides: state.guides
+    guides: state.guides,
 });
 
 export default connect(
     mapStateToProps,
-    {}
+    {},
 )(SectionSelect);

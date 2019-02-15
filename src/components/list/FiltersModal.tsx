@@ -1,9 +1,9 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
-import { State } from '../../reducers/index';
-import { IFilter } from '../../utils/types';
+import { State } from "../../reducers/index";
+import { IFilter } from "../../utils/types";
 
 // Material UI
 import {
@@ -12,7 +12,7 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    Slide
+    Slide,
 } from "@material-ui/core";
 
 // Components
@@ -32,15 +32,15 @@ interface IFiltersModalState {
 }
 
 class FiltersModal extends Component<IFiltersModalProps, IFiltersModalState> {
-    state = {
-        filters: []
+    public state = {
+        filters: [],
     };
 
-    handleClose = () => {
+    public handleClose = () => {
         this.props.toggleModal("filterModal");
-    };
+    }
 
-    render() {
+    public render() {
         return (
             <Dialog
                 open={this.props.isOpen}
@@ -73,16 +73,16 @@ class FiltersModal extends Component<IFiltersModalProps, IFiltersModalState> {
 }
 
 FiltersModal.propTypes = {
-    toggleModal: PropTypes.func.isRequired
+    toggleModal: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
     isOpen: state.openModal === "filterModal",
     openLog: state.openLog,
-    category: state.category
+    category: state.category,
 });
 
 export default connect(
     mapStateToProps,
-    { toggleModal }
+    { toggleModal },
 )(FiltersModal);

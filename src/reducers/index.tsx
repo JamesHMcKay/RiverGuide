@@ -1,32 +1,32 @@
 import { combineReducers } from "redux";
-import modalReducer from "./modalReducer";
 import authReducer from "./authReducer";
-import errorReducer from "./errorReducer";
-import guideReducer from "./guideReducer";
-import gaugeReducer from "./gaugeReducer";
-import logReducer from "./logReducer";
-import filterReducer from "./filterReducer";
-import listReducer from "./listReducer";
-import infoReducer from "./infoReducer";
-import openLogReducer from "./openLogReducer";
 import categoryReducer from "./categoryReducer";
+import errorReducer from "./errorReducer";
+import filterReducer from "./filterReducer";
+import gaugeReducer from "./gaugeReducer";
+import guideReducer from "./guideReducer";
+import infoReducer from "./infoReducer";
+import listReducer from "./listReducer";
+import logReducer from "./logReducer";
 import mapBoundsReducer from "./mapBoundsReducer";
+import modalReducer from "./modalReducer";
+import openLogReducer from "./openLogReducer";
 
 import {
-    IMapBounds,
+    IAuth,
+    IFilter,
     IGuide,
     IInfoPage,
-    IFilter,
-    IAuth,
-    IOpenLog,
-    ILogEntry } from "../utils/types";
+    ILogEntry,
+    IMapBounds,
+    IOpenLog } from "../utils/types";
 
 export interface State {
     guides: IGuide[];
     gauges: any;
-    infoPage: IInfoPage,
-    filteredList: IGuide[],
-    filteredGuides: IFilter[],
+    infoPage: IInfoPage;
+    filteredList: IGuide[];
+    filteredGuides: IFilter[];
     auth: IAuth;
     openModal: string;
     mapBounds: IMapBounds;
@@ -48,6 +48,5 @@ export default combineReducers({
     infoPage: infoReducer,
     openLog: openLogReducer,
     category: categoryReducer,
-    mapBounds: mapBoundsReducer
+    mapBounds: mapBoundsReducer,
 });
-

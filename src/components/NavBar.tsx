@@ -1,17 +1,17 @@
-import React, { Component } from "react";
 import PropTypes, { string } from "prop-types";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { toggleModal } from "../actions/actions";
 
 // Material UI
-import Button from "@material-ui/core/Button";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Toolbar from "@material-ui/core/Toolbar";
 
-import { State } from '../reducers/index';
+import { State } from "../reducers/index";
 import { IAuth } from "../utils/types";
 
 // Components
@@ -30,13 +30,13 @@ const aboutMenuItems: IMenuItem[] = [
     { name: "Our vision", route: "vision" },
     { name: "Meet the team", route: "team" },
     { name: "Contact us", route: "contact" },
-    { name: "T's & C's", route: "terms-conditions" }
+    { name: "T's & C's", route: "terms-conditions" },
 ];
 
 const userMenuItems: IMenuItem[] = [
     { name: "My profile", route: "profile" },
     { name: "River logbook", route: "profile" },
-    { name: "Logout", route: "/", modal: "logoutModal" }
+    { name: "Logout", route: "/", modal: "logoutModal" },
 ];
 
 interface INavBarProps {
@@ -54,36 +54,36 @@ class NavBar extends Component<INavBarProps, INavBarState> {
         super(props);
         this.state = {
             anchorEl: null,
-            mapView: true
+            mapView: true,
         };
     }
 
-    handleMenu = (event: any) => {
+    public handleMenu = (event: any) => {
         this.setState({ anchorEl: event.currentTarget });
-    };
+    }
 
-    handleClose = () => {
+    public handleClose = () => {
         this.setState({ anchorEl: null });
-    };
+    }
 
-    openModal = (modalName: string) => {
+    public openModal = (modalName: string) => {
         this.props.toggleModal(modalName);
-    };
+    }
 
-    handleItemSelect = (item: IMenuItem) => {
+    public handleItemSelect = (item: IMenuItem) => {
         this.handleClose();
         if (item.modal) {
             this.openModal(item.modal);
         } else {
             this.setState({ mapView: false });
         }
-    };
+    }
 
-    handleMapLink = () => {
+    public handleMapLink = () => {
         this.setState({ mapView: true });
-    };
+    }
 
-    render() {
+    public render() {
         const { anchorEl } = this.state;
         const {isAuthenticated} = this.props.auth;
         const menu =
@@ -100,7 +100,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                     color="secondary"
                     size="large"
                     style={{
-                        marginRight: "1em"
+                        marginRight: "1em",
                     }}
                 >
                     Get started
@@ -123,7 +123,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                     size="large"
                     onClick={this.openModal.bind(this, "addTrip")}
                     style={{
-                        marginRight: "1em"
+                        marginRight: "1em",
                     }}
                 >
                     Log a trip
@@ -169,11 +169,11 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                                 getContentAnchorEl={null}
                                 anchorOrigin={{
                                     vertical: "bottom",
-                                    horizontal: "left"
+                                    horizontal: "left",
                                 }}
                                 transformOrigin={{
                                     vertical: "top",
-                                    horizontal: "left"
+                                    horizontal: "left",
                                 }}
                                 onClose={this.handleClose}
                             >
@@ -184,7 +184,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                                             key={idx}
                                             onClick={this.handleItemSelect.bind(
                                                 this,
-                                                item
+                                                item,
                                             )}
                                         >
                                             {item.name}
@@ -215,14 +215,14 @@ class NavBar extends Component<INavBarProps, INavBarState> {
 
 NavBar.propTypes = {
     toggleModal: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
-    auth: state.auth
+    auth: state.auth,
 });
 
 export default connect(
     mapStateToProps,
-    { toggleModal }
+    { toggleModal },
 )(NavBar);

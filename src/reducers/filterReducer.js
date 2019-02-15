@@ -2,7 +2,7 @@ import { SEARCH_GUIDES, FILTER_GUIDES } from "../actions/types";
 
 const initialState = {
     searchString: "",
-    filters: []
+    filters: [],
 };
 
 const updateFilter = (filters, attribute, values) => {
@@ -19,7 +19,7 @@ const updateFilter = (filters, attribute, values) => {
             if (f.attribute === attribute) {
                 return {
                     attribute,
-                    values
+                    values,
                 };
             }
             return f;
@@ -29,7 +29,7 @@ const updateFilter = (filters, attribute, values) => {
     // add to filter
     filters.push({
         attribute,
-        values
+        values,
     });
 
     return filters;
@@ -46,7 +46,7 @@ export default (state = initialState, action) => {
             state.filters = updateFilter(
                 state.filters,
                 payload.attribute,
-                payload.values
+                payload.values,
             );
             break;
         default:

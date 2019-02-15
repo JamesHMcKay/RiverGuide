@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
 import classnames from "classnames";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import zxcvbn from "zxcvbn";
-import { State } from '../../reducers/index';
-import { toggleModal, registerUser } from "../../actions/actions";
-import { IRegisterData, IAuth } from '../../utils/types';
+import { registerUser, toggleModal } from "../../actions/actions";
+import { State } from "../../reducers/index";
+import { IAuth, IRegisterData } from "../../utils/types";
 
 import {
     Button,
@@ -19,7 +19,7 @@ import {
     ModalBody,
     ModalFooter,
     ModalHeader,
-    Progress
+    Progress,
 } from "reactstrap";
 
 interface IRegisterState {
@@ -29,16 +29,16 @@ interface IRegisterState {
     password2: string;
     showPassword: boolean;
     passwordScore: number;
-    passwordColor:  string;
+    passwordColor: string;
     errors: any;
 }
 
 interface IReigsterProps {
     isOpen: boolean;
     toggleModal: (modal?: string) => void;
-    registerUser: (userData: IRegisterData) => void,
-    auth: IAuth,
-    errors: any
+    registerUser: (userData: IRegisterData) => void;
+    auth: IAuth;
+    errors: any;
 }
 
 class Register extends Component<IReigsterProps, IRegisterState> {
@@ -52,7 +52,7 @@ class Register extends Component<IReigsterProps, IRegisterState> {
             showPassword: false,
             passwordScore: 0,
             passwordColor: "",
-            errors: {}
+            errors: {},
         };
 
         this.closeModal = this.closeModal.bind(this);
@@ -61,36 +61,36 @@ class Register extends Component<IReigsterProps, IRegisterState> {
         this.onPasswordChange = this.onPasswordChange.bind(this);
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         if (this.props.auth.isAuthenticated) {
             // Close modal
         }
     }
 
-    componentWillReceiveProps(nextProps: IReigsterProps) {
+    public componentWillReceiveProps(nextProps: IReigsterProps) {
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
         }
     }
 
-    togglePassword() {
+    public togglePassword() {
         this.setState({ showPassword: !this.state.showPassword });
     }
 
-    onNameChange = (e: any): void => {
+    public onNameChange = (e: any): void => {
         this.setState({ name: e.target.value });
     }
 
-    onEmailChange = (e: any): void => {
+    public onEmailChange = (e: any): void => {
         this.setState({ email: e.target.value });
     }
 
-    onPassword2Change = (e: any): void => {
+    public onPassword2Change = (e: any): void => {
         this.setState({ password2: e.target.value });
     }
 
-    onPasswordChange(e: any) {
-        var checkPassword = zxcvbn(e.target.value),
+    public onPasswordChange(e: any) {
+        let checkPassword = zxcvbn(e.target.value),
             score = checkPassword.score + 1,
             color;
 
@@ -120,28 +120,28 @@ class Register extends Component<IReigsterProps, IRegisterState> {
         this.setState({
             password: e.target.value,
             passwordScore: score,
-            passwordColor: color
+            passwordColor: color,
         });
     }
 
-    onSubmit(e: any) {
+    public onSubmit(e: any) {
         e.preventDefault();
 
         const newUser: IRegisterData = {
             name: this.state.name,
             email: this.state.email,
             password: this.state.password,
-            password2: this.state.password2
+            password2: this.state.password2,
         };
 
         this.props.registerUser(newUser);
     }
 
-    closeModal() {
+    public closeModal() {
         this.props.toggleModal();
     }
 
-    render() {
+    public render() {
         const { errors } = this.state;
 
         return (
@@ -154,7 +154,7 @@ class Register extends Component<IReigsterProps, IRegisterState> {
                             <Input
                                 className={classnames("", {
                                     "is-invalid":
-                                        errors.data && errors.data.name
+                                        errors.data && errors.data.name,
                                 })}
                                 type="text"
                                 name="name"
@@ -174,7 +174,7 @@ class Register extends Component<IReigsterProps, IRegisterState> {
                             <Input
                                 className={classnames("", {
                                     "is-invalid":
-                                        errors.data && errors.data.email
+                                        errors.data && errors.data.email,
                                 })}
                                 type="text"
                                 name="email"
@@ -199,7 +199,7 @@ class Register extends Component<IReigsterProps, IRegisterState> {
                                 <Input
                                     className={classnames("", {
                                         "is-invalid":
-                                            errors.data && errors.data.password
+                                            errors.data && errors.data.password,
                                     })}
                                     type={
                                         this.state.showPassword
@@ -238,7 +238,7 @@ class Register extends Component<IReigsterProps, IRegisterState> {
                                 <Input
                                     className={classnames("", {
                                         "is-invalid":
-                                            errors.data && errors.data.password2
+                                            errors.data && errors.data.password2,
                                     })}
                                     type={
                                         this.state.showPassword
@@ -277,16 +277,16 @@ Register.propTypes = {
     toggleModal: PropTypes.func.isRequired,
     registerUser: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired
+    errors: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
     isOpen: state.openModal === "registerModal",
     auth: state.auth,
-    errors: state.errors
+    errors: state.errors,
 });
 
 export default connect(
     mapStateToProps,
-    { toggleModal, registerUser }
+    { toggleModal, registerUser },
 )(Register);

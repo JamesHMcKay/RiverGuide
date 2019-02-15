@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
 import classnames from "classnames";
-import { State } from '../../reducers/index';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { State } from "../../reducers/index";
 
-import { toggleModal, loginUser } from "../../actions/actions";
+import { loginUser, toggleModal } from "../../actions/actions";
 import { ILoginDetails } from "../../utils/types";
 
 import {
@@ -18,7 +18,7 @@ import {
     Modal,
     ModalBody,
     ModalFooter,
-    ModalHeader
+    ModalHeader,
 } from "reactstrap";
 
 interface IWelcomeState {
@@ -35,7 +35,6 @@ interface IWelcomeProps {
     loginUser: (details: ILoginDetails) => void;
 }
 
-
 class Welcome extends Component<IWelcomeProps, IWelcomeState> {
     constructor(props: IWelcomeProps) {
         super(props);
@@ -43,7 +42,7 @@ class Welcome extends Component<IWelcomeProps, IWelcomeState> {
             email: "",
             password: "",
             showPassword: false,
-            errors: {}
+            errors: {},
         };
 
         this.closeModal = this.closeModal.bind(this);
@@ -51,40 +50,40 @@ class Welcome extends Component<IWelcomeProps, IWelcomeState> {
         this.togglePassword = this.togglePassword.bind(this);
     }
 
-    componentWillReceiveProps(nextProps: IWelcomeProps) {
+    public componentWillReceiveProps(nextProps: IWelcomeProps) {
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
         }
     }
 
-    togglePassword() {
+    public togglePassword() {
         this.setState({ showPassword: !this.state.showPassword });
     }
 
-    onEmailChange = (e: any): void => {
+    public onEmailChange = (e: any): void => {
         this.setState({ email: e.target.value });
     }
 
-    onPasswordChange = (e: any): void => {
+    public onPasswordChange = (e: any): void => {
         this.setState({ password: e.target.value });
     }
 
-    onSubmit(e: any) {
+    public onSubmit(e: any) {
         e.preventDefault();
 
         const userData = {
             email: this.state.email,
-            password: this.state.password
+            password: this.state.password,
         };
 
         this.props.loginUser(userData);
     }
 
-    closeModal() {
+    public closeModal() {
         this.props.toggleModal();
     }
 
-    render() {
+    public render() {
         const { errors } = this.state;
 
         return (
@@ -98,7 +97,7 @@ class Welcome extends Component<IWelcomeProps, IWelcomeState> {
                             <Input
                                 className={classnames("", {
                                     "is-invalid":
-                                        errors.data && errors.data.email
+                                        errors.data && errors.data.email,
                                 })}
                                 type="text"
                                 name="email"
@@ -119,7 +118,7 @@ class Welcome extends Component<IWelcomeProps, IWelcomeState> {
                                 <Input
                                     className={classnames("", {
                                         "is-invalid":
-                                            errors.data && errors.data.password
+                                            errors.data && errors.data.password,
                                     })}
                                     type={
                                         this.state.showPassword
@@ -165,16 +164,16 @@ Welcome.propTypes = {
     toggleModal: PropTypes.func.isRequired,
     loginUser: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired
+    errors: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
     isOpen: state.openModal === "welcomeModal",
     auth: state.auth,
-    errors: state.errors
+    errors: state.errors,
 });
 
 export default connect(
     mapStateToProps,
-    { toggleModal, loginUser }
+    { toggleModal, loginUser },
 )(Welcome);

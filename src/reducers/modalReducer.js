@@ -1,7 +1,7 @@
 import { OPEN_MODAL, CLOSE_MODAL } from "../actions/types";
 
 const initialState = {
-    openModal: false
+    openModal: false,
 };
 
 export default (state = initialState, action) => {

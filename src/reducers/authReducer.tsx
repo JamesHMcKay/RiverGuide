@@ -1,9 +1,9 @@
 import isEmpty from "../validation/is-empty";
 
 import {
-    SET_CURRENT_USER,
     ADD_TO_FAVOURITES,
-    REMOVE_FROM_FAVOURITES
+    REMOVE_FROM_FAVOURITES,
+    SET_CURRENT_USER,
 } from "../actions/types";
 import { IAuth, IUser } from "../utils/types";
 
@@ -13,7 +13,7 @@ const initialUser: IUser = {
     name: "",
     avatar: "",
     creationDate: "",
-}
+};
 
 const initialState: IAuth = {
     isAuthenticated: false,
@@ -26,24 +26,24 @@ export default function(state = initialState, action: any) {
             return {
                 ...state,
                 isAuthenticated: !isEmpty(action.payload),
-                user: action.payload
+                user: action.payload,
             };
         case ADD_TO_FAVOURITES:
             return {
                 ...state,
                 user: {
                     ...state.user,
-                    favourites: [...state.user.favourites, action.payload]
-                }
-            }
+                    favourites: [...state.user.favourites, action.payload],
+                },
+            };
         case REMOVE_FROM_FAVOURITES:
             return {
                 ...state,
                 user: {
                     ...state.user,
-                    favourites: state.user.favourites.filter((fav: any) => fav !== action.payload)
-                }
-            }
+                    favourites: state.user.favourites.filter((fav: any) => fav !== action.payload),
+                },
+            };
         default:
             return state;
     }

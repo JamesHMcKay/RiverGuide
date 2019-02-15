@@ -1,11 +1,11 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
-import { State } from '../../reducers/index';
-import { ILogEntry } from '../../utils/types';
+import { State } from "../../reducers/index";
+import { ILogEntry } from "../../utils/types";
 
-import { Badge, Button, ListGroup, Row, Col } from "reactstrap";
+import { Badge, Button, Col, ListGroup, Row } from "reactstrap";
 import "./profile.css";
 
 import LogItem from "./LogItem";
@@ -21,11 +21,11 @@ class Logbook extends Component<ILogBookProps> {
         this.openModal = this.openModal.bind(this);
     }
 
-    openModal() {
+    public openModal() {
         this.props.toggleModal("addTrip");
     }
 
-    render() {
+    public render() {
         const { log } = this.props;
 
         return (
@@ -61,15 +61,15 @@ class Logbook extends Component<ILogBookProps> {
 
 Logbook.propTypes = {
     log: PropTypes.array,
-    toggleModal: PropTypes.func.isRequired
+    toggleModal: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
     log: state.log,
-    openModal: state.openModal
+    openModal: state.openModal,
 });
 
 export default connect(
     mapStateToProps,
-    { toggleModal }
+    { toggleModal },
 )(Logbook);

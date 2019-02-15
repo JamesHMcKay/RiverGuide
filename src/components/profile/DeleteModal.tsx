@@ -1,8 +1,8 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { deleteLogEntry, toggleModal } from "../../actions/actions";
-import { State } from '../../reducers/index';
+import { State } from "../../reducers/index";
 import { IOpenLog } from "../../utils/types";
 
 import { Button, Modal, ModalBody, ModalHeader } from "reactstrap";
@@ -23,16 +23,16 @@ class DeleteModal extends Component<IDeleteModalProps> {
         this.handleDelete = this.handleDelete.bind(this);
     }
 
-    closeModal() {
+    public closeModal() {
         this.props.toggleModal("deleteTrip");
     }
 
-    handleDelete() {
+    public handleDelete() {
         this.props.deleteLogEntry(this.props.openLog._id);
         this.props.toggleModal("deleteTrip");
     }
 
-    render() {
+    public render() {
         return (
             <Modal isOpen={this.props.isOpen} toggle={this.closeModal}>
                 <ModalHeader toggle={this.closeModal}>
@@ -51,15 +51,15 @@ class DeleteModal extends Component<IDeleteModalProps> {
 
 DeleteModal.propTypes = {
     toggleModal: PropTypes.func.isRequired,
-    deleteLogEntry: PropTypes.func.isRequired
+    deleteLogEntry: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
     isOpen: state.openModal === "deleteTrip",
-    openLog: state.openLog
+    openLog: state.openLog,
 });
 
 export default connect(
     mapStateToProps,
-    { deleteLogEntry, toggleModal }
+    { deleteLogEntry, toggleModal },
 )(DeleteModal);

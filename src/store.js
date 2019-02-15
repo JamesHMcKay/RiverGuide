@@ -16,7 +16,7 @@ const composeSetup =
 const store = createStore(
     rootReducer,
     initialState,
-    composeSetup(applyMiddleware(...middleware))
+    composeSetup(applyMiddleware(...middleware)),
 );
 
 export default store;

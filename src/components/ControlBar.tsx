@@ -1,26 +1,35 @@
-import React, { Component } from "react";
+import React, { Component, ReactChild, ReactElement } from "react";
 import { connect } from "react-redux";
 import {
     generateFilteredList,
     searchGuideList,
-    setCategory
+    setCategory,
 } from "../actions/actions";
-import { IGuide, IFilter, IMapBounds, ILatLon } from './../utils/types';
+import { IFilter, IGuide, ILatLon, IMapBounds } from "./../utils/types";
 
 // Material UI
-import { AppBar, Toolbar, TextField, Tabs, Tab } from "@material-ui/core";
+import { AppBar, Tab, Tabs, TextField, Toolbar } from "@material-ui/core";
 
-import { State } from '../reducers/index';
+import { State } from "../reducers/index";
 
 // styles
 import "react-dropdown/style.css";
 
-const data = ["Fishing", "Flatwater", "Motorised", "Whitewater", "Other"];
+const data: string[] = [
+    "Fishing",
+    "Flatwater",
+    "Motorised",
+    "Whitewater",
+    "Other",
+];
 
 interface IControlBarProps {
     openModal: string;
     mapBounds: IMapBounds;
-    generateFilteredList: (guides: IGuide[],filters: IFilter[],mapBounds: IMapBounds) => void;
+    generateFilteredList: (
+        guides: IGuide[],
+        filters: IFilter[],
+        mapBounds: IMapBounds) => void;
     searchGuideList: (value: string, guides: IGuide[]) => void;
     setCategory: (value: string) => void;
     guides: IGuide[];
@@ -31,31 +40,30 @@ interface IControlBarState {
     index: number;
 }
 
-
 class ControlBar extends Component<IControlBarProps, IControlBarState> {
-    state = {
-        index: 3
+    public state: IControlBarState = {
+        index: 3,
     };
 
-    handleChange = (event: any, value: number) => {
+    public handleChange = (event: any, value: number): void => {
         this.setState({ index: value });
         this.props.setCategory(data[value].toLowerCase());
-    };
+    }
 
-    handleSearch = (event: any) => {
+    public handleSearch = (event: any): void => {
         this.props.searchGuideList(event.target.value, this.props.guides);
         setTimeout(
             () =>
                 this.props.generateFilteredList(
                     this.props.guides,
                     this.props.filters,
-                    this.props.mapBounds
+                    this.props.mapBounds,
                 ),
-            100
+            100,
         );
-    };
+    }
 
-    render() {
+    public render(): JSX.Element {
         return (
             <AppBar position="static" style={{ zIndex: 2 }}>
                 <Toolbar>
@@ -63,7 +71,7 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
                         style={{
                             float: "left",
                             width: "27%",
-                            textAlign: "center"
+                            textAlign: "center",
                         }}
                     >
                         <TextField
@@ -76,7 +84,7 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
                             style={{
                                 width: "100%",
                                 paddingBottom: ".5em",
-                                color: "#fff"
+                                color: "#fff",
                             }}
                         />
                     </div>
@@ -84,7 +92,7 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
                         style={{
                             width: "73%",
                             margin: "0 auto",
-                            color: "#fff"
+                            color: "#fff",
                         }}
                     >
                         <Tabs
@@ -93,10 +101,10 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
                             scrollable
                             scrollButtons="on"
                             style={{
-                                color: "#fff"
+                                color: "#fff",
                             }}
                         >
-                            {data.map(category => (
+                            {data.map((category) => (
                                 <Tab label={category} key={category} />
                             ))}
                         </Tabs>
@@ -113,10 +121,10 @@ const mapStateToProps = (state: State) => ({
     openModal: state.openModal,
     guides: state.guides,
     filters: state.filteredGuides,
-    mapBounds: state.mapBounds
+    mapBounds: state.mapBounds,
 });
 
 export default connect(
     mapStateToProps,
-    { generateFilteredList, searchGuideList, setCategory }
+    { generateFilteredList, searchGuideList, setCategory },
 )(ControlBar);

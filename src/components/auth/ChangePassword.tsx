@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
 import classnames from "classnames";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import zxcvbn from "zxcvbn";
-import { State } from '../../reducers/index';
-import { IAuth, IUserData } from '../../utils/types';
+import { State } from "../../reducers/index";
+import { IAuth, IUserData } from "../../utils/types";
 
-import { toggleModal, changePassword } from "../../actions/actions";
+import { changePassword, toggleModal } from "../../actions/actions";
 
 import {
     Button,
@@ -20,7 +20,7 @@ import {
     ModalBody,
     ModalFooter,
     ModalHeader,
-    Progress
+    Progress,
 } from "reactstrap";
 
 interface IChangePasswordState {
@@ -37,11 +37,10 @@ interface IChangePasswordState {
 interface IChangePasswordProps {
     isOpen: boolean;
     toggleModal: (modal?: string) => void;
-    changePassword: (userData: IUserData) => void,
-    auth: IAuth,
-    errors: any
+    changePassword: (userData: IUserData) => void;
+    auth: IAuth;
+    errors: any;
 }
-
 
 class ChangePassword extends Component<IChangePasswordProps, IChangePasswordState> {
     constructor(props: IChangePasswordProps) {
@@ -54,7 +53,7 @@ class ChangePassword extends Component<IChangePasswordProps, IChangePasswordStat
             passwordColor: "",
             showPassword: false,
             showOldPassword: false,
-            errors: {}
+            errors: {},
         };
 
         this.closeModal = this.closeModal.bind(this);
@@ -64,30 +63,30 @@ class ChangePassword extends Component<IChangePasswordProps, IChangePasswordStat
         this.toggleOldPassword = this.toggleOldPassword.bind(this);
     }
 
-    componentWillReceiveProps(nextProps: IChangePasswordProps) {
+    public componentWillReceiveProps(nextProps: IChangePasswordProps) {
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
         }
     }
 
-    toggleOldPassword() {
+    public toggleOldPassword() {
         this.setState({ showOldPassword: !this.state.showOldPassword });
     }
 
-    togglePassword() {
+    public togglePassword() {
         this.setState({ showPassword: !this.state.showPassword });
     }
 
-    onChangePassword = (e: any): void => {
+    public onChangePassword = (e: any): void => {
         this.setState({ password: e.target.value });
     }
 
-    onChangeNewPassWord2 = (e: any): void => {
+    public onChangeNewPassWord2 = (e: any): void => {
         this.setState({ newPassword2: e.target.value });
     }
 
-    onPasswordChange(e: any) {
-        var checkPassword = zxcvbn(e.target.value),
+    public onPasswordChange(e: any) {
+        let checkPassword = zxcvbn(e.target.value),
             score = checkPassword.score + 1,
             color;
 
@@ -117,29 +116,29 @@ class ChangePassword extends Component<IChangePasswordProps, IChangePasswordStat
         this.setState({
             newPassword: e.target.value,
             passwordScore: score,
-            passwordColor: color
+            passwordColor: color,
         });
     }
 
-    onSubmit(e: any) {
+    public onSubmit(e: any) {
         e.preventDefault();
 
         const updateUser: IUserData = {
             email: this.props.auth.user.email,
             password: this.state.password,
             newPassword: this.state.newPassword,
-            newPassword2: this.state.newPassword2
+            newPassword2: this.state.newPassword2,
         };
 
-        //this.props.changePassword(updateUser, this.props.history);
+        // this.props.changePassword(updateUser, this.props.history);
         this.props.changePassword(updateUser);
     }
 
-    closeModal() {
+    public closeModal() {
         this.props.toggleModal();
     }
 
-    render() {
+    public render() {
         const { errors } = this.state;
 
         return (
@@ -155,7 +154,7 @@ class ChangePassword extends Component<IChangePasswordProps, IChangePasswordStat
                                 <Input
                                     className={classnames("", {
                                         "is-invalid":
-                                            errors.data && errors.data.password
+                                            errors.data && errors.data.password,
                                     })}
                                     type={
                                         this.state.showOldPassword
@@ -189,7 +188,7 @@ class ChangePassword extends Component<IChangePasswordProps, IChangePasswordStat
                                     className={classnames("", {
                                         "is-invalid":
                                             errors.data &&
-                                            errors.data.newPassword
+                                            errors.data.newPassword,
                                     })}
                                     type={
                                         this.state.showPassword
@@ -229,7 +228,7 @@ class ChangePassword extends Component<IChangePasswordProps, IChangePasswordStat
                             <Input
                                 className={classnames("", {
                                     "is-invalid":
-                                        errors.data && errors.data.newPassword2
+                                        errors.data && errors.data.newPassword2,
                                 })}
                                 type={
                                     this.state.showPassword
@@ -267,16 +266,16 @@ ChangePassword.propTypes = {
     toggleModal: PropTypes.func.isRequired,
     changePassword: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired
+    errors: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
     isOpen: state.openModal === "changePasswordModal",
     auth: state.auth,
-    errors: state.errors
+    errors: state.errors,
 });
 
 export default connect(
     mapStateToProps,
-    { toggleModal, changePassword }
+    { toggleModal, changePassword },
 )(ChangePassword);

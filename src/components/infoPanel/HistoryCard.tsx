@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import ReactHighcharts from "react-highcharts";
 import moment from "moment";
-import { State } from '../../reducers/index';
-import { IHistory } from '../../utils/types';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import ReactHighcharts from "react-highcharts";
+import { connect } from "react-redux";
+import { State } from "../../reducers/index";
+import { IHistory } from "../../utils/types";
 
 // Material UI
 import Card from "@material-ui/core/Card";
@@ -15,26 +15,25 @@ interface IHistoryCardProps {
     history: IHistory[];
 }
 
-
 class HistoryCard extends Component<IHistoryCardProps> {
-    mapHistory = (history: IHistory[]) =>
-        history.map(reading =>
+    public mapHistory = (history: IHistory[]) =>
+        history.map((reading) =>
             (moment.utc(moment(reading.time, "DD/MM/YYYY h:mma")).valueOf(),
             reading.data.currentFlow
                 ? parseFloat(reading.data.currentFlow.toString())
-                : parseFloat(reading.data.currentLevel.toString()))
-        );
+                : parseFloat(reading.data.currentLevel.toString())),
+        )
 
-    createConfig = (history: IHistory[]) => ({
+    public createConfig = (history: IHistory[]) => ({
         chart: {
             zoomType: "x",
-            height: 300
+            height: 300,
         },
         title: {
-            text: ""
+            text: "",
         },
         xAxis: {
-            type: "datetime"
+            type: "datetime",
         },
         series: [
             {
@@ -43,22 +42,22 @@ class HistoryCard extends Component<IHistoryCardProps> {
                 data: this.mapHistory(history),
                 pointPlacement: "between",
                 tooltip: {
-                    valueDecimals: 1
-                }
-            }
+                    valueDecimals: 1,
+                },
+            },
         ],
         yAxis: {
             title: {
-              text: 'cumecs'
-            }
+              text: "cumecs",
+            },
           },
-    });
+    })
 
-    render() {
+    public render() {
         const { history } = this.props;
 
         return (
-            <Card style={{width:'50%'}}>
+            <Card style={{width: "50%"}}>
                 <CardContent>
                     <Typography color="textSecondary" gutterBottom>
                         Flow history
@@ -74,11 +73,11 @@ class HistoryCard extends Component<IHistoryCardProps> {
 }
 
 HistoryCard.propTypes = {
-    history: PropTypes.array.isRequired
+    history: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
-    history: state.infoPage.history
+    history: state.infoPage.history,
 });
 
 export default connect(mapStateToProps)(HistoryCard);

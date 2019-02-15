@@ -1,20 +1,20 @@
-import React, { Component } from "react";
 import marked from "marked";
+import React, { Component } from "react";
 
 // Material UI
+import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
 import EditIcon from "@material-ui/icons/Edit";
 
 marked.setOptions({
     gfm: true,
     breaks: true,
-    sanitize: true
+    sanitize: true,
 });
 
 interface IInfoCardState {
@@ -24,29 +24,28 @@ interface IInfoCardState {
     tempValue: string;
 }
 
-
 interface IInfoCardProps {
     content: string;
     title: string;
 }
 
 class InfoCard extends Component<IInfoCardProps, IInfoCardState> {
-    state: IInfoCardState = {
+    public state: IInfoCardState = {
         editIconShowing: false,
         editMode: false,
         value: "",
-        tempValue: ""
+        tempValue: "",
     };
 
-    componentWillReceiveProps = (props: IInfoCardProps) => {
+    public componentWillReceiveProps = (props: IInfoCardProps) => {
         this.setState({ value: props.content });
-    };
+    }
 
-    handleChange = (event: any) => {
+    public handleChange = (event: any) => {
         this.setState({ tempValue: event.target.value });
-    };
+    }
 
-    render() {
+    public render() {
         return (
             <Card
                 onMouseEnter={() => {
@@ -54,7 +53,7 @@ class InfoCard extends Component<IInfoCardProps, IInfoCardState> {
                 }}
                 onMouseLeave={() => this.setState({ editIconShowing: false })}
                 style={{
-                    marginBottom: "1em"
+                    marginBottom: "1em",
                 }}
             >
                 <CardContent>
@@ -72,7 +71,7 @@ class InfoCard extends Component<IInfoCardProps, IInfoCardState> {
                                         onClick={() =>
                                             this.setState({
                                                 editMode: true,
-                                                tempValue: this.state.value
+                                                tempValue: this.state.value,
                                             })
                                         }
                                     >
@@ -96,7 +95,7 @@ class InfoCard extends Component<IInfoCardProps, IInfoCardState> {
                         <Typography component="div">
                             <div
                                 dangerouslySetInnerHTML={{
-                                    __html: marked(this.props.content)
+                                    __html: marked(this.props.content),
                                 }}
                             />
                         </Typography>
@@ -110,7 +109,7 @@ class InfoCard extends Component<IInfoCardProps, IInfoCardState> {
                                 onClick={() => {
                                     this.setState({
                                         editMode: false,
-                                        value: this.state.tempValue
+                                        value: this.state.tempValue,
                                     });
                                 }}
                             >
@@ -121,7 +120,7 @@ class InfoCard extends Component<IInfoCardProps, IInfoCardState> {
                                 onClick={() => {
                                     this.setState({
                                         editMode: false,
-                                        tempValue: ""
+                                        tempValue: "",
                                     });
                                 }}
                             >

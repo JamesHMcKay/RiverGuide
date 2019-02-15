@@ -3,10 +3,10 @@ import React, { Component } from "react";
 // Material UI
 import {
     FormControl,
+    Input,
     InputLabel,
-    Select,
     MenuItem,
-    Input
+    Select,
 } from "@material-ui/core";
 
 interface IFilterDropDown {
@@ -15,18 +15,18 @@ interface IFilterDropDown {
 }
 
 class FilterDropDown extends Component<IFilterDropDown> {
-    render() {
+    public render() {
         return (
             <FormControl
                 style={{
-                    width: "100%"
+                    width: "100%",
                 }}
             >
                 <InputLabel htmlFor="select-label">
                     {this.props.title}
                 </InputLabel>
                 <Select multiple value={[]} input={<Input id="select-label" />}>
-                    {this.props.values.map(value => (
+                    {this.props.values.map((value) => (
                         <MenuItem key={value}>{value}</MenuItem>
                     ))}
                 </Select>

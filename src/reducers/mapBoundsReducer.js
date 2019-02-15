@@ -1,7 +1,7 @@
 import { SET_MAP_BOUNDS } from "../actions/types";
 
 const initialState = {
-    mapBounds: {}
+    mapBounds: {},
 };
 
 export default (state = initialState, action) => {

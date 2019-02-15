@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
-import jwt_decode from "jwt-decode";
-import setAuthToken from "./utils/setAuthToken";
-import { setCurrentUser, logoutUser } from "./actions/actions";
-import { Provider } from "react-redux";
-import store from "./store";
 import { MuiThemeProvider } from "@material-ui/core/styles";
+import jwt_decode from "jwt-decode";
+import React, { Component } from "react";
+import { Provider } from "react-redux";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { logoutUser, setCurrentUser } from "./actions/actions";
 import "./App.css";
+import store from "./store";
+import setAuthToken from "./utils/setAuthToken";
 
 import NavBar from "./components/NavBar";
 import Panel from "./components/Panel";
@@ -37,7 +37,7 @@ if (localStorage.jwtToken) {
 }
 
 class App extends Component {
-    render() {
+    public render() {
         return (
             <Provider store={store}>
                 <BrowserRouter>

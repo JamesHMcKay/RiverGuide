@@ -1,28 +1,28 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
-import { State } from '../../reducers/index';
+import { State } from "../../reducers/index";
 
 // Material UI
-import Dialog from "@material-ui/core/Dialog";
-import Slide from "@material-ui/core/Slide";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
+import Dialog from "@material-ui/core/Dialog";
 import FormControl from "@material-ui/core/FormControl";
-import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import Slide from "@material-ui/core/Slide";
+import TextField from "@material-ui/core/TextField";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 
 const Transition = (props: any) => <Slide direction="up" {...props} />;
 
 interface ICreateWhitewaterProps {
     isOpen: boolean;
     toggleModal: (modal?: string) => void;
-    category: any
+    category: any;
 }
 
 interface ICreateWhitewaterState {
@@ -30,7 +30,6 @@ interface ICreateWhitewaterState {
     river: string;
     region: string;
 }
-
 
 class CreateWhitewater extends Component<ICreateWhitewaterProps, ICreateWhitewaterState> {
     constructor(props: ICreateWhitewaterProps) {
@@ -42,11 +41,11 @@ class CreateWhitewater extends Component<ICreateWhitewaterProps, ICreateWhitewat
         };
     }
 
-    handleClose = () => this.props.toggleModal();
+    public handleClose = () => this.props.toggleModal();
 
-    handleChange = (event: any) => this.setState({});
+    public handleChange = (event: any) => this.setState({});
 
-    render() {
+    public render() {
         return (
             <Dialog
                 fullScreen
@@ -98,15 +97,15 @@ class CreateWhitewater extends Component<ICreateWhitewaterProps, ICreateWhitewat
 
 CreateWhitewater.propTypes = {
     toggleModal: PropTypes.func.isRequired,
-    category: PropTypes.object.isRequired
+    category: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state: State) => ({
     isOpen: state.openModal === "createModal",
-    category: state.category
+    category: state.category,
 });
 
 export default connect(
     mapStateToProps,
-    { toggleModal }
+    { toggleModal },
 )(CreateWhitewater);
