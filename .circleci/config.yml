@@ -22,6 +22,7 @@ jobs:
       - run: # run tests
           name: Run Test and Coverage
           command: |
-            ./cc-test-reporter before-build
-            npm test -- --coverage
-            ./cc-test-reporter after-build --exit-code $?
+            npm test
+            # ./cc-test-reporter before-build
+            # npm test -- --coverage
+            # ./cc-test-reporter after-build --exit-code $?
