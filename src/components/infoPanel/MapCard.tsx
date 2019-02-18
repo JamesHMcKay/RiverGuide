@@ -14,7 +14,7 @@ interface IMapCardProps {
 }
 
 class MapCard extends Component<IMapCardProps> {
-    public render() {
+    public render(): JSX.Element {
         return (
             <Card>
                 <CardContent>

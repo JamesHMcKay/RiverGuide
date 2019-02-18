@@ -1,11 +1,10 @@
 import classnames from "classnames";
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
 
 import { loginUser, toggleModal } from "../../actions/actions";
-import { ILoginDetails } from "../../utils/types";
+import { IErrors, ILoginDetails } from "../../utils/types";
 
 import {
     Button,
@@ -25,12 +24,15 @@ interface IWelcomeState {
     email: string;
     password: string;
     showPassword: boolean;
-    errors: any;
+    errors?: IErrors;
 }
 
-interface IWelcomeProps {
-    errors: any;
+interface IWelcomeStateProps {
+    errors: IErrors;
     isOpen: boolean;
+}
+
+interface IWelcomeProps extends IWelcomeStateProps {
     toggleModal: (modal?: string) => void;
     loginUser: (details: ILoginDetails) => void;
 }
@@ -42,7 +44,6 @@ class Welcome extends Component<IWelcomeProps, IWelcomeState> {
             email: "",
             password: "",
             showPassword: false,
-            errors: {},
         };
 
         this.closeModal = this.closeModal.bind(this);
@@ -50,13 +51,13 @@ class Welcome extends Component<IWelcomeProps, IWelcomeState> {
         this.togglePassword = this.togglePassword.bind(this);
     }
 
-    public componentWillReceiveProps(nextProps: IWelcomeProps) {
+    public componentWillReceiveProps(nextProps: IWelcomeProps): void {
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
         }
     }
 
-    public togglePassword() {
+    public togglePassword(): void {
         this.setState({ showPassword: !this.state.showPassword });
     }
 
@@ -68,10 +69,10 @@ class Welcome extends Component<IWelcomeProps, IWelcomeState> {
         this.setState({ password: e.target.value });
     }
 
-    public onSubmit(e: any) {
+    public onSubmit(e: any): void {
         e.preventDefault();
 
-        const userData = {
+        const userData: ILoginDetails = {
             email: this.state.email,
             password: this.state.password,
         };
@@ -79,12 +80,12 @@ class Welcome extends Component<IWelcomeProps, IWelcomeState> {
         this.props.loginUser(userData);
     }
 
-    public closeModal() {
+    public closeModal(): void {
         this.props.toggleModal();
     }
 
-    public render() {
-        const { errors } = this.state;
+    public render(): JSX.Element {
+        const errors: IErrors = this.props.errors;
 
         return (
             <Modal isOpen={this.props.isOpen} toggle={this.closeModal}>
@@ -160,18 +161,12 @@ class Welcome extends Component<IWelcomeProps, IWelcomeState> {
     }
 }
 
-Welcome.propTypes = {
-    toggleModal: PropTypes.func.isRequired,
-    loginUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired,
-};
-
-const mapStateToProps = (state: IState) => ({
-    isOpen: state.openModal === "welcomeModal",
-    auth: state.auth,
-    errors: state.errors,
-});
+function mapStateToProps(state: IState): IWelcomeStateProps {
+    return ({
+        isOpen: state.openModal === "welcomeModal",
+        errors: state.errors,
+    });
+}
 
 export default connect(
     mapStateToProps,

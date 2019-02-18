@@ -33,12 +33,15 @@ interface IRegisterState {
     errors: any;
 }
 
-interface IReigsterProps {
-    isOpen: boolean;
-    toggleModal: (modal?: string) => void;
-    registerUser: (userData: IRegisterData) => void;
+interface IRegisterPropsState {
     auth: IAuth;
     errors: any;
+    isOpen: boolean;
+}
+
+interface IReigsterProps extends IRegisterPropsState {
+    toggleModal: (modal?: string) => void;
+    registerUser: (userData: IRegisterData) => void;
 }
 
 class Register extends Component<IReigsterProps, IRegisterState> {
@@ -61,19 +64,19 @@ class Register extends Component<IReigsterProps, IRegisterState> {
         this.onPasswordChange = this.onPasswordChange.bind(this);
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         if (this.props.auth.isAuthenticated) {
             // Close modal
         }
     }
 
-    public componentWillReceiveProps(nextProps: IReigsterProps) {
+    public componentWillReceiveProps(nextProps: IReigsterProps): void {
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
         }
     }
 
-    public togglePassword() {
+    public togglePassword(): void {
         this.setState({ showPassword: !this.state.showPassword });
     }
 
@@ -89,7 +92,7 @@ class Register extends Component<IReigsterProps, IRegisterState> {
         this.setState({ password2: e.target.value });
     }
 
-    public onPasswordChange(e: any) {
+    public onPasswordChange(e: any): void {
         const checkPassword: ZXCVBNResult = zxcvbn(e.target.value);
         let score: number = checkPassword.score + 1;
         let color: string;
@@ -124,7 +127,7 @@ class Register extends Component<IReigsterProps, IRegisterState> {
         });
     }
 
-    public onSubmit(e: any) {
+    public onSubmit(e: any): void {
         e.preventDefault();
 
         const newUser: IRegisterData = {
@@ -137,11 +140,11 @@ class Register extends Component<IReigsterProps, IRegisterState> {
         this.props.registerUser(newUser);
     }
 
-    public closeModal() {
+    public closeModal(): void {
         this.props.toggleModal();
     }
 
-    public render() {
+    public render(): JSX.Element {
         const { errors } = this.state;
 
         return (
@@ -280,11 +283,13 @@ Register.propTypes = {
     errors: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state: IState) => ({
-    isOpen: state.openModal === "registerModal",
-    auth: state.auth,
-    errors: state.errors,
-});
+function mapStateToProps(state: IState): IRegisterPropsState {
+    return ({
+        isOpen: state.openModal === "registerModal",
+        auth: state.auth,
+        errors: state.errors,
+    });
+}
 
 export default connect(
     mapStateToProps,

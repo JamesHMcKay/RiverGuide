@@ -32,11 +32,6 @@ import {
 // Styles
 import "./Panel.css";
 
-const getDimensions = (element: any) => {
-    const { width, height } = element.getBoundingClientRect();
-    return { width, height };
-};
-
 export interface IMapDimensions {
     width: number;
     height: number;
@@ -54,12 +49,15 @@ export interface IPanelState {
     searchApplied: boolean;
 }
 
-export interface IPanelProps {
+export interface IPanelMapStateToProps {
     guides: IGuide[];
     gauges: IGauge[];
     infoPage: IInfoPage;
     filterdGuides: IGuide[];
     filters: IFilter[];
+}
+
+export interface IPanelProps extends IPanelMapStateToProps {
     makeGaugeRequest: () => void;
     makeGuideRequest: (guide: string) => void;
     setMapBounds: (mapBounds: IMapBounds) => void;
@@ -101,28 +99,33 @@ class Panel extends Component<IPanelProps, IPanelState> {
         this.updateDimensions = this.updateDimensions.bind(this);
     }
 
-    public updateDimensions() {
-        const element = ReactDOM.findDOMNode(this.refs.mapView);
+    public getDimensions(element: any): {width: number, height: number} {
+        const { width, height }: {width: number, height: number} = element.getBoundingClientRect();
+        return { width, height };
+    }
+
+    public updateDimensions(): void {
+        const element: Element | Text | null = ReactDOM.findDOMNode(this.refs.mapView);
         this.setState({
-            mapDimensions: getDimensions(element),
+            mapDimensions: this.getDimensions(element),
         });
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.props.makeGaugeRequest();
         this.props.makeGuideRequest("whitewater");
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
     }
 
-    public componentWillReceiveProps(props: IPanelProps) {
+    public componentWillReceiveProps(props: IPanelProps): void {
         this.setState({
             searchList: props.guides,
             gaugeList: props.gauges,
         });
     }
 
-    public searchMatchesGuide(guide: IGuide, searchText: string) {
+    public searchMatchesGuide(guide: IGuide, searchText: string): boolean {
         return (
             guide.title.toLowerCase().indexOf(searchText) > 0 ||
             guide.river.toLowerCase().indexOf(searchText) > 0 ||
@@ -130,11 +133,11 @@ class Panel extends Component<IPanelProps, IPanelState> {
         );
     }
 
-    public onChange(ev: any) {
-        const searchResults = this.props.guides.filter((guide) =>
+    public onChange(ev: any): void {
+        const searchResults: IGuide[] = this.props.guides.filter((guide: IGuide) =>
             this.searchMatchesGuide(guide, ev.target.value.toLowerCase()),
         );
-        let searchApplied = false;
+        let searchApplied: boolean = false;
         if (ev.target.value && ev.target.value !== "") {
             searchApplied = true;
         }
@@ -145,7 +148,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
         });
     }
 
-    public closeInfo() {
+    public closeInfo(): void {
         // this.setState({
         //     selectedGuide: {},
         //     selectedHistory: [],
@@ -153,11 +156,11 @@ class Panel extends Component<IPanelProps, IPanelState> {
         // });
     }
 
-    public onClick(guide: IGuide) {
+    public onClick(guide: IGuide): void {
         this.props.openInfoPage(guide);
     }
 
-    public updateMapBounds = (mapBounds: IMapBounds) => {
+    public updateMapBounds = (mapBounds: IMapBounds): void => {
             this.props.setMapBounds(mapBounds);
             this.props.generateFilteredList(
                 this.props.guides,
@@ -166,7 +169,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
             );
     }
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <div className="middle-section">
                 <ControlBar/>
@@ -218,7 +221,7 @@ Panel.propTypes = {
     infoPage: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state: IState) => ({
+const mapStateToProps: (state: IState) => IPanelMapStateToProps = (state: IState): IPanelMapStateToProps => ({
     guides: state.guides,
     gauges: state.gauges,
     infoPage: state.infoPage,

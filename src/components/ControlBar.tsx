@@ -23,15 +23,18 @@ const data: string[] = [
     "Other",
 ];
 
-interface IControlBarProps {
-    openModal: string;
-    mapBounds: IMapBounds;
+interface IControlBarProps extends IControlBarStateToProps {
     generateFilteredList: (
         guides: IGuide[],
         filters: IFilter[],
         mapBounds: IMapBounds) => void;
     searchGuideList: (value: string, guides: IGuide[]) => void;
     setCategory: (value: string) => void;
+}
+
+interface IControlBarStateToProps {
+    openModal: string;
+    mapBounds: IMapBounds;
     guides: IGuide[];
     filters: IFilter[];
 }
@@ -104,7 +107,7 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
                                 color: "#fff",
                             }}
                         >
-                            {data.map((category) => (
+                            {data.map((category: string) => (
                                 <Tab label={category} key={category} />
                             ))}
                         </Tabs>
@@ -117,7 +120,7 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
 
 ControlBar.propTypes = {};
 
-const mapStateToProps = (state: IState) => ({
+const mapStateToProps: (state: IState) => IControlBarStateToProps = (state: IState): IControlBarStateToProps => ({
     openModal: state.openModal,
     guides: state.guides,
     filters: state.filteredGuides,

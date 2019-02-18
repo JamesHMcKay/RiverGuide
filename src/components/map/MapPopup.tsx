@@ -12,7 +12,7 @@ interface IMapPopupProps {
 
 class MapPopup extends Component<IMapPopupProps, {}> {
 
-    public render() {
+    public render(): JSX.Element {
         const { guide, gauges } = this.props;
 
         return (
@@ -25,9 +25,11 @@ class MapPopup extends Component<IMapPopupProps, {}> {
     }
 }
 
-const mapStateToProps = (state: IState) => ({
-    gauges: state.gauges,
-});
+function mapStateToProps(state: IState): {gauges: IGauge[]} {
+    return ({
+        gauges: state.gauges,
+    });
+}
 
 export default connect(
     mapStateToProps,

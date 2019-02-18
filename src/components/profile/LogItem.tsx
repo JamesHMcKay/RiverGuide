@@ -1,6 +1,5 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import moment from "moment";
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal, updateOpenLog } from "../../actions/actions";
@@ -27,10 +26,14 @@ import "./profile.css";
 
 library.add(faCaretDown, faCaretRight, faStar, faUser);
 
-interface ILogItemProps {
+interface ILogItemProps extends ILogItemStateProps {
     toggleModal: (modal: string) => void;
     updateOpenLog: (item: ILogEntry) => void;
     item: ILogEntry;
+}
+
+interface ILogItemStateProps {
+    openModal: string;
 }
 
 interface ILogItemState {
@@ -49,40 +52,40 @@ class LogItem extends Component<ILogItemProps, ILogItemState> {
         this.renderStars = this.renderStars.bind(this);
     }
 
-    public toggleContent() {
+    public toggleContent(): void {
         this.setState({ isOpen: !this.state.isOpen });
     }
 
-    public parseDate(date: string) {
+    public parseDate(date: string): string {
         return moment(date).format("DD MMMM YYYY");
     }
 
-    public handleEdit() {
+    public handleEdit(): void {
         this.props.toggleModal("editTrip");
         this.props.updateOpenLog(this.props.item);
     }
 
-    public handleDelete() {
+    public handleDelete(): void {
         this.props.toggleModal("deleteTrip");
         this.props.updateOpenLog(this.props.item);
     }
 
-    public renderStars(rating: number) {
+    public renderStars(rating: number): number[] {
         const stars: number[] = [];
-        for (let i = 0; i < Math.floor(rating); i++) {
-            // stars.push(<FontAwesomeIcon icon="star" />);
-        }
+        // for (let i = 0; i < Math.floor(rating); i++) {
+        //     // stars.push(<FontAwesomeIcon icon="star" />);
+        // }
         return stars;
     }
 
-    public render() {
+    public render(): JSX.Element {
         const {
             date,
             section,
             participantCount,
             rating,
             description,
-        } = this.props.item;
+        }: ILogEntry = this.props.item;
 
         return (
             <div>
@@ -131,14 +134,11 @@ class LogItem extends Component<ILogItemProps, ILogItemState> {
     }
 }
 
-LogItem.propTypes = {
-    toggleModal: PropTypes.func.isRequired,
-    updateOpenLog: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state: IState) => ({
-    openModal: state.openModal,
-});
+function mapStateToProps(state: IState): ILogItemStateProps {
+    return ({
+        openModal: state.openModal,
+    });
+}
 
 export default connect(
     mapStateToProps,

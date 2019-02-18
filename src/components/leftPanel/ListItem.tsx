@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { openInfoPage } from "../../actions/actions";
@@ -14,19 +13,17 @@ import PlaceIcon from "@material-ui/icons/PlaceOutlined";
 import { IGuide } from "../../utils/types";
 import FlowBadge from "../common/FlowBadge";
 
-import { IState } from "../../reducers/index";
-
 interface IGuideItemProps {
-    openInfoPage: (guide: IGuide) => void;
     guide: IGuide;
+    openInfoPage: (guide: IGuide) => void;
 }
 
 class GuideItem extends Component<IGuideItemProps, {}> {
-    public handleClick = () => {
+    public handleClick = (): void => {
         this.props.openInfoPage(this.props.guide);
     }
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <div>
                 <ListItem button onClick={this.handleClick}>
@@ -42,15 +39,7 @@ class GuideItem extends Component<IGuideItemProps, {}> {
     }
 }
 
-GuideItem.propTypes = {
-    auth: PropTypes.object.isRequired,
-};
-
-const mapStateToProps = (state: IState) => ({
-    auth: state.auth,
-});
-
 export default connect(
-    mapStateToProps,
+    null,
     { openInfoPage },
 )(GuideItem);

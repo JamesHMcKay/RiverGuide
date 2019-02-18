@@ -1,10 +1,9 @@
 import classnames from "classnames";
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import zxcvbn, { ZXCVBNResult } from "zxcvbn";
 import { IState } from "../../reducers/index";
-import { IAuth, IUserData } from "../../utils/types";
+import { IAuth, IErrors, IUserData } from "../../utils/types";
 
 import { changePassword, toggleModal } from "../../actions/actions";
 
@@ -34,12 +33,15 @@ interface IChangePasswordState {
     errors: any;
 }
 
-interface IChangePasswordProps {
+interface IChangePasswordMapStateToProps {
+    auth: IAuth;
+    errors: IErrors;
     isOpen: boolean;
+}
+
+interface IChangePasswordProps extends IChangePasswordMapStateToProps {
     toggleModal: (modal?: string) => void;
     changePassword: (userData: IUserData) => void;
-    auth: IAuth;
-    errors: any;
 }
 
 class ChangePassword extends Component<IChangePasswordProps, IChangePasswordState> {
@@ -63,17 +65,17 @@ class ChangePassword extends Component<IChangePasswordProps, IChangePasswordStat
         this.toggleOldPassword = this.toggleOldPassword.bind(this);
     }
 
-    public componentWillReceiveProps(nextProps: IChangePasswordProps) {
+    public componentWillReceiveProps(nextProps: IChangePasswordProps): void {
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
         }
     }
 
-    public toggleOldPassword() {
+    public toggleOldPassword(): void {
         this.setState({ showOldPassword: !this.state.showOldPassword });
     }
 
-    public togglePassword() {
+    public togglePassword(): void {
         this.setState({ showPassword: !this.state.showPassword });
     }
 
@@ -85,7 +87,7 @@ class ChangePassword extends Component<IChangePasswordProps, IChangePasswordStat
         this.setState({ newPassword2: e.target.value });
     }
 
-    public onPasswordChange(e: any) {
+    public onPasswordChange(e: any): void {
         const checkPassword: ZXCVBNResult = zxcvbn(e.target.value);
         let score: number = checkPassword.score + 1;
         let color: string;
@@ -120,7 +122,7 @@ class ChangePassword extends Component<IChangePasswordProps, IChangePasswordStat
         });
     }
 
-    public onSubmit(e: any) {
+    public onSubmit(e: any): void {
         e.preventDefault();
 
         const updateUser: IUserData = {
@@ -134,12 +136,12 @@ class ChangePassword extends Component<IChangePasswordProps, IChangePasswordStat
         this.props.changePassword(updateUser);
     }
 
-    public closeModal() {
+    public closeModal(): void {
         this.props.toggleModal();
     }
 
-    public render() {
-        const { errors } = this.state;
+    public render(): JSX.Element {
+        const errors: IErrors = this.props.errors;
 
         return (
             <Modal isOpen={this.props.isOpen} toggle={this.closeModal}>
@@ -262,18 +264,13 @@ class ChangePassword extends Component<IChangePasswordProps, IChangePasswordStat
     }
 }
 
-ChangePassword.propTypes = {
-    toggleModal: PropTypes.func.isRequired,
-    changePassword: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired,
-};
-
-const mapStateToProps = (state: IState) => ({
-    isOpen: state.openModal === "changePasswordModal",
-    auth: state.auth,
-    errors: state.errors,
-});
+function mapStateToProps(state: IState): IChangePasswordMapStateToProps {
+    return ({
+        isOpen: state.openModal === "changePasswordModal",
+        auth: state.auth,
+        errors: state.errors,
+    });
+}
 
 export default connect(
     mapStateToProps,

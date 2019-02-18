@@ -20,7 +20,7 @@ const initialState: IAuth = {
     user: initialUser,
 };
 
-export default function(state = initialState, action: any) {
+export default function(state: IAuth = initialState, action: any): IAuth {
     switch (action.type) {
         case SET_CURRENT_USER:
             return {

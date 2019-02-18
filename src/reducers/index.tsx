@@ -14,7 +14,9 @@ import openLogReducer from "./openLogReducer";
 
 import {
     IAuth,
+    IErrors,
     IFilter,
+    IGauge,
     IGuide,
     IInfoPage,
     ILogEntry,
@@ -23,7 +25,7 @@ import {
 
 export interface IState {
     guides: IGuide[];
-    gauges: any;
+    gauges: IGauge[];
     infoPage: IInfoPage;
     filteredList: IGuide[];
     filteredGuides: IFilter[];
@@ -32,7 +34,7 @@ export interface IState {
     mapBounds: IMapBounds;
     openLog: IOpenLog;
     category: string;
-    errors: any;
+    errors: IErrors;
     log: ILogEntry[];
 }
 

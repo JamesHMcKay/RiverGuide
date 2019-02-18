@@ -123,3 +123,17 @@ export interface ILogEntry {
     description: string;
     section: string;
 }
+
+export interface IErrors {
+    data: {
+        password: boolean;
+        newPassword: boolean;
+        newPassword2: boolean;
+        email: boolean;
+    };
+}
+
+export enum IThemeColor {
+    primary = "primary",
+    secondary = "secondary",
+}

@@ -16,9 +16,9 @@ import { IWeather, IWeatherStore, WeatherStore } from "./WeatherStore";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 
-const CALM_WIND_THRESHOLD = 2;
+const CALM_WIND_THRESHOLD: number = 2;
 
-const WIND_DIRECTIONS = [
+const WIND_DIRECTIONS: Array<{abbrv: string; translation: string}> = [
     {abbrv: "SW", translation: "South Westerlies"},
     {abbrv: "NW", translation: "North Westerlies"},
     {abbrv: "S", translation: "Southerlies"},
@@ -29,7 +29,7 @@ const WIND_DIRECTIONS = [
     {abbrv: "SE", translation: "South Easterlies"},
 ];
 
-const WEATHER_ICONS = [
+const WEATHER_ICONS: Array<{icon: string, element: JSX.Element}> = [
     {icon: "cloudy", element: <img src={cloudy} alt="" className="current-weather-icon"/>},
     {icon: "clear-day", element: <img src={sun} alt="" className="current-weather-icon"/>},
     {icon: "clear-night", element: <img src={sun} alt="" className="current-weather-icon"/>},
@@ -73,18 +73,18 @@ export class CurrentWeather extends React.Component<ICurrentWeatherProps, ICurre
         });
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
       this._loadUserData();
     }
 
-    public componentDidUpdate(prevProps: ICurrentWeatherProps) {
+    public componentDidUpdate(prevProps: ICurrentWeatherProps): void {
         if (this.props.lat !== prevProps.lat) {
             this.setState({weather: null, lat: this.props.lat});
             this._loadUserData();
         }
     }
 
-    public alternateProvider() {
+    public alternateProvider(): void {
         if (this.state.weatherProvider === "OpenWeather") {
             this.setState({weatherProvider: "DarkSky"});
         } else if (this.state.weatherProvider === "DarkSky") {
@@ -104,8 +104,8 @@ export class CurrentWeather extends React.Component<ICurrentWeatherProps, ICurre
 
     public getSunRiseAndSet(): ISunTimes {
         if (this.state.weather && this.state.weather.openweather) {
-            const sunrise = moment.unix(this.state.weather.openweather.sunrise);
-            const sunset = moment.unix(this.state.weather.openweather.sunset);
+            const sunrise: moment.Moment = moment.unix(this.state.weather.openweather.sunrise);
+            const sunset: moment.Moment = moment.unix(this.state.weather.openweather.sunset);
             return {
                 sunrise: sunrise.format("h:mm a"),
                 sunset: sunset.format("h:mm a")};
@@ -119,7 +119,7 @@ export class CurrentWeather extends React.Component<ICurrentWeatherProps, ICurre
     }
 
     public getDetails = (): JSX.Element => {
-        const sunRiseAndSet = this.getSunRiseAndSet();
+        const sunRiseAndSet: ISunTimes = this.getSunRiseAndSet();
         return (
             <div className="weather-details">
                 <div className="sun-time">
@@ -177,7 +177,7 @@ export class CurrentWeather extends React.Component<ICurrentWeatherProps, ICurre
         return "";
     }
 
-    public getCurrentWind = () => {
+    public getCurrentWind = (): JSX.Element => {
         const weather: Partial<IWeather> | null = this.getWeatherObject();
         let speed: number = 0;
         if (weather && weather.wind) {
@@ -193,7 +193,7 @@ export class CurrentWeather extends React.Component<ICurrentWeatherProps, ICurre
         );
     }
 
-    public getWindDirection = () => {
+    public getWindDirection = (): JSX.Element => {
         const weather: Partial<IWeather> | null = this.getWeatherObject();
         let direction: number = 0;
         if (weather && weather.wind) {
@@ -206,10 +206,10 @@ export class CurrentWeather extends React.Component<ICurrentWeatherProps, ICurre
         );
     }
 
-    public getIcon() {
+    public getIcon(): JSX.Element | null {
         const weather: Partial<IWeather> | null = this.getWeatherObject();
         if (weather && weather.icon) {
-            const icon = weather.icon;
+            const icon: string = weather.icon;
             for (const weatherIcon of WEATHER_ICONS) {
                 if (icon === weatherIcon.icon) {
                     return (
@@ -219,12 +219,11 @@ export class CurrentWeather extends React.Component<ICurrentWeatherProps, ICurre
                     );
                 }
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
-    public getCurrentWeather() {
+    public getCurrentWeather(): JSX.Element {
         return (
             <div className="weather-element">
                 {this.getIcon()}
@@ -235,7 +234,7 @@ export class CurrentWeather extends React.Component<ICurrentWeatherProps, ICurre
         );
     }
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <Card className="current-weather-card">
             <CardContent>
@@ -245,8 +244,8 @@ export class CurrentWeather extends React.Component<ICurrentWeatherProps, ICurre
         );
 
     }
-    public _loadUserData() {
-        const localState = this;
+    public _loadUserData(): void {
+        const localState: CurrentWeather = this;
         this.props.weatherStore.getWeatherAtLocation(this.props.lat, this.props.lon).then(
             (result: IWeatherStore) => {
                 localState.setState({

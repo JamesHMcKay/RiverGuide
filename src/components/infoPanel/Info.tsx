@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Report from "../common/Report";
@@ -34,11 +33,14 @@ interface IInfoState {
     favourited: boolean;
 }
 
-interface IInfoProps {
+interface IInfoStateProps {
     auth: IAuth;
-    toggleModal: (modal?: string) => void;
     gauges: IGauge[];
     infoPage: IInfoPage;
+}
+
+interface IInfoProps extends IInfoStateProps {
+    toggleModal: (modal?: string) => void;
     closeInfoPage: () => void;
     guide: IGuide;
     removeFromFavourites: (guideId: string, email: string) => void;
@@ -63,13 +65,13 @@ class Info extends Component<IInfoProps, IInfoState> {
         };
     }
 
-    public openModal(modalName: string) {
+    public openModal(modalName: string): void {
         this.props.toggleModal(modalName);
     }
 
-    public handleClose = () => this.props.closeInfoPage();
+    public handleClose = (): void => this.props.closeInfoPage();
 
-    public getLastUpdated() {
+    public getLastUpdated(): JSX.Element {
         return (
             <p className="last-updated-flow">
                 <em>
@@ -79,23 +81,23 @@ class Info extends Component<IInfoProps, IInfoState> {
         );
     }
 
-    public filterGauges() {
-        const guide = this.props.guide;
+    public filterGauges(): IGauge[] {
+        const guide: IGuide = this.props.guide;
 
         if (!guide.gaugeName) {
             return [];
         }
 
         return this.props.gauges.filter(
-            (gauge) =>
+            (gauge: IGauge) =>
                 (this.props.guide.gaugeName && gauge.siteName.toLowerCase() ===
                 this.props.guide.gaugeName.toLowerCase()),
         );
     }
 
-    public toggleFavourite = () => {
+    public toggleFavourite = (): void => {
         const { favourited } = this.state;
-        const guideId = this.props.infoPage.selectedGuide._id;
+        const guideId: string = this.props.infoPage.selectedGuide._id;
         const { email } = this.props.auth.user;
 
         this.setState({ favourited: !favourited });
@@ -106,12 +108,12 @@ class Info extends Component<IInfoProps, IInfoState> {
         }
     }
 
-    public getTags = (activity?: string, grade?: string, catchType?: string) => {
-        const gradeTag = grade && "Grade " + grade;
+    public getTags = (activity?: string, grade?: string, catchType?: string): JSX.Element[] => {
+        const gradeTag: string | undefined = grade && "Grade " + grade;
         return (
         [activity, gradeTag, catchType]
-        .filter((tag) => tag)
-        .map((tag) => (
+        .filter((tag: string | undefined) => tag)
+        .map((tag: string | undefined) => (
             <Chip
                 key={tag}
                 color="secondary"
@@ -122,7 +124,7 @@ class Info extends Component<IInfoProps, IInfoState> {
         )));
     }
 
-    public render() {
+    public render(): JSX.Element {
         const {
             title,
             description,
@@ -133,9 +135,9 @@ class Info extends Component<IInfoProps, IInfoState> {
             activity,
             gaugeName,
             markers,
-        } = this.props.infoPage.selectedGuide;
+        }: IGuide = this.props.infoPage.selectedGuide;
 
-        const testDisplay = (
+        const testDisplay: JSX.Element = (
             <div>
                 <div
                     style={{
@@ -254,7 +256,6 @@ class Info extends Component<IInfoProps, IInfoState> {
                         marginTop: "1vh",
                     }}
                 >
-
                     <IconButton
                         onClick={this.handleClose}
                         style={{
@@ -270,17 +271,14 @@ class Info extends Component<IInfoProps, IInfoState> {
         );
     }
 }
-Info.propTypes = {
-    auth: PropTypes.object.isRequired,
-    gauges: PropTypes.array.isRequired,
-    infoPage: PropTypes.object.isRequired,
-};
 
-const mapStateToProps = (state: IState) => ({
-    auth: state.auth,
-    gauges: state.gauges,
-    infoPage: state.infoPage,
-});
+function mapStateToProps(state: IState): IInfoStateProps {
+    return ({
+        auth: state.auth,
+        gauges: state.gauges,
+        infoPage: state.infoPage,
+    });
+}
 
 export default connect(
     mapStateToProps,

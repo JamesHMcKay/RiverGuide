@@ -15,7 +15,7 @@ interface IFilterDropDown {
 }
 
 class FilterDropDown extends Component<IFilterDropDown> {
-    public render() {
+    public render(): JSX.Element {
         return (
             <FormControl
                 style={{
@@ -26,7 +26,7 @@ class FilterDropDown extends Component<IFilterDropDown> {
                     {this.props.title}
                 </InputLabel>
                 <Select multiple value={[]} input={<Input id="select-label" />}>
-                    {this.props.values.map((value) => (
+                    {this.props.values.map((value: string) => (
                         <MenuItem key={value}>{value}</MenuItem>
                     ))}
                 </Select>

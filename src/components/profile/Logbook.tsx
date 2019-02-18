@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
@@ -10,9 +9,13 @@ import "./profile.css";
 
 import LogItem from "./LogItem";
 
-interface ILogBookProps {
+interface ILogBookProps extends ILogBookStateProps {
     toggleModal: (modal: string) => void;
+}
+
+interface ILogBookStateProps {
     log: ILogEntry[];
+    openModal: string;
 }
 
 class Logbook extends Component<ILogBookProps> {
@@ -21,12 +24,12 @@ class Logbook extends Component<ILogBookProps> {
         this.openModal = this.openModal.bind(this);
     }
 
-    public openModal() {
+    public openModal(): void {
         this.props.toggleModal("addTrip");
     }
 
-    public render() {
-        const { log } = this.props;
+    public render(): JSX.Element {
+        const { log }: {log: ILogEntry[]} = this.props;
 
         return (
             <div>
@@ -48,7 +51,7 @@ class Logbook extends Component<ILogBookProps> {
                     <div className="logbook-content">
                         <ListGroup flush>
                             {log &&
-                                log.map((item, idx) => (
+                                log.map((item: ILogEntry, idx: number) => (
                                     <LogItem key={idx} item={item} />
                                 ))}
                         </ListGroup>
@@ -59,15 +62,12 @@ class Logbook extends Component<ILogBookProps> {
     }
 }
 
-Logbook.propTypes = {
-    log: PropTypes.array,
-    toggleModal: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state: IState) => ({
-    log: state.log,
-    openModal: state.openModal,
-});
+function mapStateToProps(state: IState): ILogBookStateProps {
+    return ({
+        log: state.log,
+        openModal: state.openModal,
+    });
+}
 
 export default connect(
     mapStateToProps,

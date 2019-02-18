@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { makeLogbookRequest } from "../../actions/actions";
@@ -10,17 +9,20 @@ import ProfileBanner from "./ProfileBanner";
 
 import "./profile.css";
 
-interface IProfileContainerProps {
+interface IProfileContainerProps extends IProfileContainerStateProps {
     makeLogbookRequest: () => void;
+}
+
+interface IProfileContainerStateProps {
     auth: IAuth;
 }
 
 class ProfileContainer extends Component<IProfileContainerProps> {
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.props.makeLogbookRequest();
     }
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <div className="container">
                 <ProfileBanner user={this.props.auth.user} />
@@ -30,14 +32,11 @@ class ProfileContainer extends Component<IProfileContainerProps> {
     }
 }
 
-ProfileContainer.propTypes = {
-    auth: PropTypes.object.isRequired,
-    makeLogbookRequest: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state: IState) => ({
-    auth: state.auth,
-});
+function mapStateToProps(state: IState): IProfileContainerStateProps {
+    return ({
+        auth: state.auth,
+    });
+}
 
 export default connect(
     mapStateToProps,

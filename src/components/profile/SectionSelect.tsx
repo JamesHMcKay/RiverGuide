@@ -6,14 +6,17 @@ import { IGuide } from "../../utils/types";
 
 import { FormGroup, Label } from "reactstrap";
 
-interface ISectionSelectProps {
+interface ISectionSelectProps extends ISectionSelectStateProps {
     handleChange: (e: any) => void;
+}
+
+interface ISectionSelectStateProps {
     guides: IGuide[];
 }
 
 class SectionSelect extends Component<ISectionSelectProps> {
-    public render() {
-        const SEPERATOR = " - ";
+    public render(): JSX.Element {
+        const SEPERATOR: string = " - ";
 
         return (
             <FormGroup>
@@ -23,7 +26,7 @@ class SectionSelect extends Component<ISectionSelectProps> {
                     placeholder="eg. Taieri at Outram"
                     onChange={this.props.handleChange}
                     options={[{ label: "Other", value: "" }].concat(
-                        this.props.guides.map((guide) => ({
+                        this.props.guides.map((guide: IGuide) => ({
                             label:
                                 guide.title +
                                 SEPERATOR +
@@ -39,9 +42,11 @@ class SectionSelect extends Component<ISectionSelectProps> {
     }
 }
 
-const mapStateToProps = (state: IState) => ({
-    guides: state.guides,
-});
+function mapStateToProps(state: IState): ISectionSelectStateProps {
+    return ({
+        guides: state.guides,
+    });
+}
 
 export default connect(
     mapStateToProps,

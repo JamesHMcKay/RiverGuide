@@ -76,7 +76,7 @@ export interface IDarkSkyForecastList {
 export class WeatherStore {
     public weatherLocations: {[key: number]: IWeatherStore} = {};
 
-    public openWeatherConverter(input: IOpenWeather) {
+    public openWeatherConverter(input: IOpenWeather): IWeather {
         const output: IWeather = {
             position: {
                 lat: input.coord.lat,
@@ -90,7 +90,6 @@ export class WeatherStore {
             sunrise: input.sys.sunrise,
             sunset: input.sys.sunset,
         };
-
         return output;
     }
 
@@ -128,7 +127,7 @@ export class WeatherStore {
 
     public createForecast(input: IDarkSkyForecastList): Array<Partial<IWeather>> {
         // we want forecast for today, tomorrow, and the next day
-        const data = input.daily.data;
+        const data: IDarkSkyForecast[] = input.daily.data;
         const forecast: Array<Partial<IWeather>> = [];
         for (const day of data) {
             forecast.push(this.darkskyForecastConverter(day));
@@ -136,19 +135,21 @@ export class WeatherStore {
         return forecast;
     }
 
-    public makeKey(lat: number, lon: number) {
-        return lat + lon;
+    public makeKey(lat: number, lon: number): number {
+        return lat + lon * 100;
     }
 
     public getWeatherAtLocation(lat: number, lon: number): Promise<IWeatherStore> {
-        const localState = this;
+        const localState: WeatherStore = this;
 
         if (this.weatherLocations[this.makeKey(lat, lon)]) {
-            return new Promise((resolve) => {resolve(localState.weatherLocations[localState.makeKey(lat, lon)]); });
+            return new Promise<IWeatherStore>((resolve: any): void => {
+                resolve(localState.weatherLocations[localState.makeKey(lat, lon)]);
+            });
         }
 
         openweather.setCoordinate(lat, lon);
-        return new Promise((resolve) => {
+        return new Promise((resolve: any): void => {
             openweather.getAllWeather((err: any, JSONObj: IOpenWeather) => {
                 localState.weatherLocations[localState.makeKey(lat, lon)] = {
                     position: {

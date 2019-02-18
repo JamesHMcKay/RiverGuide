@@ -1,8 +1,8 @@
 import Tooltip from "@material-ui/core/Tooltip";
-import React, {PureComponent} from "react";
+import React, { PureComponent } from "react";
 import IoIosLocation from "react-icons/lib/io/ios-location";
 
-const pinStyle = {
+const pinStyle: {fill: string; stroke: string} = {
   fill: "#d00",
   stroke: "none",
 };
@@ -15,7 +15,7 @@ interface IMapMarkerProps {
 }
 
 export default class MapMarker extends PureComponent<IMapMarkerProps> {
-    public getToolTip(element: any) {
+    public getToolTip(element: any): JSX.Element {
         if (this.props.deleteMode) {
             return (<Tooltip title="Click to delete" style={{backgroundColor: "red"}}>{element}</Tooltip>);
         } else {
@@ -23,7 +23,7 @@ export default class MapMarker extends PureComponent<IMapMarkerProps> {
         }
     }
 
-    public render() {
+    public render(): JSX.Element {
         const {size = 80, onClick} = this.props;
         return (
             <svg

@@ -17,7 +17,7 @@ import Success from "../utils/Success";
 // import CreateModal from "../create/CreateModal";
 
 class Modals extends Component {
-    public render() {
+    public render(): JSX.Element {
         return (
             <div>
                 <ChangePassword />
@@ -39,9 +39,11 @@ Modals.propTypes = {
     toggleModal: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state: IState) => ({
-    openModal: state.openModal,
-});
+function mapStateToProps(state: IState): {openModal: string} {
+    return ({
+        openModal: state.openModal,
+    });
+}
 
 export default connect(
     mapStateToProps,

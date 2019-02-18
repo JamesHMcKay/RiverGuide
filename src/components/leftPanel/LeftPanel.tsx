@@ -14,47 +14,43 @@ import { IAuth, IGauge, IGuide, IInfoPage } from "./../../utils/types";
 import "./LeftPanel.css";
 import ListGroup from "./ListGroup";
 
-// Icons
-// import { library } from "@fortawesome/fontawesome-svg-core";
-// // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faFilter } from "@fortawesome/free-solid-svg-icons";
-
-// library.add(faFilter);
-
-interface ILeftPanelProps {
+interface ILeftPanelProps extends ILeftPanelStateProps {
     searchList: IGuide[];
     gaugeList: IGauge[];
     gauges: IGauge[];
     toggleModal: (name: string) => void;
-    guides: IGuide[];
-    filteredGuides: IGuide[];
-    infoPage: IInfoPage;
-    auth: IAuth;
     onClick: (guide: IGuide) => void;
 }
 
+interface ILeftPanelStateProps {
+    auth: IAuth;
+    guides: IGuide[];
+    filteredGuides: IGuide[];
+    infoPage: IInfoPage;
+}
+
 class LeftPanel extends Component<ILeftPanelProps, {}> {
-    public getRegion = (guide: IGuide) => guide.region;
+    public getRegion = (guide: IGuide): string => guide.region;
 
-    public onlyUnique = (value: string, index: number, self: string[]) => self.indexOf(value) === index;
+    public onlyUnique = (value: string, index: number, self: string[]): boolean => self.indexOf(value) === index;
 
-    public sortAlphbetically = (a: string, b: string) => {
+    public sortAlphbetically = (a: string, b: string): number => {
         if (a < b) { return -1; }
         if (a > b) { return 1; }
         return 0;
     }
 
-    public handleClick = (modalName: string) => {
+    public handleClick = (modalName: string): void => {
         this.props.toggleModal(modalName);
     }
 
-    public renderListGroup = (region: string, idx: number) => <ListGroup key={idx} region={region} />;
+    public renderListGroup = (region: string, idx: number): JSX.Element => <ListGroup key={idx} region={region} />;
 
-    public render() {
-        const { isAuthenticated } = this.props.auth;
-        const isLoading = this.props.guides.length < 1;
+    public render(): JSX.Element {
+        const isAuthenticated: IAuth = this.props.auth;
+        const isLoading: boolean = this.props.guides.length < 1;
 
-        const renderedList = (
+        const renderedList: JSX.Element = (
             <List>
                 {isAuthenticated && <ListGroup region="Favourites" />}
                 {this.props.filteredGuides
@@ -65,13 +61,13 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
             </List>
         );
 
-        const loading = (
+        const loading: JSX.Element = (
             <div className="loader">
                 <CircularProgress size={20} />
             </div>
         );
 
-        const buttons = (
+        const buttons: JSX.Element = (
             <div>
                 <div className="add-icon">
                     <Tooltip title="Add a Guide" placement="right">
@@ -111,12 +107,14 @@ LeftPanel.propTypes = {
     auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state: IState) => ({
-    auth: state.auth,
-    guides: state.guides,
-    infoPage: state.infoPage,
-    filteredGuides: state.filteredList,
-});
+function mapStateToProps(state: IState): ILeftPanelStateProps {
+    return ({
+        auth: state.auth,
+        guides: state.guides,
+        infoPage: state.infoPage,
+        filteredGuides: state.filteredList,
+    });
+}
 
 export default connect(
     mapStateToProps,

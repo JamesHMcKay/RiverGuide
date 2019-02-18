@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment, { Moment } from "moment";
 import React from "react";
 import cloudy from "../../img/cloudy.svg";
 import fog from "../../img/fog.svg";
@@ -15,7 +15,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 
-const WEATHER_ICONS = [
+const WEATHER_ICONS: Array<{icon: string; element: JSX.Element}> = [
     {icon: "cloudy", element: <img src={cloudy} alt="" className="weather-icon"/>},
     {icon: "clear-day", element: <img src={sun} alt="" className="weather-icon"/>},
     {icon: "clear-night", element: <img src={sun} alt="" className="weather-icon"/>},
@@ -54,18 +54,18 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
         });
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
       this._loadUserData();
     }
 
-    public componentDidUpdate(prevProps: IWeatherForecastProps) {
+    public componentDidUpdate(prevProps: IWeatherForecastProps): void {
         if (this.props.lat !== prevProps.lat) {
             this.setState({weather: null, lat: this.props.lat});
             this._loadUserData();
         }
     }
 
-    public alternateProvider() {
+    public alternateProvider(): void {
         if (this.state.weatherProvider === "OpenWeather") {
             this.setState({weatherProvider: "DarkSky"});
         } else if (this.state.weatherProvider === "DarkSky") {
@@ -94,7 +94,7 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
     public getForecastMaxTemp = (day: number): JSX.Element | null => {
         const forecast: Partial<IWeather> | null = this.getForecastDay(day);
         if (forecast && forecast.maxTemp) {
-            const temp = Math.round(forecast.maxTemp * 10) / 10;
+            const temp: number = Math.round(forecast.maxTemp * 10) / 10;
             return (
                 <div className="weather-temp">
                     <span>
@@ -111,7 +111,7 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
     public getForecastMinTemp = (day: number): JSX.Element | null => {
         const forecast: Partial<IWeather> | null = this.getForecastDay(day);
         if (forecast && forecast.minTemp) {
-            const temp = Math.round(forecast.minTemp * 10) / 10;
+            const temp: number = Math.round(forecast.minTemp * 10) / 10;
             return (
                 <div className="weather-temp">
                     <span>
@@ -128,7 +128,7 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
     public getForecastWindSpeed = (day: number): JSX.Element | null => {
         const forecast: Partial<IWeather> | null = this.getForecastDay(day);
         if (forecast && forecast.wind) {
-            const wind = Math.round(forecast.wind.speed * 10) / 10;
+            const wind: number = Math.round(forecast.wind.speed * 10) / 10;
             return (
                 <span className="wind-speed">
                     {wind + " km/h"}
@@ -158,7 +158,7 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
     public getForecastIcon(day: number): JSX.Element | null {
         const forecast: Partial<IWeather> | null = this.getForecastDay(day);
         if (forecast && forecast.icon) {
-            const icon = forecast.icon;
+            const icon: string = forecast.icon;
             for (const weatherIcon of WEATHER_ICONS) {
                 if (icon === weatherIcon.icon) {
                     return (
@@ -185,7 +185,7 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
     }
 
     public getDayOfWeek(dayNumber: number): string {
-        return ((value) => {
+        return ((value: number): string => {
             switch (value) {
             case 0:
             return "Sunday";
@@ -209,11 +209,11 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
     public getForecastTime(day: number): JSX.Element | null {
         const forecast: Partial<IWeather> | null = this.getForecastDay(day);
         if (forecast && forecast.time) {
-            const forecastTime = moment.unix(forecast.time);
-            const currentTime = moment();
-            const localState = this;
-            const difference = moment.duration(forecastTime.diff(currentTime)).asHours();
-            const title = ((value, forecastTime) => {
+            const forecastTime: moment.Moment = moment.unix(forecast.time);
+            const currentTime: moment.Moment = moment();
+            const localState: WeatherForecast = this;
+            const difference: number = moment.duration(forecastTime.diff(currentTime)).asHours();
+            const title: string = ((value: number, forecastTime: moment.Moment): string => {
                 switch (true) {
                 case value < 0:
                     return "Today";
@@ -262,8 +262,8 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
         );
     }
 
-    public _loadUserData() {
-        const localState = this;
+    public _loadUserData(): void {
+        const localState: WeatherForecast = this;
         this.props.weatherStore.getWeatherAtLocation(this.props.lat, this.props.lon).then(
             (result: IWeatherStore) => {
                 localState.setState({

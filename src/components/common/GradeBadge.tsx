@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Badge } from "reactstrap";
-import { IGauge, IGradeRange, IGuide } from "./../../utils/types";
+import { IGauge, IGradeRange, IGuide, IThemeColor } from "./../../utils/types";
 
 interface IGradeBadgeProps {
     gauges: IGauge[];
@@ -12,18 +12,18 @@ export class GradeBadge extends Component<IGradeBadgeProps> {
         super(props);
     }
 
-    public flowFilterCondition(grade: IGradeRange, guide: IGuide) {
-        const gradeFrom = parseInt(grade.from, 10);
-        const gradeTo = parseInt(grade.to, 10);
+    public flowFilterCondition(grade: IGradeRange, guide: IGuide): boolean {
+        const gradeFrom: number = parseInt(grade.from, 10);
+        const gradeTo: number = parseInt(grade.to, 10);
         const gaugeName: string = guide.gaugeName || "";
 
         const gaugeAtThisSite: IGauge | undefined = this.props.gauges.find(
-            (gauge) =>
+            (gauge: IGauge) =>
                 gauge.siteName.toLowerCase() === gaugeName.toLowerCase(),
         );
 
         if (gaugeAtThisSite) {
-            const currentFlow = gaugeAtThisSite.currentFlow;
+            const currentFlow: number = gaugeAtThisSite.currentFlow;
             return gradeFrom <= currentFlow && gradeTo >= currentFlow
                 ? true
                 : false;
@@ -32,21 +32,21 @@ export class GradeBadge extends Component<IGradeBadgeProps> {
         }
     }
 
-    public getColor(guide: IGuide) {
-        const flowSpecificGrades = this.props.guide.flowSpecificGrades;
+    public getColor(guide: IGuide): IThemeColor {
+        const flowSpecificGrades: IGradeRange[] | undefined = this.props.guide.flowSpecificGrades;
         if (flowSpecificGrades && flowSpecificGrades.length > 0) {
-            const filteredGrades = flowSpecificGrades.filter((grade) =>
+            const filteredGrades: IGradeRange[] = flowSpecificGrades.filter((grade: IGradeRange) =>
                 this.flowFilterCondition(grade, guide),
             );
-            return filteredGrades.length > 0 ? "primary" : "secondary";
+            return filteredGrades.length > 0 ? IThemeColor.primary : IThemeColor.secondary;
         } else {
-            return "primary";
+            return IThemeColor.primary;
         }
     }
 
-    public getFlowAdjustGrade(guide: IGuide) {
+    public getFlowAdjustGrade(guide: IGuide): string | undefined {
         if (guide.flowSpecificGrades) {
-            const grades = guide.flowSpecificGrades.filter((grade) =>
+            const grades: IGradeRange[] = guide.flowSpecificGrades.filter((grade: IGradeRange) =>
                 this.flowFilterCondition(grade, guide),
             );
 
@@ -57,7 +57,7 @@ export class GradeBadge extends Component<IGradeBadgeProps> {
         return guide.grade;
     }
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <Badge
                 className="gradeBadge"

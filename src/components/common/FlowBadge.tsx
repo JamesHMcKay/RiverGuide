@@ -8,12 +8,15 @@ import { IGauge } from "./../../utils/types";
 // Material UI
 import Chip from "@material-ui/core/Chip";
 
-const FLOW_UNIT = " cumecs";
-const HEIGHT_UNIT = " meters";
+const FLOW_UNIT: string = " cumecs";
+const HEIGHT_UNIT: string = " meters";
 
-interface IFlowBadgeProps {
-    gauges: IGauge[];
+interface IFlowBadgeProps extends IFlowBadgeStateProps {
     siteName?: string;
+}
+
+interface IFlowBadgeStateProps {
+    gauges: IGauge[];
 }
 
 class FlowBadge extends Component<IFlowBadgeProps> {
@@ -22,8 +25,8 @@ class FlowBadge extends Component<IFlowBadgeProps> {
     }
 
     public getFlowValue = (siteName: string): string | null => {
-        const gauge = this.props.gauges.filter(
-            (site) => site.siteName === siteName,
+        const gauge: IGauge = this.props.gauges.filter(
+            (site: IGauge) => site.siteName === siteName,
         )[0];
 
         if (gauge) {
@@ -36,7 +39,7 @@ class FlowBadge extends Component<IFlowBadgeProps> {
     }
 
     public render(): JSX.Element | null {
-        const { siteName } = this.props;
+        const siteName: string | undefined = this.props.siteName;
         const flow: string | null | undefined = siteName && this.getFlowValue(siteName);
         if (flow) {
             return (
@@ -56,9 +59,11 @@ FlowBadge.propTypes = {
     gauges: PropTypes.array.isRequired,
 };
 
-const mapStateToProps = (state: IState) => ({
-    gauges: state.gauges,
-});
+function mapStateToProps(state: IState): IFlowBadgeStateProps {
+    return ({
+        gauges: state.gauges,
+    });
+}
 
 export default connect(
     mapStateToProps,

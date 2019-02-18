@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
@@ -10,7 +9,6 @@ import {
     Button,
     Dialog,
     DialogActions,
-    DialogContent,
     DialogTitle,
     Slide,
 } from "@material-ui/core";
@@ -18,13 +16,17 @@ import {
 // Components
 import FilterDropDown from "./FilterDropDown";
 
-function Transition(props: any) {
+function Transition(props: any): JSX.Element {
     return <Slide direction="up" {...props} />;
 }
 
-interface IFiltersModalProps {
+interface IFiltersModalProps extends IFiltersModelStateProps {
     toggleModal: (modal: string) => void;
+}
+
+interface IFiltersModelStateProps {
     isOpen: boolean;
+    category: string;
 }
 
 interface IFiltersModalState {
@@ -32,15 +34,15 @@ interface IFiltersModalState {
 }
 
 class FiltersModal extends Component<IFiltersModalProps, IFiltersModalState> {
-    public state = {
+    public state: IFiltersModalState = {
         filters: [],
     };
 
-    public handleClose = () => {
+    public handleClose = (): void => {
         this.props.toggleModal("filterModal");
     }
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <Dialog
                 open={this.props.isOpen}
@@ -72,15 +74,12 @@ class FiltersModal extends Component<IFiltersModalProps, IFiltersModalState> {
     }
 }
 
-FiltersModal.propTypes = {
-    toggleModal: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state: IState) => ({
-    isOpen: state.openModal === "filterModal",
-    openLog: state.openLog,
-    category: state.category,
-});
+function mapStateToProps(state: IState): IFiltersModelStateProps {
+    return ({
+        isOpen: state.openModal === "filterModal",
+        category: state.category,
+    });
+}
 
 export default connect(
     mapStateToProps,

@@ -16,15 +16,14 @@ interface IHistoryCardProps {
 }
 
 class HistoryCard extends Component<IHistoryCardProps> {
-    public mapHistory = (history: IHistory[]) =>
-        history.map((reading) =>
-            (moment.utc(moment(reading.time, "DD/MM/YYYY h:mma")).valueOf(),
-            reading.data.currentFlow
-                ? parseFloat(reading.data.currentFlow.toString())
-                : parseFloat(reading.data.currentLevel.toString())),
-        )
+    public mapHistory = (history: IHistory[]): number[] => history.map((reading: IHistory) =>
+        (moment.utc(moment(reading.time, "DD/MM/YYYY h:mma")).valueOf(),
+        reading.data.currentFlow
+            ? parseFloat(reading.data.currentFlow.toString())
+            : parseFloat(reading.data.currentLevel.toString())),
+    )
 
-    public createConfig = (history: IHistory[]) => ({
+    public createConfig = (history: IHistory[]): Highcharts.Options => ({
         chart: {
             zoomType: "x",
             height: 300,
@@ -38,12 +37,7 @@ class HistoryCard extends Component<IHistoryCardProps> {
         series: [
             {
                 name: history[0].data.currentFlow ? "cumecs" : "meters",
-                showInLegend: false,
                 data: this.mapHistory(history),
-                pointPlacement: "between",
-                tooltip: {
-                    valueDecimals: 1,
-                },
             },
         ],
         yAxis: {
@@ -53,7 +47,7 @@ class HistoryCard extends Component<IHistoryCardProps> {
           },
     })
 
-    public render() {
+    public render(): JSX.Element {
         const { history } = this.props;
 
         return (
@@ -76,8 +70,10 @@ HistoryCard.propTypes = {
     history: PropTypes.array.isRequired,
 };
 
-const mapStateToProps = (state: IState) => ({
-    history: state.infoPage.history,
-});
+function mapStateToProps(state: IState): IHistoryCardProps {
+    return ({
+        history: state.infoPage.history,
+    });
+}
 
 export default connect(mapStateToProps)(HistoryCard);

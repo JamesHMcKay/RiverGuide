@@ -20,12 +20,12 @@ if (localStorage.jwtToken) {
     // Set auth token header auth
     setAuthToken(localStorage.jwtToken);
     // Decode token and get user info and exp
-    const decoded = jwt_decode(localStorage.jwtToken);
+    const decoded: any = jwt_decode(localStorage.jwtToken);
     // Set user and isAuthenticated
     store.dispatch(setCurrentUser(decoded));
 
     // Check for expired token
-    const currentTime = Date.now() / 1000;
+    const currentTime: number = Date.now() / 1000;
     // TODO reinstate this
     // if (decoded.exp < currentTime) {
     //     // Logout user
@@ -37,7 +37,7 @@ if (localStorage.jwtToken) {
 }
 
 class App extends Component {
-    public render() {
+    public render(): JSX.Element {
         return (
             <Provider store={store}>
                 <BrowserRouter>

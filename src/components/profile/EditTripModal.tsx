@@ -1,9 +1,8 @@
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { editLogEntry, toggleModal } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import { ILogEntry } from "../../utils/types";
+import { ILogEntry, IOpenLog } from "../../utils/types";
 
 import SectionSelect from "./SectionSelect";
 
@@ -19,7 +18,7 @@ import {
     ModalHeader,
 } from "reactstrap";
 
-const FORM_CONTENT = [
+const FORM_CONTENT: Array<{name: string; type: string; label: string}> = [
     { name: "date", type: "date", label: "Date of Trip" },
     {
         name: "participantCount",
@@ -30,10 +29,14 @@ const FORM_CONTENT = [
     { name: "description", type: "textarea", label: "Description" },
 ];
 
-interface IEditTripModalProps {
-    isOpen: boolean;
+interface IEditTripModalProps extends IEditTripModalStateProps {
     toggleModal: (modal: string) => void;
     editLogEntry: (entry: ILogEntry) => void;
+}
+
+interface IEditTripModalStateProps {
+    isOpen: boolean;
+    openLog: IOpenLog;
 }
 
 interface IEditTripModalState {
@@ -49,17 +52,17 @@ class EditTripModal extends Component<IEditTripModalProps, IEditTripModalState> 
         this.handleSave = this.handleSave.bind(this);
     }
 
-    public closeModal() {
+    public closeModal(): void {
         this.props.toggleModal("editTrip");
     }
 
-    public handleChange(e: any) {
+    public handleChange(e: any): void {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    public handleSectionChange(e: any) {
+    public handleSectionChange(e: any): void {
         if (this.state.logEntry) {
-            let logEntry = this.state.logEntry;
+            let logEntry: ILogEntry = this.state.logEntry;
             logEntry = {
                 ...logEntry,
                 section: e.value,
@@ -68,7 +71,7 @@ class EditTripModal extends Component<IEditTripModalProps, IEditTripModalState> 
         }
     }
 
-    public handleSave() {
+    public handleSave(): void {
         this.props.editLogEntry(this.state as ILogEntry);
     }
 
@@ -80,7 +83,7 @@ class EditTripModal extends Component<IEditTripModalProps, IEditTripModalState> 
         }
     }
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <div>
                 <Modal isOpen={this.props.isOpen} toggle={this.closeModal}>
@@ -92,7 +95,7 @@ class EditTripModal extends Component<IEditTripModalProps, IEditTripModalState> 
                             <SectionSelect
                                 handleChange={this.handleSectionChange}
                             />
-                            {FORM_CONTENT.map((field, idx) => (
+                            {FORM_CONTENT.map((field: {name: string, label: string}, idx: number) => (
                                 <FormGroup key={idx}>
                                     <Label for={field.name}>
                                         {field.label}
@@ -119,15 +122,12 @@ class EditTripModal extends Component<IEditTripModalProps, IEditTripModalState> 
     }
 }
 
-EditTripModal.propTypes = {
-    toggleModal: PropTypes.func.isRequired,
-    editLogEntry: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state: IState) => ({
-    isOpen: state.openModal === "editTrip",
-    openLog: state.openLog,
-});
+function mapStateToProps(state: IState): IEditTripModalStateProps {
+    return ({
+        isOpen: state.openModal === "editTrip",
+        openLog: state.openLog,
+    });
+}
 
 export default connect(
     mapStateToProps,

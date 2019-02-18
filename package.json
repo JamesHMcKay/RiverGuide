@@ -7,7 +7,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "tslint -c tslint.json --project ."
+    "pretest": "npm run lint",
+    "prebuild": "npm run lint",
+    "lint": "tslint -c tslint.json --project .",
+    "lint-fix": "tslint -c tslint.json --project . --fix"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.6",

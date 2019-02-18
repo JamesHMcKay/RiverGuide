@@ -58,19 +58,19 @@ class NavBar extends Component<INavBarProps, INavBarState> {
         };
     }
 
-    public handleMenu = (event: any) => {
+    public handleMenu = (event: any): void => {
         this.setState({ anchorEl: event.currentTarget });
     }
 
-    public handleClose = () => {
+    public handleClose = (): void => {
         this.setState({ anchorEl: null });
     }
 
-    public openModal = (modalName: string) => {
+    public openModal = (modalName: string): void => {
         this.props.toggleModal(modalName);
     }
 
-    public handleItemSelect = (item: IMenuItem) => {
+    public handleItemSelect = (item: IMenuItem): void => {
         this.handleClose();
         if (item.modal) {
             this.openModal(item.modal);
@@ -79,20 +79,20 @@ class NavBar extends Component<INavBarProps, INavBarState> {
         }
     }
 
-    public handleMapLink = () => {
+    public handleMapLink = (): void => {
         this.setState({ mapView: true });
     }
 
-    public render() {
+    public render(): JSX.Element {
         const { anchorEl } = this.state;
         const {isAuthenticated} = this.props.auth;
-        const menu =
+        const menu: IMenuItem[] =
             Boolean(anchorEl) && anchorEl.name === "about"
                 ? aboutMenuItems
                 : userMenuItems;
 
         // user is not authenticated
-        const noAuthButtons = (
+        const noAuthButtons: JSX.Element = (
             <div className="no-auth-buttons">
                 <Button
                     onClick={this.openModal.bind(this, "registerModal")}
@@ -115,7 +115,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
         );
 
         // user is authenticated
-        const authButtons = (
+        const authButtons: JSX.Element = (
             <div className="auth-buttons">
                 <Button
                     variant="contained"
@@ -177,7 +177,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                                 }}
                                 onClose={this.handleClose}
                             >
-                                {menu.map((item, idx) => (
+                                {menu.map((item: IMenuItem, idx: number) => (
                                     <Link to={item.route}
                                     key={idx}>
                                         <MenuItem
@@ -213,12 +213,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
     }
 }
 
-NavBar.propTypes = {
-    toggleModal: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
-};
-
-const mapStateToProps = (state: IState) => ({
+const mapStateToProps: (state: IState) => {auth: IAuth} = (state: IState): {auth: IAuth} => ({
     auth: state.auth,
 });
 

@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import IoAndroidAdd from "react-icons/lib/io/android-add";
 import IoAndroidPerson from "react-icons/lib/io/android-person";
@@ -17,16 +16,20 @@ import {
   ModalFooter,
   ModalHeader,
 } from "reactstrap";
+import { ILoginDetails } from "../../utils/types";
 
 interface IReportState {
-    peopleCount: number;
-    email?: string;
-    password?: string;
+  peopleCount: number;
+  email?: string;
+  password?: string;
 }
 
-interface IReportProps {
-    toggleModal: (modal?: string) => void;
-    isOpen: boolean;
+interface IReportStateProps {
+  isOpen: boolean;
+}
+
+interface IReportProps extends IReportStateProps {
+  toggleModal: (modal?: string) => void;
 }
 
 class Report extends Component<IReportProps, IReportState> {
@@ -39,42 +42,44 @@ class Report extends Component<IReportProps, IReportState> {
     this.onChange = this.onChange.bind(this);
   }
 
-  public onSubmit(e: any) {
+  public onSubmit(e: any): void {
     e.preventDefault();
-
-    const userData = {
-      email: this.state.email,
-      password: this.state.password,
-    };
-
-    // this.props.loginUser(userData);
+    if (this.state.email && this.state.password) {
+      const userData: ILoginDetails = {
+        email: this.state.email,
+        password: this.state.password,
+      };
+      // this.props.loginUser(userData);
+    } else {
+      // raise warning
+    }
   }
 
-  public closeModal() {
+  public closeModal(): void {
     this.props.toggleModal();
   }
 
-  public setHover(key: number) {
+  public setHover(key: number): void {
     this.setState({
       peopleCount: key + 1,
     });
   }
 
-  public addPerson() {
+  public addPerson(): void {
     this.setState({
       peopleCount: this.state.peopleCount + 1,
     });
   }
 
-  public onChange(e: any) {
+  public onChange(e: any): void {
     this.setState({
       peopleCount: e.target.value,
     });
   }
 
-  public getPersonList() {
-    const keys = [0, 1, 2, 3, 4];
-    const listItems = keys.map((key) =>
+  public getPersonList(): JSX.Element {
+    const keys: number[] = [0, 1, 2, 3, 4];
+    const listItems: JSX.Element[] = keys.map((key: number) =>
       <li key={key}
         style={{float: "left"}}>
         <div>
@@ -130,7 +135,7 @@ class Report extends Component<IReportProps, IReportState> {
     );
   }
 
-  public render() {
+  public render(): JSX.Element {
     return (
       <Modal isOpen={this.props.isOpen} toggle={this.closeModal}>
         <ModalHeader toggle={this.closeModal}>
@@ -158,13 +163,11 @@ class Report extends Component<IReportProps, IReportState> {
   }
 }
 
-Report.propTypes = {
-  toggleModal: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state: IState) => ({
-  isOpen: state.openModal === "reportModal",
-});
+function mapStateToProps(state: IState): IReportStateProps {
+  return ({
+    isOpen: state.openModal === "reportModal",
+  });
+}
 
 export default connect(
   mapStateToProps,

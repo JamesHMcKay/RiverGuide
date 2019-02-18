@@ -17,12 +17,19 @@ import TextField from "@material-ui/core/TextField";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 
-const Transition = (props: any) => <Slide direction="up" {...props} />;
+function Transition(props: any): JSX.Element {
+    return (<Slide direction="up" {...props} />);
+}
 
 interface ICreateWhitewaterProps {
     isOpen: boolean;
     toggleModal: (modal?: string) => void;
     category: any;
+}
+
+interface ICreateWhitewaterPropsState {
+    category: any;
+    isOpen: boolean;
 }
 
 interface ICreateWhitewaterState {
@@ -41,11 +48,11 @@ class CreateWhitewater extends Component<ICreateWhitewaterProps, ICreateWhitewat
         };
     }
 
-    public handleClose = () => this.props.toggleModal();
+    public handleClose = (): void => this.props.toggleModal();
 
-    public handleChange = (event: any) => this.setState({});
+    public handleChange = (event: any): void => this.setState({});
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <Dialog
                 fullScreen
@@ -95,15 +102,12 @@ class CreateWhitewater extends Component<ICreateWhitewaterProps, ICreateWhitewat
     }
 }
 
-CreateWhitewater.propTypes = {
-    toggleModal: PropTypes.func.isRequired,
-    category: PropTypes.object.isRequired,
-};
-
-const mapStateToProps = (state: IState) => ({
-    isOpen: state.openModal === "createModal",
-    category: state.category,
-});
+function mapStateToProps(state: IState): ICreateWhitewaterPropsState {
+    return ({
+        isOpen: state.openModal === "createModal",
+        category: state.category,
+    });
+}
 
 export default connect(
     mapStateToProps,

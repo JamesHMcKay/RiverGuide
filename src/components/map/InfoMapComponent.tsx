@@ -4,13 +4,13 @@ import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import React, { Component } from "react";
-import ReactMapGL, { Marker } from "react-map-gl";
+import ReactMapGL, { Marker, ViewState } from "react-map-gl";
 import uuid from "uuidv4";
 import WebMercatorViewport from "viewport-mercator-project";
 import { IMarker } from "../../utils/types";
 import MapMarker from "./MapMarker";
 
-const TOKEN =
+const TOKEN: string =
     "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqbXZ0bnp6dzA3NG0zc3BiYjMxaWJrcTIifQ.BKESeoXyOqkiB8j1sjbxQg";
 
 interface IInfoMapProps {
@@ -36,10 +36,10 @@ interface IInfoMapState {
 export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapState> {
     constructor(props: IInfoMapProps) {
         super(props);
-        const markers: {[key: string]: IMarker} = {};
+        const markers: {[key: string]: IMarker } = {};
 
         for (const marker of props.markers) {
-            const id = uuid();
+            const id: string = uuid();
             marker.id = id;
             markers[id] = marker;
         }
@@ -58,9 +58,9 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
         };
     }
 
-    public onMarkerClick(markerId: string) {
+    public onMarkerClick(markerId: string): void {
         if (this.state.editMode && this.state.deleteMode) {
-            const markers = {...this.state.markers};
+            const markers: { [key: string]: IMarker} = {...this.state.markers};
             delete markers[markerId];
             this.setState({
                 markers,
@@ -74,8 +74,8 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
     // public onMarkerDrag = (event: any) => {
     // }
 
-    public onMarkerDragEnd = (markerId: string, event: any) => {
-        const markers = {...this.state.markers};
+    public onMarkerDragEnd = (markerId: string, event: any): void => {
+        const markers: { [key: string]: IMarker } = {...this.state.markers};
         markers[markerId].lat = event.lngLat[1];
         markers[markerId].lng = event.lngLat[0];
         this.setState({
@@ -83,11 +83,11 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
         });
     }
 
-    public getMarkers = () => {
+    public getMarkers = (): Array<(0 | JSX.Element)> => {
         const markersList: IMarker[] = Object.values(this.state.markers);
 
-        const list = markersList.map(
-            (marker) =>
+        const list: Array<(0 | JSX.Element)> = markersList.map(
+            (marker: IMarker) =>
                 marker.lat &&
                 marker.lng && (
                     <Marker
@@ -96,14 +96,14 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
                         latitude={marker.lat}
                         draggable
                         // onDragStart={this.onMarkerDragStart}
-                        onDragEnd={(event) => this.onMarkerDragEnd(marker.id, event)}
+                        onDragEnd={(event: any): void => this.onMarkerDragEnd(marker.id, event)}
                         // onDrag={this.onMarkerDrag}
                     >
                         <MapMarker
                             size={30}
                             toolTip={marker.name}
                             deleteMode={this.state.deleteMode}
-                            onClick={() => this.onMarkerClick(marker.id)}
+                            onClick={(): void => this.onMarkerClick(marker.id)}
                         />
                   </Marker>
                 ),
@@ -111,17 +111,17 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
         return list;
     }
 
-    public setViewport() {
-        const bounds = this.props.markers;
-        let viewport = {
+    public setViewport(): IViewport {
+        const bounds: IMarker[] = this.props.markers;
+        let viewport: IViewport = {
             ...this.state.viewport,
         };
         if (bounds.length >= 2) {
-            const putInLat = bounds[0].lat;
-            const putInLon = bounds[0].lng;
+            const putInLat: number = bounds[0].lat;
+            const putInLon: number = bounds[0].lng;
 
-            const takeOutLat = bounds[bounds.length - 1].lat;
-            const takeOutLon = bounds[bounds.length - 1].lng;
+            const takeOutLat: number = bounds[bounds.length - 1].lat;
+            const takeOutLon: number = bounds[bounds.length - 1].lng;
 
             const { longitude, latitude, zoom } = new WebMercatorViewport(
                 this.state.viewport,
@@ -147,17 +147,17 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
         return viewport;
     }
 
-    public onMapClick = (event: any) => {
+    public onMapClick = (event: any): void => {
         if (!this.state.deleteMode && this.state.addMode) {
             // create a marker at this location
-            const id = uuid();
-            const marker = {
+            const id: string = uuid();
+            const marker: IMarker = {
                 lat: event.lngLat[1],
                 lng: event.lngLat[0],
                 name: "no name",
                 id,
             };
-            const markers = {...this.state.markers};
+            const markers: { [key: string]: IMarker } = {...this.state.markers};
 
             markers[id] = marker;
             this.setState({
@@ -167,13 +167,13 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
 
     }
 
-    public enterEditMode = () => {
+    public enterEditMode = (): void => {
         this.setState({
             editMode: true,
         });
     }
 
-    public getEditButtons = () => {
+    public getEditButtons = (): JSX.Element => {
         const deleteColor: PropTypes.Color = !this.state.deleteMode ? "primary" : "secondary";
         const addColor: PropTypes.Color = !this.state.addMode ? "primary" : "secondary";
         return (
@@ -182,7 +182,7 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
                     variant="fab"
                     color={addColor}
                     aria-label="Add"
-                    onClick={() => {this.setState({
+                    onClick={(): void => {this.setState({
                         deleteMode: false,
                         addMode: true,
                     }); }}
@@ -193,7 +193,7 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
                     variant="fab"
                     color={deleteColor}
                     aria-label="Add"
-                    onClick={() => {this.setState({
+                    onClick={(): void => {this.setState({
                         addMode: false,
                         deleteMode: true,
                     }); }}
@@ -204,18 +204,18 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
         );
     }
 
-    public onDragOver = (event: any) => {
+    public onDragOver = (event: any): void => {
         event.preventDefault();
     }
 
-    public render() {
-        const viewport = this.setViewport();
+    public render(): JSX.Element {
+        const viewport: IViewport = this.setViewport();
         const editColor: PropTypes.Color = !this.state.editMode ? "primary" : "secondary";
         return (
             <div className="info-map">
                 <div className="info-map-buttons">
                     <Button variant="fab" color={editColor} aria-label="Add"
-                        onClick={() => {this.setState({editMode: !this.state.editMode}); }}
+                        onClick={(): void => {this.setState({editMode: !this.state.editMode}); }}
                     >
                         <EditIcon/>
                     </Button>
@@ -224,7 +224,7 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
                 <ReactMapGL
                     mapStyle="mapbox://styles/mapbox/outdoors-v9"
                     {...viewport}
-                    onViewportChange={(viewport) => null}
+                    onViewportChange={(viewport: ViewState): null => null}
                     mapboxApiAccessToken={TOKEN}
                     onClick={this.onMapClick}
                     // onDragOver={(e) => this.onDragOver()}

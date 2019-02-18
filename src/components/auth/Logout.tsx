@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
@@ -7,9 +6,12 @@ import { logoutUser, toggleModal } from "../../actions/actions";
 
 import { Button, Form, Modal, ModalFooter, ModalHeader } from "reactstrap";
 
-interface ILogoutProps {
+interface ILogoutProps extends ILogoutStateProps {
     logoutUser: () => void;
     toggleModal: (modal?: string) => void;
+}
+
+interface ILogoutStateProps {
     isOpen: boolean;
 }
 
@@ -20,20 +22,20 @@ class Logout extends Component<ILogoutProps> {
         this.onLogoutClick = this.onLogoutClick.bind(this);
     }
 
-    public onLogoutClick(e: any) {
+    public onLogoutClick(e: any): void {
         e.preventDefault();
         this.props.logoutUser();
     }
 
-    public closeModal() {
+    public closeModal(): void {
         this.props.toggleModal();
     }
 
-    public onSubmit(e: any) {
+    public onSubmit(e: any): void {
         e.preventDefault();
     }
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <Modal isOpen={this.props.isOpen} toggle={this.closeModal}>
                 <ModalHeader toggle={this.closeModal}>
@@ -54,14 +56,11 @@ class Logout extends Component<ILogoutProps> {
     }
 }
 
-Logout.propTypes = {
-    toggleModal: PropTypes.func.isRequired,
-    logoutUser: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state: IState) => ({
-    isOpen: state.openModal === "logoutModal",
-});
+function mapStateToProps(state: IState): ILogoutStateProps {
+    return ({
+        isOpen: state.openModal === "logoutModal",
+    });
+}
 
 export default connect(
     mapStateToProps,

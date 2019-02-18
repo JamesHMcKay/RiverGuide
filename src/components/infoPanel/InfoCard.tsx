@@ -37,21 +37,21 @@ class InfoCard extends Component<IInfoCardProps, IInfoCardState> {
         tempValue: "",
     };
 
-    public componentWillReceiveProps = (props: IInfoCardProps) => {
+    public componentWillReceiveProps = (props: IInfoCardProps): void => {
         this.setState({ value: props.content });
     }
 
-    public handleChange = (event: any) => {
+    public handleChange = (event: any): void => {
         this.setState({ tempValue: event.target.value });
     }
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <Card
-                onMouseEnter={() => {
+                onMouseEnter={(): void => {
                     this.setState({ editIconShowing: true });
                 }}
-                onMouseLeave={() => this.setState({ editIconShowing: false })}
+                onMouseLeave={(): void => this.setState({ editIconShowing: false })}
                 style={{
                     marginBottom: "1em",
                 }}
@@ -68,7 +68,7 @@ class InfoCard extends Component<IInfoCardProps, IInfoCardState> {
                                     <IconButton
                                         // size="small"
                                         style={{ float: "right" }}
-                                        onClick={() =>
+                                        onClick={(): void =>
                                             this.setState({
                                                 editMode: true,
                                                 tempValue: this.state.value,
@@ -106,7 +106,7 @@ class InfoCard extends Component<IInfoCardProps, IInfoCardState> {
                             <br />
                             <Button
                                 size="small"
-                                onClick={() => {
+                                onClick={(): void => {
                                     this.setState({
                                         editMode: false,
                                         value: this.state.tempValue,
@@ -117,7 +117,7 @@ class InfoCard extends Component<IInfoCardProps, IInfoCardState> {
                             </Button>
                             <Button
                                 size="small"
-                                onClick={() => {
+                                onClick={(): void => {
                                     this.setState({
                                         editMode: false,
                                         tempValue: "",
