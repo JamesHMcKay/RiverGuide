@@ -15,6 +15,8 @@ import Modals from "./components/utils/Modals";
 
 import theme from "./utils/theme";
 
+
+
 // Check for token
 if (localStorage.jwtToken) {
     // Set auth token header auth
@@ -52,7 +54,9 @@ class App extends Component {
                                 />
                             </Switch>
                             <Modals />
+                            
                         </div>
+                        
                     </MuiThemeProvider>
                 </BrowserRouter>
             </Provider>
