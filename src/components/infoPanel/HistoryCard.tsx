@@ -49,7 +49,7 @@ class HistoryCard extends Component<IHistoryCardProps> {
 
     public render(): JSX.Element {
         const { history } = this.props;
-
+        //console.log(history)
         return (
             <Card style={{width: "50%"}}>
                 <CardContent>
@@ -59,6 +59,7 @@ class HistoryCard extends Component<IHistoryCardProps> {
                     <br />
                     {history.length > 0 && (
                         <ReactHighcharts config={this.createConfig(history)} />
+                        
                     )}
                 </CardContent>
             </Card>
