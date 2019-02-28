@@ -6,6 +6,10 @@ import PropTypes from 'prop-types';
 
 import { connect } from "react-redux";
  
+// Material UI
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
 
 class FlowChart extends Component {
 
@@ -15,15 +19,17 @@ class FlowChart extends Component {
         ? parseFloat(reading.data.currentFlow.toString())
         : parseFloat(reading.data.currentLevel.toString()))
 
-  
+  getDate(history){
+    let result = console.log(history.map((reading) =>
+    reading.time))
+    result !== undefined? console.log(result[0]) : console.log("not loaded")
+  }
   
   //create chart options 
   createOptions(historyData){
+
     return {
-      rangeSelector: {
-        selected: 3
-      },
-    
+          
       title: {
         text: ""
       },
@@ -39,6 +45,7 @@ class FlowChart extends Component {
           name: "",
           data: this.mapHistory(historyData),
           pointStart: Date.parse("2001-02-19"), // need only start date
+          //pointStart: this.getDate(historyData),
           pointInterval : 24 * 3600 * 1000, // one day,
         }
       ]
@@ -48,17 +55,22 @@ class FlowChart extends Component {
     
   
   render() {
-    
+    const { history } = this.props;
     
     return (
-      <div>     
-        <HighchartsReact
+      <Card style={{width: "50%" }}>
+      <CardContent>
+          <Typography color="textSecondary" gutterBottom>
+              Flow history
+          </Typography>
+          <HighchartsReact
           highcharts={Highcharts}
           constructorType={"stockChart"}
-          options={this.createOptions(this.props.history)}
+          options={this.createOptions(this.props.history) }
         />
-        
-      </div>
+      
+      </CardContent>
+    </Card>
     );
   }
 }

@@ -13,6 +13,7 @@
     "lint-fix": "tslint -c tslint.json --project . --fix"
   },
   "dependencies": {
+    "@amcharts/amcharts4": "^4.1.13",
     "@fortawesome/fontawesome-svg-core": "^1.2.6",
     "@fortawesome/free-solid-svg-icons": "^5.4.1",
     "@fortawesome/react-fontawesome": "^0.1.3",

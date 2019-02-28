@@ -29,6 +29,7 @@ import InfoCard from "./InfoCard";
 import MapCard from "./MapCard";
 
 import FlowChart from "./flowChart";
+import Amchart from "./Amchart";
 
 interface IInfoState {
   weatherStore: WeatherStore;
@@ -218,12 +219,14 @@ class Info extends Component<IInfoProps, IInfoState> {
         {this.filterGauges().length > 0 && this.getLastUpdated()}
         <div className="flow-weather-section">
           {/* {gaugeName && (<HistoryCard />)} */}
+          {/* {gaugeName && <FlowChart />} */}
+          {gaugeName && <Amchart />}
           {gaugeName && <FlowChart />}
-          <WeatherForecast
+          {/* <WeatherForecast
             lat={this.props.guide.lat || 0}
             lon={this.props.guide.lng || 0}
             weatherStore={this.state.weatherStore}
-          />
+          /> */}
         </div>
 
         <div style={{ margin: "1em" }}>
