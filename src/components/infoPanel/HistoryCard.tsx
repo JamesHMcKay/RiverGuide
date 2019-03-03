@@ -49,7 +49,7 @@ class HistoryCard extends Component<IHistoryCardProps> {
 
     public render(): JSX.Element {
         const { history } = this.props;
-        //console.log(history)
+        console.log(this.mapHistory(history))
         return (
             <Card style={{width: "50%"}}>
                 <CardContent>
