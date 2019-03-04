@@ -22,37 +22,43 @@ Am4core.useTheme(Am4themes_animated);
 
 interface IFlowChartProps {
     history: IHistory[];
+}
 
+interface IChartData {
+    value: number;
+    date: number;
 }
 
 class FlowChart extends Component<IFlowChartProps> {
 
-    public mapHistory = (history: IHistory[]): any[] => {
-        const result: any = [];
-        for (const i of history) {
-            result.push({
-                currentFlow: (i.data.currentFlow ? i.data.currentFlow : i.data.currentLevel),
-                date: (Moment.utc(Moment(i.time, "DD/MM/YYYY h:mma")).valueOf())});
-        }
+    public mapHistory = (history: IHistory[]): IChartData[] => {
+        const result: IChartData[] = history.map((reading: IHistory): IChartData => {
+            return {
+                value: reading.data.currentFlow ? reading.data.currentFlow : reading.data.currentLevel,
+                date: Moment.utc(Moment(reading.time, "DD/MM/YYYY h:mma")).valueOf(),
+            };
+        });
         return result;
     }
 
     public setChartOptions = (): void => {
-        const chart: any = Am4core.create("chartdiv", Am4charts.XYChart);
+        const chart: Am4charts.XYChart = Am4core.create("chartdiv", Am4charts.XYChart);
 
         chart.data = this.mapHistory(this.props.history);
 
-        const dateAxis: any = chart.xAxes.push(new Am4charts.DateAxis());
+        const dateAxis: Am4charts.DateAxis = chart.xAxes.push(new Am4charts.DateAxis());
         dateAxis.renderer.grid.template.location = 0.5;
         dateAxis.renderer.minGridDistance = 50;
 
-        const valueAxis: any = chart.yAxes.push(new Am4charts.ValueAxis());
-        valueAxis.tooltip.disabled = true;
+        const valueAxis: Am4charts.ValueAxis = chart.yAxes.push(new Am4charts.ValueAxis());
+        if (valueAxis.tooltip) {
+            valueAxis.tooltip.disabled = true;
+        }
         valueAxis.renderer.minWidth = 35;
 
-        const series: any = chart.series.push(new Am4charts.LineSeries());
+        const series: Am4charts.LineSeries = chart.series.push(new Am4charts.LineSeries());
         series.dataFields.dateX = "date";
-        series.dataFields.valueY = "currentFlow";
+        series.dataFields.valueY = "value";
         series.strokeWidth = 3;
         series.fillOpacity = 0.5;
 
@@ -65,15 +71,14 @@ class FlowChart extends Component<IFlowChartProps> {
         chart.scrollbarX.parent = chart.bottomAxesContainer;
 
         // set default range to load, range starts -1 ends 1
-        chart.events.on("ready", function() {
-        dateAxis.zoom({start: 0.50, end: 1});
+        chart.events.on("ready", (): void => {
+            dateAxis.zoom({start: 0.50, end: 1});
         });
     }
 
     public componentDidUpdate(): void {
         this.setChartOptions();
-
-        }
+    }
 
     public render(): JSX.Element {
         return (
@@ -82,7 +87,7 @@ class FlowChart extends Component<IFlowChartProps> {
                     <Typography color="textSecondary" gutterBottom>
                         Flow history
                     </Typography>
-                    <div id="chartdiv" style={{ width: "100%", height: "300px"}}></div>
+                    <div id="chartdiv" style={{width: "100%", height: "300px"}}></div>
                 </CardContent>
             </Card>
         ); }
