@@ -6,7 +6,7 @@ import {
     addToFavourites,
     closeInfoPage,
     removeFromFavourites,
-    toggleModal
+    toggleModal,
 } from "../../actions/actions";
 import { IState } from "../../reducers/index";
 import { IAuth, IGauge, IGuide, IInfoPage } from "../../utils/types";
@@ -61,7 +61,7 @@ class Info extends Component<IInfoProps, IInfoState> {
 
     this.state = {
       weatherStore: new WeatherStore(),
-      favourited
+      favourited,
     };
   }
 
@@ -90,7 +90,7 @@ class Info extends Component<IInfoProps, IInfoState> {
       (gauge: IGauge) =>
         this.props.guide.gaugeName &&
         gauge.siteName.toLowerCase() ===
-          this.props.guide.gaugeName.toLowerCase()
+          this.props.guide.gaugeName.toLowerCase(),
     );
   }
 
@@ -105,12 +105,12 @@ class Info extends Component<IInfoProps, IInfoState> {
     } else {
       this.props.addToFavourites(guideId, email);
     }
-  };
+  }
 
   public getTags = (
     activity?: string,
     grade?: string,
-    catchType?: string
+    catchType?: string,
   ): JSX.Element[] => {
     const gradeTag: string | undefined = grade && "Grade " + grade;
     return [activity, gradeTag, catchType]
@@ -124,7 +124,7 @@ class Info extends Component<IInfoProps, IInfoState> {
           style={{ margin: "0 .5em" }}
         />
       ));
-  };
+  }
 
   public render(): JSX.Element {
     const {
@@ -136,7 +136,7 @@ class Info extends Component<IInfoProps, IInfoState> {
       catch_type,
       activity,
       gaugeName,
-      markers
+      markers,
     }: IGuide = this.props.infoPage.selectedGuide;
 
     const testDisplay: JSX.Element = (
@@ -145,13 +145,13 @@ class Info extends Component<IInfoProps, IInfoState> {
           style={{
             width: "100%",
             height: "10em",
-            backgroundColor: "#459BE8"
+            backgroundColor: "#459BE8",
           }}
         >
           <div
             style={{
               position: "fixed",
-              margin: ".5em"
+              margin: ".5em",
             }}
           >
             <Tooltip
@@ -175,7 +175,7 @@ class Info extends Component<IInfoProps, IInfoState> {
             style={{
               textAlign: "center",
               color: "#fff",
-              paddingTop: "1em"
+              paddingTop: "1em",
             }}
           >
             {title}
@@ -183,7 +183,7 @@ class Info extends Component<IInfoProps, IInfoState> {
           <p
             style={{
               textAlign: "center",
-              color: "#fff"
+              color: "#fff",
             }}
           >
             {`----- ${river}  •  ${region} -----`}
@@ -234,7 +234,7 @@ class Info extends Component<IInfoProps, IInfoState> {
         <div
           style={{
             marginLeft: "93%",
-            padding: "1em 0"
+            padding: "1em 0",
           }}
         >
           <Tooltip title={"Edit " + title} placement="left">
@@ -252,14 +252,14 @@ class Info extends Component<IInfoProps, IInfoState> {
           style={{
             position: "fixed",
             marginLeft: "65%",
-            marginTop: "1vh"
+            marginTop: "1vh",
           }}
         >
           <IconButton
             onClick={this.handleClose}
             style={{
               color: "#fff",
-              cursor: "pointer"
+              cursor: "pointer",
             }}
           >
             <CloseIcon />
@@ -275,11 +275,11 @@ function mapStateToProps(state: IState): IInfoStateProps {
   return {
     auth: state.auth,
     gauges: state.gauges,
-    infoPage: state.infoPage
+    infoPage: state.infoPage,
   };
 }
 
 export default connect(
   mapStateToProps,
-  { closeInfoPage, addToFavourites, removeFromFavourites, toggleModal }
+  { closeInfoPage, addToFavourites, removeFromFavourites, toggleModal },
 )(Info);

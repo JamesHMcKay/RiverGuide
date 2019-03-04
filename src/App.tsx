@@ -51,8 +51,8 @@ class App extends Component {
                                     component={ProfileContainer}
                                 />
                             </Switch>
-                            <Modals />                            
-                        </div>                        
+                            <Modals />
+                        </div>
                     </MuiThemeProvider>
                 </BrowserRouter>
             </Provider>
