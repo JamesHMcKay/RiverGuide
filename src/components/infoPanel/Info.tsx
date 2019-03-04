@@ -52,16 +52,16 @@ class Info extends Component<IInfoProps, IInfoState> {
         super(props);
         let favourited: boolean = false;
         if (props.auth.isAuthenticated) {
-        favourited =
-            props.auth.user.favourites.indexOf(props.infoPage.selectedGuide._id) >
-            -1
-            ? true
-            : false;
+            favourited = props.auth.user.favourites.indexOf(
+                props.infoPage.selectedGuide._id,
+            ) > -1
+                ? true
+                : false;
         }
 
         this.state = {
-        weatherStore: new WeatherStore(),
-        favourited,
+            weatherStore: new WeatherStore(),
+            favourited,
         };
     }
 
@@ -73,9 +73,11 @@ class Info extends Component<IInfoProps, IInfoState> {
 
     public getLastUpdated(): JSX.Element {
         return (
-        <p className="last-updated-flow">
-            <em>Flow Data Last Updated: {this.filterGauges()[0].lastUpdated}</em>
-        </p>
+            <p className="last-updated-flow">
+                <em>
+                    Flow Data Last Updated: {this.filterGauges()[0].lastUpdated}
+                </em>
+            </p>
         );
     }
 
@@ -83,14 +85,13 @@ class Info extends Component<IInfoProps, IInfoState> {
         const guide: IGuide = this.props.guide;
 
         if (!guide.gaugeName) {
-        return [];
+            return [];
         }
 
         return this.props.gauges.filter(
-        (gauge: IGauge) =>
-            this.props.guide.gaugeName &&
-            gauge.siteName.toLowerCase() ===
-            this.props.guide.gaugeName.toLowerCase(),
+            (gauge: IGauge) =>
+                (this.props.guide.gaugeName && gauge.siteName.toLowerCase() ===
+                this.props.guide.gaugeName.toLowerCase()),
         );
     }
 
@@ -101,97 +102,97 @@ class Info extends Component<IInfoProps, IInfoState> {
 
         this.setState({ favourited: !favourited });
         if (favourited) {
-        this.props.removeFromFavourites(guideId, email);
+            this.props.removeFromFavourites(guideId, email);
         } else {
-        this.props.addToFavourites(guideId, email);
+            this.props.addToFavourites(guideId, email);
         }
     }
 
-    public getTags = (
-        activity?: string,
-        grade?: string,
-        catchType?: string,
-    ): JSX.Element[] => {
+    public getTags = (activity?: string, grade?: string, catchType?: string): JSX.Element[] => {
         const gradeTag: string | undefined = grade && "Grade " + grade;
-        return [activity, gradeTag, catchType]
+        return (
+        [activity, gradeTag, catchType]
         .filter((tag: string | undefined) => tag)
         .map((tag: string | undefined) => (
             <Chip
-            key={tag}
-            color="secondary"
-            variant="outlined"
-            label={tag}
-            style={{ margin: "0 .5em" }}
+                key={tag}
+                color="secondary"
+                variant="outlined"
+                label={tag}
+                style={{ margin: "0 .5em" }}
             />
-        ));
+        )));
     }
 
     public render(): JSX.Element {
         const {
-        title,
-        description,
-        river,
-        region,
-        grade,
-        catch_type,
-        activity,
-        gaugeName,
-        markers,
+            title,
+            description,
+            river,
+            region,
+            grade,
+            catch_type,
+            activity,
+            gaugeName,
+            markers,
         }: IGuide = this.props.infoPage.selectedGuide;
 
         const testDisplay: JSX.Element = (
             <div>
                 <div
-                style={{
-                    width: "100%",
-                    height: "10em",
-                    backgroundColor: "#459BE8",
-                }}
-                >
-                <div
                     style={{
-                    position: "fixed",
-                    margin: ".5em",
+                        width: "100%",
+                        height: "10em",
+                        backgroundColor: "#459BE8",
                     }}
                 >
-                    <Tooltip
-                    title={
-                        this.state.favourited
-                        ? "Remove from favourites"
-                        : "Add to favourites"
-                    }
-                    placement="right"
+                    <div
+                        style={{
+                            position: "fixed",
+                            margin: ".5em",
+                        }}
                     >
-                    <IconButton onClick={this.toggleFavourite}>
-                        {this.state.favourited ? (
-                        <StarIcon style={{ color: "#fb1" }} />
-                        ) : (
-                        <StarBorderIcon style={{ color: "#fff" }} />
-                        )}
-                    </IconButton>
-                    </Tooltip>
+                        <Tooltip
+                            title={
+                                this.state.favourited
+                                    ? "Remove from favourites"
+                                    : "Add to favourites"
+                            }
+                            placement="right"
+                        >
+                            <IconButton onClick={this.toggleFavourite}>
+                                {this.state.favourited ? (
+                                    <StarIcon style={{ color: "#fb1" }} />
+                                ) : (
+                                    <StarBorderIcon style={{ color: "#fff" }} />
+                                )}
+                            </IconButton>
+                        </Tooltip>
+                    </div>
+                    <h1
+                        style={{
+                            textAlign: "center",
+                            color: "#fff",
+                            paddingTop: "1em",
+                        }}
+                    >
+                        {title}
+                    </h1>
+                    <p
+                        style={{
+                            textAlign: "center",
+                            color: "#fff",
+                        }}
+                    >
+                        {`----- ${river}  •  ${region} -----`}
+                    </p>
                 </div>
-                <h1
-                    style={{
-                    textAlign: "center",
-                    color: "#fff",
-                    paddingTop: "1em",
-                    }}
+                <div
+                    className="tags"
+                    style={{ margin: "1em", textAlign: "center" }}
                 >
-                    {title}
-                </h1>
-                <p
-                    style={{
-                    textAlign: "center",
-                    color: "#fff",
-                    }}
-                >
-                    {`----- ${river}  •  ${region} -----`}
-                </p>
-                </div>
-                <div className="tags" style={{ margin: "1em", textAlign: "center" }}>
-                {this.getTags(activity, grade, catch_type)}
-                <Button
+                   {this.getTags(activity, grade, catch_type)}
+                        <Button
                     className="reporting-button"
                     variant="outlined"
                     onClick={this.openModal.bind(this, "reportModal")}
@@ -207,79 +208,79 @@ class Info extends Component<IInfoProps, IInfoState> {
                 </Button>
                 <FlowBadge siteName={this.props.guide.gaugeName} />
                 <CurrentWeather
-                    lat={this.props.guide.lat || 0}
-                    lon={this.props.guide.lng || 0}
-                    weatherStore={this.state.weatherStore}
+                        lat={this.props.guide.lat || 0}
+                        lon={this.props.guide.lng || 0}
+                        weatherStore={this.state.weatherStore}
                 />
                 <Report />
                 </div>
                 {this.filterGauges().length > 0 && this.getLastUpdated()}
                 <div className="flow-weather-section">
-                {gaugeName && <FlowChart />}
-                <WeatherForecast
-                    lat={this.props.guide.lat || 0}
-                    lon={this.props.guide.lng || 0}
-                    weatherStore={this.state.weatherStore}
-                />
+                    {gaugeName && (<FlowChart />)}
+                    <WeatherForecast
+                        lat={this.props.guide.lat || 0}
+                        lon={this.props.guide.lng || 0}
+                        weatherStore={this.state.weatherStore}
+                    />
                 </div>
 
-                <div style={{ margin: "1em" }}>
-                <InfoCard title="Description" content={description} />
+                                    <div style={{ margin: "1em" }}>
+                    <InfoCard title="Description" content={description} />
                 </div>
                 {markers.length > 0 && (
-                <div style={{ margin: "1em", paddingBottom: "1em" }}>
-                    <MapCard markers={markers} />
-                </div>
+                    <div style={{ margin: "1em", paddingBottom: "1em" }}>
+                        <MapCard markers={markers} />
+                    </div>
                 )}
                 <div
-                style={{
-                    marginLeft: "93%",
-                    padding: "1em 0",
-                }}
+                    style={{
+                        marginLeft: "93%",
+                        padding: "1em 0",
+                    }}
                 >
-                <Tooltip title={"Edit " + title} placement="left">
-                    <Button variant="fab" color="secondary">
-                    <EditIcon />
-                    </Button>
-                </Tooltip>
+                    <Tooltip title={"Edit " + title} placement="left">
+                        <Button variant="fab" color="secondary">
+                            <EditIcon />
+                        </Button>
+                    </Tooltip>
                 </div>
             </div>
-            );
+        );
 
         return (
             <Paper>
                 <div
-                style={{
-                    position: "fixed",
-                    marginLeft: "65%",
-                    marginTop: "1vh",
-                }}
-                >
-                <IconButton
-                    onClick={this.handleClose}
                     style={{
-                    color: "#fff",
-                    cursor: "pointer",
+                        position: "fixed",
+                        marginLeft: "65%",
+                        marginTop: "1vh",
                     }}
                 >
-                    <CloseIcon />
-                </IconButton>
+                    <IconButton
+                        onClick={this.handleClose}
+                        style={{
+                            color: "#fff",
+                            cursor: "pointer",
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
                 </div>
                 {testDisplay}
             </Paper>
-            );
-        }
-        }
+        );
+    }
+}
 
 function mapStateToProps(state: IState): IInfoStateProps {
-  return {
-    auth: state.auth,
-    gauges: state.gauges,
-    infoPage: state.infoPage,
-  };
+    return ({
+        auth: state.auth,
+        gauges: state.gauges,
+        infoPage: state.infoPage,
+    });
 }
 
 export default connect(
-  mapStateToProps,
-  { closeInfoPage, addToFavourites, removeFromFavourites, toggleModal },
+    mapStateToProps,
+    { closeInfoPage, addToFavourites, removeFromFavourites, toggleModal },
 )(Info);
