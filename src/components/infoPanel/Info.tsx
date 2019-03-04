@@ -3,10 +3,10 @@ import { connect } from "react-redux";
 import Report from "../common/Report";
 
 import {
-  addToFavourites,
-  closeInfoPage,
-  removeFromFavourites,
-  toggleModal
+    addToFavourites,
+    closeInfoPage,
+    removeFromFavourites,
+    toggleModal
 } from "../../actions/actions";
 import { IState } from "../../reducers/index";
 import { IAuth, IGauge, IGuide, IInfoPage } from "../../utils/types";
@@ -24,11 +24,9 @@ import StarBorderIcon from "@material-ui/icons/StarBorderRounded";
 import StarIcon from "@material-ui/icons/StarRounded";
 
 // Components
-import HistoryCard from "./HistoryCard";
+import FlowChart from "./FlowChart";
 import InfoCard from "./InfoCard";
 import MapCard from "./MapCard";
-
-import FlowChart from "./FlowChart";
 
 interface IInfoState {
   weatherStore: WeatherStore;
@@ -217,7 +215,6 @@ class Info extends Component<IInfoProps, IInfoState> {
         </div>
         {this.filterGauges().length > 0 && this.getLastUpdated()}
         <div className="flow-weather-section">
-          {/* {gaugeName && (<HistoryCard />)} */}
           {gaugeName && <FlowChart />}
           <WeatherForecast
             lat={this.props.guide.lat || 0}

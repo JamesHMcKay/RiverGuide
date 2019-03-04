@@ -95,7 +95,7 @@ class Login extends Component<ILoginProps, ILoginState> {
                 <Form onSubmit={this.onSubmit}>
                     <ModalBody>
                         <FormGroup>
-                            <Label for="email" >Email</Label>
+                            <Label for="email">Email</Label>
                             <Input
                                 className={classnames("", {
                                     "is-invalid":

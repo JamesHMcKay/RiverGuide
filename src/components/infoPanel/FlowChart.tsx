@@ -10,6 +10,8 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 
+import moment from "moment";
+
 //amchart imports
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
@@ -25,30 +27,23 @@ interface IFlowChartProps {
 class FlowChart extends Component<IFlowChartProps> {
 
     public mapHistory = (history: IHistory[]): any => {
-        let result = []
-        for(let i=0; i<history.length;i++){
+        const result: any = []
+        for(let i of history){
             result.push({
-                "currentFlow":(history[i].data.currentFlow? history[i].data.currentFlow: history[i].data.currentLevel),
-                "date":history[i].time})
+                "currentFlow":(i.data.currentFlow? i.data.currentFlow: i.data.currentLevel),
+                "date":(moment.utc(moment(i.time, "DD/MM/YYYY h:mma")).valueOf())})
         }
         return result
     }
     
-
     public setChartOptions(){  
         let chart = am4core.create("chartdiv", am4charts.XYChart) as any;
 
-        //chart.paddingRight = 10;
-
-       
         chart.data = this.mapHistory(this.props.history)
-
-        chart.dateFormatter.inputDateFormat = "dd/MM/yyyy";
 
         let dateAxis = chart.xAxes.push(new am4charts.DateAxis()) as any;
         dateAxis.renderer.grid.template.location = 0.5;
         dateAxis.renderer.minGridDistance = 50;
-        dateAxis.renderer.grid.template.location = 0.5;
 
         let valueAxis = chart.yAxes.push(new am4charts.ValueAxis()) as any;
         valueAxis.tooltip.disabled = true;
@@ -60,35 +55,26 @@ class FlowChart extends Component<IFlowChartProps> {
         series.strokeWidth = 3;
         series.fillOpacity = 0.5;
 
-        dateAxis.tooltipDateFormat = "dd/MM/yyyy"
+        dateAxis.tooltipDateFormat = "dd MMM yyyy hh:mma"
         series.tooltipText = "{valueY.value}";
         chart.cursor = new am4charts.XYCursor();
 
         // Create a horizontal scrollbar range selector and place it underneath the date axis
-            //with preview of the whole chart
-            // chart.scrollbarX = new am4charts.XYChartScrollbar()
-            // chart.scrollbarX.series.push(series);
-            // chart.scrollbarX.parent = chart.bottomAxesContainer;
-
-            // //only scrollbar
-            chart.scrollbarX = new am4core.Scrollbar();
-            chart.scrollbarX.parent = chart.bottomAxesContainer;
+        chart.scrollbarX = new am4core.Scrollbar();
+        chart.scrollbarX.parent = chart.bottomAxesContainer;
         
         // set default range to load, range starts -1 ends 1
         chart.events.on("ready", function () {
-            dateAxis.zoom({start:0.50, end:1});
+        dateAxis.zoom({start:0.50, end:1});
         });
-
     }
     
     public componentDidUpdate() {
-            this.setChartOptions()
+        this.setChartOptions()
         
         }
 
-
     public render(): JSX.Element {
-        
         return (
             <Card style={{width: "80%"}}>
                 <CardContent>
