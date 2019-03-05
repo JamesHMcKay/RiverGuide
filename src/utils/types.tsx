@@ -28,9 +28,14 @@ export interface IGradeRange {
     to: string;
 }
 
+export interface IFlowLevel {
+    currentFlow: number;
+    currentLevel: number;
+}
+
 export interface IHistory {
     time: string;
-    data: IGauge;
+    data: IFlowLevel;
 }
 
 export interface IGuide {
