@@ -24,7 +24,7 @@ import StarBorderIcon from "@material-ui/icons/StarBorderRounded";
 import StarIcon from "@material-ui/icons/StarRounded";
 
 // Components
-import HistoryCard from "./HistoryCard";
+import FlowChart from "./FlowChart";
 import InfoCard from "./InfoCard";
 import MapCard from "./MapCard";
 
@@ -209,7 +209,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                 </div>
                 {this.filterGauges().length > 0 && this.getLastUpdated()}
                 <div className="flow-weather-section">
-                    {gaugeName && (<HistoryCard />)}
+                    {gaugeName && (<FlowChart />)}
                     <WeatherForecast
                         lat={this.props.guide.lat || 0}
                         lon={this.props.guide.lng || 0}
