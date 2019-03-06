@@ -192,19 +192,12 @@ class Info extends Component<IInfoProps, IInfoState> {
                     style={{ margin: "1em", textAlign: "center" }}
                 >
                    {this.getTags(activity, grade, catch_type)}
-                        <Button
-                    className="reporting-button"
-                    variant="outlined"
-                    onClick={this.openModal.bind(this, "reportModal")}
-                >
-                    Going today?
-                </Button>
                 <Button
                     className="reporting-button"
                     variant="outlined"
-                    onClick={this.openModal.bind(this, "reportModal")}
+                    onClick={this.openModal.bind(this, "addTrip")}
                 >
-                    Report a trip
+                    Report a trip here
                 </Button>
                 <FlowBadge siteName={this.props.guide.gaugeName} />
                 <CurrentWeather

@@ -1,6 +1,11 @@
 import { SET_CATEGORY } from "../actions/types";
 
-const whitewater = [
+export interface ICategory {
+    title: string;
+    values: string[];
+}
+
+const whitewater: ICategory[] = [
     {
         title: "activity",
         values: [
@@ -22,7 +27,7 @@ const whitewater = [
     },
 ];
 
-const flatwater = [
+const flatwater: ICategory[] = [
     {
         title: "activity",
         values: ["Canoing", "Rowing", "Multisport", "Sailing", "Waka Ama"],
@@ -33,7 +38,7 @@ const flatwater = [
     },
 ];
 
-const motorised = [
+const motorised: ICategory[] = [
     {
         title: "activity",
         values: ["Jetboating", "Jetskiing", "Motorbiking", "4-Wheel Driving"],
@@ -44,7 +49,7 @@ const motorised = [
     },
 ];
 
-const fishing = [
+const fishing: ICategory[] = [
     {
         title: "catch",
         values: ["salmon", "brown trout", "rainbow trout"],
@@ -55,7 +60,7 @@ const fishing = [
     },
 ];
 
-const other = [
+const other: ICategory[] = [
     {
         title: "activity",
         values: ["Biking", "Horse Riding", "Site Seeing", "Walking"],
@@ -66,9 +71,14 @@ const other = [
     },
 ];
 
-const initialState = { name: "fishing", filters: fishing };
+export interface ICategoryState {
+    name: string;
+    filters: ICategory[];
+}
 
-export default function(state = initialState, action) {
+const initialState: ICategoryState = { name: "fishing", filters: fishing };
+
+export default function(state = initialState, action: any) {
     switch (action.type) {
         case SET_CATEGORY:
             if (action.payload === "whitewater") {

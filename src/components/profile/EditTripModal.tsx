@@ -30,7 +30,7 @@ const FORM_CONTENT: Array<{name: string; type: string; label: string}> = [
 ];
 
 interface IEditTripModalProps extends IEditTripModalStateProps {
-    toggleModal: (modal: string) => void;
+    toggleModal: (modal?: string) => void;
     editLogEntry: (entry: ILogEntry) => void;
 }
 
@@ -53,7 +53,7 @@ class EditTripModal extends Component<IEditTripModalProps, IEditTripModalState> 
     }
 
     public closeModal(): void {
-        this.props.toggleModal("editTrip");
+        this.props.toggleModal();
     }
 
     public handleChange(e: any): void {
