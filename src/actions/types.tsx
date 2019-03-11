@@ -14,6 +14,7 @@ export const GENERATE_FILTERED_LIST: string = "GENERATE_FILTERED_LIST";
 export const OPEN_INFO: string = "OPEN_INFO";
 export const CLOSE_INFO: string = "CLOSE_INFO";
 export const ADD_HISTORIC_FLOW: string = "ADD_HISTORIC_FLOW";
+export const GET_GAUGE_HISTORY: string = "GET_GAUGE_HISTORY";
 export const EDIT_LOG: string = "EDIT_LOG";
 export const UPDATE_OPEN_LOG: string = "UPDATE_PRE_EDIT_STATE";
 export const DELETE_LOG: string = "DELETE_LOG";

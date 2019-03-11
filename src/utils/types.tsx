@@ -29,8 +29,8 @@ export interface IGradeRange {
 }
 
 export interface IFlowLevel {
-    currentFlow: number;
-    currentLevel: number;
+    currentFlow: string;
+    currentLevel: string;
 }
 
 export interface IHistory {
@@ -63,6 +63,10 @@ export interface IGauge {
     currentFlow: number;
     currentLevel: number;
     lastUpdated: string;
+}
+
+export interface IGaugeHistory {
+    gaugeHistory: IHistory[];
 }
 
 export interface IInfoPage {

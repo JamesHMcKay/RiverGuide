@@ -20,6 +20,7 @@ import ControlBar from "./ControlBar";
 import Info from "./infoPanel/Info";
 import LeftPanel from "./leftPanel/LeftPanel";
 import { MapComponent } from "./map/MapComponent";
+import Grid from '@material-ui/core/Grid';
 
 import {
     IFilter,
@@ -100,14 +101,16 @@ class Panel extends Component<IPanelProps, IPanelState> {
     }
 
     public getDimensions(element: any): {width: number, height: number} {
-        const { width, height }: {width: number, height: number} = element.getBoundingClientRect();
-        return { width, height };
+        // const { width, height }: {width: number, height: number} = element.getBoundingClientRect();
+        return { width: 0, height: 0 };
     }
 
     public updateDimensions(): void {
         const element: Element | Text | null = ReactDOM.findDOMNode(this.refs.mapView);
+        let dimensions = this.getDimensions(element);
+        console.log("dimensions = " , dimensions);
         this.setState({
-            mapDimensions: this.getDimensions(element),
+            mapDimensions: dimensions,
         });
     }
 
@@ -171,10 +174,16 @@ class Panel extends Component<IPanelProps, IPanelState> {
 
     public render(): JSX.Element {
         return (
-            <div className="middle-section">
+            // <div className="middle-section">
+            <Grid container spacing={24}>
+            <Grid item md={12} lg={12}>
                 <ControlBar/>
-                <div className="panel-layout">
-                    <div className="left-panel">
+                </Grid>
+                 {/* <div className="panel-layout">  */}
+
+                {/* <Grid container spacing={24} justify="space-between"> */}
+                <Grid item md={12} lg={4}>
+                    <div className="left-panel"> 
                         <LeftPanel
                             searchList={this.state.searchList}
                             gaugeList={this.state.gaugeList}
@@ -182,7 +191,8 @@ class Panel extends Component<IPanelProps, IPanelState> {
                             onClick={this.onClick}
                         />
                     </div>
-                    <div className="right-panel" ref="mapView">
+                    </Grid>
+                    <Grid item md={12} lg={8}>
                         {this.props.infoPage.infoSelected ? (
                             <CSSTransition
                                 classNames="slide"
@@ -206,9 +216,10 @@ class Panel extends Component<IPanelProps, IPanelState> {
                                 setMapBounds={this.updateMapBounds}
                             />)
                         }
-                    </div>
-                </div>
-            </div>
+                    </Grid>
+                {/* </Grid> */}
+            {/* </div> */}
+            </Grid>
         );
     }
 }

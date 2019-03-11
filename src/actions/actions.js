@@ -21,6 +21,7 @@ import {
     OPEN_INFO,
     CLOSE_INFO,
     ADD_HISTORIC_FLOW,
+    GET_GAUGE_HISTORY,
     UPDATE_OPEN_LOG,
     SET_CATEGORY,
     LOADING_GUIDES,
@@ -282,6 +283,27 @@ export const openInfoPage = guide => dispatch => {
             .then(() => dispatch({ type: CLEAR_ERRORS }));
     }
 };
+
+export const getGaugeHistory = guide => dispatch => {
+    // check for gauge data
+    console.log("getting gauge history for gauge = ", guide.gaugeName);
+    if (guide.gaugeName) {
+        axios
+            .get(
+                `${process.env.REACT_APP_AGG_FLOW_URL}/${
+                    guide.gaugeName
+                }/history`,
+            )
+            .then(res => {
+                dispatch({
+                    type: GET_GAUGE_HISTORY,
+                    payload: res.data.data,
+                });
+            })
+            .then(() => dispatch({ type: CLEAR_ERRORS }));
+    }
+}
+
 
 // close info page
 export const closeInfoPage = () => dispatch => {

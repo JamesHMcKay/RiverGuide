@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
-import { IHistory } from "../../utils/types";
+import { IHistory, IGauge, IGuide } from "../../utils/types";
 
 // Material UI
 import Card from "@material-ui/core/Card";
@@ -20,12 +20,17 @@ import Am4themes_animated from "@amcharts/amcharts4/themes/animated";
 // amchart theme
 Am4core.useTheme(Am4themes_animated);
 
-interface IFlowChartProps {
+interface IFlowChartStateProps {
     history: IHistory[];
+    gauges: IGauge[];
+}
+
+interface IFlowChartProps extends IFlowChartStateProps {
+    guide: IGuide;
 }
 
 interface IChartData {
-    value: number;
+    value: string;
     date: number;
 }
 
@@ -76,18 +81,44 @@ class FlowChart extends Component<IFlowChartProps> {
         });
     }
 
+
+    public getLastUpdated(): JSX.Element {
+        return (
+            <p className="last-updated-flow">
+                <em>
+                    Flow Data Last Updated: {this.filterGauges()[0].lastUpdated}
+                </em>
+            </p>
+        );
+    }
+
+    public filterGauges(): IGauge[] {
+        const guide: IGuide = this.props.guide;
+
+        if (!guide.gaugeName) {
+            return [];
+        }
+
+        return this.props.gauges.filter(
+            (gauge: IGauge) =>
+                (this.props.guide.gaugeName && gauge.siteName.toLowerCase() ===
+                this.props.guide.gaugeName.toLowerCase()),
+        );
+    }
+
     public componentDidUpdate(): void {
         this.setChartOptions();
     }
 
     public render(): JSX.Element {
         return (
-            <Card style={{width: "80%"}}>
+            <Card>
                 <CardContent>
                     <Typography color="textSecondary" gutterBottom>
                         Flow history
                     </Typography>
                     <div id="chartdiv" style={{width: "100%", height: "300px"}}></div>
+                    {this.filterGauges().length > 0 && this.getLastUpdated()}
                 </CardContent>
             </Card>
         ); }
@@ -97,9 +128,10 @@ FlowChart.propTypes = {
     history: PropTypes.array.isRequired,
 };
 
-function mapStateToProps(state: IState): IFlowChartProps {
+function mapStateToProps(state: IState): IFlowChartStateProps {
     return ({
         history: state.infoPage.history,
+        gauges: state.gauges,
     });
 }
 

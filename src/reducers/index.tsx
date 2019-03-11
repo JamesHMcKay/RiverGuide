@@ -11,6 +11,7 @@ import logReducer from "./logReducer";
 import mapBoundsReducer from "./mapBoundsReducer";
 import modalReducer from "./modalReducer";
 import openLogReducer from "./openLogReducer";
+import gaugeHistoryReducer from "./gaugeHistoryReducer";
 
 import {
     IAuth,
@@ -21,7 +22,8 @@ import {
     IInfoPage,
     ILogEntry,
     IMapBounds,
-    IOpenLog } from "../utils/types";
+    IOpenLog,
+    IGaugeHistory } from "../utils/types";
 
 export interface IState {
     guides: IGuide[];
@@ -36,6 +38,7 @@ export interface IState {
     category: string;
     errors: IErrors;
     log: ILogEntry[];
+    gaugeHistory:  IGaugeHistory;
 }
 
 export default combineReducers({
@@ -51,4 +54,5 @@ export default combineReducers({
     openLog: openLogReducer,
     category: categoryReducer,
     mapBounds: mapBoundsReducer,
+    gaugeHistory: gaugeHistoryReducer,
 });

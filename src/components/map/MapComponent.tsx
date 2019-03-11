@@ -1,7 +1,7 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import * as kmeans from "node-kmeans";
 import React, { Component } from "react";
-import MapGL, { FlyToInterpolator, InteractiveMap, Marker, ViewState } from "react-map-gl";
+import ReactMapGL, { FlyToInterpolator, InteractiveMap, Marker, ViewState } from "react-map-gl";
 import WebMercatorViewport from "viewport-mercator-project";
 import { IGuide, ILatLon, IMapBounds } from "../../utils/types";
 import { IMapDimensions } from "../Panel";
@@ -319,15 +319,15 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
         };
 
         return (
-            <MapGL
-                ref={(map: MapGL | null): InteractiveMap | null => this.mapRef = map}
+            <ReactMapGL
+                ref={(map: ReactMapGL | null): InteractiveMap | null => this.mapRef = map}
                 mapStyle="mapbox://styles/mapbox/outdoors-v9"
                 {...viewport}
                 onViewportChange={(viewport: ViewState): void => this.setViewport(viewport)}
                 mapboxApiAccessToken={TOKEN}
             >
                 {this.getMarkersOrCluster()}
-            </MapGL>
+            </ReactMapGL>
         );
     }
 }

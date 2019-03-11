@@ -11,7 +11,8 @@ import Logout from "../auth/Logout";
 import Register from "../auth/Register";
 import Welcome from "../auth/Welcome";
 import FiltersModal from "../list/FiltersModal";
-import TripDetailsModal from "../profile/TripDetailsModal";
+import TripDetailsInfoPage from "../profile/TripDetailsInfoPage";
+import TripDetailsAnyPage from "../profile/TripDetailsAnyPage";
 import Success from "../utils/Success";
 // import Create from "../create/Create";
 // import CreateModal from "../create/CreateModal";
@@ -26,10 +27,9 @@ class Modals extends Component {
                 <Register />
                 <Login />
                 <Welcome />
-                <TripDetailsModal />
+                <TripDetailsInfoPage />
+                <TripDetailsAnyPage />
                 <FiltersModal />
-                {/* <Create /> */}
-                {/* <CreateModal /> */}
             </div>
         );
     }
