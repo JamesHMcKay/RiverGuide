@@ -14,14 +14,17 @@ export interface IMarker {
     lat: number;
     lng: number;
     id: string;
+    description: string;
+    category: string;
+
 }
 
-export interface IMarker {
-    name: string;
-    lat: number;
-    lng: number;
-    id: string;
-}
+// export interface IMarker {
+//     name: string;
+//     lat: number;
+//     lng: number;
+//     id: string;
+// }
 
 export interface IGradeRange {
     from: string;
