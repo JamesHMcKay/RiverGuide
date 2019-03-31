@@ -3,6 +3,7 @@ import authReducer from "./authReducer";
 import categoryReducer from "./categoryReducer";
 import errorReducer from "./errorReducer";
 import filterReducer from "./filterReducer";
+import gaugeHistoryReducer from "./gaugeHistoryReducer";
 import gaugeReducer from "./gaugeReducer";
 import guideReducer from "./guideReducer";
 import infoReducer from "./infoReducer";
@@ -11,19 +12,18 @@ import logReducer from "./logReducer";
 import mapBoundsReducer from "./mapBoundsReducer";
 import modalReducer from "./modalReducer";
 import openLogReducer from "./openLogReducer";
-import gaugeHistoryReducer from "./gaugeHistoryReducer";
 
 import {
     IAuth,
     IErrors,
     IFilter,
     IGauge,
+    IGaugeHistory,
     IGuide,
     IInfoPage,
     ILogEntry,
     IMapBounds,
-    IOpenLog,
-    IGaugeHistory } from "../utils/types";
+    IOpenLog } from "../utils/types";
 
 export interface IState {
     guides: IGuide[];
@@ -38,7 +38,7 @@ export interface IState {
     category: string;
     errors: IErrors;
     log: ILogEntry[];
-    gaugeHistory:  IGaugeHistory;
+    gaugeHistory: IGaugeHistory;
 }
 
 export default combineReducers({

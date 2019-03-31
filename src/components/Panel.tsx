@@ -16,11 +16,11 @@ import { IState } from "../reducers/index";
 import * as darksky from "dark-sky-api";
 import * as weather from "openweather-apis";
 
+import Grid from "@material-ui/core/Grid";
 import ControlBar from "./ControlBar";
 import Info from "./infoPanel/Info";
 import LeftPanel from "./leftPanel/LeftPanel";
 import { MapComponent } from "./map/MapComponent";
-import Grid from '@material-ui/core/Grid';
 
 import {
     IFilter,
@@ -107,7 +107,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
 
     public updateDimensions(): void {
         const element: Element | Text | null = ReactDOM.findDOMNode(this.refs.mapView);
-        let dimensions = this.getDimensions(element);
+        const dimensions = this.getDimensions(element);
         console.log("dimensions = " , dimensions);
         this.setState({
             mapDimensions: dimensions,
@@ -183,7 +183,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
 
                 {/* <Grid container spacing={24} justify="space-between"> */}
                 <Grid item md={12} lg={4}>
-                    <div className="left-panel"> 
+                    <div className="left-panel">
                         <LeftPanel
                             searchList={this.state.searchList}
                             gaugeList={this.state.gaugeList}

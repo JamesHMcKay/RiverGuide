@@ -8,7 +8,7 @@ import "./App.css";
 import store from "./store";
 import setAuthToken from "./utils/setAuthToken";
 
-import 'mapbox-gl/dist/mapbox-gl.css';
+import "mapbox-gl/dist/mapbox-gl.css";
 import NavBar from "./components/NavBar";
 import Panel from "./components/Panel";
 import ProfileContainer from "./components/profile/ProfileContainer";

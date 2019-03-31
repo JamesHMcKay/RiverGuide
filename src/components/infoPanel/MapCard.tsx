@@ -21,7 +21,6 @@ class MapCard extends Component<IMapCardProps> {
                     <Typography color="textSecondary" gutterBottom>
                         Local map
                     </Typography>
-                    <br />
                     <InfoMapComponent markers={this.props.markers} />
                 </CardContent>
             </Card>

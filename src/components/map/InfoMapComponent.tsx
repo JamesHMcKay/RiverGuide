@@ -2,20 +2,20 @@ import { PropTypes } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import EditIcon from "@material-ui/icons/Edit";
 import React, { Component } from "react";
-import ReactMapGL, { Marker, ViewState, NavigationControl } from "react-map-gl";
+import ReactMapGL, { Marker, NavigationControl, ViewState } from "react-map-gl";
 import uuid from "uuidv4";
 import WebMercatorViewport from "viewport-mercator-project";
 import { IMarker } from "../../utils/types";
 import MapMarker from "./MapMarker";
 
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import MenuItem from '@material-ui/core/MenuItem';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import IconButton from "@material-ui/core/IconButton";
+import MenuItem from "@material-ui/core/MenuItem";
+import TextField from "@material-ui/core/TextField";
+import CloseIcon from "@material-ui/icons/Close";
 
 const TOKEN: string =
     "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqbXZ0bnp6dzA3NG0zc3BiYjMxaWJrcTIifQ.BKESeoXyOqkiB8j1sjbxQg";
@@ -46,11 +46,11 @@ interface IInfoMapState {
         lat: number,
         long: number,
         id: string;
-    }
+    };
 }
 
-const categoryList: string[] = ['Put In', 'Carpark', 'Track',
-    'Rapid','Play', 'Feature','Waterfall', 'Hazard', 'Portage'].sort();
+const categoryList: string[] = ["Put In", "Carpark", "Track",
+    "Rapid", "Play", "Feature", "Waterfall", "Hazard", "Portage"].sort();
 
 export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapState> {
     constructor(props: IInfoMapProps) {
@@ -74,7 +74,7 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
             editMode: false,
             markers,
             openAddMarkerDialog: false,
-            openDeleteDialog:false,
+            openDeleteDialog: false,
             newMarker: {
                 category: "",
                 name: "",
@@ -82,25 +82,25 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
                 lat: 0,
                 long: 0,
                 id: "",
-            }
+            },
         };
     }
 
     public onMarkerClick(markerId: string): void {
-        if (this.state.editMode){
+        if (this.state.editMode) {
             const markers: { [key: string]: IMarker} = {...this.state.markers};
             this.setState({
-                    deleteMode:true,
-                    openAddMarkerDialog:true,                
+                    deleteMode: true,
+                    openAddMarkerDialog: true,
                     newMarker: {
-                        category: markers[markerId].category?markers[markerId].category:"",
+                        category: markers[markerId].category ? markers[markerId].category : "",
                         name: markers[markerId].name,
                         description: markers[markerId].description,
                         lat: markers[markerId].lat,
                         long: markers[markerId].lng,
                         id: markerId,
-                    }
-                })
+                    },
+                });
             }
         }
 
@@ -111,14 +111,14 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
     // }
 
     public onMarkerDragEnd = (markerId: string, event: any): void => {
-        if(this.state.editMode){    
+        if (this.state.editMode) {
             const markers: { [key: string]: IMarker } = {...this.state.markers};
             markers[markerId].lat = event.lngLat[1];
             markers[markerId].lng = event.lngLat[0];
             this.setState({
                 markers,
         });
-        }else{event.preventDefault()}
+        } else {event.preventDefault(); }
     }
 
     public getMarkers = (): Array<(0 | JSX.Element)> => {
@@ -188,15 +188,15 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
         if (this.state.editMode) {
             const id: string = uuid();
             this.setState({
-                deleteMode:false,
+                deleteMode: false,
                 openAddMarkerDialog: true,
-                newMarker:{
+                newMarker: {
                     ...this.state.newMarker,
-                    id: id,
+                    id,
                     lat: event.lngLat[1],
                     long: event.lngLat[0],
-                }
-            })              
+                },
+            });
         }
 
     }
@@ -212,81 +212,86 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
     }
     public handleClose = (): void => {
         this.setState({ openAddMarkerDialog: false, openDeleteDialog: false });
-        this.resetNewMarkerState()
-    };
-    public handleChange = (name:any) => ({ target: {value}}:any) =>{
-        this.setState({
-            newMarker:{
-                ...this.state.newMarker,
-                [name]: value
-            }  
-        })
+        this.resetNewMarkerState();
     }
-
+    public handleChange = (name: any) => ({ target: {value}}: any) => {
+        this.setState({
+            newMarker: {
+                ...this.state.newMarker,
+                [name]: value,
+            },
+        });
+    }
+    public capitalizeFirstLetter = (word:string): string => {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    }
     public handleSave = (): void => {
-        const {newMarker:{name, category, description, id, lat, long}} = this.state
+        const {newMarker: {category, description, id, lat, long}} = this.state;
+        let {newMarker: {name}} = this.state;
+        const capitalizedName = this.capitalizeFirstLetter(name)
+        name = capitalizedName
         const marker: IMarker = {
                 lat,
                 lng: long,
                 name,
                 id,
                 description,
-                category
+                category,
             };
         const markers: { [key: string]: IMarker } = {...this.state.markers};
         markers[id] = marker;
         this.setState({
             markers,
         });
-        this.handleClose()
-        this.resetNewMarkerState()
+        this.handleClose();
+        this.resetNewMarkerState();
     }
     public handleDelete = (): void => {
-       this.setState({openDeleteDialog:true})
+       this.setState({openDeleteDialog: true});
     }
 
     public handleDeleteClose = (): void => {
-        this.setState({openDeleteDialog:false})
+        this.setState({openDeleteDialog: false});
     }
 
     public deleteMarker = (): void => {
         const markers: { [key: string]: IMarker} = {...this.state.markers};
-            delete markers[this.state.newMarker.id];
-            this.setState({
+        delete markers[this.state.newMarker.id];
+        this.setState({
                 markers,
-                deleteMode:false,
+                deleteMode: false,
             });
-            this.resetNewMarkerState()
-            this.handleDeleteClose()
-            this.handleClose()
-    } 
+        this.resetNewMarkerState();
+        this.handleDeleteClose();
+        this.handleClose();
+    }
 
-    public resetNewMarkerState = (): void =>{
+    public resetNewMarkerState = (): void => {
         this.setState({
             newMarker: {
                 category: "",
-                name: '',
-                description: '',
+                name: "",
+                description: "",
                 lat: 0,
                 long: 0,
-                id: '',
-            }
-        })
+                id: "",
+            },
+        });
     }
-    public editButton = (editColor:PropTypes.Color): JSX.Element => {
+    public editButton = (editColor: PropTypes.Color): JSX.Element => {
         const toolTip: string = !this.state.editMode ? "On" : "Off";
         return (
             <Button variant="fab" color={editColor} aria-label="Add" mini title={`Turn edit mode ${toolTip}`}
                 onClick={(): void => {this.setState({editMode: !this.state.editMode}); }}
             >
-                {this.state.editMode? <CloseIcon />: <EditIcon  />}
-            </Button>)
+                {this.state.editMode ? <CloseIcon /> : <EditIcon  />}
+            </Button>);
     }
 
     public render(): JSX.Element {
         const viewport: IViewport = this.setViewport();
         const editColor: PropTypes.Color = !this.state.editMode ? "primary" : "secondary";
-        const {newMarker:{name, category, description}} = this.state
+        const {newMarker: {name, category, description}} = this.state;
         return (
             <div className="info-map">
                 <ReactMapGL
@@ -298,16 +303,13 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
                     // onDragOver={(e) => this.onDragOver()}
                 >
                     {this.getMarkers()}
-                <div style={{position: 'absolute', right: 5}}>
-                {/* <NavigationControl onViewportChange={this._updateViewport}  onViewStateChange={(): null => null}  /> */}
+                <div style={{position: "absolute", right: 5}}>
                     <NavigationControl onViewportChange={(): null => null}  onViewStateChange={(): null => null}  />
                 </div>
-                
                 </ReactMapGL>
                 <div className="info-map-buttons">
                      {this.editButton(editColor)}
-                </div> 
-                
+                </div>
                 {/* Marker dialog */}
                 <div>
                     <Dialog
@@ -316,9 +318,9 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
                         fullWidth
                         >
                         <DialogTitle >
-                            <IconButton 
-                                aria-label="Close" 
-                                style={{position: 'absolute', right: 0, top:0}} 
+                            <IconButton
+                                aria-label="Close"
+                                style={{position: "absolute", right: 0, top: 0}}
                                 onClick={this.handleClose}
                             >
                                 <CloseIcon />
@@ -328,11 +330,11 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
                         <DialogContent>
                             <TextField
                                 fullWidth
-                                label='Name*'
+                                label="Name*"
                                 variant="outlined"
                                 margin="dense"
                                 value={name}
-                                onChange={this.handleChange('name')}
+                                onChange={this.handleChange("name")}
                                 autoFocus
                             />
                             <br />
@@ -340,14 +342,14 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
                                 select
                                 label="Category*"
                                 value={category}
-                                onChange={this.handleChange('category')}
+                                onChange={this.handleChange("category")}
                                 fullWidth
                                 margin="dense"
                                 variant="outlined"
                             >
-                                {categoryList.map((category:any) =>
-                                    <MenuItem key={category} value={category}>{category}</MenuItem>
-                                )} 
+                                {categoryList.map((category: string) =>
+                                    <MenuItem key={category} value={category}>{category}</MenuItem>,
+                                )}
                             </TextField>
                             <TextField
                                 label="Description"
@@ -365,7 +367,7 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
                                 Save
                             </Button>
                             {this.state.deleteMode ?
-                                <Button onClick={this.handleDelete} style={{color:"red"}}>
+                                <Button onClick={this.handleDelete} style={{color: "red"}}>
                                     Delete
                                 </Button> :
                                 <Button onClick={this.handleClose} color="primary">

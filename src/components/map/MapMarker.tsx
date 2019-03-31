@@ -17,7 +17,7 @@ interface IMapMarkerProps {
 export default class MapMarker extends PureComponent<IMapMarkerProps> {
     public getToolTip(element: any): JSX.Element {
         if (this.props.editMode) {
-            return (<Tooltip title="Click to delete" style={{backgroundColor: "red"}}>{element}</Tooltip>);
+            return (<Tooltip title="Click for more options" style={{backgroundColor: "red"}}>{element}</Tooltip>);
         } else {
             return <Tooltip title={this.props.toolTip}>{element}</Tooltip>;
         }

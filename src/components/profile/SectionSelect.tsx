@@ -23,15 +23,15 @@ class SectionSelect extends Component<ISectionSelectProps> {
             SEPERATOR +
             guide.river +
             SEPERATOR +
-            guide.region)
+            guide.region);
     }
 
     public handleSelectionChange = (e: any): void => {
         const selectedId = e.value;
         const selectedGuide: IGuide[] = this.props.guides.filter(
-            guide => guide._id == selectedId);
+            (guide) => guide._id == selectedId);
         if (selectedGuide.length == 1) {
-            this.props.handleChange(selectedGuide[0])
+            this.props.handleChange(selectedGuide[0]);
         }
     }
 
@@ -53,7 +53,7 @@ class SectionSelect extends Component<ISectionSelectProps> {
                     this.props.selectedGuide ?
                         {
                             label: this.get_label(this.props.selectedGuide),
-                            value: this.props.selectedGuide._id
+                            value: this.props.selectedGuide._id,
                         } :
                         null
                     }

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
-import { IHistory, IGauge, IGuide } from "../../utils/types";
+import { IGauge, IGuide, IHistory } from "../../utils/types";
 
 // Material UI
 import Card from "@material-ui/core/Card";
@@ -80,7 +80,6 @@ class FlowChart extends Component<IFlowChartProps> {
             dateAxis.zoom({start: 0.50, end: 1});
         });
     }
-
 
     public getLastUpdated(): JSX.Element {
         return (

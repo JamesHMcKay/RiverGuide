@@ -1,23 +1,23 @@
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import TextField from "@material-ui/core/TextField";
+import { DateFormatInput, TimeFormatInput } from "material-ui-next-pickers";
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { createLogEntry, toggleModal } from "../../actions/actions";
-import { IState } from "../../reducers/index";
-import { ILogEntry, IHistory } from "../../utils/types";
 import IoAndroidAdd from "react-icons/lib/io/android-add";
 import IoAndroidPerson from "react-icons/lib/io/android-person";
 import IoAndroidStar from "react-icons/lib/io/android-star";
-import {DateFormatInput, TimeFormatInput} from 'material-ui-next-pickers'
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import { connect } from "react-redux";
+import { createLogEntry, toggleModal } from "../../actions/actions";
+import { IState } from "../../reducers/index";
+import { IHistory, ILogEntry } from "../../utils/types";
 import { IGuide, IInfoPage } from "../../utils/types";
 
-import SectionSelect from "./SectionSelect";
 import FlowReport from "./FlowReport";
+import SectionSelect from "./SectionSelect";
 
 const initialState: ILogEntry = {
     _id: "",
@@ -49,7 +49,7 @@ interface ITripDetailsModelState {
 class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsModelState> {
     constructor(props: ITripDetailsModelProps) {
         super(props);
-        let initialLogEntry: ILogEntry = initialState;
+        const initialLogEntry: ILogEntry = initialState;
 
         this.state = {
             logEntry: initialLogEntry,
@@ -81,9 +81,9 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                 ...logEntry,
                 section: selectedGuide._id,
             };
-            this.setState({ 
-                logEntry: logEntry,
-                selectedGuide: selectedGuide,
+            this.setState({
+                logEntry,
+                selectedGuide,
             });
         }
     }
@@ -95,7 +95,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
             participantCount: this.state.peopleCount,
             date: this.state.date.toISOString(),
             rating: this.state.rating,
-        }
+        };
         this.props.createLogEntry(logEntry as ILogEntry);
         this.props.handleClose();
     }
@@ -173,8 +173,8 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         return (
         <ul
             style={{
-            "listStyle": "none",
-            "float": "right",
+            listStyle: "none",
+            float: "right",
             }}
         >{listItems}</ul>
         );
@@ -217,8 +217,8 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         return (
         <ul
             style={{
-            "listStyle": "none",
-            "float": "right",
+            listStyle: "none",
+            float: "right",
             }}
         >{listItems}</ul>
         );
@@ -231,8 +231,8 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
             date: date.toISOString(),
         };
         this.setState({
-            logEntry: logEntry,
-            date: date,
+            logEntry,
+            date,
         });
     }
 
@@ -241,16 +241,16 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         let logEntry: ILogEntry = this.state.logEntry;
         logEntry = {
             ...logEntry,
-            description: description
+            description,
         };
         this.setState({
-            logEntry: logEntry,
+            logEntry,
         });
     }
 
     public handleFlowChange = (flow: string): void => {
         this.setState({
-            flow: flow,
+            flow,
         });
     }
 
@@ -264,7 +264,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
             return (<SectionSelect
                 handleChange={this.handleSectionChange}
                 selectedGuide={this.state.selectedGuide}
-            />)
+            />);
         }
     }
 
@@ -282,7 +282,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                     <div className="person-count">
                         {this.getPersonList()}
                     </div>
-                    {this.state.peopleCount > 5 && 
+                    {this.state.peopleCount > 5 &&
                         <TextField
                             autoFocus
                             margin="dense"
@@ -293,7 +293,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                         />
                         }
                     <div className="date-picker-container">
-                        <DateFormatInput name='date-input' label="Date" value={this.state.date} onChange={this.handleDateChange} variant='standard'/>
+                        <DateFormatInput name="date-input" label="Date" value={this.state.date} onChange={this.handleDateChange} variant="standard"/>
                     </div>
                     <DialogContentText>
                         {"Rating"}
