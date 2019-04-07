@@ -5,6 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import KeyFactsCard from './KeyFactsCard';
 
 import {
     addToFavourites,
@@ -27,14 +28,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import StarBorderIcon from "@material-ui/icons/StarBorderRounded";
 import StarIcon from "@material-ui/icons/StarRounded";
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import ImageIcon from '@material-ui/icons/Image';
-import WorkIcon from '@material-ui/icons/Work';
-import BeachAccessIcon from '@material-ui/icons/BeachAccess';
-import Divider from '@material-ui/core/Divider';
+
 
 // Components
 import FlowChart from "./FlowChart";
@@ -151,7 +145,7 @@ class Info extends Component<IInfoProps, IInfoState> {
             <IconButton
             onClick={this.handleClose}
             style={{
-                color: "#fff",
+                color: "black",
                 cursor: "pointer",
             }}
             >
@@ -159,36 +153,6 @@ class Info extends Component<IInfoProps, IInfoState> {
             </IconButton>
         );
     }
-
-    public getKeyFacts = (): JSX.Element => {
-        
-        return (
-          <List >
-            <ListItem>
-              <Avatar>
-                <ImageIcon />
-              </Avatar>
-              <ListItemText primary="Photos" secondary="Jan 9, 2014" />
-            </ListItem>
-            <li>
-              <Divider variant="inset" />
-            </li>
-            <ListItem>
-              <Avatar>
-                <WorkIcon />
-              </Avatar>
-              <ListItemText primary="Work" secondary="Jan 7, 2014" />
-            </ListItem>
-            <Divider variant="inset" />
-            <ListItem>
-              <Avatar>
-                <BeachAccessIcon />
-              </Avatar>
-              <ListItemText primary="Vacation" secondary="July 20, 2014" />
-            </ListItem>
-          </List>
-        );
-      }
 
 
     public render(): JSX.Element {
@@ -206,22 +170,23 @@ class Info extends Component<IInfoProps, IInfoState> {
 
         return (
             <Grid container spacing={24} justify="space-between" className = "right-panel">
-            <Grid item md={12} lg={12}>
-                <AppBar position="static">
-                    <Toolbar>
-                    <IconButton  color="inherit" aria-label="Menu">
-                        {/* <MenuIcon /> */}
-                    </IconButton>
-                    <Typography variant="h6" color="inherit" >
-                    {title}
-                    {` ${river} river  •  ${region} `}
-                    </Typography>
-                    {this.getTags(activity, grade, catch_type)}
-                    {this.getReportButton()}
-                    {this.getCloseButton()}
-                    </Toolbar>
-                </AppBar>
-            </Grid>
+                <Grid item md={12} lg={12}>
+                    <AppBar position="static" color="default">
+                        <Toolbar>
+                        <div>
+                            <Typography variant="title">
+                            {title}
+                            </Typography>
+                            <Typography variant="caption">
+                            {`${river} river  •  ${region} `}
+                            </Typography>
+                        </div>
+                        {this.getTags(activity, grade, catch_type)}
+                        {this.getReportButton()}
+                        {this.getCloseButton()}
+                        </Toolbar>
+                    </AppBar>
+                </Grid>
                 {/* <FlowBadge siteName={this.props.guide.gaugeName} /> */}
                 {/* <CurrentWeather
                         lat={this.props.guide.lat || 0}
@@ -235,9 +200,9 @@ class Info extends Component<IInfoProps, IInfoState> {
                             weatherStore={this.state.weatherStore}
                         /> */}
 
-                    
                         <Grid item md={12} lg={4}>
-                                {this.getKeyFacts()}
+                                <KeyFactsCard content={description} guide={this.props.guide}>
+                                </KeyFactsCard>
                         </Grid>
                         <Grid item md={12} lg={8}>
                                 {gaugeName && (<FlowChart guide={this.props.guide} />)}

@@ -47,7 +47,7 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
     public renderListGroup = (region: string, idx: number): JSX.Element => <ListGroup key={idx} region={region} />;
 
     public render(): JSX.Element {
-        const isAuthenticated: IAuth = this.props.auth;
+        const isAuthenticated: boolean = this.props.auth.isAuthenticated;
         const isLoading: boolean = this.props.guides.length < 1;
 
         const renderedList: JSX.Element = (

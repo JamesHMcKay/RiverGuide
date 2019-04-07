@@ -12,6 +12,16 @@ import {
     setMapBounds,
 } from "../actions/actions";
 import { IState } from "../reducers/index";
+import Typography from '@material-ui/core/Typography';
+import Hidden from '@material-ui/core/Hidden';
+import withWidth from '@material-ui/core/withWidth';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+
+import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
+import FormatAlignCenterIcon from '@material-ui/icons/FormatAlignCenter';
+import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
+import FormatAlignJustifyIcon from '@material-ui/icons/FormatAlignJustify';
 
 import * as darksky from "dark-sky-api";
 import * as weather from "openweather-apis";
@@ -172,16 +182,78 @@ class Panel extends Component<IPanelProps, IPanelState> {
             );
     }
 
+    getInfoPage = (): JSX.Element => {
+        return (
+            <CSSTransition
+                    classNames="slide"
+                    in={this.props.infoPage.infoSelected}
+                    timeout={500}
+                    appear={true}
+                >
+                    <Info
+                        guide={this.props.infoPage.selectedGuide}
+                    />
+                </CSSTransition>
+        );
+    }
+
+    public getMapPage = (): JSX.Element => {
+        return (
+                <MapComponent
+                    guides={this.props.guides || this.props.guides}
+                    filteredGuides={
+                        this.props.filterdGuides ||
+                        this.props.guides
+                    }
+                    onClick={this.onClick}
+                    mapDimensions={this.state.mapDimensions}
+                    setMapBounds={this.updateMapBounds}
+                />
+        );
+    }
+
+    public getToggleButton = (): JSX.Element => {
+        return (
+            <Grid item xs={12} sm={6}>
+          <div>
+            <ToggleButtonGroup value={'left'} exclusive>
+              <ToggleButton value="left">
+                <FormatAlignLeftIcon />
+              </ToggleButton>
+              <ToggleButton value="center">
+                <FormatAlignCenterIcon />
+              </ToggleButton>
+              <ToggleButton value="right">
+                <FormatAlignRightIcon />
+              </ToggleButton>
+              <ToggleButton value="justify" disabled>
+                <FormatAlignJustifyIcon />
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </div>
+          <Typography variant="caption" gutterBottom>
+            Exclusive Selection
+          </Typography>
+          <Typography variant="caption">
+            Text justification toggle buttons present options for left, right, center, full, and
+            justified text with only one item available for selection at a time. Selecting one
+            option deselects any other.
+          </Typography>
+        </Grid>
+        );
+    }
+
     public render(): JSX.Element {
         return (
             // <div className="middle-section">
+            
             <Grid container spacing={24}>
+            <Hidden xsUp>
+                {this.getToggleButton()}
+            </Hidden>
             <Grid item md={12} lg={12}>
                 <ControlBar/>
                 </Grid>
-                 {/* <div className="panel-layout">  */}
-
-                {/* <Grid container spacing={24} justify="space-between"> */}
                 <Grid item md={12} lg={4}>
                     <div className="left-panel"> 
                         <LeftPanel
@@ -193,32 +265,8 @@ class Panel extends Component<IPanelProps, IPanelState> {
                     </div>
                     </Grid>
                     <Grid item md={12} lg={8}>
-                        {this.props.infoPage.infoSelected ? (
-                            <CSSTransition
-                                classNames="slide"
-                                in={this.props.infoPage.infoSelected}
-                                timeout={500}
-                                appear={true}
-                            >
-                                <Info
-                                    guide={this.props.infoPage.selectedGuide}
-                                />
-                            </CSSTransition>
-                        ) : (
-                            <MapComponent
-                                guides={this.props.guides || this.props.guides}
-                                filteredGuides={
-                                    this.props.filterdGuides ||
-                                    this.props.guides
-                                }
-                                onClick={this.onClick}
-                                mapDimensions={this.state.mapDimensions}
-                                setMapBounds={this.updateMapBounds}
-                            />)
-                        }
+                        {this.props.infoPage.infoSelected ? this.getInfoPage() : this.getMapPage()}
                     </Grid>
-                {/* </Grid> */}
-            {/* </div> */}
             </Grid>
         );
     }
