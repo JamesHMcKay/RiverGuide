@@ -4,7 +4,6 @@ import React, { Component } from "react";
 import ReactMapGL, { FlyToInterpolator, InteractiveMap, Marker, ViewState } from "react-map-gl";
 import WebMercatorViewport from "viewport-mercator-project";
 import { IGuide, ILatLon, IMapBounds } from "../../utils/types";
-import { IMapDimensions } from "../Panel";
 import { IViewport } from "./InfoMapComponent";
 import MapCluster from "./MapCluster";
 import MapMarker from "./MapMarker";
