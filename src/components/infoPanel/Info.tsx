@@ -1,6 +1,11 @@
+import AppBar from "@material-ui/core/AppBar";
+import Grid from "@material-ui/core/Grid";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Report from "../common/Report";
+import KeyFactsCard from "./KeyFactsCard";
 
 import {
     addToFavourites,
@@ -9,7 +14,7 @@ import {
     toggleModal,
 } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import { IAuth, IGauge, IGuide, IInfoPage } from "../../utils/types";
+import { IAuth, IGuide, IInfoPage } from "../../utils/types";
 import FlowBadge from "../common/FlowBadge";
 import { CurrentWeather } from "./CurrentWeather";
 import "./Info.css";
@@ -35,7 +40,6 @@ interface IInfoState {
 
 interface IInfoStateProps {
     auth: IAuth;
-    gauges: IGauge[];
     infoPage: IInfoPage;
 }
 
@@ -71,30 +75,6 @@ class Info extends Component<IInfoProps, IInfoState> {
 
     public handleClose = (): void => this.props.closeInfoPage();
 
-    public getLastUpdated(): JSX.Element {
-        return (
-            <p className="last-updated-flow">
-                <em>
-                    Flow Data Last Updated: {this.filterGauges()[0].lastUpdated}
-                </em>
-            </p>
-        );
-    }
-
-    public filterGauges(): IGauge[] {
-        const guide: IGuide = this.props.guide;
-
-        if (!guide.gaugeName) {
-            return [];
-        }
-
-        return this.props.gauges.filter(
-            (gauge: IGauge) =>
-                (this.props.guide.gaugeName && gauge.siteName.toLowerCase() ===
-                this.props.guide.gaugeName.toLowerCase()),
-        );
-    }
-
     public toggleFavourite = (): void => {
         const { favourited } = this.state;
         const guideId: string = this.props.infoPage.selectedGuide._id;
@@ -124,6 +104,53 @@ class Info extends Component<IInfoProps, IInfoState> {
         )));
     }
 
+    public getFavButton = (): JSX.Element => {
+        return (
+            <Tooltip
+                title={
+                    this.state.favourited
+                        ? "Remove from favourites"
+                        : "Add to favourites"
+                }
+                placement="right"
+            >
+            <IconButton onClick={this.toggleFavourite}>
+                {this.state.favourited ? (
+                    <StarIcon style={{ color: "#fb1" }} />
+                ) : (
+                    <StarBorderIcon style={{ color: "#fff" }} />
+                )}
+                </IconButton>
+            </Tooltip>
+        );
+    }
+
+    public getReportButton = (): JSX.Element => {
+        return (
+            <Button
+            className="reporting-button"
+            variant="outlined"
+            onClick={this.openModal.bind(this, "addTripInfoPage")}
+             >
+                Report a trip here
+            </Button>
+        );
+    }
+
+    public getCloseButton = (): JSX.Element => {
+        return (
+            <IconButton
+            onClick={this.handleClose}
+            style={{
+                color: "black",
+                cursor: "pointer",
+            }}
+            >
+                <CloseIcon />
+            </IconButton>
+        );
+    }
+
     public render(): JSX.Element {
         const {
             title,
@@ -137,137 +164,73 @@ class Info extends Component<IInfoProps, IInfoState> {
             markers,
         }: IGuide = this.props.infoPage.selectedGuide;
 
-        const testDisplay: JSX.Element = (
-            <div>
-                <div
-                    style={{
-                        width: "100%",
-                        height: "10em",
-                        backgroundColor: "#459BE8",
-                    }}
-                >
-                    <div
-                        style={{
-                            position: "fixed",
-                            margin: ".5em",
-                        }}
-                    >
-                        <Tooltip
-                            title={
-                                this.state.favourited
-                                    ? "Remove from favourites"
-                                    : "Add to favourites"
-                            }
-                            placement="right"
-                        >
-                            <IconButton onClick={this.toggleFavourite}>
-                                {this.state.favourited ? (
-                                    <StarIcon style={{ color: "#fb1" }} />
-                                ) : (
-                                    <StarBorderIcon style={{ color: "#fff" }} />
-                                )}
-                            </IconButton>
-                        </Tooltip>
-                    </div>
-                    <h1
-                        style={{
-                            textAlign: "center",
-                            color: "#fff",
-                            paddingTop: "1em",
-                        }}
-                    >
-                        {title}
-                    </h1>
-                    <p
-                        style={{
-                            textAlign: "center",
-                            color: "#fff",
-                        }}
-                    >
-                        {`----- ${river}  •  ${region} -----`}
-                    </p>
-                </div>
-                <div
-                    className="tags"
-                    style={{ margin: "1em", textAlign: "center" }}
-                >
-                   {this.getTags(activity, grade, catch_type)}
-                        <Button
-                    className="reporting-button"
-                    variant="outlined"
-                    onClick={this.openModal.bind(this, "reportModal")}
-                >
-                    Going today?
-                </Button>
-                <Button
-                    className="reporting-button"
-                    variant="outlined"
-                    onClick={this.openModal.bind(this, "reportModal")}
-                >
-                    Report a trip
-                </Button>
-                <FlowBadge siteName={this.props.guide.gaugeName} />
-                <CurrentWeather
-                        lat={this.props.guide.lat || 0}
-                        lon={this.props.guide.lng || 0}
-                        weatherStore={this.state.weatherStore}
-                />
-                <Report />
-                </div>
-                {this.filterGauges().length > 0 && this.getLastUpdated()}
-                <div className="flow-weather-section">
-                    {gaugeName && (<FlowChart />)}
-                    <WeatherForecast
-                        lat={this.props.guide.lat || 0}
-                        lon={this.props.guide.lng || 0}
-                        weatherStore={this.state.weatherStore}
-                    />
-                </div>
-
-                                    <div style={{ margin: "1em" }}>
-                    <InfoCard title="Description" content={description} />
-                </div>
-                {markers.length > 0 && (
-                    <div style={{ margin: "1em", paddingBottom: "1em" }}>
-                        <MapCard markers={markers} />
-                    </div>
-                )}
-                <div
-                    style={{
-                        marginLeft: "93%",
-                        padding: "1em 0",
-                    }}
-                >
-                    <Tooltip title={"Edit " + title} placement="left">
-                        <Button variant="fab" color="secondary">
-                            <EditIcon />
-                        </Button>
-                    </Tooltip>
-                </div>
-            </div>
-        );
-
         return (
-            <Paper>
-                <div
-                    style={{
-                        position: "fixed",
-                        marginLeft: "65%",
-                        marginTop: "1vh",
-                    }}
-                >
-                    <IconButton
-                        onClick={this.handleClose}
-                        style={{
-                            color: "#fff",
-                            cursor: "pointer",
-                        }}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                </div>
-                {testDisplay}
-            </Paper>
+            <Grid container item xs={12} spacing={24} justify="space-between" className = "right-panel">
+                <Grid item md={12} lg={12}>
+                    <AppBar position="static" color="default">
+                        <Toolbar className="toolbar">
+                        <div className="toolbar-left">
+                            <Typography variant="title">
+                            {title}
+                            </Typography>
+                            <Typography variant="caption">
+                            {`${river} river  •  ${region} `}
+                            </Typography>
+                        </div>
+                        <div className="toolbar-right">
+                            {this.getTags(activity, grade, catch_type)}
+                            {this.getReportButton()}
+                            {this.getCloseButton()}
+                        </div>
+                        </Toolbar>
+                    </AppBar>
+                </Grid>
+                {/* <FlowBadge siteName={this.props.guide.gaugeName} /> */}
+                {/* <CurrentWeather
+                        lat={this.props.guide.lat || 0}
+                        lon={this.props.guide.lng || 0}
+                        weatherStore={this.state.weatherStore}
+                /> */}
+        <Grid item md={12} lg={12}>
+            <KeyFactsCard content={description} guide={this.props.guide} />
+                        </Grid>
+                        <Grid item md={12} lg={12}>
+                                {gaugeName && (<FlowChart guide={this.props.guide} />)}
+                        </Grid>
+                        <Grid item xs={12} sm={12}>
+                            <div style={{ margin: "1em" }}>
+                                <InfoCard title="Description" content={description} />
+                            </div>
+                        </Grid>
+                        <Grid item xs={12} sm={12}>
+                            {markers.length > 0 && (
+                                <div style={{ margin: "1em", paddingBottom: "1em" }}>
+                                    <MapCard markers={markers} />
+                                </div>
+                            )}
+                        </Grid>
+                        <Grid item xs={12} sm={12}>
+                            <WeatherForecast
+                                lat={this.props.guide.lat || 0}
+                                lon={this.props.guide.lng || 0}
+                                weatherStore={this.state.weatherStore}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={12}>
+                        <div
+                            style={{
+                                marginLeft: "93%",
+                                padding: "1em 0",
+                            }}
+                        >
+                            <Tooltip title={"Edit " + title} placement="left">
+                                <Button variant="fab" color="secondary">
+                                    <EditIcon />
+                                </Button>
+                            </Tooltip>
+                        </div>
+                        </Grid>
+            </Grid>
         );
     }
 }
@@ -275,7 +238,6 @@ class Info extends Component<IInfoProps, IInfoState> {
 function mapStateToProps(state: IState): IInfoStateProps {
     return ({
         auth: state.auth,
-        gauges: state.gauges,
         infoPage: state.infoPage,
     });
 }

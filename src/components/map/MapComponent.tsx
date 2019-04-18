@@ -1,10 +1,9 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import * as kmeans from "node-kmeans";
 import React, { Component } from "react";
-import MapGL, { FlyToInterpolator, InteractiveMap, Marker, ViewState } from "react-map-gl";
+import ReactMapGL, { FlyToInterpolator, InteractiveMap, Marker, ViewState } from "react-map-gl";
 import WebMercatorViewport from "viewport-mercator-project";
 import { IGuide, ILatLon, IMapBounds } from "../../utils/types";
-import { IMapDimensions } from "../Panel";
 import { IViewport } from "./InfoMapComponent";
 import MapCluster from "./MapCluster";
 import MapMarker from "./MapMarker";
@@ -21,7 +20,6 @@ interface IMapComponentProps {
     filteredGuides: IGuide[];
     onClick: (guide: IGuide) => void;
     setMapBounds: (bounds: IMapBounds) => void;
-    mapDimensions: IMapDimensions;
 }
 
 interface IMapComponentState {
@@ -67,8 +65,8 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
         super(props);
         this.state = {
             viewport: {
-                width: this.props.mapDimensions.width,
-                height: this.props.mapDimensions.height,
+                // width: this.props.mapDimensions.width,
+                // height: this.props.mapDimensions.height,
                 latitude: DEFAULT_LAT,
                 longitude: DEFAULT_LON,
                 zoom: DEFAULT_ZOOM,
@@ -210,12 +208,12 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
           offset: [0, 0],
         });
         const viewport: IViewportWithTransition = {
-            ...this.state.viewport,
+            // ...this.state.viewport,
             longitude,
             latitude,
             zoom,
-            transitionDuration: 5000,
-            transitionInterpolator: new FlyToInterpolator(),
+            // transitionDuration: 5000,
+            // transitionInterpolator: new FlyToInterpolator(),
         };
         this.setState({viewport});
     }
@@ -259,7 +257,7 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
                             size={30}
                             onClick={(): void => {this.props.onClick(guide); }}
                             toolTip={guide.title}
-                            deleteMode={false}
+                            editMode={false}
                         />
                   </Marker>
                 ),
@@ -300,8 +298,8 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
 
     public setViewport(newViewport: ViewState): void {
         const viewport: IViewport = {
-            width: this.state.viewport.width,
-            height: this.state.viewport.height,
+            // width: this.state.viewport.width,
+            // height: this.state.viewport.height,
             latitude: newViewport.latitude,
             longitude: newViewport.longitude,
             zoom: newViewport.zoom,
@@ -311,23 +309,27 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
 
     public render(): JSX.Element {
         const viewport: IViewport = {
-            width: this.props.mapDimensions.width,
-            height: this.props.mapDimensions.height,
+            // width: this.props.mapDimensions.width,
+            // height: this.props.mapDimensions.height,
             latitude: this.state.viewport.latitude,
             longitude: this.state.viewport.longitude,
             zoom: this.state.viewport.zoom,
         };
 
         return (
-            <MapGL
-                ref={(map: MapGL | null): InteractiveMap | null => this.mapRef = map}
-                mapStyle="mapbox://styles/mapbox/outdoors-v9"
-                {...viewport}
-                onViewportChange={(viewport: ViewState): void => this.setViewport(viewport)}
-                mapboxApiAccessToken={TOKEN}
-            >
-                {this.getMarkersOrCluster()}
-            </MapGL>
+            <div style={{height: "76vh", width: "100%"}}>
+                <ReactMapGL
+                    width="100%"
+                    height="100%"
+                    ref={(map: ReactMapGL | null): InteractiveMap | null => this.mapRef = map}
+                    mapStyle="mapbox://styles/mapbox/outdoors-v9"
+                    {...viewport}
+                    onViewportChange={(viewport: ViewState): void => this.setViewport(viewport)}
+                    mapboxApiAccessToken={TOKEN}
+                >
+                    {this.getMarkersOrCluster()}
+                </ReactMapGL>
+            </div>
         );
     }
 }

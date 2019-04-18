@@ -7,7 +7,8 @@ import { IGuide } from "../../utils/types";
 import { FormGroup, Label } from "reactstrap";
 
 interface ISectionSelectProps extends ISectionSelectStateProps {
-    handleChange: (e: any) => void;
+    handleChange: (selectedGuide: IGuide) => void;
+    selectedGuide?: IGuide;
 }
 
 interface ISectionSelectStateProps {
@@ -15,27 +16,47 @@ interface ISectionSelectStateProps {
 }
 
 class SectionSelect extends Component<ISectionSelectProps> {
-    public render(): JSX.Element {
+    public getLabel = (guide: IGuide): string => {
         const SEPERATOR: string = " - ";
+        return (
+            guide.title +
+            SEPERATOR +
+            guide.river +
+            SEPERATOR +
+            guide.region);
+    }
 
+    public handleSelectionChange = (e: any): void => {
+        const selectedId: string = e.value;
+        const selectedGuide: IGuide[] = this.props.guides.filter(
+            (guide: IGuide) => guide._id === selectedId);
+        if (selectedGuide.length === 1) {
+            this.props.handleChange(selectedGuide[0]);
+        }
+    }
+
+    public render(): JSX.Element {
         return (
             <FormGroup>
                 <Label for="section">Section</Label>
                 <Select
                     name="section"
-                    placeholder="eg. Taieri at Outram"
-                    onChange={this.props.handleChange}
-                    options={[{ label: "Other", value: "" }].concat(
+                    placeholder="Select a section"
+                    onChange={this.handleSelectionChange}
+                    options={
                         this.props.guides.map((guide: IGuide) => ({
-                            label:
-                                guide.title +
-                                SEPERATOR +
-                                guide.river +
-                                SEPERATOR +
-                                guide.region,
-                            value: guide.title,
-                        })),
-                    )}
+                            label: this.getLabel(guide),
+                            value: guide._id,
+                        }))
+                    }
+                    value={
+                    this.props.selectedGuide ?
+                        {
+                            label: this.getLabel(this.props.selectedGuide),
+                            value: this.props.selectedGuide._id,
+                        } :
+                        null
+                    }
                 />
             </FormGroup>
         );

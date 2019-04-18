@@ -1,71 +1,68 @@
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import TextField from "@material-ui/core/TextField";
+import { DateFormatInput, TimeFormatInput } from "material-ui-next-pickers";
 import React, { Component } from "react";
+import IoAndroidAdd from "react-icons/lib/io/android-add";
+import IoAndroidPerson from "react-icons/lib/io/android-person";
+import IoAndroidStar from "react-icons/lib/io/android-star";
 import { connect } from "react-redux";
 import { createLogEntry, toggleModal } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import { ILogEntry } from "../../utils/types";
+import { IHistory, ILogEntry } from "../../utils/types";
+import { IGuide, IInfoPage } from "../../utils/types";
 
+import FlowReport from "./FlowReport";
 import SectionSelect from "./SectionSelect";
-
-import {
-    Button,
-    Form,
-    FormGroup,
-    Input,
-    Label,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-} from "reactstrap";
-
-const FORM_CONTENT: Array<{name: string; type: string; label: string}> = [
-    { name: "date", type: "date", label: "Date of Trip" },
-    {
-        name: "participantCount",
-        type: "number",
-        label: "Number of Participants",
-    },
-    { name: "rating", type: "number", label: "Rating (0 - 5)" },
-    { name: "description", type: "textarea", label: "Description" },
-];
 
 const initialState: ILogEntry = {
     _id: "",
-    section: "Lower Taieri",
+    section: "",
     date: "",
     participantCount: 1,
     rating: 3,
     description: "",
 };
 
-interface ITripDetailsModelProps extends ITripDetailsModelStateProps {
-    toggleModal: (modal: string) => void;
+interface ITripDetailsModelProps {
     createLogEntry: (item: ILogEntry) => void;
-}
-
-interface ITripDetailsModelStateProps {
-    isOpen: boolean;
+    handleClose: () => void;
+    selectedGuide?: IGuide;
+    gaugeHistory?: IHistory[];
 }
 
 interface ITripDetailsModelState {
     logEntry: ILogEntry;
+    peopleCount: number;
+    date: Date;
+    rating: number;
+    preventHoverChangePeople: boolean;
+    preventHoverChangeRating: boolean;
+    selectedGuide?: IGuide;
+    flow?: string;
 }
 
 class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsModelState> {
     constructor(props: ITripDetailsModelProps) {
         super(props);
-        this.state = {
-            logEntry: initialState,
-        };
+        const initialLogEntry: ILogEntry = initialState;
 
-        this.closeModal = this.closeModal.bind(this);
+        this.state = {
+            logEntry: initialLogEntry,
+            peopleCount: 1,
+            date: new Date(),
+            preventHoverChangePeople: false,
+            preventHoverChangeRating: false,
+            rating: 1,
+        };
+        this.onChange = this.onChange.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSectionChange = this.handleSectionChange.bind(this);
         this.handleSave = this.handleSave.bind(this);
-    }
-
-    public closeModal(): void {
-        this.props.toggleModal("addTrip");
     }
 
     public handleChange(e: any): void {
@@ -77,19 +74,30 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         }
     }
 
-    public handleSectionChange(e: any): void {
+    public handleSectionChange(selectedGuide: IGuide): void {
         if (this.state.logEntry) {
             let logEntry: ILogEntry = this.state.logEntry;
             logEntry = {
                 ...logEntry,
-                section: e.value,
+                section: selectedGuide._id,
             };
-            this.setState({ logEntry });
+            this.setState({
+                logEntry,
+                selectedGuide,
+            });
         }
     }
 
     public handleSave(): void {
-        this.props.createLogEntry(this.state.logEntry as ILogEntry);
+        let logEntry: ILogEntry = this.state.logEntry;
+        logEntry = {
+            ...logEntry,
+            participantCount: this.state.peopleCount,
+            date: this.state.date.toISOString(),
+            rating: this.state.rating,
+        };
+        this.props.createLogEntry(logEntry as ILogEntry);
+        this.props.handleClose();
     }
 
     public getValue = (key: string): string => {
@@ -100,52 +108,239 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         }
     }
 
+    public setHover(key: number): void {
+        if (!this.state.preventHoverChangePeople) {
+            this.setState({
+                peopleCount: key + 1,
+                });
+        }
+    }
+
+    public addPerson(): void {
+        this.setState({
+        peopleCount: this.state.peopleCount + 1,
+        });
+    }
+
+    public onChange(e: any): void {
+        this.setState({
+            peopleCount: e.target.value,
+        });
+    }
+
+    public onSelectPeopleCount = (key: number): void => {
+        this.setState({
+            preventHoverChangePeople: true,
+            peopleCount: key + 1,
+        });
+    }
+
+    public getPersonList(): JSX.Element {
+        const keys: number[] = [0, 1, 2, 3, 4];
+        const listItems: JSX.Element[] = keys.map((key: number) =>
+        <li key={key}
+            style={{float: "left"}}>
+            <div>
+            <span
+                className="person-icon"
+                onMouseEnter={this.setHover.bind(this, key)}
+                onMouseDown={this.onSelectPeopleCount.bind(this, key)}
+            >
+            {key < this.state.peopleCount ?
+                <IoAndroidPerson size={40} className="person-button-hover"/> :
+                <IoAndroidPerson size={40} className="person-button"/>}
+            </span>
+            </div>
+        </li>,
+        );
+
+        listItems.push(
+        <li key={keys.length + 1}
+            style={{float: "left"}}>
+            <div>
+            <span
+                className="person-icon"
+                onClick={this.addPerson.bind(this)}
+            >
+                {this.state.peopleCount > keys.length ?
+                <IoAndroidAdd size={40} className="person-button-hover"/> :
+                <IoAndroidAdd size={40} className="person-button"/>}
+            </span>
+            </div>
+        </li>,
+        );
+
+        return (
+        <ul
+            style={{
+            listStyle: "none",
+            float: "right",
+            }}
+        >{listItems}</ul>
+        );
+    }
+
+    public setRatingHover(key: number): void {
+        if (!this.state.preventHoverChangeRating) {
+            this.setState({
+                rating: key + 1,
+            });
+        }
+    }
+
+    public onSelectRating = (key: number): void => {
+        this.setState({
+            preventHoverChangeRating: true,
+            rating: key + 1,
+        });
+    }
+
+    public getRatingList(): JSX.Element {
+        const keys: number[] = [0, 1, 2, 3, 4];
+        const listItems: JSX.Element[] = keys.map((key: number) =>
+        <li key={key}
+            style={{float: "left"}}>
+            <div>
+            <span
+                className="person-icon"
+                onMouseEnter={this.setRatingHover.bind(this, key)}
+                onMouseDown={this.onSelectRating.bind(this, key)}
+            >
+            {key < this.state.rating ?
+                <IoAndroidStar size={40} className="person-button-hover"/> :
+                <IoAndroidStar size={40} className="person-button"/>}
+            </span>
+            </div>
+        </li>,
+        );
+
+        return (
+        <ul
+            style={{
+            listStyle: "none",
+            float: "right",
+            }}
+        >{listItems}</ul>
+        );
+    }
+
+    public handleDateChange = (date: Date): void => {
+        let logEntry: ILogEntry = this.state.logEntry;
+        logEntry = {
+            ...logEntry,
+            date: date.toISOString(),
+        };
+        this.setState({
+            logEntry,
+            date,
+        });
+    }
+
+    public updateDescription = (input: any): void => {
+        const description: string = input.target.value;
+        let logEntry: ILogEntry = this.state.logEntry;
+        logEntry = {
+            ...logEntry,
+            description,
+        };
+        this.setState({
+            logEntry,
+        });
+    }
+
+    public handleFlowChange = (flow: string): void => {
+        this.setState({
+            flow,
+        });
+    }
+
+    public getSelectedSection = (): JSX.Element => {
+        if (this.props.selectedGuide) {
+            return (
+                <DialogContentText>
+                {this.props.selectedGuide.title}
+            </DialogContentText>);
+        } else {
+            return (<SectionSelect
+                handleChange={this.handleSectionChange}
+                selectedGuide={this.state.selectedGuide}
+            />);
+        }
+    }
+
     public render(): JSX.Element {
         return (
             <div>
-                <Modal isOpen={this.props.isOpen} toggle={this.closeModal}>
-                    <ModalHeader toggle={this.closeModal}>
-                        Add Trip to Logbook
-                    </ModalHeader>
-                    <ModalBody>
-                        <Form>
-                            <SectionSelect
-                                handleChange={this.handleSectionChange}
-                            />
-                            {FORM_CONTENT.map((field: {name: string, label: string}, idx: number) => (
-                                <FormGroup key={idx}>
-                                    <Label for={field.name}>
-                                        {field.label}
-                                    </Label>
-                                    <Input
-                                        type={"text"}
-                                        name={field.name}
-                                        onChange={this.handleChange}
-                                        value={this.getValue(field.name)}
-                                    />
-                                </FormGroup>
-                            ))}
-                        </Form>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button onClick={this.closeModal}>Cancel</Button>{" "}
-                        <Button onClick={this.handleSave} color="primary">
-                            Save
-                        </Button>
-                    </ModalFooter>
-                </Modal>
+                <DialogTitle>
+                    Add Trip to Logbook
+                </DialogTitle >
+                <DialogContent>
+                    {this.getSelectedSection()}
+                    <DialogContentText>
+                        {"Number of participants"}
+                    </DialogContentText>
+                    <div className="person-count">
+                        {this.getPersonList()}
+                    </div>
+                    {this.state.peopleCount > 5 &&
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="people"
+                            type="number"
+                            value={this.state.peopleCount}
+                            onChange={(value: any): void => this.setState({peopleCount: value.target.value})}
+                        />
+                        }
+                    <div className="date-picker-container">
+                        <DateFormatInput
+                            name="date-input"
+                            label="Date"
+                            value={this.state.date}
+                            onChange={this.handleDateChange}
+                            variant="standard"
+                        />
+                    </div>
+                    <DialogContentText>
+                        {"Rating"}
+                    </DialogContentText>
+                    <div className="person-count">
+                        {this.getRatingList()}
+                    </div>
+                    <DialogContentText>
+                        {"Comments"}
+                    </DialogContentText>
+                    <TextField
+                            autoFocus
+                            margin="dense"
+                            id="comments"
+                            type="text"
+                            value={this.state.logEntry.description}
+                            onChange={this.updateDescription}
+                            fullWidth={true}
+                        />
+                    <FlowReport
+                        selectedGuide={this.state.selectedGuide}
+                        handleChange={this.handleFlowChange}
+                        date={this.state.date}
+                        gaugeHistoryFromInfoPage={this.props.gaugeHistory}
+                        flow={this.state.flow}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={this.props.handleClose} color="primary">
+                    Cancel
+                    </Button>
+                    <Button onClick={this.handleSave} color="primary">
+                    Submit
+                    </Button>
+                </DialogActions>
             </div>
         );
     }
 }
 
-function mapStateToProps(state: IState): ITripDetailsModelStateProps {
-    return ({
-        isOpen: state.openModal === "addTrip",
-    });
-}
-
 export default connect(
-    mapStateToProps,
-    { createLogEntry, toggleModal },
+    null,
+    { createLogEntry },
 )(TripDetailsModal);

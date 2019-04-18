@@ -10,7 +10,7 @@ import "./profile.css";
 import LogItem from "./LogItem";
 
 interface ILogBookProps extends ILogBookStateProps {
-    toggleModal: (modal: string) => void;
+    toggleModal: (modal?: string) => void;
 }
 
 interface ILogBookStateProps {

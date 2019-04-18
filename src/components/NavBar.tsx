@@ -121,7 +121,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                     variant="contained"
                     color="secondary"
                     size="large"
-                    onClick={this.openModal.bind(this, "addTrip")}
+                    onClick={this.openModal.bind(this, "addTripAnyPage")}
                     style={{
                         marginRight: "1em",
                     }}

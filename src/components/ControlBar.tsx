@@ -9,6 +9,11 @@ import { IFilter, IGuide, ILatLon, IMapBounds } from "./../utils/types";
 
 // Material UI
 import { AppBar, Tab, Tabs, TextField, Toolbar } from "@material-ui/core";
+import Hidden from "@material-ui/core/Hidden";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 import { IState } from "../reducers/index";
 
@@ -17,10 +22,9 @@ import "react-dropdown/style.css";
 
 const data: string[] = [
     "Fishing",
-    "Flatwater",
-    "Motorised",
+    "Jet boating",
+    "Gauges",
     "Whitewater",
-    "Other",
 ];
 
 interface IControlBarProps extends IControlBarStateToProps {
@@ -41,11 +45,15 @@ interface IControlBarStateToProps {
 
 interface IControlBarState {
     index: number;
+    anchorEl: any;
 }
+
+const ITEM_HEIGHT: number = 48;
 
 class ControlBar extends Component<IControlBarProps, IControlBarState> {
     public state: IControlBarState = {
         index: 3,
+        anchorEl: null,
     };
 
     public handleChange = (event: any, value: number): void => {
@@ -66,7 +74,25 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
         );
     }
 
+    public handleSelect = (event: any, category: string): void => {
+        const index: number = data.indexOf(category);
+        this.setState({ index });
+        this.props.setCategory(category.toLowerCase());
+        this.handleClose();
+    }
+
+    public handleClick = (event: any): void => {
+        this.setState({ anchorEl: event.currentTarget });
+    }
+
+    public handleClose = (): void => {
+        this.setState({ anchorEl: null });
+    }
+
     public render(): JSX.Element {
+        const { anchorEl } = this.state;
+        const open: boolean = Boolean(anchorEl);
+
         return (
             <AppBar position="static" style={{ zIndex: 2 }}>
                 <Toolbar>
@@ -75,6 +101,8 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
                             float: "left",
                             width: "27%",
                             textAlign: "center",
+                            display: "flex",
+                            flexDirection: "row",
                         }}
                     >
                         <TextField
@@ -88,9 +116,45 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
                                 width: "100%",
                                 paddingBottom: ".5em",
                                 color: "#fff",
+                                minWidth: "300px",
                             }}
                         />
                     </div>
+                    <Hidden mdUp>
+                    <div style = {{right: "10%", position: "absolute"}}>
+                            <IconButton
+                            aria-label="More"
+                            aria-owns={open ? "long-menu" : undefined}
+                            aria-haspopup="true"
+                            onClick={this.handleClick}
+                            >
+                            <MoreVertIcon />
+                            </IconButton>
+                            <Menu
+                            id="long-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={this.handleClose}
+                            PaperProps={{
+                                style: {
+                                maxHeight: ITEM_HEIGHT * 4.5,
+                                width: 200,
+                                },
+                            }}
+                            >
+                            {data.map((category: string) => (
+                                <MenuItem
+                                    key={category}
+                                    selected={data[this.state.index] === category}
+                                    onClick={(event: any): void => this.handleSelect(event, category)}
+                                >
+                                    {category}
+                                </MenuItem>
+                            ))}
+                            </Menu>
+                            </div>
+                    </Hidden>
+                    <Hidden smDown>
                     <div
                         style={{
                             width: "73%",
@@ -112,6 +176,7 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
                             ))}
                         </Tabs>
                     </div>
+                    </Hidden>
                 </Toolbar>
             </AppBar>
         );

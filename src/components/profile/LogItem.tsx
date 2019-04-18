@@ -27,7 +27,7 @@ import "./profile.css";
 library.add(faCaretDown, faCaretRight, faStar, faUser);
 
 interface ILogItemProps extends ILogItemStateProps {
-    toggleModal: (modal: string) => void;
+    toggleModal: (modal?: string) => void;
     updateOpenLog: (item: ILogEntry) => void;
     item: ILogEntry;
 }

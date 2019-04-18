@@ -21,6 +21,7 @@ import {
     OPEN_INFO,
     CLOSE_INFO,
     ADD_HISTORIC_FLOW,
+    GET_GAUGE_HISTORY,
     UPDATE_OPEN_LOG,
     SET_CATEGORY,
     LOADING_GUIDES,
@@ -30,6 +31,7 @@ import {
 } from "./types";
 
 const serverLocation = process.env.REACT_APP_SERVER_URL;
+const riverServiceLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
 
 // Toggle Modals
 export const toggleModal = modal => dispatch => {
@@ -151,7 +153,33 @@ export const changePassword = userData => dispatch => {
 
 // Get guides
 export const makeGuideRequest = category => dispatch => {
-    axios
+    console.log("category = ", category);
+    if (category === "gauges") {
+        const request = {
+            action: "get_features",
+            crossDomain: true,
+        }
+        axios
+            .post(serverLocation, request)
+            .then(res => {
+                let data = res.data.features;
+                let result = data.map(item => (
+                    {
+                        _id: item.id,
+                        author: "riverservice",
+                        title: item.name,
+                        river: "NIWA",
+                        region: "All New Zealand",
+                        description: "no description",
+                        dateCreated: "none",
+                    }));
+                dispatch({
+                    type: GET_GUIDES,
+                    payload: result,
+                });
+            });
+    } else {
+        axios
         .get(`${serverLocation}/${category}`)
         .then(res => {
             dispatch({
@@ -160,6 +188,7 @@ export const makeGuideRequest = category => dispatch => {
             });
         })
         .catch(err => console.log(err));
+    }
 };
 
 // Create guides
@@ -283,6 +312,26 @@ export const openInfoPage = guide => dispatch => {
     }
 };
 
+export const getGaugeHistory = guide => dispatch => {
+    // check for gauge data
+    if (guide.gaugeName) {
+        axios
+            .get(
+                `${process.env.REACT_APP_AGG_FLOW_URL}/${
+                    guide.gaugeName
+                }/history`,
+            )
+            .then(res => {
+                dispatch({
+                    type: GET_GAUGE_HISTORY,
+                    payload: res.data.data,
+                });
+            })
+            .then(() => dispatch({ type: CLEAR_ERRORS }));
+    }
+}
+
+
 // close info page
 export const closeInfoPage = () => dispatch => {
     dispatch({
@@ -335,20 +384,50 @@ export const setCategory = category => dispatch => {
         type: CLOSE_INFO,
     });
 
-    axios
-        .get(`${serverLocation}/${category}`)
-        .then(res => {
-            dispatch({
-                type: GET_GUIDES,
-                payload: res.data,
+    if (category === "gauges") {
+        const request = {
+            action: "get_features",
+            crossDomain: true,
+        }
+        axios
+            .post(riverServiceLocation, request)
+            .then(res => {
+                let data = res.data.features;
+                let result = data.map(item => (
+                    {
+                        _id: item.id,
+                        author: "riverservice",
+                        title: item.name,
+                        river: "NIWA",
+                        region: "All New Zealand",
+                        description: "no description",
+                        dateCreated: "none",
+                        lat: item.location.lat,
+                        lng: item.location.lon,
+                        markers: {name: "", lat: item.location.lat, lng: item.location.lon, id: "1"},
+                        latestFlow: item.latest_flow,
+                    }));
+                dispatch({
+                    type: GET_GUIDES,
+                    payload: result,
+                });
             });
-        })
-        .catch(err => console.log(err));
+    } else {
+        axios
+            .get(`${serverLocation}/${category}`)
+            .then(res => {
+                dispatch({
+                    type: GET_GUIDES,
+                    payload: res.data,
+                });
+            })
+            .catch(err => console.log(err));
 
-    dispatch({
-        type: SET_CATEGORY,
-        payload: category,
-    });
+        dispatch({
+            type: SET_CATEGORY,
+            payload: category,
+        });
+    }
 };
 
 // add to favourites

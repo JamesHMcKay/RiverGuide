@@ -12,16 +12,15 @@
 
 .right-panel {
     float: right;
-    width: 70%;
     overflow-y: auto;
+    height: 76vh;
 }
 
 .left-panel {
-    width: 30%;
-    float: left;
     z-index: 1;
     overflow-y: auto;
     border: 1px solid lightgrey;
+    width: 100%;
 }
 
 .panel-layout:after {

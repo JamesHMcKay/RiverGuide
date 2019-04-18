@@ -1,3 +1,6 @@
+import Hidden from "@material-ui/core/Hidden";
+import ToggleButton from "@material-ui/lab/ToggleButton";
+import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import PropTypes, { string } from "prop-types";
 import React, { Component } from "react";
 // Components
@@ -11,31 +14,29 @@ import {
     openInfoPage,
     setMapBounds,
 } from "../actions/actions";
+import { getSensorData } from "../actions/getSensorData";
 import { IState } from "../reducers/index";
 
 import * as darksky from "dark-sky-api";
 import * as weather from "openweather-apis";
 
+import Grid from "@material-ui/core/Grid";
+import "mapbox-gl/dist/mapbox-gl.css";
 import ControlBar from "./ControlBar";
 import Info from "./infoPanel/Info";
 import LeftPanel from "./leftPanel/LeftPanel";
 import { MapComponent } from "./map/MapComponent";
 
 import {
+    IFeatureOfInterest,
     IFilter,
     IGauge,
     IGuide,
     IInfoPage,
-    ILatLon,
     IMapBounds } from "./../utils/types";
 
 // Styles
 import "./Panel.css";
-
-export interface IMapDimensions {
-    width: number;
-    height: number;
-}
 
 export interface IPanelState {
     searchText: string;
@@ -45,8 +46,9 @@ export interface IPanelState {
     selectedHistory: [];
     infoSelected: boolean;
     units: string;
-    mapDimensions: IMapDimensions;
     searchApplied: boolean;
+    search_panel: string;
+    mapRef: React.RefObject<MapComponent>;
 }
 
 export interface IPanelMapStateToProps {
@@ -55,6 +57,7 @@ export interface IPanelMapStateToProps {
     infoPage: IInfoPage;
     filterdGuides: IGuide[];
     filters: IFilter[];
+    sensorFeatureList: IFeatureOfInterest[];
 }
 
 export interface IPanelProps extends IPanelMapStateToProps {
@@ -67,6 +70,7 @@ export interface IPanelProps extends IPanelMapStateToProps {
         mapBounds: IMapBounds,
     ) => void;
     openInfoPage: (guide: IGuide) => void;
+    getSensorData: () => void;
 }
 
 class Panel extends Component<IPanelProps, IPanelState> {
@@ -79,11 +83,9 @@ class Panel extends Component<IPanelProps, IPanelState> {
             selectedHistory: [],
             infoSelected: false,
             units: "",
-            mapDimensions: {
-                width: 0,
-                height: 0,
-            },
             searchApplied: false,
+            search_panel: "list",
+            mapRef: React.createRef(),
         };
 
         weather.setAPPID("521cea2fce8675d0fe0678216dc01d5c");
@@ -94,28 +96,13 @@ class Panel extends Component<IPanelProps, IPanelState> {
 
         this.onChange = this.onChange.bind(this);
         this.onClick = this.onClick.bind(this);
-        this.updateMapBounds = this.updateMapBounds.bind(this);
         this.closeInfo = this.closeInfo.bind(this);
-        this.updateDimensions = this.updateDimensions.bind(this);
-    }
-
-    public getDimensions(element: any): {width: number, height: number} {
-        const { width, height }: {width: number, height: number} = element.getBoundingClientRect();
-        return { width, height };
-    }
-
-    public updateDimensions(): void {
-        const element: Element | Text | null = ReactDOM.findDOMNode(this.refs.mapView);
-        this.setState({
-            mapDimensions: this.getDimensions(element),
-        });
     }
 
     public componentDidMount(): void {
         this.props.makeGaugeRequest();
         this.props.makeGuideRequest("whitewater");
-        this.updateDimensions();
-        window.addEventListener("resize", this.updateDimensions);
+        this.props.getSensorData();
     }
 
     public componentWillReceiveProps(props: IPanelProps): void {
@@ -169,57 +156,86 @@ class Panel extends Component<IPanelProps, IPanelState> {
             );
     }
 
-    public render(): JSX.Element {
+    public getInfoPage = (): JSX.Element => {
         return (
-            <div className="middle-section">
-                <ControlBar/>
-                <div className="panel-layout">
-                    <div className="left-panel">
-                        <LeftPanel
-                            searchList={this.state.searchList}
-                            gaugeList={this.state.gaugeList}
-                            gauges={this.props.gauges}
-                            onClick={this.onClick}
-                        />
-                    </div>
-                    <div className="right-panel" ref="mapView">
-                        {this.props.infoPage.infoSelected ? (
-                            <CSSTransition
-                                classNames="slide"
-                                in={this.props.infoPage.infoSelected}
-                                timeout={500}
-                                appear={true}
-                            >
-                                <Info
-                                    guide={this.props.infoPage.selectedGuide}
-                                />
-                            </CSSTransition>
-                        ) : (
-                            <MapComponent
-                                guides={this.props.guides || this.props.guides}
-                                filteredGuides={
-                                    this.props.filterdGuides ||
-                                    this.props.guides
-                                }
-                                onClick={this.onClick}
-                                mapDimensions={this.state.mapDimensions}
-                                setMapBounds={this.updateMapBounds}
-                            />)
-                        }
-                    </div>
-                </div>
+            <Info
+                guide={this.props.infoPage.selectedGuide}
+            />
+        );
+    }
+
+    public getMapPage = (): JSX.Element => {
+        return (
+                <MapComponent
+                    ref={this.state.mapRef}
+                    guides={this.props.guides || this.props.guides}
+                    filteredGuides={
+                        this.props.filterdGuides ||
+                        this.props.guides
+                    }
+                    onClick={this.onClick}
+                    setMapBounds={this.updateMapBounds}
+                />
+        );
+    }
+
+    public handleToggle = (event: any, value: string): void => {
+        this.setState({
+            search_panel: value,
+        });
+    }
+
+    public getToggleButton = (): JSX.Element => {
+        return (
+          <div style = {{width: "100%"}}>
+            <ToggleButtonGroup value={this.state.search_panel} exclusive onChange={this.handleToggle}>
+              <ToggleButton value="list" style = {{width: "50%"}}>
+                <p> Search List </p>
+              </ToggleButton>
+              <ToggleButton value="map" style = {{width: "50%"}}>
+              <p> Map </p>
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </div>
+        );
+    }
+
+    public getleftPanel = (): JSX.Element => {
+        return (
+            <div className="left-panel">
+                <LeftPanel
+                    searchList={this.state.searchList}
+                    gaugeList={this.state.gaugeList}
+                    gauges={this.props.gauges}
+                    onClick={this.onClick}
+                />
             </div>
         );
     }
-}
 
-Panel.propTypes = {
-    makeGuideRequest: PropTypes.func.isRequired,
-    makeGaugeRequest: PropTypes.func.isRequired,
-    guides: PropTypes.array.isRequired,
-    gauges: PropTypes.array.isRequired,
-    infoPage: PropTypes.object.isRequired,
-};
+    public render(): JSX.Element {
+        return (
+            <Grid container spacing={0}>
+            <ControlBar/>
+            <Hidden mdUp>
+                {!this.props.infoPage.infoSelected && this.getToggleButton()}
+            </Hidden>
+            <Hidden smDown>
+            <Grid item sm={4}>
+                    {this.getleftPanel()}
+                </Grid>
+                <Grid item sm={8}>
+                    {this.props.infoPage.infoSelected ? this.getInfoPage() : this.getMapPage()}
+                </Grid>
+            </Hidden>
+            <Hidden mdUp>
+                {this.props.infoPage.infoSelected ? this.getInfoPage() :
+                    this.state.search_panel === "list" ? this.getleftPanel() : this.getMapPage()}
+            </Hidden>
+            </Grid>
+        );
+    }
+}
 
 const mapStateToProps: (state: IState) => IPanelMapStateToProps = (state: IState): IPanelMapStateToProps => ({
     guides: state.guides,
@@ -227,6 +243,7 @@ const mapStateToProps: (state: IState) => IPanelMapStateToProps = (state: IState
     infoPage: state.infoPage,
     filterdGuides: state.filteredList,
     filters: state.filteredGuides,
+    sensorFeatureList: state.sensorFeatureList,
 });
 
 export default connect(
@@ -236,5 +253,6 @@ export default connect(
         makeGaugeRequest,
         makeGuideRequest,
         setMapBounds,
-        openInfoPage}),
+        openInfoPage,
+        getSensorData}),
 )(Panel);

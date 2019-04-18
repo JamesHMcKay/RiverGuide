@@ -14,14 +14,17 @@ export interface IMarker {
     lat: number;
     lng: number;
     id: string;
+    description: string;
+    category: string;
+
 }
 
-export interface IMarker {
-    name: string;
-    lat: number;
-    lng: number;
-    id: string;
-}
+// export interface IMarker {
+//     name: string;
+//     lat: number;
+//     lng: number;
+//     id: string;
+// }
 
 export interface IGradeRange {
     from: string;
@@ -29,8 +32,8 @@ export interface IGradeRange {
 }
 
 export interface IFlowLevel {
-    currentFlow: number;
-    currentLevel: number;
+    currentFlow: string;
+    currentLevel: string;
 }
 
 export interface IHistory {
@@ -56,6 +59,7 @@ export interface IGuide {
     dateCreated: Date;
     catch_type?: string;
     activity?: string;
+    latestFlow?: number;
 }
 
 export interface IGauge {
@@ -63,6 +67,10 @@ export interface IGauge {
     currentFlow: number;
     currentLevel: number;
     lastUpdated: string;
+}
+
+export interface IGaugeHistory {
+    gaugeHistory: IHistory[];
 }
 
 export interface IInfoPage {
@@ -141,4 +149,14 @@ export interface IErrors {
 export enum IThemeColor {
     primary = "primary",
     secondary = "secondary",
+}
+
+export interface ISensorFeatureRequest {
+    action: string;
+}
+
+export interface IFeatureOfInterest {
+    id: string;
+    latest_flow: number;
+    name: string;
 }

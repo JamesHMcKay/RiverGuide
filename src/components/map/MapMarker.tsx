@@ -10,14 +10,14 @@ const pinStyle: {fill: string; stroke: string} = {
 interface IMapMarkerProps {
     size: number;
     onClick: () => void;
-    deleteMode: boolean;
+    editMode: boolean;
     toolTip: string;
 }
 
 export default class MapMarker extends PureComponent<IMapMarkerProps> {
     public getToolTip(element: any): JSX.Element {
-        if (this.props.deleteMode) {
-            return (<Tooltip title="Click to delete" style={{backgroundColor: "red"}}>{element}</Tooltip>);
+        if (this.props.editMode) {
+            return (<Tooltip title="Click for more options" style={{backgroundColor: "red"}}>{element}</Tooltip>);
         } else {
             return <Tooltip title={this.props.toolTip}>{element}</Tooltip>;
         }
