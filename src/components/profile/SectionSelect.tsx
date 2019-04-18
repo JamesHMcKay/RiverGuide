@@ -16,22 +16,22 @@ interface ISectionSelectStateProps {
 }
 
 class SectionSelect extends Component<ISectionSelectProps> {
-    public get_label = (guide: IGuide): string => {
+    public getLabel = (guide: IGuide): string => {
         const SEPERATOR: string = " - ";
         return (
             guide.title +
             SEPERATOR +
             guide.river +
             SEPERATOR +
-            guide.region)
+            guide.region);
     }
 
     public handleSelectionChange = (e: any): void => {
-        const selectedId = e.value;
+        const selectedId: string = e.value;
         const selectedGuide: IGuide[] = this.props.guides.filter(
-            guide => guide._id == selectedId);
-        if (selectedGuide.length == 1) {
-            this.props.handleChange(selectedGuide[0])
+            (guide: IGuide) => guide._id === selectedId);
+        if (selectedGuide.length === 1) {
+            this.props.handleChange(selectedGuide[0]);
         }
     }
 
@@ -45,15 +45,15 @@ class SectionSelect extends Component<ISectionSelectProps> {
                     onChange={this.handleSelectionChange}
                     options={
                         this.props.guides.map((guide: IGuide) => ({
-                            label: this.get_label(guide),
+                            label: this.getLabel(guide),
                             value: guide._id,
                         }))
                     }
                     value={
                     this.props.selectedGuide ?
                         {
-                            label: this.get_label(this.props.selectedGuide),
-                            value: this.props.selectedGuide._id
+                            label: this.getLabel(this.props.selectedGuide),
+                            value: this.props.selectedGuide._id,
                         } :
                         null
                     }

@@ -20,6 +20,7 @@
     z-index: 1;
     overflow-y: auto;
     border: 1px solid lightgrey;
+    width: 100%;
 }
 
 .panel-layout:after {

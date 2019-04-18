@@ -1,12 +1,11 @@
+import Dialog from "@material-ui/core/Dialog";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import Dialog from '@material-ui/core/Dialog'
 import { IInfoPage } from "../../utils/types";
 
 import TripDetailsModal from "./TripDetailsModal";
-
 
 interface ITripDetailsInfoPageProps extends ITripDetailsInfoPageStateProps {
     toggleModal: (modal?: string) => void;
@@ -30,7 +29,6 @@ class TripDetailsInfoPage extends Component<ITripDetailsInfoPageProps> {
         this.props.toggleModal();
     }
 
-
     public render(): JSX.Element {
         return (
             <div>
@@ -40,7 +38,7 @@ class TripDetailsInfoPage extends Component<ITripDetailsInfoPageProps> {
                         selectedGuide = {this.props.infoPage.selectedGuide}
                         gaugeHistory = {this.props.infoPage.history}
                     />
-                    
+
                 </Dialog>
             </div>
         );

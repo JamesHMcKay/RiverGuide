@@ -31,6 +31,7 @@ import {
 } from "./types";
 
 const serverLocation = process.env.REACT_APP_SERVER_URL;
+const riverServiceLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
 
 // Toggle Modals
 export const toggleModal = modal => dispatch => {
@@ -152,7 +153,33 @@ export const changePassword = userData => dispatch => {
 
 // Get guides
 export const makeGuideRequest = category => dispatch => {
-    axios
+    console.log("category = ", category);
+    if (category === "gauges") {
+        const request = {
+            action: "get_features",
+            crossDomain: true,
+        }
+        axios
+            .post(serverLocation, request)
+            .then(res => {
+                let data = res.data.features;
+                let result = data.map(item => (
+                    {
+                        _id: item.id,
+                        author: "riverservice",
+                        title: item.name,
+                        river: "NIWA",
+                        region: "All New Zealand",
+                        description: "no description",
+                        dateCreated: "none",
+                    }));
+                dispatch({
+                    type: GET_GUIDES,
+                    payload: result,
+                });
+            });
+    } else {
+        axios
         .get(`${serverLocation}/${category}`)
         .then(res => {
             dispatch({
@@ -161,6 +188,7 @@ export const makeGuideRequest = category => dispatch => {
             });
         })
         .catch(err => console.log(err));
+    }
 };
 
 // Create guides
@@ -286,7 +314,6 @@ export const openInfoPage = guide => dispatch => {
 
 export const getGaugeHistory = guide => dispatch => {
     // check for gauge data
-    console.log("getting gauge history for gauge = ", guide.gaugeName);
     if (guide.gaugeName) {
         axios
             .get(
@@ -357,20 +384,50 @@ export const setCategory = category => dispatch => {
         type: CLOSE_INFO,
     });
 
-    axios
-        .get(`${serverLocation}/${category}`)
-        .then(res => {
-            dispatch({
-                type: GET_GUIDES,
-                payload: res.data,
+    if (category === "gauges") {
+        const request = {
+            action: "get_features",
+            crossDomain: true,
+        }
+        axios
+            .post(riverServiceLocation, request)
+            .then(res => {
+                let data = res.data.features;
+                let result = data.map(item => (
+                    {
+                        _id: item.id,
+                        author: "riverservice",
+                        title: item.name,
+                        river: "NIWA",
+                        region: "All New Zealand",
+                        description: "no description",
+                        dateCreated: "none",
+                        lat: 0,
+                        lng: 0,
+                        markers: {name: "", lat: 0, lng:0, id: "1"},
+                        latestFlow: item.latest_flow,
+                    }));
+                dispatch({
+                    type: GET_GUIDES,
+                    payload: result,
+                });
             });
-        })
-        .catch(err => console.log(err));
+    } else {
+        axios
+            .get(`${serverLocation}/${category}`)
+            .then(res => {
+                dispatch({
+                    type: GET_GUIDES,
+                    payload: res.data,
+                });
+            })
+            .catch(err => console.log(err));
 
-    dispatch({
-        type: SET_CATEGORY,
-        payload: category,
-    });
+        dispatch({
+            type: SET_CATEGORY,
+            payload: category,
+        });
+    }
 };
 
 // add to favourites

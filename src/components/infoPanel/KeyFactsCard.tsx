@@ -4,21 +4,21 @@ import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import EditIcon from "@material-ui/icons/Edit";
-import Grid from '@material-ui/core/Grid';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import ImageIcon from '@material-ui/icons/Image';
-import WorkIcon from '@material-ui/icons/Work';
-import BeachAccessIcon from '@material-ui/icons/BeachAccess';
-import Divider from '@material-ui/core/Divider';
+import Avatar from "@material-ui/core/Avatar";
+import Divider from "@material-ui/core/Divider";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import BeachAccessIcon from "@material-ui/icons/BeachAccess";
+import ImageIcon from "@material-ui/icons/Image";
+import WorkIcon from "@material-ui/icons/Work";
 import { IGuide } from "../../utils/types";
 
 interface IKeyFactsCardState {
@@ -49,17 +49,15 @@ class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
         this.setState({ tempValue: event.target.value });
     }
 
-
     public getKeyFacts = (): JSX.Element => {
-        
         return (
-        <Grid container spacing={24} justify="space-between">
+        <Grid container item spacing={24} justify="space-between">
         <Grid item md={12} lg={4}>
         <ListItem>
               <Avatar>
                 <ImageIcon />
               </Avatar>
-              <ListItemText primary="Photos" secondary="Jan 9, 2014" />
+              <ListItemText primary="Grade" secondary="5" />
             </ListItem>
         </Grid>
         <Grid item md={12} lg={4}>
@@ -67,7 +65,7 @@ class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
               <Avatar>
                 <ImageIcon />
               </Avatar>
-              <ListItemText primary="Photos" secondary="Jan 9, 2014" />
+              <ListItemText primary="Length" secondary="10km" />
             </ListItem>
         </Grid>
         <Grid item md={12} lg={4}>
@@ -75,11 +73,9 @@ class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
               <Avatar>
                 <ImageIcon />
               </Avatar>
-              <ListItemText primary="Photos" secondary="Jan 9, 2014" />
+              <ListItemText primary="Approximate duration" secondary="8 - 10 hours" />
             </ListItem>
         </Grid>
-        
-          
           </Grid>
         );
       }

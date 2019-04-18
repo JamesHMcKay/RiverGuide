@@ -1,11 +1,11 @@
+import AppBar from "@material-ui/core/AppBar";
+import Grid from "@material-ui/core/Grid";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Report from "../common/Report";
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import KeyFactsCard from './KeyFactsCard';
+import KeyFactsCard from "./KeyFactsCard";
 
 import {
     addToFavourites,
@@ -27,8 +27,6 @@ import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
 import StarBorderIcon from "@material-ui/icons/StarBorderRounded";
 import StarIcon from "@material-ui/icons/StarRounded";
-
-
 
 // Components
 import FlowChart from "./FlowChart";
@@ -76,7 +74,6 @@ class Info extends Component<IInfoProps, IInfoState> {
     }
 
     public handleClose = (): void => this.props.closeInfoPage();
-
 
     public toggleFavourite = (): void => {
         const { favourited } = this.state;
@@ -154,7 +151,6 @@ class Info extends Component<IInfoProps, IInfoState> {
         );
     }
 
-
     public render(): JSX.Element {
         const {
             title,
@@ -169,11 +165,11 @@ class Info extends Component<IInfoProps, IInfoState> {
         }: IGuide = this.props.infoPage.selectedGuide;
 
         return (
-            <Grid container spacing={24} justify="space-between" className = "right-panel">
+            <Grid container item xs={12} spacing={24} justify="space-between" className = "right-panel">
                 <Grid item md={12} lg={12}>
                     <AppBar position="static" color="default">
-                        <Toolbar>
-                        <div>
+                        <Toolbar className="toolbar">
+                        <div className="toolbar-left">
                             <Typography variant="title">
                             {title}
                             </Typography>
@@ -181,9 +177,11 @@ class Info extends Component<IInfoProps, IInfoState> {
                             {`${river} river  •  ${region} `}
                             </Typography>
                         </div>
-                        {this.getTags(activity, grade, catch_type)}
-                        {this.getReportButton()}
-                        {this.getCloseButton()}
+                        <div className="toolbar-right">
+                            {this.getTags(activity, grade, catch_type)}
+                            {this.getReportButton()}
+                            {this.getCloseButton()}
+                        </div>
                         </Toolbar>
                     </AppBar>
                 </Grid>
@@ -193,18 +191,18 @@ class Info extends Component<IInfoProps, IInfoState> {
                         lon={this.props.guide.lng || 0}
                         weatherStore={this.state.weatherStore}
                 /> */}
-                                        {/* 
+                                        {/*
                         <WeatherForecast
                             lat={this.props.guide.lat || 0}
                             lon={this.props.guide.lng || 0}
                             weatherStore={this.state.weatherStore}
                         /> */}
 
-                        <Grid item md={12} lg={4}>
+                        <Grid item md={12} lg={12}>
                                 <KeyFactsCard content={description} guide={this.props.guide}>
                                 </KeyFactsCard>
                         </Grid>
-                        <Grid item md={12} lg={8}>
+                        <Grid item md={12} lg={12}>
                                 {gaugeName && (<FlowChart guide={this.props.guide} />)}
                         </Grid>
 

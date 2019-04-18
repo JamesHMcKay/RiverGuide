@@ -298,3 +298,12 @@ weather-forecast {
     text-align: center;
     align-content: center;
 }
+
+.toolbar {
+    flex-grow: 1;
+}
+
+.toolbar-right {
+    margin-right: 10px;
+    align-content: right;
+}

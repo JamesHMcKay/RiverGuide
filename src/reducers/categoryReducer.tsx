@@ -38,6 +38,13 @@ const flatwater: ICategory[] = [
     },
 ];
 
+const gauges: ICategory[] = [
+    {
+        title: "source",
+        values: ["NIWA", "ECAN"],
+    },
+];
+
 const motorised: ICategory[] = [
     {
         title: "activity",
@@ -78,7 +85,7 @@ export interface ICategoryState {
 
 const initialState: ICategoryState = { name: "fishing", filters: fishing };
 
-export default function(state = initialState, action: any) {
+export default function(state: ICategoryState = initialState, action: any): ICategoryState {
     switch (action.type) {
         case SET_CATEGORY:
             if (action.payload === "whitewater") {
@@ -87,8 +94,8 @@ export default function(state = initialState, action: any) {
             if (action.payload === "flatwater") {
                 return { name: action.payload, filters: flatwater };
             }
-            if (action.payload === "motorised") {
-                return { name: action.payload, filters: motorised };
+            if (action.payload === "gauges") {
+                return { name: action.payload, filters: gauges };
             }
             if (action.payload === "fishing") {
                 return { name: action.payload, filters: motorised };

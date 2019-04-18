@@ -56,6 +56,7 @@ export interface IGuide {
     dateCreated: Date;
     catch_type?: string;
     activity?: string;
+    latestFlow?: number;
 }
 
 export interface IGauge {
@@ -145,4 +146,14 @@ export interface IErrors {
 export enum IThemeColor {
     primary = "primary",
     secondary = "secondary",
+}
+
+export interface ISensorFeatureRequest {
+    action: string;
+}
+
+export interface IFeatureOfInterest {
+    id: string;
+    latest_flow: number;
+    name: string;
 }

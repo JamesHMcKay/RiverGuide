@@ -18,8 +18,8 @@ interface IInfoMapProps {
 }
 
 export interface IViewport {
-    width: number;
-    height: number;
+    // width: number;
+    // height: number;
     longitude: number;
     latitude: number;
     zoom: number;
@@ -45,8 +45,8 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
         }
         this.state = {
             viewport: {
-                width: 800,
-                height: 300,
+                // width: 800,
+                // height: 300,
                 longitude: -122.45,
                 latitude: 37.78,
                 zoom: 14,
@@ -222,6 +222,8 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
                     {this.state.editMode && this.getEditButtons()}
                 </div>
                 <ReactMapGL
+                    width="100%"
+                    height="100%"
                     mapStyle="mapbox://styles/mapbox/outdoors-v9"
                     {...viewport}
                     onViewportChange={(viewport: ViewState): null => null}

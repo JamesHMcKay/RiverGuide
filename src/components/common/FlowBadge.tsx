@@ -13,6 +13,7 @@ const HEIGHT_UNIT: string = " meters";
 
 interface IFlowBadgeProps extends IFlowBadgeStateProps {
     siteName?: string;
+    latestFlow?: number;
 }
 
 interface IFlowBadgeStateProps {
@@ -24,15 +25,19 @@ class FlowBadge extends Component<IFlowBadgeProps> {
         super(props);
     }
 
-    public getFlowValue = (siteName: string): string | null => {
-        const gauge: IGauge = this.props.gauges.filter(
-            (site: IGauge) => site.siteName === siteName,
-        )[0];
+    public getFlowValue = (siteName?: string): string | null => {
+        if (siteName) {
+            const gauge: IGauge = this.props.gauges.filter(
+                (site: IGauge) => site.siteName === siteName,
+            )[0];
 
-        if (gauge) {
-            return gauge.currentFlow
-                ? gauge.currentFlow + FLOW_UNIT
-                : gauge.currentLevel + HEIGHT_UNIT;
+            if (gauge) {
+                return gauge.currentFlow
+                    ? gauge.currentFlow + FLOW_UNIT
+                    : gauge.currentLevel + HEIGHT_UNIT;
+            }
+        } else if (this.props.latestFlow) {
+            return this.props.latestFlow.toFixed(2).toString();
         }
 
         return null;
@@ -40,7 +45,7 @@ class FlowBadge extends Component<IFlowBadgeProps> {
 
     public render(): JSX.Element | null {
         const siteName: string | undefined = this.props.siteName;
-        const flow: string | null | undefined = siteName && this.getFlowValue(siteName);
+        const flow: string | null | undefined = this.getFlowValue(siteName);
         if (flow) {
             return (
                 <Chip
