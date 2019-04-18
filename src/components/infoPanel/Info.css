@@ -125,11 +125,13 @@ weather-forecast {
     height: 300px;
     display: flex;
     flex-direction: row;
+    position: relative;
 }
 
 .info-map-buttons {
-    display: flex;
-    flex-direction: column;
+    position: absolute;
+    right: 95%;
+    top: 5px;
 }
 
 .weather-info {

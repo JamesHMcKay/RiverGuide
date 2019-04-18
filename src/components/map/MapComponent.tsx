@@ -257,7 +257,7 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
                             size={30}
                             onClick={(): void => {this.props.onClick(guide); }}
                             toolTip={guide.title}
-                            deleteMode={false}
+                            editMode={false}
                         />
                   </Marker>
                 ),

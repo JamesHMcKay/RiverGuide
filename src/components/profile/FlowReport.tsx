@@ -59,8 +59,13 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
 
     public filterHistory = (item: IHistory, dayNow: number, monthNow: number, yearNow: string): boolean => {
         const dateString: string = item.time;
+<<<<<<< HEAD
         const day: number = parseInt(dateString.substring(0, 2), 10);
         const month: number = parseInt(dateString.substring(3, 5), 10) - 1;
+=======
+        const day: number = parseInt(dateString.substring(0, 2));
+        const month: number = parseInt(dateString.substring(3, 5)) - 1;
+>>>>>>> info-map2
         const year: string = dateString.substring(6, 10);
         return (day === dayNow && month === monthNow && year === yearNow);
     }
@@ -70,16 +75,24 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         const dayNow: number = parseInt(date.getDate().toString(), 10);
         const monthNow: number = date.getMonth();
         const yearNow: string = date.getFullYear().toString();
+<<<<<<< HEAD
         const filteredHistory: IHistory[] = history.filter(
             (item: IHistory) => this.filterHistory(item, dayNow, monthNow, yearNow),
         );
+=======
+        const filteredHistory: IHistory[] = history.filter((item) => this.filterHistory(item, dayNow, monthNow, yearNow));
+>>>>>>> info-map2
         let averageFlow: number = 0;
         let averageLevel: number = 0;
 
         if (filteredHistory.length > 0) {
             const flows: number[] = filteredHistory.map((item: IHistory): number => parseFloat(item.data.currentFlow));
+<<<<<<< HEAD
             const levels: number[] = filteredHistory.map(
                 (item: IHistory): number => parseFloat(item.data.currentLevel));
+=======
+            const levels: number[] = filteredHistory.map((item: IHistory): number => parseFloat(item.data.currentLevel));
+>>>>>>> info-map2
             averageFlow = this.computeMean(flows);
             averageLevel = this.computeMean(levels);
         }

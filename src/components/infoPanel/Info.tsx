@@ -198,9 +198,14 @@ class Info extends Component<IInfoProps, IInfoState> {
                             weatherStore={this.state.weatherStore}
                         /> */}
 
+<<<<<<< HEAD
                         <Grid item md={12} lg={12}>
                                 <KeyFactsCard content={description} guide={this.props.guide}>
                                 </KeyFactsCard>
+=======
+                        <Grid item md={12} lg={4}>
+                                {this.getKeyFacts()}
+>>>>>>> info-map2
                         </Grid>
                         <Grid item md={12} lg={12}>
                                 {gaugeName && (<FlowChart guide={this.props.guide} />)}
