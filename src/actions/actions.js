@@ -402,9 +402,9 @@ export const setCategory = category => dispatch => {
                         region: "All New Zealand",
                         description: "no description",
                         dateCreated: "none",
-                        lat: 0,
-                        lng: 0,
-                        markers: {name: "", lat: 0, lng:0, id: "1"},
+                        lat: item.location.lat,
+                        lng: item.location.lon,
+                        markers: {name: "", lat: item.location.lat, lng: item.location.lon, id: "1"},
                         latestFlow: item.latest_flow,
                     }));
                 dispatch({

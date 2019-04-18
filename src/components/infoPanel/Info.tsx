@@ -191,38 +191,30 @@ class Info extends Component<IInfoProps, IInfoState> {
                         lon={this.props.guide.lng || 0}
                         weatherStore={this.state.weatherStore}
                 /> */}
-                                        {/*
-                        <WeatherForecast
-                            lat={this.props.guide.lat || 0}
-                            lon={this.props.guide.lng || 0}
-                            weatherStore={this.state.weatherStore}
-                        /> */}
-
-<<<<<<< HEAD
-                        <Grid item md={12} lg={12}>
-                                <KeyFactsCard content={description} guide={this.props.guide}>
-                                </KeyFactsCard>
-=======
-                        <Grid item md={12} lg={4}>
-                                {this.getKeyFacts()}
->>>>>>> info-map2
+        <Grid item md={12} lg={12}>
+            <KeyFactsCard content={description} guide={this.props.guide} />
                         </Grid>
                         <Grid item md={12} lg={12}>
                                 {gaugeName && (<FlowChart guide={this.props.guide} />)}
                         </Grid>
-
                         <Grid item xs={12} sm={12}>
                             <div style={{ margin: "1em" }}>
                                 <InfoCard title="Description" content={description} />
                             </div>
                         </Grid>
                         <Grid item xs={12} sm={12}>
-
                             {markers.length > 0 && (
                                 <div style={{ margin: "1em", paddingBottom: "1em" }}>
                                     <MapCard markers={markers} />
                                 </div>
                             )}
+                        </Grid>
+                        <Grid item xs={12} sm={12}>
+                            <WeatherForecast
+                                lat={this.props.guide.lat || 0}
+                                lon={this.props.guide.lng || 0}
+                                weatherStore={this.state.weatherStore}
+                            />
                         </Grid>
                         <Grid item xs={12} sm={12}>
                         <div
@@ -237,7 +229,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                                 </Button>
                             </Tooltip>
                         </div>
-                 </Grid>
+                        </Grid>
             </Grid>
         );
     }

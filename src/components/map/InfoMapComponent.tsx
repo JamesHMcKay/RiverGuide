@@ -214,7 +214,7 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
         this.setState({ openAddMarkerDialog: false, openDeleteDialog: false });
         this.resetNewMarkerState();
     }
-    public handleChange = (name: any) => ({ target: {value}}: any) => {
+    public handleChange = (name: any): (({ target: {value}}: any) => void) => ({ target: {value}}: any): void => {
         this.setState({
             newMarker: {
                 ...this.state.newMarker,
@@ -222,14 +222,14 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
             },
         });
     }
-    public capitalizeFirstLetter = (word:string): string => {
+    public capitalizeFirstLetter = (word: string): string => {
         return word.charAt(0).toUpperCase() + word.slice(1);
     }
     public handleSave = (): void => {
         const {newMarker: {category, description, id, lat, long}} = this.state;
         let {newMarker: {name}} = this.state;
-        const capitalizedName = this.capitalizeFirstLetter(name)
-        name = capitalizedName
+        const capitalizedName: string = this.capitalizeFirstLetter(name);
+        name = capitalizedName;
         const marker: IMarker = {
                 lat,
                 lng: long,
