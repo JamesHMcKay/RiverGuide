@@ -2,34 +2,34 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Select from "react-select";
 import { IState } from "../../reducers/index";
-import { IGuide } from "../../utils/types";
+import { IGuide, IListEntry } from "../../utils/types";
 
 import { FormGroup, Label } from "reactstrap";
 
 interface ISectionSelectProps extends ISectionSelectStateProps {
-    handleChange: (selectedGuide: IGuide) => void;
-    selectedGuide?: IGuide;
+    handleChange: (selectedGuide: IListEntry) => void;
+    selectedGuide?: IListEntry;
 }
 
 interface ISectionSelectStateProps {
-    guides: IGuide[];
+    guides: IListEntry[];
 }
 
 class SectionSelect extends Component<ISectionSelectProps> {
-    public getLabel = (guide: IGuide): string => {
+    public getLabel = (guide: IListEntry): string => {
         const SEPERATOR: string = " - ";
         return (
-            guide.title +
+            guide.display_name +
             SEPERATOR +
-            guide.river +
+            guide.river_name +
             SEPERATOR +
             guide.region);
     }
 
     public handleSelectionChange = (e: any): void => {
         const selectedId: string = e.value;
-        const selectedGuide: IGuide[] = this.props.guides.filter(
-            (guide: IGuide) => guide._id === selectedId);
+        const selectedGuide: IListEntry[] = this.props.guides.filter(
+            (guide: IListEntry) => guide.id === selectedId);
         if (selectedGuide.length === 1) {
             this.props.handleChange(selectedGuide[0]);
         }
@@ -44,16 +44,16 @@ class SectionSelect extends Component<ISectionSelectProps> {
                     placeholder="Select a section"
                     onChange={this.handleSelectionChange}
                     options={
-                        this.props.guides.map((guide: IGuide) => ({
+                        this.props.guides.map((guide: IListEntry) => ({
                             label: this.getLabel(guide),
-                            value: guide._id,
+                            value: guide.id,
                         }))
                     }
                     value={
                     this.props.selectedGuide ?
                         {
                             label: this.getLabel(this.props.selectedGuide),
-                            value: this.props.selectedGuide._id,
+                            value: this.props.selectedGuide.id,
                         } :
                         null
                     }
@@ -65,7 +65,7 @@ class SectionSelect extends Component<ISectionSelectProps> {
 
 function mapStateToProps(state: IState): ISectionSelectStateProps {
     return ({
-        guides: state.guides,
+        guides: state.listEntries,
     });
 }
 

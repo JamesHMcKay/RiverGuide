@@ -24,3 +24,6 @@ export const ADD_TO_FAVOURITES: string = "ADD_TO_FAVOURITES";
 export const REMOVE_FROM_FAVOURITES: string = "REMOVE_FROM_FAVOURITES";
 export const SET_MAP_BOUNDS: string = "SET_MAP_BOUNDS";
 export const GET_SENSOR_DATA: string = "GET_SENSOR_DATA";
+export const GET_ENTRIES: string = "GET_ENTRIES";
+export const LOADING_ENTRIES: string = "LOADING_ENTRIES";
+export const GET_ITEM_DETAILS: string = "GET_ITEM_DETAILS";

@@ -3,7 +3,7 @@ import * as kmeans from "node-kmeans";
 import React, { Component } from "react";
 import ReactMapGL, { FlyToInterpolator, InteractiveMap, Marker, ViewState } from "react-map-gl";
 import WebMercatorViewport from "viewport-mercator-project";
-import { IGuide, ILatLon, IMapBounds } from "../../utils/types";
+import { IGuide, ILatLon, IListEntry, IMapBounds } from "../../utils/types";
 import { IViewport } from "./InfoMapComponent";
 import MapCluster from "./MapCluster";
 import MapMarker from "./MapMarker";
@@ -16,14 +16,14 @@ const TOKEN: string =
     "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqbXZ0bnp6dzA3NG0zc3BiYjMxaWJrcTIifQ.BKESeoXyOqkiB8j1sjbxQg";
 
 interface IMapComponentProps {
-    guides: IGuide[];
-    filteredGuides: IGuide[];
-    onClick: (guide: IGuide) => void;
+    guides: IListEntry[];
+    filteredGuides: IListEntry[];
+    onClick: (guide: IListEntry) => void;
     setMapBounds: (bounds: IMapBounds) => void;
 }
 
 interface IMapComponentState {
-    viewport: IViewportWithTransition;
+    viewport: IViewport;
     clusterLocations: ICluster[];
 }
 
@@ -31,7 +31,7 @@ interface ICluster {
     boundingBox: IBoundingBox;
     lat: number;
     lon: number;
-    markers: IGuide[];
+    markers: IListEntry[];
     count: number;
     averageLat: number;
     averageLon: number;
@@ -50,11 +50,6 @@ interface IBoundingBox {
     minLon: number;
 }
 
-interface IViewportWithTransition extends IViewport {
-    transitionDuration?: number;
-    transitionInterpolator?: FlyToInterpolator;
-}
-
 export class MapComponent extends Component<IMapComponentProps, IMapComponentState> {
     public prevZoom: number = 0;
     public prevMarkerSize: number = 0;
@@ -65,8 +60,6 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
         super(props);
         this.state = {
             viewport: {
-                // width: this.props.mapDimensions.width,
-                // height: this.props.mapDimensions.height,
                 latitude: DEFAULT_LAT,
                 longitude: DEFAULT_LON,
                 zoom: DEFAULT_ZOOM,
@@ -122,27 +115,27 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
 
     public createClusters(result: IKMeansCluster[]): ICluster[] {
         const clusterLocations: ICluster[] = [];
-        const guides: IGuide[] = this.props.guides;
+        const guides: IListEntry[] = this.props.guides;
         for (const cluster of result) {
-            const markers: IGuide[] = [];
+            const markers: IListEntry[] = [];
             const clusterInd: number[] = cluster.clusterInd;
             const boundingBox: Partial<IBoundingBox> = {};
             for (const ind of clusterInd) {
-                const marker: IGuide = guides[ind];
+                const marker: IListEntry = guides[ind];
                 markers.push(marker);
-                if (marker && marker.lat && marker.lng) {
-                    if (!boundingBox.maxLat || marker.lat > boundingBox.maxLat) {
-                        boundingBox.maxLat = marker.lat;
+                if (marker && marker.position.lat && marker.position.lon) {
+                    if (!boundingBox.maxLat || marker.position.lat > boundingBox.maxLat) {
+                        boundingBox.maxLat = marker.position.lat;
                     }
-                    if (!boundingBox.maxLon || marker.lng > boundingBox.maxLon) {
-                        boundingBox.maxLon = marker.lng;
+                    if (!boundingBox.maxLon || marker.position.lon > boundingBox.maxLon) {
+                        boundingBox.maxLon = marker.position.lon;
                     }
 
-                    if (!boundingBox.minLon || marker.lng < boundingBox.minLon) {
-                        boundingBox.minLon = marker.lng;
+                    if (!boundingBox.minLon || marker.position.lon < boundingBox.minLon) {
+                        boundingBox.minLon = marker.position.lon;
                     }
-                    if (!boundingBox.minLat || marker.lat < boundingBox.minLat) {
-                        boundingBox.minLat = marker.lat;
+                    if (!boundingBox.minLat || marker.position.lon < boundingBox.minLat) {
+                        boundingBox.minLat = marker.position.lat;
                     }
                 }
                 cluster.boundingBox = boundingBox as IBoundingBox;
@@ -164,11 +157,11 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
     public computeCustersKmeans(): void {
         let numberOfClusters: number = 20;
 
-        const guides: IGuide[] = this.props.guides;
+        const guides: IListEntry[] = this.props.guides;
         const locations: Array<Array<number | undefined>> = [];
 
         for (const guide of guides) {
-            locations.push([ guide.lat , guide.lng]);
+            locations.push([ guide.position.lat , guide.position.lon]);
         }
 
         if (locations.length < numberOfClusters) {
@@ -203,15 +196,13 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
     public onClusterClick(cluster: ICluster): void {
         const boundingBox: IBoundingBox = cluster.boundingBox;
         const {longitude, latitude, zoom} = new WebMercatorViewport(this.state.viewport)
-        .fitBounds([[boundingBox.minLon, boundingBox.minLat], [boundingBox.maxLon, boundingBox.maxLat]], {
-          padding: 5,
-          offset: [0, 0],
-        });
-        const viewport: IViewportWithTransition = {
+        .fitBounds([[boundingBox.minLon, boundingBox.minLat], [boundingBox.maxLon, boundingBox.maxLat]]);
+
+        const viewport: IViewport = {
             // ...this.state.viewport,
             longitude,
             latitude,
-            zoom,
+            zoom: 8,
             // transitionDuration: 5000,
             // transitionInterpolator: new FlyToInterpolator(),
         };
@@ -245,18 +236,18 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
 
     public getMarkers(): Array<(0 | JSX.Element | undefined)> {
         const list: Array<(0 | JSX.Element | undefined)>  = this.props.filteredGuides.map(
-            (guide: IGuide) =>
-                guide.lat &&
-                guide.lng && (
+            (guide: IListEntry) =>
+                guide.position.lat &&
+                guide.position.lon && (
                     <Marker
-                        key={guide.lat}
-                        longitude={guide.lng}
-                        latitude={guide.lat}
+                        key={guide.position.lat}
+                        longitude={guide.position.lon}
+                        latitude={guide.position.lat}
                     >
                         <MapMarker
                             size={30}
                             onClick={(): void => {this.props.onClick(guide); }}
-                            toolTip={guide.title}
+                            toolTip={guide.display_name}
                             editMode={false}
                         />
                   </Marker>

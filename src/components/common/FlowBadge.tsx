@@ -45,7 +45,12 @@ class FlowBadge extends Component<IFlowBadgeProps> {
 
     public render(): JSX.Element | null {
         const siteName: string | undefined = this.props.siteName;
-        const flow: string | null | undefined = this.getFlowValue(siteName);
+        let flow: string | undefined;
+
+        if (this.props.latestFlow) {
+            flow = this.props.latestFlow.toFixed(2);
+        }
+
         if (flow) {
             return (
                 <Chip

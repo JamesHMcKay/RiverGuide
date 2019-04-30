@@ -5,13 +5,13 @@ const initialState = {};
 export default function(state = initialState, action) {
     switch (action.type) {
         case OPEN_INFO:
+        console.log("opening info page");
             return { ...action.payload, history: [] };
         case CLOSE_INFO:
             return {};
         case ADD_HISTORIC_FLOW:
-            const newState = state;
-            newState.history = action.payload;
-            return newState;
+        console.log("updating flow data", action.payload);
+            return {...state, history: action.payload};
         default:
             return state;
     }

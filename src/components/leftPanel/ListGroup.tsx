@@ -13,7 +13,7 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 
 // Components
 import { IState } from "../../reducers/index";
-import { IAuth, IGauge, IGuide, IInfoPage } from "./../../utils/types";
+import { IAuth, IGauge, IGuide, IInfoPage, IListEntry } from "./../../utils/types";
 import GuideItem from "./ListItem";
 
 interface IListGroupProps extends IListGroupStateProps {
@@ -21,7 +21,7 @@ interface IListGroupProps extends IListGroupStateProps {
 }
 
 interface IListGroupStateProps {
-    filteredList: IGuide[];
+    listEntries: IListEntry[];
     auth: IAuth;
 }
 
@@ -41,29 +41,29 @@ class ListGroup extends Component<IListGroupProps, IListGroupState> {
         this.setState({ isExpanded: !this.state.isExpanded });
     }
 
-    public getChildren = (): IGuide[] => {
+    public getChildren = (): IListEntry[] => {
         const { region }: {region: string} = this.props;
-        const filterdGuides: IGuide[] = this.props.filteredList;
+        const filterdGuides: IListEntry[] = this.props.listEntries;
 
         if (region === "Favourites") {
             return filterdGuides.filter(
-                (guide: IGuide) => this.props.auth.user.favourites.indexOf(guide._id) > -1,
+                (guide: IListEntry) => this.props.auth.user.favourites.indexOf(guide.id) > -1,
             );
         }
 
-        return filterdGuides.filter((guide: IGuide) => guide.region === region);
+        return filterdGuides.filter((guide: IListEntry) => guide.region === region);
     }
 
-    public renderListItem = (guide: IGuide, idx: number): JSX.Element => <GuideItem key={idx} guide={guide} />;
+    public renderListItem = (guide: IListEntry, idx: number): JSX.Element => <GuideItem key={idx} guide={guide} />;
 
-    public sortAlphbetically = (a: IGuide, b: IGuide): number => {
-        if (a.title < b.title) { return -1; }
-        if (a.title > b.title) { return 1; }
+    public sortAlphbetically = (a: IListEntry, b: IListEntry): number => {
+        if (a.display_name < b.display_name) { return -1; }
+        if (a.display_name > b.display_name) { return 1; }
         return 0;
     }
 
     public render(): JSX.Element {
-        const children: IGuide[] = this.getChildren();
+        const children: IListEntry[] = this.getChildren();
 
         return (
             <div>
@@ -101,7 +101,7 @@ class ListGroup extends Component<IListGroupProps, IListGroupState> {
 function mapStateToProps(state: IState): IListGroupStateProps {
     return ({
         auth: state.auth,
-        filteredList: state.filteredList,
+        listEntries: state.filteredList,
     });
 }
 

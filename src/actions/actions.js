@@ -10,7 +10,6 @@ import {
     DELETE_LOG,
     EDIT_LOG,
     GET_ERRORS,
-    GET_GUIDES,
     OPEN_MODAL,
     SET_CURRENT_USER,
     GET_GAUGES,
@@ -18,20 +17,14 @@ import {
     SEARCH_GUIDES,
     FILTER_GUIDES,
     GENERATE_FILTERED_LIST,
-    OPEN_INFO,
     CLOSE_INFO,
-    ADD_HISTORIC_FLOW,
-    GET_GAUGE_HISTORY,
     UPDATE_OPEN_LOG,
-    SET_CATEGORY,
-    LOADING_GUIDES,
     ADD_TO_FAVOURITES,
     REMOVE_FROM_FAVOURITES,
     SET_MAP_BOUNDS,
 } from "./types";
 
 const serverLocation = process.env.REACT_APP_SERVER_URL;
-const riverServiceLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
 
 // Toggle Modals
 export const toggleModal = modal => dispatch => {
@@ -153,42 +146,7 @@ export const changePassword = userData => dispatch => {
 
 // Get guides
 export const makeGuideRequest = category => dispatch => {
-    console.log("category = ", category);
-    if (category === "gauges") {
-        const request = {
-            action: "get_features",
-            crossDomain: true,
-        }
-        axios
-            .post(serverLocation, request)
-            .then(res => {
-                let data = res.data.features;
-                let result = data.map(item => (
-                    {
-                        _id: item.id,
-                        author: "riverservice",
-                        title: item.name,
-                        river: "NIWA",
-                        region: "All New Zealand",
-                        description: "no description",
-                        dateCreated: "none",
-                    }));
-                dispatch({
-                    type: GET_GUIDES,
-                    payload: result,
-                });
-            });
-    } else {
-        axios
-        .get(`${serverLocation}/${category}`)
-        .then(res => {
-            dispatch({
-                type: GET_GUIDES,
-                payload: res.data,
-            });
-        })
-        .catch(err => console.log(err));
-    }
+    console.log("makeGuideRequest no longer in operation");
 };
 
 // Create guides
@@ -284,53 +242,33 @@ export const generateFilteredList = (guides, filters, mapBounds) => dispatch => 
     });
 };
 
-// open info page
-export const openInfoPage = guide => dispatch => {
-    dispatch({
-        type: OPEN_INFO,
-        payload: {
-            selectedGuide: guide,
-            infoSelected: true,
-        },
-    });
-
-    // check for gauge data
-    if (guide.gaugeName) {
-        axios
-            .get(
-                `${process.env.REACT_APP_AGG_FLOW_URL}/${
-                    guide.gaugeName
-                }/history`,
-            )
-            .then(res => {
-                dispatch({
-                    type: ADD_HISTORIC_FLOW,
-                    payload: res.data.data,
-                });
-            })
-            .then(() => dispatch({ type: CLEAR_ERRORS }));
-    }
-};
-
 export const getGaugeHistory = guide => dispatch => {
     // check for gauge data
-    if (guide.gaugeName) {
-        axios
-            .get(
-                `${process.env.REACT_APP_AGG_FLOW_URL}/${
-                    guide.gaugeName
-                }/history`,
-            )
-            .then(res => {
-                dispatch({
-                    type: GET_GAUGE_HISTORY,
-                    payload: res.data.data,
-                });
-            })
-            .then(() => dispatch({ type: CLEAR_ERRORS }));
-    }
+    // if (guide.gauge_id) {
+    //     const request = {
+    //         action: "get_flows",
+    //         crossDomain: true,
+    //         id: guide.gauge_id,
+    //     }
+    //     axios
+    //         .post(riverServiceLocation, request)
+    //         .then(res => {
+    //             let data = res.data.flows;
+    //             let result = data.map(item => (
+    //                 {
+    //                     flow: item.flow,
+    //                     time: item.time,
+    //                 }));
+    //             console.log("GET GAUGE HISTORY = ", result);
+    //             dispatch({
+    //                 type: GET_GAUGE_HISTORY,
+    //                 payload: {
+    //                     gaugeHistory: result
+    //                 }
+    //             });
+    //         });
+    // }
 }
-
 
 // close info page
 export const closeInfoPage = () => dispatch => {
@@ -373,61 +311,6 @@ export const deleteLogEntry = logId => dispatch => {
             payload: logId,
         });
     });
-};
-
-// Set category
-export const setCategory = category => dispatch => {
-    dispatch({
-        type: LOADING_GUIDES,
-    });
-    dispatch({
-        type: CLOSE_INFO,
-    });
-
-    if (category === "gauges") {
-        const request = {
-            action: "get_features",
-            crossDomain: true,
-        }
-        axios
-            .post(riverServiceLocation, request)
-            .then(res => {
-                let data = res.data.features;
-                let result = data.map(item => (
-                    {
-                        _id: item.id,
-                        author: "riverservice",
-                        title: item.name,
-                        river: "NIWA",
-                        region: "All New Zealand",
-                        description: "no description",
-                        dateCreated: "none",
-                        lat: item.location.lat,
-                        lng: item.location.lon,
-                        markers: {name: "", lat: item.location.lat, lng: item.location.lon, id: "1"},
-                        latestFlow: item.latest_flow,
-                    }));
-                dispatch({
-                    type: GET_GUIDES,
-                    payload: result,
-                });
-            });
-    } else {
-        axios
-            .get(`${serverLocation}/${category}`)
-            .then(res => {
-                dispatch({
-                    type: GET_GUIDES,
-                    payload: res.data,
-                });
-            })
-            .catch(err => console.log(err));
-
-        dispatch({
-            type: SET_CATEGORY,
-            payload: category,
-        });
-    }
 };
 
 // add to favourites

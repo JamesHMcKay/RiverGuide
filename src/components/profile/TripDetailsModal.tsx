@@ -13,7 +13,7 @@ import IoAndroidStar from "react-icons/lib/io/android-star";
 import { connect } from "react-redux";
 import { createLogEntry, toggleModal } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import { IHistory, ILogEntry } from "../../utils/types";
+import { IHistory, IListEntry, ILogEntry } from "../../utils/types";
 import { IGuide, IInfoPage } from "../../utils/types";
 
 import FlowReport from "./FlowReport";
@@ -31,7 +31,7 @@ const initialState: ILogEntry = {
 interface ITripDetailsModelProps {
     createLogEntry: (item: ILogEntry) => void;
     handleClose: () => void;
-    selectedGuide?: IGuide;
+    selectedGuide?: IListEntry;
     gaugeHistory?: IHistory[];
 }
 
@@ -42,7 +42,7 @@ interface ITripDetailsModelState {
     rating: number;
     preventHoverChangePeople: boolean;
     preventHoverChangeRating: boolean;
-    selectedGuide?: IGuide;
+    selectedGuide?: IListEntry;
     flow?: string;
 }
 
@@ -74,12 +74,12 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         }
     }
 
-    public handleSectionChange(selectedGuide: IGuide): void {
+    public handleSectionChange(selectedGuide: IListEntry): void {
         if (this.state.logEntry) {
             let logEntry: ILogEntry = this.state.logEntry;
             logEntry = {
                 ...logEntry,
-                section: selectedGuide._id,
+                section: selectedGuide.id,
             };
             this.setState({
                 logEntry,
@@ -258,7 +258,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         if (this.props.selectedGuide) {
             return (
                 <DialogContentText>
-                {this.props.selectedGuide.title}
+                {this.props.selectedGuide.display_name}
             </DialogContentText>);
         } else {
             return (<SectionSelect

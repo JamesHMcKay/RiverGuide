@@ -7,6 +7,8 @@ import gaugeHistoryReducer from "./gaugeHistoryReducer";
 import gaugeReducer from "./gaugeReducer";
 import guideReducer from "./guideReducer";
 import infoReducer from "./infoReducer";
+import listEntryReducer from "./listEntryReducer";
+import listItemDetailsReducer from "./listItemDetailsReducer";
 import listReducer from "./listReducer";
 import logReducer from "./logReducer";
 import mapBoundsReducer from "./mapBoundsReducer";
@@ -23,6 +25,8 @@ import {
     IGaugeHistory,
     IGuide,
     IInfoPage,
+    IItemDetails,
+    IListEntry,
     ILogEntry,
     IMapBounds,
     IOpenLog } from "../utils/types";
@@ -31,7 +35,7 @@ export interface IState {
     guides: IGuide[];
     gauges: IGauge[];
     infoPage: IInfoPage;
-    filteredList: IGuide[];
+    filteredList: IListEntry[];
     filteredGuides: IFilter[];
     auth: IAuth;
     openModal: string;
@@ -42,6 +46,8 @@ export interface IState {
     log: ILogEntry[];
     gaugeHistory: IGaugeHistory;
     sensorFeatureList: IFeatureOfInterest[];
+    listEntries: IListEntry[];
+    listItemDetails: IItemDetails;
 }
 
 export default combineReducers({
@@ -59,4 +65,6 @@ export default combineReducers({
     mapBounds: mapBoundsReducer,
     gaugeHistory: gaugeHistoryReducer,
     sensorFeatureList: sensorDataReducer,
+    listEntries: listEntryReducer,
+    listItemDetails: listItemDetailsReducer,
 });

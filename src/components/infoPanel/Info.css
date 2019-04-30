@@ -305,7 +305,6 @@ weather-forecast {
     flex-grow: 1;
 }
 
-.toolbar-right {
-    margin-right: 10px;
-    align-content: right;
+.toolbar-middle {
+    flex-grow: 1;
 }

@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import {
     generateFilteredList,
     searchGuideList,
-    setCategory,
 } from "../actions/actions";
+import { setCategory } from "../actions/getGuides";
 import { IFilter, IGuide, ILatLon, IMapBounds } from "./../utils/types";
 
 // Material UI

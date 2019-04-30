@@ -34,7 +34,7 @@
     "@types/react-redux": "^6.0.10",
     "@types/react-router-dom": "^4.3.1",
     "@types/reactstrap": "^6.4.3",
-    "@types/viewport-mercator-project": "^5.2.1",
+    "@types/viewport-mercator-project": "^6.1.0",
     "@types/zxcvbn": "^4.4.0",
     "axios": "^0.18.0",
     "bootstrap": "^4.1.1",
@@ -49,6 +49,7 @@
     "moment": "^2.22.2",
     "node-kmeans": "^1.1.8",
     "openweather-apis": "^3.3.5",
+    "pondjs": "^0.8.10",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-dropdown": "^1.6.2",
@@ -60,6 +61,7 @@
     "react-select": "^2.3.0",
     "react-select-search": "^0.9.3",
     "react-textarea-autosize": "^7.0.4",
+    "react-timeseries-charts": "^0.15.5",
     "react-transition-group": "^2.5.0",
     "reactstrap": "^6.2.0",
     "redux": "^4.0.0",
@@ -69,6 +71,7 @@
     "tslint-react": "^3.6.0",
     "typescript": "^3.2.1",
     "uuidv4": "^2.0.0",
+    "viewport-mercator-project": "^6.1.1",
     "zxcvbn": "^4.4.2"
   },
   "eslintConfig": {

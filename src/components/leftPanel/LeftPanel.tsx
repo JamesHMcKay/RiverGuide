@@ -9,28 +9,28 @@ import AddIcon from "@material-ui/icons/Add";
 
 // Components
 import { IState } from "../../reducers/index";
-import { IAuth, IGauge, IGuide, IInfoPage } from "./../../utils/types";
+import { IAuth, IGauge, IGuide, IInfoPage, IListEntry } from "./../../utils/types";
 // Styles
 import "./LeftPanel.css";
 import ListGroup from "./ListGroup";
 
 interface ILeftPanelProps extends ILeftPanelStateProps {
-    searchList: IGuide[];
     gaugeList: IGauge[];
     gauges: IGauge[];
     toggleModal: (name: string) => void;
-    onClick: (guide: IGuide) => void;
+    onClick: (guide: IListEntry) => void;
 }
 
 interface ILeftPanelStateProps {
     auth: IAuth;
     guides: IGuide[];
-    filteredGuides: IGuide[];
+    filteredGuides: IListEntry[];
     infoPage: IInfoPage;
+    listEntries: IListEntry[];
 }
 
 class LeftPanel extends Component<ILeftPanelProps, {}> {
-    public getRegion = (guide: IGuide): string => guide.region;
+    public getRegion = (guide: IListEntry): string => guide.region;
 
     public onlyUnique = (value: string, index: number, self: string[]): boolean => self.indexOf(value) === index;
 
@@ -48,7 +48,7 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
 
     public render(): JSX.Element {
         const isAuthenticated: boolean = this.props.auth.isAuthenticated;
-        const isLoading: boolean = this.props.guides.length < 1;
+        const isLoading: boolean = this.props.listEntries.length < 1;
 
         const renderedList: JSX.Element = (
             <List>
@@ -67,32 +67,32 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
             </div>
         );
 
-        const buttons: JSX.Element = (
-            <div>
-                <div className="add-icon">
-                    <Tooltip title="Add a Guide" placement="right">
-                        <Button
-                            onClick={this.handleClick.bind(this, "createModal")}
-                            variant="fab"
-                            color="primary"
-                        >
-                            <AddIcon />
-                        </Button>
-                    </Tooltip>
-                </div>
-                <div className="filter-icon">
-                    <Tooltip title="Filter Guides" placement="right">
-                        <Button
-                            onClick={this.handleClick.bind(this, "filterModal")}
-                            variant="fab"
-                            color="primary"
-                        >
-                            {/* <FontAwesomeIcon icon="filter" /> */}
-                        </Button>
-                    </Tooltip>
-                </div>
-            </div>
-        );
+        // const buttons: JSX.Element = (
+        //     <div>
+        //         <div className="add-icon">
+        //             <Tooltip title="Add a Guide" placement="right">
+        //                 <Button
+        //                     onClick={this.handleClick.bind(this, "createModal")}
+        //                     variant="fab"
+        //                     color="primary"
+        //                 >
+        //                     <AddIcon />
+        //                 </Button>
+        //             </Tooltip>
+        //         </div>
+        //         <div className="filter-icon">
+        //             <Tooltip title="Filter Guides" placement="right">
+        //                 <Button
+        //                     onClick={this.handleClick.bind(this, "filterModal")}
+        //                     variant="fab"
+        //                     color="primary"
+        //                 >
+        //                     {/* <FontAwesomeIcon icon="filter" /> */}
+        //                 </Button>
+        //             </Tooltip>
+        //         </div>
+        //     </div>
+        // );
 
         return (
             <div className="list-container">
@@ -113,6 +113,7 @@ function mapStateToProps(state: IState): ILeftPanelStateProps {
         guides: state.guides,
         infoPage: state.infoPage,
         filteredGuides: state.filteredList,
+        listEntries: state.listEntries,
     });
 }
 

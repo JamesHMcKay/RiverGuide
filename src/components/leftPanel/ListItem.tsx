@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { openInfoPage } from "../../actions/actions";
+import { openInfoPage } from "../../actions/getGuides";
 
 // Material UI
 import Divider from "@material-ui/core/Divider";
@@ -10,12 +10,12 @@ import ListItemText from "@material-ui/core/ListItemText";
 import PlaceIcon from "@material-ui/icons/PlaceOutlined";
 
 // Components
-import { IGuide } from "../../utils/types";
+import { IListEntry } from "../../utils/types";
 import FlowBadge from "../common/FlowBadge";
 
 interface IGuideItemProps {
-    guide: IGuide;
-    openInfoPage: (guide: IGuide) => void;
+    guide: IListEntry;
+    openInfoPage: (guide: IListEntry) => void;
 }
 
 class GuideItem extends Component<IGuideItemProps, {}> {
@@ -30,8 +30,8 @@ class GuideItem extends Component<IGuideItemProps, {}> {
                     <ListItemIcon>
                         <PlaceIcon />
                     </ListItemIcon>
-                    <ListItemText inset primary={this.props.guide.title} />
-                    <FlowBadge siteName={this.props.guide.gaugeName} latestFlow={this.props.guide.latestFlow} />
+                    <ListItemText inset primary={this.props.guide.display_name} />
+                    <FlowBadge siteName={this.props.guide.gauge_id} latestFlow={this.props.guide.latest_flow} />
                 </ListItem>
                 <Divider />
             </div>

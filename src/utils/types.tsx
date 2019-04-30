@@ -38,7 +38,22 @@ export interface IFlowLevel {
 
 export interface IHistory {
     time: string;
-    data: IFlowLevel;
+    flow: number;
+}
+
+export interface IListEntry {
+    id: string;
+    display_name: string;
+    river_name?: string;
+    region: string;
+    gauge_id?: string;
+    position: ILatLon;
+    latest_flow?: number;
+}
+
+export interface IItemDetails {
+    id: string;
+    description: string;
 }
 
 export interface IGuide {
@@ -74,10 +89,11 @@ export interface IGaugeHistory {
 }
 
 export interface IInfoPage {
-    selectedGuide: IGuide;
+    selectedGuide: IListEntry;
     infoSelected: boolean;
     history: IHistory[];
     selectedHistory: IHistory[];
+    itemDetails: IItemDetails;
 }
 
 export interface IFilter {

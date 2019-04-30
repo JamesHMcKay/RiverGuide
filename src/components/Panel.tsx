@@ -11,9 +11,12 @@ import {
     generateFilteredList,
     makeGaugeRequest,
     makeGuideRequest,
-    openInfoPage,
     setMapBounds,
 } from "../actions/actions";
+import {
+    makeEntriesRequest,
+    openInfoPage,
+} from "../actions/getGuides";
 import { getSensorData } from "../actions/getSensorData";
 import { IState } from "../reducers/index";
 
@@ -33,6 +36,7 @@ import {
     IGauge,
     IGuide,
     IInfoPage,
+    IListEntry,
     IMapBounds } from "./../utils/types";
 
 // Styles
@@ -55,21 +59,23 @@ export interface IPanelMapStateToProps {
     guides: IGuide[];
     gauges: IGauge[];
     infoPage: IInfoPage;
-    filterdGuides: IGuide[];
+    filterdGuides: IListEntry[];
     filters: IFilter[];
     sensorFeatureList: IFeatureOfInterest[];
+    listEntries: IListEntry[];
 }
 
 export interface IPanelProps extends IPanelMapStateToProps {
     makeGaugeRequest: () => void;
     makeGuideRequest: (guide: string) => void;
+    makeEntriesRequest: () => void;
     setMapBounds: (mapBounds: IMapBounds) => void;
     generateFilteredList: (
-        guides: IGuide[],
+        guides: IListEntry[],
         filters: IFilter[],
         mapBounds: IMapBounds,
     ) => void;
-    openInfoPage: (guide: IGuide) => void;
+    openInfoPage: (guide: IListEntry) => void;
     getSensorData: () => void;
 }
 
@@ -143,14 +149,14 @@ class Panel extends Component<IPanelProps, IPanelState> {
         // });
     }
 
-    public onClick(guide: IGuide): void {
+    public onClick(guide: IListEntry): void {
         this.props.openInfoPage(guide);
     }
 
     public updateMapBounds = (mapBounds: IMapBounds): void => {
             this.props.setMapBounds(mapBounds);
             this.props.generateFilteredList(
-                this.props.guides,
+                this.props.listEntries,
                 this.props.filters,
                 mapBounds,
             );
@@ -158,9 +164,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
 
     public getInfoPage = (): JSX.Element => {
         return (
-            <Info
-                guide={this.props.infoPage.selectedGuide}
-            />
+            <Info/>
         );
     }
 
@@ -168,10 +172,10 @@ class Panel extends Component<IPanelProps, IPanelState> {
         return (
                 <MapComponent
                     ref={this.state.mapRef}
-                    guides={this.props.guides || this.props.guides}
+                    guides={this.props.listEntries}
                     filteredGuides={
                         this.props.filterdGuides ||
-                        this.props.guides
+                        this.props.listEntries
                     }
                     onClick={this.onClick}
                     setMapBounds={this.updateMapBounds}
@@ -204,7 +208,6 @@ class Panel extends Component<IPanelProps, IPanelState> {
         return (
             <div className="left-panel">
                 <LeftPanel
-                    searchList={this.state.searchList}
                     gaugeList={this.state.gaugeList}
                     gauges={this.props.gauges}
                     onClick={this.onClick}
@@ -244,6 +247,7 @@ const mapStateToProps: (state: IState) => IPanelMapStateToProps = (state: IState
     filterdGuides: state.filteredList,
     filters: state.filteredGuides,
     sensorFeatureList: state.sensorFeatureList,
+    listEntries: state.listEntries,
 });
 
 export default connect(
@@ -252,6 +256,7 @@ export default connect(
         generateFilteredList,
         makeGaugeRequest,
         makeGuideRequest,
+        makeEntriesRequest,
         setMapBounds,
         openInfoPage,
         getSensorData}),

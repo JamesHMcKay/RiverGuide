@@ -12,7 +12,7 @@ import { connect } from "react-redux";
 import Select from "react-select";
 import { getGaugeHistory } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import { IGauge, IGaugeHistory, IGuide, IHistory } from "../../utils/types";
+import { IGauge, IGaugeHistory, IGuide, IHistory, IListEntry } from "../../utils/types";
 
 interface IUnitSelection {
     label: string;
@@ -26,9 +26,9 @@ const UNIT_OPTIONS: IUnitSelection[] = [
 
 interface IFlowReportProps extends IFlowReportStateProps {
     handleChange: (e: any) => void;
-    selectedGuide?: IGuide;
+    selectedGuide?: IListEntry;
     date: Date;
-    getGaugeHistory: (gauge: IGuide) => void;
+    getGaugeHistory: (gauge: IListEntry) => void;
     gaugeHistoryFromInfoPage?: IHistory[];
     flow?: string;
 }
@@ -77,9 +77,9 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         let averageLevel: number = 0;
 
         if (filteredHistory.length > 0) {
-            const flows: number[] = filteredHistory.map((item: IHistory): number => parseFloat(item.data.currentFlow));
+            const flows: number[] = filteredHistory.map((item: IHistory): number => item.flow);
             const levels: number[] = filteredHistory.map(
-                (item: IHistory): number => parseFloat(item.data.currentLevel));
+                (item: IHistory): number => item.flow);
             averageFlow = this.computeMean(flows);
             averageLevel = this.computeMean(levels);
         }
@@ -87,15 +87,15 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
     }
 
     public componentDidUpdate(prevProps: IFlowReportProps): void {
-        const selectedGuide: IGuide | undefined = this.props.selectedGuide;
-        const prevSelectedGuide: IGuide | undefined = prevProps.selectedGuide;
+        const selectedGuide: IListEntry | undefined = this.props.selectedGuide;
+        const prevSelectedGuide: IListEntry | undefined = prevProps.selectedGuide;
 
         const shouldUpdate: boolean | undefined = (!!prevSelectedGuide !== !!selectedGuide) ||
             (prevSelectedGuide && selectedGuide &&
-            prevSelectedGuide._id !== selectedGuide._id);
+            prevSelectedGuide.id !== selectedGuide.id);
 
-        if (shouldUpdate && selectedGuide && selectedGuide.gaugeName) {
-            const gaugeName: string = selectedGuide.gaugeName;
+        if (shouldUpdate && selectedGuide && selectedGuide.gauge_id) {
+            const gaugeName: string = selectedGuide.gauge_id;
             const gauge: IGauge = this.props.gauges.filter(
                 (gauge: IGauge): boolean => (gauge.siteName === gaugeName))[0];
             this.props.getGaugeHistory(selectedGuide);

@@ -1,4 +1,4 @@
-import { IGuide, IMapBounds } from "./types";
+import { IListEntry, IMapBounds } from "./types";
 
 interface IFilterValues {
     filters: string[];
@@ -15,36 +15,36 @@ function hasIndex(obj: string, str: string): boolean {
 // const applyFilters = ([head, ...tail]): string[] => (guide: IGuide) =>
 //     !head || (checkFilter(head, guide) && applyFilters(tail)(guide));
 
-function checkIfInBounds(mapBounds: IMapBounds, guide: IGuide): boolean {
+function checkIfInBounds(mapBounds: IMapBounds, guide: IListEntry): boolean {
     const upperLat: number = mapBounds._ne.lat;
     const upperLon: number = mapBounds._ne.lng || 0;
     const lowerLat: number = mapBounds._sw.lat;
     const lowerLon: number = mapBounds._sw.lng || 0;
-    if (!!guide.lat && !!guide.lng
-        && guide.lat < upperLat && guide.lat > lowerLat
-        && guide.lng < upperLon && guide.lng > lowerLon) {
+    if (!!guide.position.lat && !!guide.position.lon
+        && guide.position.lat < upperLat && guide.position.lat > lowerLat
+        && guide.position.lon < upperLon && guide.position.lon > lowerLon) {
         return true;
     } else {
         return false;
     }
 }
 
-function applyMapBounds(mapBounds: IMapBounds): (guide: IGuide) => boolean {
-    return ((guide: IGuide): boolean =>
+function applyMapBounds(mapBounds: IMapBounds): (guide: IListEntry) => boolean {
+    return ((guide: IListEntry): boolean =>
     !mapBounds._ne || checkIfInBounds(mapBounds, guide));
 }
 
 // apply filters + search
-function applyFiltersToList(guideList: IGuide[], filterValues: IFilterValues, mapBounds: IMapBounds): IGuide[] {
+function applyFiltersToList(guideList: IListEntry[], filterValues: IFilterValues, mapBounds: IMapBounds): IListEntry[] {
     // const { filters: string[], searchString: string } = filterValues;
-    return guideList.filter(applyMapBounds(mapBounds)).filter((guide: IGuide): boolean => {
+    return guideList.filter(applyMapBounds(mapBounds)).filter((guide: IListEntry): boolean => {
         if (filterValues.searchString === "") {
             return true;
         }
         return (
-            hasIndex(guide.title, filterValues.searchString) ||
-            hasIndex(guide.region, filterValues.searchString) ||
-            hasIndex(guide.river, filterValues.searchString)
+            hasIndex(guide.display_name, filterValues.searchString) ||
+            hasIndex(guide.region, filterValues.searchString)
+            // hasIndex(guide.river_name, filterValues.searchString)
         );
     });
 }

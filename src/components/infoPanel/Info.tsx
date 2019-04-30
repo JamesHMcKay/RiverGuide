@@ -14,7 +14,7 @@ import {
     toggleModal,
 } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import { IAuth, IGuide, IInfoPage } from "../../utils/types";
+import { IAuth, IGuide, IInfoPage, IListEntry } from "../../utils/types";
 import FlowBadge from "../common/FlowBadge";
 import { CurrentWeather } from "./CurrentWeather";
 import "./Info.css";
@@ -46,7 +46,6 @@ interface IInfoStateProps {
 interface IInfoProps extends IInfoStateProps {
     toggleModal: (modal?: string) => void;
     closeInfoPage: () => void;
-    guide: IGuide;
     removeFromFavourites: (guideId: string, email: string) => void;
     addToFavourites: (guideId: string, email: string) => void;
 }
@@ -57,7 +56,7 @@ class Info extends Component<IInfoProps, IInfoState> {
         let favourited: boolean = false;
         if (props.auth.isAuthenticated) {
             favourited = props.auth.user.favourites.indexOf(
-                props.infoPage.selectedGuide._id,
+                props.infoPage.selectedGuide.id,
             ) > -1
                 ? true
                 : false;
@@ -77,7 +76,7 @@ class Info extends Component<IInfoProps, IInfoState> {
 
     public toggleFavourite = (): void => {
         const { favourited } = this.state;
-        const guideId: string = this.props.infoPage.selectedGuide._id;
+        const guideId: string = this.props.infoPage.selectedGuide.id;
         const { email } = this.props.auth.user;
 
         this.setState({ favourited: !favourited });
@@ -152,36 +151,24 @@ class Info extends Component<IInfoProps, IInfoState> {
     }
 
     public render(): JSX.Element {
-        const {
-            title,
-            description,
-            river,
-            region,
-            grade,
-            catch_type,
-            activity,
-            gaugeName,
-            markers,
-        }: IGuide = this.props.infoPage.selectedGuide;
+        const entry: IListEntry = this.props.infoPage.selectedGuide;
 
         return (
             <Grid container item xs={12} spacing={24} justify="space-between" className = "right-panel">
                 <Grid item md={12} lg={12}>
                     <AppBar position="static" color="default">
                         <Toolbar className="toolbar">
-                        <div className="toolbar-left">
-                            <Typography variant="title">
-                            {title}
-                            </Typography>
-                            <Typography variant="caption">
-                            {`${river} river  •  ${region} `}
-                            </Typography>
-                        </div>
-                        <div className="toolbar-right">
-                            {this.getTags(activity, grade, catch_type)}
+                            <div className="toolbar-middle">
+                                <Typography variant="h6">
+                                {entry.display_name}
+                                </Typography>
+                                <Typography variant="caption">
+                                {`${entry.river_name} river  •  ${entry.region} `}
+                                </Typography>
+                            </div>
+                            {this.getTags("", "", "")}
                             {this.getReportButton()}
                             {this.getCloseButton()}
-                        </div>
                         </Toolbar>
                     </AppBar>
                 </Grid>
@@ -191,45 +178,45 @@ class Info extends Component<IInfoProps, IInfoState> {
                         lon={this.props.guide.lng || 0}
                         weatherStore={this.state.weatherStore}
                 /> */}
-        <Grid item md={12} lg={12}>
-            <KeyFactsCard content={description} guide={this.props.guide} />
-                        </Grid>
-                        <Grid item md={12} lg={12}>
-                                {gaugeName && (<FlowChart guide={this.props.guide} />)}
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <div style={{ margin: "1em" }}>
-                                <InfoCard title="Description" content={description} />
-                            </div>
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            {markers.length > 0 && (
-                                <div style={{ margin: "1em", paddingBottom: "1em" }}>
-                                    <MapCard markers={markers} />
-                                </div>
-                            )}
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <WeatherForecast
-                                lat={this.props.guide.lat || 0}
-                                lon={this.props.guide.lng || 0}
-                                weatherStore={this.state.weatherStore}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                        <div
-                            style={{
-                                marginLeft: "93%",
-                                padding: "1em 0",
-                            }}
-                        >
-                            <Tooltip title={"Edit " + title} placement="left">
-                                <Button variant="fab" color="secondary">
-                                    <EditIcon />
-                                </Button>
-                            </Tooltip>
+                {/* <Grid item md={12} lg={12}>
+                    <KeyFactsCard content={description} guide={this.props.guide} />
+                </Grid> */}
+                <Grid item md={12} lg={12}>
+                        {entry.gauge_id && (<FlowChart gaugeId={entry.gauge_id} />)}
+                </Grid>
+                {/* <Grid item xs={12} sm={12}>
+                    <div style={{ margin: "1em" }}>
+                        <InfoCard title="Description" content={description} />
+                    </div>
+                </Grid> */}
+                {/* <Grid item xs={12} sm={12}>
+                    {markers.length > 0 && (
+                        <div style={{ margin: "1em", paddingBottom: "1em" }}>
+                            <MapCard markers={markers} />
                         </div>
-                        </Grid>
+                    )}
+                </Grid> */}
+                <Grid item xs={12} sm={12}>
+                    <WeatherForecast
+                        lat={entry.position.lat || 0}
+                        lon={entry.position.lon || 0}
+                        weatherStore={this.state.weatherStore}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                    <div
+                        style={{
+                            marginLeft: "93%",
+                            padding: "1em 0",
+                        }}
+                    >
+                        <Tooltip title={"Edit " + entry.display_name} placement="left">
+                            <Button color="secondary">
+                                <EditIcon />
+                            </Button>
+                        </Tooltip>
+                    </div>
+                </Grid>
             </Grid>
         );
     }
