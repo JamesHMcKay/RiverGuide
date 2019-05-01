@@ -14,6 +14,8 @@ import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import { CancelTokenSource } from "axios";
+import axios from "axios";
 
 import { IState } from "../reducers/index";
 
@@ -33,7 +35,7 @@ interface IControlBarProps extends IControlBarStateToProps {
         filters: IFilter[],
         mapBounds: IMapBounds) => void;
     searchGuideList: (value: string, guides: IGuide[]) => void;
-    setCategory: (value: string) => void;
+    setCategory: (value: string, token: CancelTokenSource) => void;
 }
 
 interface IControlBarStateToProps {
@@ -46,6 +48,7 @@ interface IControlBarStateToProps {
 interface IControlBarState {
     index: number;
     anchorEl: any;
+    cancelToken: CancelTokenSource;
 }
 
 const ITEM_HEIGHT: number = 48;
@@ -54,11 +57,21 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
     public state: IControlBarState = {
         index: 3,
         anchorEl: null,
+        cancelToken: axios.CancelToken.source(),
     };
+
+    public componentDidMount(): void {
+        this.props.setCategory(data[this.state.index].toLowerCase(), this.state.cancelToken);
+    }
 
     public handleChange = (event: any, value: number): void => {
         this.setState({ index: value });
-        this.props.setCategory(data[value].toLowerCase());
+        this.state.cancelToken.cancel();
+        const newToken: CancelTokenSource = axios.CancelToken.source();
+        this.setState({
+            cancelToken: newToken,
+        });
+        this.props.setCategory(data[value].toLowerCase(), newToken);
     }
 
     public handleSearch = (event: any): void => {
@@ -77,7 +90,7 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
     public handleSelect = (event: any, category: string): void => {
         const index: number = data.indexOf(category);
         this.setState({ index });
-        this.props.setCategory(category.toLowerCase());
+        this.props.setCategory(category.toLowerCase(), this.state.cancelToken);
         this.handleClose();
     }
 

@@ -12,62 +12,8 @@ import {
 const strapi_location = "https://riverapi.herokuapp.com/graphql";
 const riverServiceLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
 
-// Get guides
-export const makeEntriesRequest = category => dispatch => {
-    if (category === "gauges") {
-        const request = {
-            action: "get_features",
-            crossDomain: true,
-        }
-        axios
-            .post(riverServiceLocation, request)
-            .then(res => {
-                let data = res.data.features;
-                let result = data.map(item => (
-                    {
-                        id: item.id,
-                        gauge_id: item.id,
-                        display_name: item.name,
-                        position: {lat: item.location.lat, lon: item.location.lon },
-                        latest_flow: item.latest_flow,
-                        region: item.data_source,
-                    }));
-                dispatch({
-                    type: GET_ENTRIES,
-                    payload: result,
-                });
-            });
-    } else {
-        axios
-        .get(`${strapi_location}`,
-            {
-                headers: {'Authorization': ''},
-                params: {query: '{wwguides{app_id,river_name,section_name,region,latitude,longitude,gauge_id}}'}
-            }
-        )
-        .then(res => {
-            let data = res.data.data.wwguides;
-            let result = data.map(item => (
-                {
-                    id: item.app_id,
-                    display_name: item.section_name,
-                    river_name: item.river_name,
-                    position: {lat: item.latitude < 90 ? item.latitude : -45, lon: item.longitude },
-                    region: item.region,
-                }));
-            dispatch({
-                type: GET_ENTRIES,
-                payload: result,
-            });
-        })
-        .catch(err => console.log(err));
-    }
-};
-
-
-
 // Set category
-export const setCategory = category => dispatch => {
+export const setCategory = (category, cancelToken) => dispatch => {
     dispatch({
         type: LOADING_ENTRIES,
     });
@@ -81,7 +27,7 @@ export const setCategory = category => dispatch => {
             crossDomain: true,
         }
         axios
-            .post(riverServiceLocation, request)
+            .post(riverServiceLocation, request, {cancelToken: cancelToken.token})
             .then(res => {
                 let data = res.data.features;
                 let result = data.map(item => (
@@ -103,7 +49,8 @@ export const setCategory = category => dispatch => {
         .get(`${strapi_location}`,
             {
                 headers: {'Authorization': ''},
-                params: {query: '{wwguides{app_id,river_name,section_name,region,latitude,longitude,gauge_id}}'}
+                params: {query: '{wwguides{app_id,river_name,section_name,region,latitude,longitude,gauge_id}}'},
+                cancelToken: cancelToken.token
             }
         )
         .then(res => {

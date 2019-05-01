@@ -1,6 +1,8 @@
 import Hidden from "@material-ui/core/Hidden";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
+import { CancelTokenSource } from "axios";
+import axios from "axios";
 import PropTypes, { string } from "prop-types";
 import React, { Component } from "react";
 // Components
@@ -14,7 +16,6 @@ import {
     setMapBounds,
 } from "../actions/actions";
 import {
-    makeEntriesRequest,
     openInfoPage,
 } from "../actions/getGuides";
 import { getSensorData } from "../actions/getSensorData";
@@ -53,6 +54,7 @@ export interface IPanelState {
     searchApplied: boolean;
     search_panel: string;
     mapRef: React.RefObject<MapComponent>;
+    cancelToken: CancelTokenSource;
 }
 
 export interface IPanelMapStateToProps {
@@ -67,8 +69,6 @@ export interface IPanelMapStateToProps {
 
 export interface IPanelProps extends IPanelMapStateToProps {
     makeGaugeRequest: () => void;
-    makeGuideRequest: (guide: string) => void;
-    makeEntriesRequest: () => void;
     setMapBounds: (mapBounds: IMapBounds) => void;
     generateFilteredList: (
         guides: IListEntry[],
@@ -92,6 +92,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
             searchApplied: false,
             search_panel: "list",
             mapRef: React.createRef(),
+            cancelToken: axios.CancelToken.source(),
         };
 
         weather.setAPPID("521cea2fce8675d0fe0678216dc01d5c");
@@ -107,7 +108,6 @@ class Panel extends Component<IPanelProps, IPanelState> {
 
     public componentDidMount(): void {
         this.props.makeGaugeRequest();
-        this.props.makeGuideRequest("whitewater");
         this.props.getSensorData();
     }
 
@@ -255,8 +255,6 @@ export default connect(
     ({
         generateFilteredList,
         makeGaugeRequest,
-        makeGuideRequest,
-        makeEntriesRequest,
         setMapBounds,
         openInfoPage,
         getSensorData}),
