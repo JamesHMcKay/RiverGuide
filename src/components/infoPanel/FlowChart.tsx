@@ -1,9 +1,10 @@
 
+import Button from "@material-ui/core/Button";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
-import { IGauge, IGuide, IHistory, IInfoPage } from "../../utils/types";
+import { IGauge, IGuide, IHistory, IInfoPage, IObservable, IObsValue } from "../../utils/types";
 
 // Material UI
 import Card from "@material-ui/core/Card";
@@ -33,12 +34,34 @@ interface IChartData {
     date: number;
 }
 
-class FlowChart extends Component<IFlowChartProps> {
+interface IFlowChartState {
+    selectedType?: string;
+}
+
+class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
+    constructor(props: IFlowChartProps) {
+        super(props);
+        let selectedType: string | undefined;
+        if (this.props.infoPage.selectedGuide.observables) {
+            const observables: IObservable[] = this.props.infoPage.selectedGuide.observables;
+            const types: string[] = observables.map((item: IObservable): string => item.type);
+            if (types.indexOf("flow") >= 0) {
+                selectedType = "flow";
+            } else if (types.length > 0) {
+                selectedType = types[0];
+            }
+        }
+        this.state = {
+            selectedType,
+        };
+      }
 
     public mapHistory = (history: IHistory[]): IChartData[] => {
+        const type: string = this.state.selectedType || "flow";
+        const key: keyof IObsValue = type as keyof IObsValue;
         const result: IChartData[] = history.map((reading: IHistory): IChartData => {
             return {
-                value: reading.flow,
+                value: reading.values[key] || 0,
                 date: Moment.utc(Moment(reading.time)).valueOf(),
             };
         });
@@ -97,13 +120,52 @@ class FlowChart extends Component<IFlowChartProps> {
         this.setChartOptions();
     }
 
+    public selectTypeClick(type: string): void {
+        this.setState({
+            selectedType: type,
+        });
+    }
+
+    public getButtonColor(type: string): "inherit" | "primary" | "secondary" | "default" | undefined {
+        if (type === this.state.selectedType) {
+            return "secondary";
+        }
+        return "default";
+    }
+
+    public getButtonVariant(type: string):
+        "text" | "flat" | "outlined" | "contained" | "raised" | "fab" | "extendedFab" | undefined {
+        if (type === this.state.selectedType) {
+            return "contained";
+        }
+        return "outlined";
+    }
+
+    public getButtons = (): JSX.Element[] | null => {
+        if (this.props.infoPage.selectedGuide.observables) {
+            const observables: IObservable[] = this.props.infoPage.selectedGuide.observables;
+            const result: JSX.Element[] = observables.map((item: IObservable) =>
+                <Button
+                    style = {{marginLeft: "10px"}}
+                    variant={this.getButtonVariant(item.type)}
+                    color={this.getButtonColor(item.type)} key={item.type}
+                    onClick = {(): void => this.selectTypeClick(item.type)}
+                >
+                    {item.type}
+                </Button>);
+            return result;
+        } else {
+            return null;
+        }
+    }
+
     public render(): JSX.Element {
         return (
             <Card>
                 <CardContent>
-                    <Typography color="textSecondary" gutterBottom>
-                        Flow history
-                    </Typography>
+                    <div className="flow-chart-buttons">
+                        {this.getButtons()}
+                    </div>
                     <div id="chartdiv" style={{width: "100%", height: "300px"}}></div>
                     {/* {this.filterGauges().length > 0 && this.getLastUpdated()} */}
                 </CardContent>

@@ -16,7 +16,6 @@ export interface IMarker {
     id: string;
     description: string;
     category: string;
-
 }
 
 // export interface IMarker {
@@ -36,9 +35,21 @@ export interface IFlowLevel {
     currentLevel: string;
 }
 
+export interface IObsValue {
+    stage_height: number;
+    flow: number;
+}
+
 export interface IHistory {
     time: string;
     flow: number;
+    values: Partial<IObsValue>;
+}
+
+export interface IObservable {
+    latest_value: number;
+    type: string;
+    units: string;
 }
 
 export interface IListEntry {
@@ -48,10 +59,20 @@ export interface IListEntry {
     region: string;
     gauge_id?: string;
     position: ILatLon;
+    observables?: IObservable[];
     latest_flow?: number;
+    type: string;
 }
 
-export interface IItemDetails {
+export interface IWhiteWaterDetails {
+    entryDetails: string;
+    exitDetails: string;
+    gradeHardest: string;
+    gradeOverall: string;
+    markerList: IMarker[];
+}
+
+export interface IItemDetails extends Partial<IWhiteWaterDetails> {
     id: string;
     description: string;
 }

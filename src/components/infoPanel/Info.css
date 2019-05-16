@@ -308,3 +308,7 @@ weather-forecast {
 .toolbar-middle {
     flex-grow: 1;
 }
+
+.flow-chart-buttons {
+    display: flex;
+}

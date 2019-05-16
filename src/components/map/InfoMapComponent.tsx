@@ -281,7 +281,7 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
     public editButton = (editColor: PropTypes.Color): JSX.Element => {
         const toolTip: string = !this.state.editMode ? "On" : "Off";
         return (
-            <Button variant="fab" color={editColor} aria-label="Add" mini title={`Turn edit mode ${toolTip}`}
+            <Button color={editColor} aria-label="Add" mini title={`Turn edit mode ${toolTip}`}
                 onClick={(): void => {this.setState({editMode: !this.state.editMode}); }}
             >
                 {this.state.editMode ? <CloseIcon /> : <EditIcon  />}

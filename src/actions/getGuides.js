@@ -24,6 +24,7 @@ export const setCategory = (category, cancelToken) => dispatch => {
     if (category === "gauges") {
         const request = {
             action: "get_features",
+            filters: ["flow"],
             crossDomain: true,
         }
         axios
@@ -36,8 +37,9 @@ export const setCategory = (category, cancelToken) => dispatch => {
                         gauge_id: item.id,
                         display_name: item.name,
                         position: {lat: item.location.lat, lon: item.location.lon },
-                        latest_flow: item.latest_flow,
+                        observables: item.observables,
                         region: item.data_source,
+                        type: "gauge",
                     }));
                 dispatch({
                     type: GET_ENTRIES,
@@ -49,7 +51,7 @@ export const setCategory = (category, cancelToken) => dispatch => {
         .get(`${strapi_location}`,
             {
                 headers: {'Authorization': ''},
-                params: {query: '{wwguides{app_id,river_name,section_name,region,latitude,longitude,gauge_id}}'},
+                params: {query: '{wwguides{id,river_name,section_name,region,latitude,longitude,gauge_id}}'},
                 cancelToken: cancelToken.token
             }
         )
@@ -57,11 +59,12 @@ export const setCategory = (category, cancelToken) => dispatch => {
             let data = res.data.data.wwguides;
             let result = data.map(item => (
                 {
-                    id: item.app_id,
+                    id: item.id,
                     display_name: item.section_name,
                     river_name: item.river_name,
                     position: {lat: item.latitude < 90 ? item.latitude : -45, lon: item.longitude },
                     region: item.region,
+                    type: "wwguide",
                 }));
             dispatch({
                 type: GET_ENTRIES,
@@ -83,30 +86,30 @@ export const openInfoPage = guide => dispatch => {
         },
     });
     console.log("opening info page");
-    let itemType = "";
-    if (itemType === "gauges") {
+    if (guide.type === "gauge") {
 
     } else {
+        let guideId = guide.id;
+        let query = "{wwguide(id:\"" + guideId + "\"){grade_overall,grade_hardest,description,entry_details,exit_details,marker_list}}"
         axios
         .get(`${strapi_location}`,
             {
                 headers: {'Authorization': ''},
-                params: {query: '{wwguides{app_id,river_name,section_name,country,region,latitude,longitude,gauge_id,activity,grade_overall,grade_hardest,description,entry_details,exit_details,marker_list}}'}
+                params: {query: query}
             }
         )
         .then(res => {
-            let data = res.data.data.wwguides;
-            let result = data.map(item => (
+            let item = res.data.data.wwguide;
+            let result = 
                 {
-                    id: item.app_id,
-                    display_name: item.section_name,
-                    river_name: item.river_name,
-                    position: {lat: item.latitude, lon: item.longitude },
-                    region: item.region,
+                    id: item.id,
+                    entryDetails: item.entry_details,
+                    exitDetails: item.exit_details,
+                    gradeHardest: item.grade_hardest,
+                    gradeOverall: item.grade_overall,
                     description: item.description,
-                }));
-            result = result[0];
-            console.log(result);
+                };
+            console.log("got guide details: ", result);
             dispatch({
                 type: GET_ITEM_DETAILS,
                 payload: result,
@@ -117,7 +120,6 @@ export const openInfoPage = guide => dispatch => {
 
 
     if (guide.gauge_id) {
-        console.log("GETTING GAUGE HISTORY");
         const request = {
             action: "get_flows",
             id: [guide.gauge_id],
@@ -131,8 +133,11 @@ export const openInfoPage = guide => dispatch => {
                     {
                         flow: item.flow,
                         time: item.time,
+                        values: {
+                            flow: item.flow,
+                            stage_height: item.stage_height,
+                        }
                     }));
-                console.log("GOT GAUGE HISTORY = ", result);
                 dispatch({
                     type: ADD_HISTORIC_FLOW,
                     payload: result.reverse(),

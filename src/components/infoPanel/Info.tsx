@@ -14,7 +14,7 @@ import {
     toggleModal,
 } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import { IAuth, IGuide, IInfoPage, IListEntry } from "../../utils/types";
+import { IAuth, IGuide, IInfoPage, IListEntry, IMarker } from "../../utils/types";
 import FlowBadge from "../common/FlowBadge";
 import { CurrentWeather } from "./CurrentWeather";
 import "./Info.css";
@@ -152,6 +152,19 @@ class Info extends Component<IInfoProps, IInfoState> {
 
     public render(): JSX.Element {
         const entry: IListEntry = this.props.infoPage.selectedGuide;
+        let markerList: IMarker[] | undefined =
+            this.props.infoPage.itemDetails && this.props.infoPage.itemDetails.markerList;
+        if (!markerList) {
+            const marker: IMarker = {
+                name: "Location",
+                lat: entry.position.lat,
+                lng: entry.position.lon || 0,
+                id: "1",
+                description: "",
+                category: "",
+            };
+            markerList = [marker];
+        }
 
         return (
             <Grid container item xs={12} spacing={24} justify="space-between" className = "right-panel">
@@ -172,30 +185,33 @@ class Info extends Component<IInfoProps, IInfoState> {
                         </Toolbar>
                     </AppBar>
                 </Grid>
-                {/* <FlowBadge siteName={this.props.guide.gaugeName} /> */}
-                {/* <CurrentWeather
-                        lat={this.props.guide.lat || 0}
-                        lon={this.props.guide.lng || 0}
-                        weatherStore={this.state.weatherStore}
-                /> */}
-                {/* <Grid item md={12} lg={12}>
-                    <KeyFactsCard content={description} guide={this.props.guide} />
-                </Grid> */}
+                {/* <FlowBadge siteName={this.props.entry.gaugeName} /> */}
+                {this.props.infoPage.itemDetails &&
+                    <Grid item md={12} lg={12}>
+                        <KeyFactsCard itemDetails={this.props.infoPage.itemDetails} />
+                    </Grid>
+                }
                 <Grid item md={12} lg={12}>
                         {entry.gauge_id && (<FlowChart gaugeId={entry.gauge_id} />)}
                 </Grid>
-                {/* <Grid item xs={12} sm={12}>
+                {this.props.infoPage.itemDetails &&
+                <Grid item xs={12} sm={12}>
                     <div style={{ margin: "1em" }}>
-                        <InfoCard title="Description" content={description} />
+                        <InfoCard title="Description" content={this.props.infoPage.itemDetails.description} />
                     </div>
-                </Grid> */}
-                {/* <Grid item xs={12} sm={12}>
-                    {markers.length > 0 && (
+                </Grid>}
+                <Grid item xs={12} sm={12}>
+                    {markerList && markerList.length > 0 && (
                         <div style={{ margin: "1em", paddingBottom: "1em" }}>
-                            <MapCard markers={markers} />
+                            <MapCard markers={markerList} />
                         </div>
                     )}
-                </Grid> */}
+                </Grid>
+                <CurrentWeather
+                        lat={entry.position.lat || 0}
+                        lon={entry.position.lon || 0}
+                        weatherStore={this.state.weatherStore}
+                />
                 <Grid item xs={12} sm={12}>
                     <WeatherForecast
                         lat={entry.position.lat || 0}

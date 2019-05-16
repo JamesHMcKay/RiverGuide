@@ -19,7 +19,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import BeachAccessIcon from "@material-ui/icons/BeachAccess";
 import ImageIcon from "@material-ui/icons/Image";
 import WorkIcon from "@material-ui/icons/Work";
-import { IGuide } from "../../utils/types";
+import { IItemDetails } from "../../utils/types";
 
 interface IKeyFactsCardState {
     editIconShowing: boolean;
@@ -29,8 +29,7 @@ interface IKeyFactsCardState {
 }
 
 interface IKeyFactsCardProps {
-    content: string;
-    guide: IGuide;
+    itemDetails: IItemDetails;
 }
 
 class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
@@ -42,7 +41,7 @@ class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
     };
 
     public componentWillReceiveProps = (props: IKeyFactsCardProps): void => {
-        this.setState({ ...this.state, value: props.content });
+        this.setState({ ...this.state });
     }
 
     public handleChange = (event: any): void => {
@@ -57,7 +56,7 @@ class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
               <Avatar>
                 <ImageIcon />
               </Avatar>
-              <ListItemText primary="Grade" secondary="5" />
+              <ListItemText primary="Grade" secondary={this.props.itemDetails.gradeOverall} />
             </ListItem>
         </Grid>
         <Grid item md={12} lg={4}>
