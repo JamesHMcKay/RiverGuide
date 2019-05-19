@@ -16,14 +16,12 @@ interface IMapCardProps {
 class MapCard extends Component<IMapCardProps> {
     public render(): JSX.Element {
         return (
-            <Card>
-                <CardContent>
-                    <Typography color="textSecondary" gutterBottom>
-                        Local map
-                    </Typography>
-                    <InfoMapComponent markers={this.props.markers} />
-                </CardContent>
-            </Card>
+            <div>
+                <Typography variant="h5" gutterBottom>
+                    Local map
+                </Typography>
+                <InfoMapComponent markers={this.props.markers}/>
+            </div>
         );
     }
 }

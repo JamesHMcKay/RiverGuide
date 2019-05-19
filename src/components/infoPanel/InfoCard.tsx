@@ -47,38 +47,9 @@ class InfoCard extends Component<IInfoCardProps, IInfoCardState> {
 
     public render(): JSX.Element {
         return (
-            <Card
-                onMouseEnter={(): void => {
-                    this.setState({ editIconShowing: true });
-                }}
-                onMouseLeave={(): void => this.setState({ editIconShowing: false })}
-                style={{
-                    marginBottom: "1em",
-                }}
-            >
-                <CardContent>
-                    <Typography color="textSecondary" gutterBottom>
+            <div>
+                    <Typography variant="h5" gutterBottom>
                         {this.props.title}
-                        {this.state.editIconShowing &&
-                            !this.state.editMode && (
-                                <Tooltip
-                                    title={"Edit " + this.props.title}
-                                    placement="left"
-                                >
-                                    <IconButton
-                                        // size="small"
-                                        style={{ float: "right" }}
-                                        onClick={(): void =>
-                                            this.setState({
-                                                editMode: true,
-                                                tempValue: this.state.value,
-                                            })
-                                        }
-                                    >
-                                        <EditIcon style={{ fontSize: 17 }} />
-                                    </IconButton>
-                                </Tooltip>
-                            )}
                     </Typography>
                     <br />
                     {this.state.editMode ? (
@@ -128,8 +99,7 @@ class InfoCard extends Component<IInfoCardProps, IInfoCardState> {
                             </Button>
                         </div>
                     )}
-                </CardContent>
-            </Card>
+            </div>
         );
     }
 }

@@ -118,8 +118,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
         const authButtons: JSX.Element = (
             <div className="auth-buttons">
                 <Button
-                    variant="contained"
-                    color="secondary"
+                    color="primary"
                     size="large"
                     onClick={this.openModal.bind(this, "addTripAnyPage")}
                     style={{
@@ -201,7 +200,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                                         alt=""
                                         className="nav-logo"
                                     />
-                                    <h1> RiverWiki</h1>
+                                    <h1></h1>
                                 </div>
                             </Link>
                         </div>

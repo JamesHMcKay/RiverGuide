@@ -7,6 +7,8 @@ import rain from "../../img/rain.svg";
 import sleet from "../../img/sleet.svg";
 import snow from "../../img/snow.svg";
 import sun from "../../img/sun.svg";
+import sunrise from "../../img/sunrise.svg";
+import sunset from "../../img/sunset.svg";
 import wind from "../../img/wind.svg";
 import { IWeather, IWeatherStore, WeatherStore } from "./WeatherStore";
 
@@ -14,6 +16,18 @@ import { IWeather, IWeatherStore, WeatherStore } from "./WeatherStore";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import { CurrentWeather } from "./CurrentWeather";
+
+const WIND_DIRECTIONS: Array<{abbrv: string; translation: string}> = [
+    {abbrv: "SW", translation: "South Westerlies"},
+    {abbrv: "NW", translation: "North Westerlies"},
+    {abbrv: "S", translation: "Southerlies"},
+    {abbrv: "N", translation: "Northerlies"},
+    {abbrv: "E", translation: "Easterlies"},
+    {abbrv: "W", translation: "Westerlies"},
+    {abbrv: "NE", translation: "North Easterlies"},
+    {abbrv: "SE", translation: "South Easterlies"},
+];
 
 const WEATHER_ICONS: Array<{icon: string; element: JSX.Element}> = [
     {icon: "cloudy", element: <img src={cloudy} alt="" className="weather-icon"/>},
@@ -40,6 +54,11 @@ interface IWeatherForecastProps {
     weatherStore: WeatherStore;
     lat: number;
     lon: number;
+}
+
+interface ISunTimes {
+    sunrise: string;
+    sunset: string;
 }
 
 export class WeatherForecast extends React.Component<IWeatherForecastProps, IWeatherForecastState> {
@@ -245,20 +264,59 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
         );
     }
 
+    public getSunRiseAndSet(): ISunTimes {
+        if (this.state.weather && this.state.weather.openweather) {
+            const sunrise: moment.Moment = moment.unix(this.state.weather.openweather.sunrise);
+            const sunset: moment.Moment = moment.unix(this.state.weather.openweather.sunset);
+            return {
+                sunrise: sunrise.format("h:mm a"),
+                sunset: sunset.format("h:mm a")};
+        } else {
+            return {
+                sunrise: "",
+                sunset: "",
+            };
+        }
+    }
+
+    public getDetails = (): JSX.Element => {
+        const sunRiseAndSet: ISunTimes = this.getSunRiseAndSet();
+        return (
+            <div className="weather-details" style = {{right: 0}}>
+                <div className="sun-time">
+                    <img src={sunrise} alt="" className="sunrise-icon"/>
+                    {"Sunrise: " + sunRiseAndSet.sunrise}
+                </div>
+                <div className="sun-time">
+                    <img src={sunset} alt="" className="sunrise-icon"/>
+                    {" Sunset: " + sunRiseAndSet.sunset}
+                </div>
+                    {/* <button
+                    className='weather-credit-button'
+                    onClick={() => {this.alternateProvider()}}
+                    >{this.state.weatherProvider}</button> */}
+            </div>
+        );
+    }
+
     public render(): JSX.Element {
         return (
-            <Card style={{width: "50%"}}>
-                <CardContent>
-                <Typography color="textSecondary" gutterBottom>
-                    Forecast
-                </Typography>
-                    <div className="weather-data">
-                        {this.state.weather && this.getForecastElement(0)}
-                        {this.state.weather && this.getForecastElement(1)}
-                        {this.state.weather && this.getForecastElement(2)}
-                    </div>
-                </CardContent>
-            </Card>
+            <div>
+                <div style={{display: "flex", flexDirection: "row"}}>
+                    <CurrentWeather
+                        lat={this.props.lat || 0}
+                        lon={this.props.lon || 0}
+                        weatherStore={this.props.weatherStore}
+                        textColor = {"black"}
+                    />
+                    {this.getDetails()}
+                </div>
+                <div className="weather-data">
+                    {this.state.weather && this.getForecastElement(0)}
+                    {this.state.weather && this.getForecastElement(1)}
+                    {this.state.weather && this.getForecastElement(2)}
+                </div>
+            </div>
         );
     }
 

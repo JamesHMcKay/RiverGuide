@@ -21,12 +21,12 @@
 }
 
 .reporting-button {
-    margin-top: 3%;
+    /* margin-top: 3%;
     left: 0%;
     margin-right: 5%;
     margin-left: 5%;
     padding-left: 5%;
-    padding-right: 5%;
+    padding-right: 5%; */
     height: fit-content;
 }
 
@@ -311,4 +311,5 @@ weather-forecast {
 
 .flow-chart-buttons {
     display: flex;
+    right: 0;
 }

@@ -1,5 +1,6 @@
 
 import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -90,7 +91,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         series.dataFields.dateX = "date";
         series.dataFields.valueY = "value";
         series.strokeWidth = 3;
-        series.fillOpacity = 0.5;
+        series.fillOpacity = 0.0;
 
         dateAxis.tooltipDateFormat = "dd MMM yyyy hh:mma";
         series.tooltipText = "{valueY.value}";
@@ -128,7 +129,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
 
     public getButtonColor(type: string): "inherit" | "primary" | "secondary" | "default" | undefined {
         if (type === this.state.selectedType) {
-            return "secondary";
+            return "primary";
         }
         return "default";
     }
@@ -161,15 +162,28 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
 
     public render(): JSX.Element {
         return (
-            <Card>
-                <CardContent>
+            // <Card>
+                <Grid container item xs={12} spacing={24} justify="space-between">
+
+                <Grid container item md={6} lg={6} justify="flex-start">
+                    <Typography variant="h5" gutterBottom>
+                        Data
+                    </Typography>
+                </Grid>
+
+                <Grid container item md={6} lg={6} justify="flex-end">
                     <div className="flow-chart-buttons">
                         {this.getButtons()}
                     </div>
+                </Grid>
+
+                    <Grid container item md={12} lg={12} justify="center">
                     <div id="chartdiv" style={{width: "100%", height: "300px"}}></div>
                     {/* {this.filterGauges().length > 0 && this.getLastUpdated()} */}
-                </CardContent>
-            </Card>
+                    </Grid>
+                {/* </CardContent> */}
+                </Grid>
+            // </Card>
         ); }
 }
 

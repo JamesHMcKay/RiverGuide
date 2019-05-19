@@ -15,7 +15,9 @@ import mapBoundsReducer from "./mapBoundsReducer";
 import modalReducer from "./modalReducer";
 import openLogReducer from "./openLogReducer";
 import sensorDataReducer from "./sensorDataReducer";
+import weatherReducer from "./weatherReducer";
 
+import { WeatherStore } from "../components/infoPanel/WeatherStore";
 import {
     IAuth,
     IErrors,
@@ -48,6 +50,7 @@ export interface IState {
     sensorFeatureList: IFeatureOfInterest[];
     listEntries: IListEntry[];
     listItemDetails: IItemDetails;
+    weatherStore: WeatherStore;
 }
 
 export default combineReducers({
@@ -67,4 +70,5 @@ export default combineReducers({
     sensorFeatureList: sensorDataReducer,
     listEntries: listEntryReducer,
     listItemDetails: listItemDetailsReducer,
+    weatherStore: weatherReducer,
 });

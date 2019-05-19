@@ -10,6 +10,7 @@ import Login from "../auth/Login";
 import Logout from "../auth/Logout";
 import Register from "../auth/Register";
 import Welcome from "../auth/Welcome";
+import WeatherModal from "../infoPanel/WeatherModal";
 import FiltersModal from "../list/FiltersModal";
 import TripDetailsAnyPage from "../profile/TripDetailsAnyPage";
 import TripDetailsInfoPage from "../profile/TripDetailsInfoPage";
@@ -30,6 +31,7 @@ class Modals extends Component {
                 <TripDetailsInfoPage />
                 <TripDetailsAnyPage />
                 <FiltersModal />
+                <WeatherModal />
             </div>
         );
     }

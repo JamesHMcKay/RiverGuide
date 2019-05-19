@@ -27,3 +27,4 @@ export const GET_SENSOR_DATA: string = "GET_SENSOR_DATA";
 export const GET_ENTRIES: string = "GET_ENTRIES";
 export const LOADING_ENTRIES: string = "LOADING_ENTRIES";
 export const GET_ITEM_DETAILS: string = "GET_ITEM_DETAILS";
+export const GET_WEATHER: string = "GET_WEATHER";

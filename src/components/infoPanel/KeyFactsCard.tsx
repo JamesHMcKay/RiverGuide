@@ -81,46 +81,16 @@ class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
 
     public render(): JSX.Element {
         return (
-            <Card
-                onMouseEnter={(): void => {
-                    this.setState({ editIconShowing: true });
-                }}
-                onMouseLeave={(): void => this.setState({ editIconShowing: false })}
-                style={{
-                    marginBottom: "1em",
-                }}
-            >
-                <CardContent>
+            <Grid container item xs={12} spacing={24} justify="space-between">
+                <Grid container item md={12} lg={12} justify="flex-start">
+                    <Typography variant="h5" gutterBottom>
+                        Key Facts
+                    </Typography>
+                </Grid>
+                <Grid container item md={12} lg={12} justify="center">
                     {this.getKeyFacts()}
-                    {this.state.editMode && (
-                        <div>
-                            <br />
-                            <Button
-                                size="small"
-                                onClick={(): void => {
-                                    this.setState({
-                                        editMode: false,
-                                        value: this.state.tempValue,
-                                    });
-                                }}
-                            >
-                                Save
-                            </Button>
-                            <Button
-                                size="small"
-                                onClick={(): void => {
-                                    this.setState({
-                                        editMode: false,
-                                        tempValue: "",
-                                    });
-                                }}
-                            >
-                                Cancel
-                            </Button>
-                        </div>
-                    )}
-                </CardContent>
-            </Card>
+                </Grid>
+            </Grid>
         );
     }
 }

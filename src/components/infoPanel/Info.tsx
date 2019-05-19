@@ -4,6 +4,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import title_image from "../../img/whitewater_feature-min.jpg";
 import Report from "../common/Report";
 import KeyFactsCard from "./KeyFactsCard";
 
@@ -18,7 +19,6 @@ import { IAuth, IGuide, IInfoPage, IListEntry, IMarker } from "../../utils/types
 import FlowBadge from "../common/FlowBadge";
 import { CurrentWeather } from "./CurrentWeather";
 import "./Info.css";
-import { WeatherForecast } from "./WeatherForecast";
 import { IWeatherStore, WeatherStore } from "./WeatherStore";
 
 // Material UI
@@ -34,13 +34,13 @@ import InfoCard from "./InfoCard";
 import MapCard from "./MapCard";
 
 interface IInfoState {
-    weatherStore: WeatherStore;
     favourited: boolean;
 }
 
 interface IInfoStateProps {
     auth: IAuth;
     infoPage: IInfoPage;
+    weatherStore: WeatherStore;
 }
 
 interface IInfoProps extends IInfoStateProps {
@@ -63,7 +63,6 @@ class Info extends Component<IInfoProps, IInfoState> {
         }
 
         this.state = {
-            weatherStore: new WeatherStore(),
             favourited,
         };
     }
@@ -129,6 +128,7 @@ class Info extends Component<IInfoProps, IInfoState> {
             <Button
             className="reporting-button"
             variant="outlined"
+            style={{height: "fit-content", color: "white", borderColor: "white"}}
             onClick={this.openModal.bind(this, "addTripInfoPage")}
              >
                 Report a trip here
@@ -138,15 +138,15 @@ class Info extends Component<IInfoProps, IInfoState> {
 
     public getCloseButton = (): JSX.Element => {
         return (
-            <IconButton
+            <Button
             onClick={this.handleClose}
             style={{
-                color: "black",
+                color: "white",
                 cursor: "pointer",
             }}
             >
                 <CloseIcon />
-            </IconButton>
+            </Button>
         );
     }
 
@@ -167,57 +167,88 @@ class Info extends Component<IInfoProps, IInfoState> {
         }
 
         return (
-            <Grid container item xs={12} spacing={24} justify="space-between" className = "right-panel">
-                <Grid item md={12} lg={12}>
-                    <AppBar position="static" color="default">
-                        <Toolbar className="toolbar">
-                            <div className="toolbar-middle">
-                                <Typography variant="h6">
-                                {entry.display_name}
-                                </Typography>
-                                <Typography variant="caption">
-                                {`${entry.river_name} river  •  ${entry.region} `}
-                                </Typography>
+            <Grid container item xs={12} spacing={0} justify="space-between" className="right-panel" >
+            {/* <img src={title_image} alt="Feature image" /> */}
+                <Grid
+                    container
+                    item xs={12}
+                    spacing={24}
+                    justify="space-between"
+                    style={{
+                        height: "200px",
+                        margin: "0px",
+                        backgroundImage: `url(${title_image})`,
+                        backgroundRepeat: "no-repeat"}}>
+                    <Grid container item md={8} lg={8} justify="flex-start">
+                                <div className="toolbar-middle">
+                                    <Typography variant="h3" style={{color: "white"}}>
+                                    {entry.display_name}
+                                    </Typography>
+                                    <Typography variant="h6" style={{color: "white"}}>
+                                    {`${entry.river_name} river  •  ${entry.region} `}
+                                    </Typography>
                             </div>
-                            {this.getTags("", "", "")}
-                            {this.getReportButton()}
+                    </Grid>
+                    <Grid container item md={4} lg={4} justify="flex-end">
+                    {/* {this.getTags("", "", "")} */}
                             {this.getCloseButton()}
-                        </Toolbar>
-                    </AppBar>
+                    </Grid>
+                    <Grid container item md={4} lg={4} justify="center">
+                        <CurrentWeather
+                            lat={entry.position.lat || 0}
+                            lon={entry.position.lon || 0}
+                            weatherStore={this.props.weatherStore}
+                            onClick= {this.openModal.bind(this, "weatherModal")}
+                            textColor = {"white"}
+                        />
+                    </Grid>
+                    <Grid container item md={4} lg={4} justify="center">
+                    {this.getFavButton()}
+                    </Grid>
+                    <Grid container item md={4} lg={4} justify="center">
+                    {this.getReportButton()}
+                    </Grid>
                 </Grid>
+
                 {/* <FlowBadge siteName={this.props.entry.gaugeName} /> */}
                 {this.props.infoPage.itemDetails &&
-                    <Grid item md={12} lg={12}>
+                    <Grid
+                        item
+                        md={12}
+                        lg={12}
+                        style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "2%"}}
+                        >
                         <KeyFactsCard itemDetails={this.props.infoPage.itemDetails} />
                     </Grid>
                 }
-                <Grid item md={12} lg={12}>
-                        {entry.gauge_id && (<FlowChart gaugeId={entry.gauge_id} />)}
-                </Grid>
+                {entry.gauge_id &&
+                <Grid
+                item
+                md={12}
+                lg={12}
+                style={{marginRight: "5%", marginLeft: "5%",  marginTop: "2%", marginBottom: "2%"}}
+                >
+                       <FlowChart gaugeId={entry.gauge_id} />
+                </Grid> }
+
                 {this.props.infoPage.itemDetails &&
-                <Grid item xs={12} sm={12}>
-                    <div style={{ margin: "1em" }}>
+                <Grid
+                item
+                xs={12}
+                sm={12}
+                style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "2%"}}
+                >
                         <InfoCard title="Description" content={this.props.infoPage.itemDetails.description} />
-                    </div>
                 </Grid>}
-                <Grid item xs={12} sm={12}>
+                <Grid
+                item
+                xs={12}
+                sm={12}
+                style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "2%"}}
+                >
                     {markerList && markerList.length > 0 && (
-                        <div style={{ margin: "1em", paddingBottom: "1em" }}>
                             <MapCard markers={markerList} />
-                        </div>
                     )}
-                </Grid>
-                <CurrentWeather
-                        lat={entry.position.lat || 0}
-                        lon={entry.position.lon || 0}
-                        weatherStore={this.state.weatherStore}
-                />
-                <Grid item xs={12} sm={12}>
-                    <WeatherForecast
-                        lat={entry.position.lat || 0}
-                        lon={entry.position.lon || 0}
-                        weatherStore={this.state.weatherStore}
-                    />
                 </Grid>
                 <Grid item xs={12} sm={12}>
                     <div
@@ -242,6 +273,7 @@ function mapStateToProps(state: IState): IInfoStateProps {
     return ({
         auth: state.auth,
         infoPage: state.infoPage,
+        weatherStore: state.weatherStore,
     });
 }
 
