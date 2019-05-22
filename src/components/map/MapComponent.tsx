@@ -2,6 +2,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import * as kmeans from "node-kmeans";
 import React, { Component } from "react";
 import ReactMapGL, { FlyToInterpolator, InteractiveMap, Marker, ViewState } from "react-map-gl";
+import uuidv1 from "uuid";
 import WebMercatorViewport from "viewport-mercator-project";
 import { IGuide, ILatLon, IListEntry, IMapBounds } from "../../utils/types";
 import { IViewport } from "./InfoMapComponent";
@@ -49,6 +50,20 @@ interface IBoundingBox {
     minLat: number;
     minLon: number;
 }
+
+// interface IFeatureItem {
+//     type: string;
+//     properties: null;
+//     geometry: {
+//         type: string;
+//         coordinates: [number, number]
+//     };
+// }
+
+// interface IFeatureCollection {
+//     type: string;
+//     features: IFeatureItem[];
+// }
 
 export class MapComponent extends Component<IMapComponentProps, IMapComponentState> {
     public prevZoom: number = 0;
@@ -155,7 +170,7 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
     }
 
     public computeCustersKmeans(): void {
-        let numberOfClusters: number = 20;
+        let numberOfClusters: number = 10;
 
         const guides: IListEntry[] = this.props.guides;
         const locations: Array<Array<number | undefined>> = [];
@@ -234,13 +249,31 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
         return list;
     }
 
+    // public getFeatureList(): IFeatureCollection {
+    //     const list: IFeatureItem[] = this.props.filteredGuides.map(
+    //         (guide: IListEntry) => {
+    //             return ({
+    //                 type: "Feature",
+    //                 properties: null,
+    //                 geometry: {
+    //                     type: "Point",
+    //                     coordinates: [guide.position.lon || 0, guide.position.lat]
+    //                 }
+    //             });
+    //         })
+    //     return {
+    //         type: "FeatureCollection",
+    //         features: list,
+    //     };
+    // }
+
     public getMarkers(): Array<(0 | JSX.Element | undefined)> {
         const list: Array<(0 | JSX.Element | undefined)>  = this.props.filteredGuides.map(
             (guide: IListEntry) =>
                 guide.position.lat &&
                 guide.position.lon && (
                     <Marker
-                        key={guide.position.lat}
+                        key={uuidv1()}
                         longitude={guide.position.lon}
                         latitude={guide.position.lat}
                     >
@@ -297,6 +330,25 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
         };
         this.setState({ viewport });
     }
+
+    // public getEventHandlers(): any {
+    //     return {
+    //       onClick: (properties: any, coords: any, offset: any) =>
+    //         console.log("marker click", properties),
+    //       onMouseEnter: (properties: any, coords: any, offset: any) =>
+    //         console.log(
+    //           `Receive event onMouseEnter at properties: ${properties}, coords: ${coords}, offset: ${offset}`
+    //         ),
+    //       onMouseLeave: (properties: any, coords: any, offset: any) =>
+    //         console.log(
+    //           `Receive event onMouseLeave at properties: ${properties}, coords: ${coords}, offset: ${offset}`
+    //         ),
+    //       onClusterClick: (properties: any, coords: any, offset: any) =>
+    //         console.log(
+    //           `Receive event onClusterClick at properties: ${properties}, coords: ${coords}, offset: ${offset}`
+    //         )
+    //     };
+    // }
 
     public render(): JSX.Element {
         const viewport: IViewport = {

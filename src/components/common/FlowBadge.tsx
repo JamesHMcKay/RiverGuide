@@ -60,6 +60,10 @@ class FlowBadge extends Component<IFlowBadgeProps> {
             units = "m";
         }
 
+        if (units === "litres_second") {
+            units = "l/s";
+        }
+
         if (flow) {
             return (
                 // <Chip

@@ -69,6 +69,28 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         return result;
     }
 
+    public getUnit = (): string => {
+        let unit: string = "";
+        const type: string = this.state.selectedType || "flow";
+        if (this.props.infoPage.selectedGuide.observables) {
+            const observables: IObservable[] = this.props.infoPage.selectedGuide.observables;
+            const selObs: IObservable[] = observables.filter((item: IObservable) => (item.type === type));
+            unit = selObs[0].units;
+        }
+        if (unit === "cumecs") {
+            unit = "m\u00B3/s";
+        }
+
+        if (unit === "metres") {
+            unit = "m";
+        }
+
+        if (unit === "litres_second") {
+            unit = "l/s";
+        }
+        return unit;
+    }
+
     public setChartOptions = (): void => {
         const chart: Am4charts.XYChart = Am4core.create("chartdiv", Am4charts.XYChart);
 
@@ -85,7 +107,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         if (valueAxis.tooltip) {
             valueAxis.tooltip.disabled = true;
         }
-        valueAxis.title.text = "units";
+        valueAxis.title.text = this.getUnit();
         // valueAxis.renderer.minWidth = 35;
 
         const series: Am4charts.LineSeries = chart.series.push(new Am4charts.LineSeries());

@@ -13,7 +13,7 @@ export default class MapCluster extends PureComponent<IMapClusterProps> {
             <div
                 className="map-cluster"
                 onClick={(): void => this.props.onClick()}
-                style={{transform: `translate(${-size / 2}px,${-size}px)`}}
+                style={{transform: `translate(${-size / 2}px,${-size}px)`, color: "white"}}
             >
                 {this.props.count}
             </div>

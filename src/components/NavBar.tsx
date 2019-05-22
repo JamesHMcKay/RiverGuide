@@ -96,9 +96,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
             <div className="no-auth-buttons">
                 <Button
                     onClick={this.openModal.bind(this, "registerModal")}
-                    variant="contained"
-                    color="secondary"
-                    size="large"
+                    color="primary"
                     style={{
                         marginRight: "1em",
                     }}

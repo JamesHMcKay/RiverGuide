@@ -34,6 +34,7 @@
     "@types/react-redux": "^6.0.10",
     "@types/react-router-dom": "^4.3.1",
     "@types/reactstrap": "^6.4.3",
+    "@types/uuid": "^3.4.4",
     "@types/viewport-mercator-project": "^6.1.0",
     "@types/zxcvbn": "^4.4.0",
     "axios": "^0.18.0",
@@ -70,6 +71,7 @@
     "tslint": "^5.12.1",
     "tslint-react": "^3.6.0",
     "typescript": "^3.2.1",
+    "uuid": "^3.3.2",
     "uuidv4": "^2.0.0",
     "viewport-mercator-project": "^6.1.1",
     "zxcvbn": "^4.4.2"
