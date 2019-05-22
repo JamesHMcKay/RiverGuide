@@ -4,7 +4,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import title_image from "../../img/whitewater_feature-min.jpg";
+import title_image from "../../img/riverwiki.jpg";
 import Report from "../common/Report";
 import KeyFactsCard from "./KeyFactsCard";
 
@@ -25,8 +25,8 @@ import { IWeatherStore, WeatherStore } from "./WeatherStore";
 import { Button, Chip, IconButton, Paper, Tooltip } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
-import StarBorderIcon from "@material-ui/icons/StarBorderRounded";
-import StarIcon from "@material-ui/icons/StarRounded";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 
 // Components
 import FlowChart from "./FlowChart";
@@ -114,9 +114,9 @@ class Info extends Component<IInfoProps, IInfoState> {
             >
             <IconButton onClick={this.toggleFavourite}>
                 {this.state.favourited ? (
-                    <StarIcon style={{ color: "#fb1" }} />
+                    <FavoriteIcon style={{ color: "#fb1" }} />
                 ) : (
-                    <StarBorderIcon style={{ color: "#fff" }} />
+                    <FavoriteBorder style={{ color: "#fff" }} />
                 )}
                 </IconButton>
             </Tooltip>
@@ -131,7 +131,7 @@ class Info extends Component<IInfoProps, IInfoState> {
             style={{height: "fit-content", color: "white", borderColor: "white"}}
             onClick={this.openModal.bind(this, "addTripInfoPage")}
              >
-                Report a trip here
+                Log a trip here
             </Button>
         );
     }
@@ -179,8 +179,8 @@ class Info extends Component<IInfoProps, IInfoState> {
                         margin: "0px",
                         backgroundImage: `url(${title_image})`,
                         backgroundRepeat: "no-repeat"}}>
-                    <Grid container item md={8} lg={8} justify="flex-start">
-                                <div className="toolbar-middle">
+                    <Grid container item md={11} lg={11} justify="flex-start">
+                            <div className="toolbar-middle">
                                     <Typography variant="h3" style={{color: "white"}}>
                                     {entry.display_name}
                                     </Typography>
@@ -188,12 +188,13 @@ class Info extends Component<IInfoProps, IInfoState> {
                                     {`${entry.river_name} river  •  ${entry.region} `}
                                     </Typography>
                             </div>
+                            {this.getFavButton()}
                     </Grid>
-                    <Grid container item md={4} lg={4} justify="flex-end">
+                    <Grid container item md={1} lg={1} justify="flex-end">
                     {/* {this.getTags("", "", "")} */}
                             {this.getCloseButton()}
                     </Grid>
-                    <Grid container item md={4} lg={4} justify="center">
+                    <Grid container item md={6} lg={6} justify="flex-start">
                         <CurrentWeather
                             lat={entry.position.lat || 0}
                             lon={entry.position.lon || 0}
@@ -202,10 +203,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                             textColor = {"white"}
                         />
                     </Grid>
-                    <Grid container item md={4} lg={4} justify="center">
-                    {this.getFavButton()}
-                    </Grid>
-                    <Grid container item md={4} lg={4} justify="center">
+                    <Grid container item md={6} lg={6} justify="flex-end">
                     {this.getReportButton()}
                     </Grid>
                 </Grid>
@@ -216,7 +214,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                         item
                         md={12}
                         lg={12}
-                        style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "2%"}}
+                        style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0"}}
                         >
                         <KeyFactsCard itemDetails={this.props.infoPage.itemDetails} />
                     </Grid>
@@ -236,7 +234,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                 item
                 xs={12}
                 sm={12}
-                style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "2%"}}
+                style={{marginRight: "5%", marginLeft: "5%", marginTop: "1%", marginBottom: "2%"}}
                 >
                         <InfoCard title="Description" content={this.props.infoPage.itemDetails.description} />
                 </Grid>}

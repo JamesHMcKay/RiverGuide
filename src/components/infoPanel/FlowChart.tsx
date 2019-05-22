@@ -85,6 +85,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         if (valueAxis.tooltip) {
             valueAxis.tooltip.disabled = true;
         }
+        valueAxis.title.text = "units";
         // valueAxis.renderer.minWidth = 35;
 
         const series: Am4charts.LineSeries = chart.series.push(new Am4charts.LineSeries());

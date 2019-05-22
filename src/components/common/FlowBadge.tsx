@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import { IState } from "../../reducers/index";
-import { IGauge } from "./../../utils/types";
+import { IGauge, IObservable } from "./../../utils/types";
 
 // Material UI
 import Chip from "@material-ui/core/Chip";
@@ -13,7 +13,7 @@ const HEIGHT_UNIT: string = " meters";
 
 interface IFlowBadgeProps extends IFlowBadgeStateProps {
     siteName?: string;
-    latestFlow?: number;
+    observables?: IObservable[];
 }
 
 interface IFlowBadgeStateProps {
@@ -25,39 +25,51 @@ class FlowBadge extends Component<IFlowBadgeProps> {
         super(props);
     }
 
-    public getFlowValue = (siteName?: string): string | null => {
-        if (siteName) {
-            const gauge: IGauge = this.props.gauges.filter(
-                (site: IGauge) => site.siteName === siteName,
-            )[0];
+    // public getFlowValue = (siteName?: string): string | null => {
+    //     if (siteName) {
+    //         const gauge: IGauge = this.props.gauges.filter(
+    //             (site: IGauge) => site.siteName === siteName,
+    //         )[0];
 
-            if (gauge) {
-                return gauge.currentFlow
-                    ? gauge.currentFlow + FLOW_UNIT
-                    : gauge.currentLevel + HEIGHT_UNIT;
-            }
-        } else if (this.props.latestFlow) {
-            return this.props.latestFlow.toFixed(2).toString();
-        }
+    //         if (gauge) {
+    //             return gauge.currentFlow
+    //                 ? gauge.currentFlow + FLOW_UNIT
+    //                 : gauge.currentLevel + HEIGHT_UNIT;
+    //         }
+    //     } else if (this.props.latestFlow) {
+    //         return this.props.latestFlow.toFixed(2).toString();
+    //     }
 
-        return null;
-    }
+    //     return null;
+    // }
 
     public render(): JSX.Element | null {
         const siteName: string | undefined = this.props.siteName;
         let flow: string | undefined;
+        let units: string | undefined;
 
-        if (this.props.latestFlow) {
-            flow = this.props.latestFlow.toFixed(2);
+        if (this.props.observables) {
+            flow = this.props.observables[0].latest_value.toFixed(1);
+            units = this.props.observables[0].units;
+        }
+        if (units === "cumecs") {
+            units = "m\u00B3/s";
+        }
+
+        if (units === "metres") {
+            units = "m";
         }
 
         if (flow) {
             return (
-                <Chip
-                    label={flow}
-                    color="primary"
-                    className="flow-badge"
-                />
+                // <Chip
+                //     label={flow + " " + units}
+                //     color="primary"
+                //     className="flow-badge"
+                // />
+                <div>
+                    {flow + " " + units}
+                </div>
             );
         } else {
             return null;

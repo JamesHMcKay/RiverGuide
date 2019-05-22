@@ -47,7 +47,11 @@ class WeatherModal extends Component<IWeatherModalProps> {
     public render(): JSX.Element {
         const entry: IListEntry = this.props.infoPage.selectedGuide;
         return (
-                <Modal isOpen={this.props.isOpen} toggle={(): void => this.props.toggleModal()}>
+                <Modal
+                    isOpen={this.props.isOpen}
+                    toggle={(): void => this.props.toggleModal()}
+                    style={{alignItems: "center", justifyContent: "center"}}
+                >
                     <ModalHeader toggle={(): void => this.props.toggleModal()}>
                         Weather
                     </ModalHeader>

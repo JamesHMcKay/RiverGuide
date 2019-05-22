@@ -251,16 +251,14 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
 
     public getForecastElement(day: number): JSX.Element {
         return (
-            <Card>
-                <CardContent className="forecast-element">
+            <div className="forecast-element">
                 {this.getForecastIcon(day)}
                 {this.getForecastTime(day)}
                 {this.getForecastMaxTemp(day)}
                 {this.getForecastMinTemp(day)}
                 {this.getForecastWindSpeed(day)}
                 {this.getForecastWindDirection(day)}
-                </CardContent>
-            </Card>
+            </div>
         );
     }
 
@@ -302,7 +300,10 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
     public render(): JSX.Element {
         return (
             <div>
-                <div style={{display: "flex", flexDirection: "row"}}>
+                <Typography variant="h5" style={{margin: "15px"}}>
+                    {"Current"}
+                </Typography>
+                <div style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
                     <CurrentWeather
                         lat={this.props.lat || 0}
                         lon={this.props.lon || 0}
@@ -311,7 +312,10 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
                     />
                     {this.getDetails()}
                 </div>
-                <div className="weather-data">
+                <Typography variant="h5" style={{margin: "15px"}}>
+                    {"Forecast"}
+                </Typography>
+                <div className="weather-data" style = {{justifyContent: "center"}}>
                     {this.state.weather && this.getForecastElement(0)}
                     {this.state.weather && this.getForecastElement(1)}
                     {this.state.weather && this.getForecastElement(2)}
