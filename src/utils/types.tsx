@@ -99,7 +99,7 @@ export interface IGuide {
 }
 
 export interface IGauge extends IListEntry {
-    extra_field?: string;
+    observables: IObservable[];
 }
 
 export interface IGaugeHistory {

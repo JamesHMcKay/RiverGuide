@@ -24,6 +24,7 @@ Am4core.useTheme(Am4themes_animated);
 
 interface IFlowChartStateProps {
     infoPage: IInfoPage;
+    gauges: IGauge[];
 }
 
 interface IFlowChartProps extends IFlowChartStateProps {
@@ -43,8 +44,8 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
     constructor(props: IFlowChartProps) {
         super(props);
         let selectedType: string | undefined;
-        if (this.props.infoPage.selectedGuide.observables) {
-            const observables: IObservable[] = this.props.infoPage.selectedGuide.observables;
+        const observables: IObservable[] | undefined = this.getObservables();
+        if (observables) {
             const types: string[] = observables.map((item: IObservable): string => item.type);
             if (types.indexOf("flow") >= 0) {
                 selectedType = "flow";
@@ -56,6 +57,21 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
             selectedType,
         };
       }
+
+    public getObservables = (): IObservable[] | undefined => {
+        const observables: IObservable[] | undefined = this.props.infoPage.selectedGuide.observables;
+        if (observables) {
+            return observables;
+        } else {
+            const gauges: IGauge[] = this.props.gauges.filter(
+                (item: IGauge) => item.id === this.props.infoPage.selectedGuide.gauge_id,
+            );
+            if (gauges.length > 0) {
+                return gauges[0].observables;
+            }
+        }
+        return undefined;
+    }
 
     public mapHistory = (history: IHistory[]): IChartData[] => {
         const type: string = this.state.selectedType || "flow";
@@ -72,8 +88,8 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
     public getUnit = (): string => {
         let unit: string = "";
         const type: string = this.state.selectedType || "flow";
-        if (this.props.infoPage.selectedGuide.observables) {
-            const observables: IObservable[] = this.props.infoPage.selectedGuide.observables;
+        const observables: IObservable[] | undefined = this.getObservables();
+        if (observables) {
             const selObs: IObservable[] = observables.filter((item: IObservable) => (item.type === type));
             unit = selObs[0].units;
         }
@@ -166,8 +182,8 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
     }
 
     public getButtons = (): JSX.Element[] | null => {
-        if (this.props.infoPage.selectedGuide.observables) {
-            const observables: IObservable[] = this.props.infoPage.selectedGuide.observables;
+        const observables: IObservable[] | undefined = this.getObservables();
+        if (observables) {
             const result: JSX.Element[] = observables.map((item: IObservable) =>
                 <Button
                     style = {{marginLeft: "10px"}}
@@ -213,6 +229,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
 function mapStateToProps(state: IState): IFlowChartStateProps {
     return ({
         infoPage: state.infoPage,
+        gauges: state.gauges,
     });
 }
 

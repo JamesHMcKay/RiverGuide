@@ -19,7 +19,7 @@ class MapPopup extends Component<IMapPopupProps, {}> {
             <div className="popup-content">
                 <h5>{guide.title}</h5>
                 <GradeBadge guide={guide} gauges={gauges} />
-                <FlowBadge siteName={guide.gaugeName} />
+                <FlowBadge gaugeId={guide.gaugeName} />
             </div>
         );
     }

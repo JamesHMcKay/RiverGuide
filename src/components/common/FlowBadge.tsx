@@ -5,14 +5,8 @@ import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
 import { IGauge, IObservable } from "./../../utils/types";
 
-// Material UI
-import Chip from "@material-ui/core/Chip";
-
-const FLOW_UNIT: string = " cumecs";
-const HEIGHT_UNIT: string = " meters";
-
 interface IFlowBadgeProps extends IFlowBadgeStateProps {
-    siteName?: string;
+    gaugeId?: string;
     observables?: IObservable[];
 }
 
@@ -25,32 +19,39 @@ class FlowBadge extends Component<IFlowBadgeProps> {
         super(props);
     }
 
-    // public getFlowValue = (siteName?: string): string | null => {
-    //     if (siteName) {
-    //         const gauge: IGauge = this.props.gauges.filter(
-    //             (site: IGauge) => site.siteName === siteName,
-    //         )[0];
+    public getObservables = (gaugeId: string | undefined): IObservable[] | undefined => {
+        let observables: IObservable[] | undefined;
+        if (this.props.observables) {
+            observables = this.props.observables;
+        } else {
+            const gauges: IGauge[] = this.props.gauges.filter(
+                (item: IGauge) => item.id === gaugeId,
+            );
+            if (gauges.length > 0) {
+                observables = gauges[0].observables;
+            }
+        }
 
-    //         if (gauge) {
-    //             return gauge.currentFlow
-    //                 ? gauge.currentFlow + FLOW_UNIT
-    //                 : gauge.currentLevel + HEIGHT_UNIT;
-    //         }
-    //     } else if (this.props.latestFlow) {
-    //         return this.props.latestFlow.toFixed(2).toString();
-    //     }
+        if (observables && observables.length > 0) {
+            const observablesFlow: IObservable[] = observables.filter(
+                (item: IObservable) => item.type === "flow",
+            );
+            if (observablesFlow.length > 0) {
+                observables = observablesFlow;
+            }
+        }
 
-    //     return null;
-    // }
+        return observables;
+    }
 
     public render(): JSX.Element | null {
-        const siteName: string | undefined = this.props.siteName;
         let flow: string | undefined;
         let units: string | undefined;
+        const observables: IObservable[] | undefined = this.getObservables(this.props.gaugeId);
 
-        if (this.props.observables) {
-            flow = this.props.observables[0].latest_value.toFixed(1);
-            units = this.props.observables[0].units;
+        if (observables && observables.length > 0) {
+            flow = observables[0].latest_value.toFixed(1);
+            units = observables[0].units;
         }
         if (units === "cumecs") {
             units = "m\u00B3/s";
@@ -66,11 +67,6 @@ class FlowBadge extends Component<IFlowBadgeProps> {
 
         if (flow) {
             return (
-                // <Chip
-                //     label={flow + " " + units}
-                //     color="primary"
-                //     className="flow-badge"
-                // />
                 <div>
                     {flow + " " + units}
                 </div>

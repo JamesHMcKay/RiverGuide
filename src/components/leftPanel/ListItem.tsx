@@ -31,7 +31,7 @@ class GuideItem extends Component<IGuideItemProps, {}> {
                         <PlaceIcon />
                     </ListItemIcon>
                     <ListItemText inset primary={this.props.guide.display_name} />
-                    <FlowBadge siteName={this.props.guide.gauge_id} observables={this.props.guide.observables} />
+                    <FlowBadge gaugeId={this.props.guide.gauge_id} observables={this.props.guide.observables} />
                 </ListItem>
                 <Divider />
             </div>
