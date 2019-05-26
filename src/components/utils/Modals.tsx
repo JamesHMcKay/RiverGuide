@@ -10,12 +10,12 @@ import Login from "../auth/Login";
 import Logout from "../auth/Logout";
 import Register from "../auth/Register";
 import Welcome from "../auth/Welcome";
+import EditModal from "../infoPanel/EditModal";
 import WeatherModal from "../infoPanel/WeatherModal";
 import FiltersModal from "../list/FiltersModal";
 import TripDetailsAnyPage from "../profile/TripDetailsAnyPage";
 import TripDetailsInfoPage from "../profile/TripDetailsInfoPage";
 import Success from "../utils/Success";
-import EditModal from "../infoPanel/EditModal";
 // import Create from "../create/Create";
 // import CreateModal from "../create/CreateModal";
 

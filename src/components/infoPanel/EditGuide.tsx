@@ -1,16 +1,16 @@
-import React from "react";
 import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
+import React from "react";
 
 import { connect } from "react-redux";
-import { IState } from "../../reducers/index";
-import { IInfoPage, IListEntry, ILogEntry, IOpenLog, IGauge } from "../../utils/types";
-import GaugeSelect from "./GaugeSelect";
 import { updateGuide } from "../../actions/updateGuide";
+import { IState } from "../../reducers/index";
+import { IGauge, IInfoPage, IListEntry, ILogEntry, IOpenLog } from "../../utils/types";
+import GaugeSelect from "./GaugeSelect";
 
 interface IEditGuideState {
     description: string;
@@ -38,9 +38,9 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
             id = this.props.infoPage.selectedGuide.id;
         }
         this.state = ({
-            description: description,
-            gaugeId: gaugeId,
-            id: id,
+            description,
+            gaugeId,
+            id,
         });
     }
 
@@ -57,10 +57,9 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
         }
     }
 
-
     public handleSave = (): void => {
-        let result: IEditGuideState = this.state;
-        
+        const result: IEditGuideState = this.state;
+
         this.props.updateGuide(result);
         this.props.handleClose();
     }
@@ -68,7 +67,7 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
     public updateDescription = (input: any): void => {
         const description: string = input.target.value;
         this.setState({
-            description: description,
+            description,
         });
     }
 

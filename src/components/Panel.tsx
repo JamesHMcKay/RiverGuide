@@ -14,10 +14,10 @@ import {
     makeGuideRequest,
     setMapBounds,
 } from "../actions/actions";
+import { makeGaugeRequest } from "../actions/getGauges";
 import {
     openInfoPage,
 } from "../actions/getGuides";
-import { makeGaugeRequest } from "../actions/getGauges";
 import { IState } from "../reducers/index";
 
 import * as darksky from "dark-sky-api";

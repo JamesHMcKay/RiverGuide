@@ -98,7 +98,9 @@ export interface IGuide {
     latestFlow?: number;
 }
 
-export interface IGauge extends IListEntry {}
+export interface IGauge extends IListEntry {
+    extra_field?: string;
+}
 
 export interface IGaugeHistory {
     gaugeHistory: IHistory[];

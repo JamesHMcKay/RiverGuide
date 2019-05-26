@@ -3,8 +3,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import EditGuide from "./EditGuide";
 import { IInfoPage } from "../../utils/types";
+import EditGuide from "./EditGuide";
 
 interface IEditModalProps extends IEditModalStateProps {
     toggleModal: (modal?: string) => void;

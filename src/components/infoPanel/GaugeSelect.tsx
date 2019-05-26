@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Select from "react-select";
 import { IState } from "../../reducers/index";
-import { IGuide, IListEntry, IGauge } from "../../utils/types";
+import { IGauge, IGuide, IListEntry } from "../../utils/types";
 
 import { FormGroup, Label } from "reactstrap";
 
@@ -37,14 +37,14 @@ class SectionSelect extends Component<IGaugeSelectProps> {
 
     public getSelectedGauge = (gaugeId: string | undefined): IGauge | null  => {
         const selectedGauge: IGauge[] = this.props.gauges.filter(
-            (gauge: IGauge) => gauge.id === gaugeId
+            (gauge: IGauge) => gauge.id === gaugeId,
         );
         if (selectedGauge.length > 0) {
             return selectedGauge[0];
         } else {
             return null;
         }
-        
+
     }
 
     public render(): JSX.Element {
