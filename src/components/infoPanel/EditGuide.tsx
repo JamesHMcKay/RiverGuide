@@ -10,18 +10,21 @@ import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
 import { IInfoPage, IListEntry, ILogEntry, IOpenLog, IGauge } from "../../utils/types";
 import GaugeSelect from "./GaugeSelect";
+import { updateGuide } from "../../actions/updateGuide";
 
 interface IEditGuideState {
     description: string;
     gaugeId: string | undefined;
+    id: string | undefined;
 }
 
 interface IEditGuideProps {
+    updateGuide: (item: IEditGuideState) => void;
     handleClose: () => void;
     infoPage: IInfoPage;
 }
 
-export class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
+class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
     constructor(props: IEditGuideProps) {
         super(props);
         let description: string = "";
@@ -29,12 +32,15 @@ export class EditGuide extends React.Component<IEditGuideProps, IEditGuideState>
             description = this.props.infoPage.itemDetails.description;
         }
         let gaugeId: string | undefined;
+        let id: string | undefined;
         if (this.props.infoPage.selectedGuide) {
             gaugeId = this.props.infoPage.selectedGuide.gauge_id;
+            id = this.props.infoPage.selectedGuide.id;
         }
         this.state = ({
             description: description,
-            gaugeId: gaugeId
+            gaugeId: gaugeId,
+            id: id,
         });
     }
 
@@ -51,7 +57,11 @@ export class EditGuide extends React.Component<IEditGuideProps, IEditGuideState>
         }
     }
 
-    public handleSave(): void {
+
+    public handleSave = (): void => {
+        let result: IEditGuideState = this.state;
+        
+        this.props.updateGuide(result);
         this.props.handleClose();
     }
 
@@ -62,7 +72,7 @@ export class EditGuide extends React.Component<IEditGuideProps, IEditGuideState>
         });
     }
 
-    public handleGaugeChange(selectedGauge: IGauge): void {
+    public handleGaugeChange = (selectedGauge: IGauge): void => {
         this.setState({
             gaugeId: selectedGauge.id,
         });
@@ -110,7 +120,7 @@ export class EditGuide extends React.Component<IEditGuideProps, IEditGuideState>
     }
   }
 
-  export default connect(
+export default connect(
     null,
-    { },
+    { updateGuide },
 )(EditGuide);

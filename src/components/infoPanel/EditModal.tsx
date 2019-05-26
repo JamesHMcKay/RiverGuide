@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import { EditGuide } from "./EditGuide";
+import EditGuide from "./EditGuide";
 import { IInfoPage } from "../../utils/types";
 
 interface IEditModalProps extends IEditModalStateProps {
@@ -15,7 +15,7 @@ interface IEditModalStateProps {
     infoPage: IInfoPage;
 }
 
-class TripDetailsAnyPage extends Component<IEditModalProps> {
+class EditModal extends Component<IEditModalProps> {
     constructor(props: IEditModalProps) {
         super(props);
     }
@@ -56,4 +56,4 @@ function mapStateToProps(state: IState): IEditModalStateProps {
 export default connect(
     mapStateToProps,
     { toggleModal},
-)(TripDetailsAnyPage);
+)(EditModal);

@@ -64,6 +64,7 @@ export const setCategory = (category, cancelToken) => dispatch => {
                     river_name: item.river_name,
                     position: {lat: item.latitude < 90 ? item.latitude : -45, lon: item.longitude },
                     region: item.region,
+                    gauge_id: item.gauge_id,
                     type: "wwguide",
                 }));
             dispatch({

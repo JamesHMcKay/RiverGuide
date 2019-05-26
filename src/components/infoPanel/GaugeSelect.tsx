@@ -50,8 +50,6 @@ class SectionSelect extends Component<IGaugeSelectProps> {
     public render(): JSX.Element {
         const selectedGauge: IGauge | null = this.getSelectedGauge(this.props.selectedGaugeId || "");
         return (
-            <FormGroup>
-                <Label for="section">Gauge</Label>
                 <Select
                     name="section"
                     placeholder="Select a gauge"
@@ -71,14 +69,13 @@ class SectionSelect extends Component<IGaugeSelectProps> {
                         null
                     }
                 />
-            </FormGroup>
         );
     }
 }
 
 function mapStateToProps(state: IState): IGaugeSelectStateProps {
     return ({
-        gauges: state.listEntries,
+        gauges: state.gauges,
     });
 }
 

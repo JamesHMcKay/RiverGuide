@@ -12,7 +12,6 @@ import {
     GET_ERRORS,
     OPEN_MODAL,
     SET_CURRENT_USER,
-    GET_GAUGES,
     GET_LOGS,
     SEARCH_GUIDES,
     FILTER_GUIDES,
