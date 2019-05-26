@@ -19,11 +19,11 @@ export class GradeBadge extends Component<IGradeBadgeProps> {
 
         const gaugeAtThisSite: IGauge | undefined = this.props.gauges.find(
             (gauge: IGauge) =>
-                gauge.siteName.toLowerCase() === gaugeName.toLowerCase(),
+                gauge.display_name.toLowerCase() === gaugeName.toLowerCase(),
         );
 
         if (gaugeAtThisSite) {
-            const currentFlow: number = gaugeAtThisSite.currentFlow;
+            const currentFlow: number = 0;
             return gradeFrom <= currentFlow && gradeTo >= currentFlow
                 ? true
                 : false;

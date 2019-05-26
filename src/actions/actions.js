@@ -171,16 +171,6 @@ export const createGuide = (guideData, category) => dispatch => {
         });
 };
 
-// Get gauges
-export const makeGaugeRequest = () => dispatch => {
-    axios.get(process.env.REACT_APP_AGG_FLOW_URL).then(res => {
-        dispatch({
-            type: GET_GAUGES,
-            payload: res.data.data,
-        });
-    });
-};
-
 // Get logbook logs
 export const makeLogbookRequest = () => dispatch => {
     axios.get(serverLocation + "/logbook").then(res => {

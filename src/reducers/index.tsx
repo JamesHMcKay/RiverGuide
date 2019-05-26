@@ -47,7 +47,6 @@ export interface IState {
     errors: IErrors;
     log: ILogEntry[];
     gaugeHistory: IGaugeHistory;
-    sensorFeatureList: IFeatureOfInterest[];
     listEntries: IListEntry[];
     listItemDetails: IItemDetails;
     weatherStore: WeatherStore;

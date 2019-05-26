@@ -98,12 +98,7 @@ export interface IGuide {
     latestFlow?: number;
 }
 
-export interface IGauge {
-    siteName: string;
-    currentFlow: number;
-    currentLevel: number;
-    lastUpdated: string;
-}
+export interface IGauge extends IListEntry {}
 
 export interface IGaugeHistory {
     gaugeHistory: IHistory[];

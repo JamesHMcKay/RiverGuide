@@ -256,7 +256,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                         }}
                     >
                         <Tooltip title={"Edit " + entry.display_name} placement="left">
-                            <Button color="secondary">
+                            <Button color="secondary" onClick={this.openModal.bind(this, "editModal")}>
                                 <EditIcon />
                             </Button>
                         </Tooltip>

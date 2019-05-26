@@ -11,14 +11,13 @@ import { connect } from "react-redux";
 import { CSSTransition } from "react-transition-group";
 import {
     generateFilteredList,
-    makeGaugeRequest,
     makeGuideRequest,
     setMapBounds,
 } from "../actions/actions";
 import {
     openInfoPage,
 } from "../actions/getGuides";
-import { getSensorData } from "../actions/getSensorData";
+import { makeGaugeRequest } from "../actions/getGauges";
 import { IState } from "../reducers/index";
 
 import * as darksky from "dark-sky-api";
@@ -63,7 +62,6 @@ export interface IPanelMapStateToProps {
     infoPage: IInfoPage;
     filterdGuides: IListEntry[];
     filters: IFilter[];
-    sensorFeatureList: IFeatureOfInterest[];
     listEntries: IListEntry[];
 }
 
@@ -108,7 +106,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
 
     public componentDidMount(): void {
         this.props.makeGaugeRequest();
-        this.props.getSensorData();
+        this.props.makeGaugeRequest();
     }
 
     public componentWillReceiveProps(props: IPanelProps): void {
@@ -246,7 +244,6 @@ const mapStateToProps: (state: IState) => IPanelMapStateToProps = (state: IState
     infoPage: state.infoPage,
     filterdGuides: state.filteredList,
     filters: state.filteredGuides,
-    sensorFeatureList: state.sensorFeatureList,
     listEntries: state.listEntries,
 });
 
@@ -256,6 +253,5 @@ export default connect(
         generateFilteredList,
         makeGaugeRequest,
         setMapBounds,
-        openInfoPage,
-        getSensorData}),
+        openInfoPage}),
 )(Panel);

@@ -15,6 +15,7 @@ import FiltersModal from "../list/FiltersModal";
 import TripDetailsAnyPage from "../profile/TripDetailsAnyPage";
 import TripDetailsInfoPage from "../profile/TripDetailsInfoPage";
 import Success from "../utils/Success";
+import EditModal from "../infoPanel/EditModal";
 // import Create from "../create/Create";
 // import CreateModal from "../create/CreateModal";
 
@@ -32,6 +33,7 @@ class Modals extends Component {
                 <TripDetailsAnyPage />
                 <FiltersModal />
                 <WeatherModal />
+                <EditModal />
             </div>
         );
     }

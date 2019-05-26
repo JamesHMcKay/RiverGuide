@@ -97,7 +97,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         if (shouldUpdate && selectedGuide && selectedGuide.gauge_id) {
             const gaugeName: string = selectedGuide.gauge_id;
             const gauge: IGauge = this.props.gauges.filter(
-                (gauge: IGauge): boolean => (gauge.siteName === gaugeName))[0];
+                (gauge: IGauge): boolean => (gauge.display_name === gaugeName))[0];
             this.props.getGaugeHistory(selectedGuide);
             this.setState({
                 gauge,
