@@ -1,4 +1,4 @@
-import { IListEntry, IMapBounds } from "./types";
+import { IListEntry, IMapBounds, IGuide } from "./types";
 
 interface IFilterValues {
     filters: string[];
@@ -37,16 +37,22 @@ function applyMapBounds(mapBounds: IMapBounds): (guide: IListEntry) => boolean {
 // apply filters + search
 function applyFiltersToList(guideList: IListEntry[], filterValues: IFilterValues, mapBounds: IMapBounds): IListEntry[] {
     // const { filters: string[], searchString: string } = filterValues;
-    return guideList.filter(applyMapBounds(mapBounds)).filter((guide: IListEntry): boolean => {
-        if (filterValues.searchString === "") {
-            return true;
-        }
-        return (
-            hasIndex(guide.display_name, filterValues.searchString) ||
-            hasIndex(guide.region, filterValues.searchString)
-            // hasIndex(guide.river_name, filterValues.searchString)
-        );
-    });
+    let filteredList: IListEntry[] = guideList;
+    if (filterValues.searchString === "") {
+        filteredList = guideList.filter(applyMapBounds(mapBounds));
+    } else {
+        filteredList = guideList.filter((guide: IListEntry): boolean => {
+            if (filterValues.searchString === "") {
+                return true;
+            }
+            return (
+                hasIndex(guide.display_name, filterValues.searchString) ||
+                hasIndex(guide.region, filterValues.searchString)
+                // hasIndex(guide.river_name, filterValues.searchString)
+            );
+        });
+    }
+    return filteredList;
 }
 
 export default applyFiltersToList;
