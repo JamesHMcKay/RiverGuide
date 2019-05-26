@@ -5,7 +5,7 @@ import {
     searchGuideList,
 } from "../actions/actions";
 import { setCategory } from "../actions/getGuides";
-import { IFilter, IGuide, ILatLon, IMapBounds } from "./../utils/types";
+import { IFilter, IGuide, ILatLon, IListEntry, IMapBounds } from "./../utils/types";
 
 // Material UI
 import { AppBar, Tab, Tabs, TextField, Toolbar } from "@material-ui/core";
@@ -31,8 +31,8 @@ const data: string[] = [
 
 interface IControlBarProps extends IControlBarStateToProps {
     generateFilteredList: (
-        guides: IGuide[],
-        filters: IFilter[],
+        guides: IListEntry[],
+        searchString: string,
         mapBounds: IMapBounds) => void;
     searchGuideList: (value: string, guides: IGuide[]) => void;
     setCategory: (value: string, token: CancelTokenSource) => void;
@@ -41,8 +41,7 @@ interface IControlBarProps extends IControlBarStateToProps {
 interface IControlBarStateToProps {
     openModal: string;
     mapBounds: IMapBounds;
-    guides: IGuide[];
-    filters: IFilter[];
+    listEntries: IListEntry[];
 }
 
 interface IControlBarState {
@@ -75,15 +74,12 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
     }
 
     public handleSearch = (event: any): void => {
-        this.props.searchGuideList(event.target.value, this.props.guides);
-        setTimeout(
-            () =>
-                this.props.generateFilteredList(
-                    this.props.guides,
-                    this.props.filters,
-                    this.props.mapBounds,
-                ),
-            100,
+        // this.props.searchGuideList(event.target.value, this.props.guides);
+
+        this.props.generateFilteredList(
+            this.props.listEntries,
+            event.target.value,
+            this.props.mapBounds,
         );
     }
 
@@ -200,8 +196,7 @@ ControlBar.propTypes = {};
 
 const mapStateToProps: (state: IState) => IControlBarStateToProps = (state: IState): IControlBarStateToProps => ({
     openModal: state.openModal,
-    guides: state.guides,
-    filters: state.filteredGuides,
+    listEntries: state.listEntries,
     mapBounds: state.mapBounds,
 });
 

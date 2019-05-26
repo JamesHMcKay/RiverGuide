@@ -21,6 +21,7 @@ import {
     ADD_TO_FAVOURITES,
     REMOVE_FROM_FAVOURITES,
     SET_MAP_BOUNDS,
+    SET_FILTER,
 } from "./types";
 
 const serverLocation = process.env.REACT_APP_SERVER_URL;
@@ -220,13 +221,20 @@ export const filterGuideList = (attribute, values) => dispatch => {
     });
 };
 
-export const generateFilteredList = (guides, filters, mapBounds) => dispatch => {
+export const generateFilteredList = (guides, searchString, mapBounds) => dispatch => {
     dispatch({
         type: GENERATE_FILTERED_LIST,
         payload: {
             guides,
-            filters,
+            searchString,
             mapBounds,
+        },
+    });
+
+    dispatch({
+        type: SET_FILTER,
+        payload: {
+            searchString,
         },
     });
 };

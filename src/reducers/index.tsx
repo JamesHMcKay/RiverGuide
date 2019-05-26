@@ -21,7 +21,6 @@ import { WeatherStore } from "../components/infoPanel/WeatherStore";
 import {
     IAuth,
     IErrors,
-    IFeatureOfInterest,
     IFilter,
     IGauge,
     IGaugeHistory,
@@ -38,7 +37,6 @@ export interface IState {
     gauges: IGauge[];
     infoPage: IInfoPage;
     filteredList: IListEntry[];
-    filteredGuides: IFilter[];
     auth: IAuth;
     openModal: string;
     mapBounds: IMapBounds;
@@ -50,6 +48,7 @@ export interface IState {
     listEntries: IListEntry[];
     listItemDetails: IItemDetails;
     weatherStore: WeatherStore;
+    filters: IFilter;
 }
 
 export default combineReducers({
@@ -59,7 +58,6 @@ export default combineReducers({
     guides: guideReducer,
     gauges: gaugeReducer,
     log: logReducer,
-    filteredGuides: filterReducer,
     filteredList: listReducer,
     infoPage: infoReducer,
     openLog: openLogReducer,
@@ -70,4 +68,5 @@ export default combineReducers({
     listEntries: listEntryReducer,
     listItemDetails: listItemDetailsReducer,
     weatherStore: weatherReducer,
+    filters: filterReducer,
 });

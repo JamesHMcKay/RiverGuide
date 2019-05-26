@@ -115,8 +115,7 @@ export interface IInfoPage {
 }
 
 export interface IFilter {
-    attribute: string;
-    values: string;
+    searchString: string;
 }
 
 export interface ILoginDetails {
@@ -193,4 +192,9 @@ export interface IFeatureOfInterest {
     id: string;
     latest_flow: number;
     name: string;
+}
+
+export interface IRiverRegion {
+    river: string;
+    region: string;
 }

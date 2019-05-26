@@ -10,7 +10,7 @@ export default function(state = initialState, action) {
         case GENERATE_FILTERED_LIST:
             return applyFiltersToList(
                 action.payload.guides,
-                action.payload.filters,
+                action.payload.searchString,
                 action.payload.mapBounds,
             );
         default:

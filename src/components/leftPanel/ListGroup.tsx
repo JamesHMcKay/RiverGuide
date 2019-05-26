@@ -13,8 +13,9 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 
 // Components
 import { IState } from "../../reducers/index";
-import { IAuth, IGauge, IGuide, IInfoPage, IListEntry } from "./../../utils/types";
+import { IAuth, IFilter, IGauge, IGuide, IInfoPage, IListEntry, IRiverRegion } from "./../../utils/types";
 import GuideItem from "./ListItem";
+import RiverGroup from "./RiverGroup";
 
 interface IListGroupProps extends IListGroupStateProps {
     region: string;
@@ -23,6 +24,7 @@ interface IListGroupProps extends IListGroupStateProps {
 interface IListGroupStateProps {
     listEntries: IListEntry[];
     auth: IAuth;
+    filters: IFilter;
 }
 
 interface IListGroupState {
@@ -41,34 +43,35 @@ class ListGroup extends Component<IListGroupProps, IListGroupState> {
         this.setState({ isExpanded: !this.state.isExpanded });
     }
 
-    public getChildren = (): IListEntry[] => {
+    public onlyUnique = (value: IRiverRegion, index: number, self: IRiverRegion[]): boolean =>
+        self.map((item: IRiverRegion) => item.river).indexOf(value.river) === index
+
+    public getChildren = (): IRiverRegion[] => {
         const { region }: {region: string} = this.props;
         const filterdGuides: IListEntry[] = this.props.listEntries;
 
-        if (region === "Favourites") {
-            return filterdGuides.filter(
-                (guide: IListEntry) => this.props.auth.user.favourites.indexOf(guide.id) > -1,
-            );
-        }
-
-        return filterdGuides.filter((guide: IListEntry) => guide.region === region);
+        return filterdGuides.filter((guide: IListEntry) => guide.region === region).map((item: IListEntry) => ({
+            river: item.river_name || "undefined",
+            region,
+        }));
     }
 
-    public renderListItem = (guide: IListEntry, idx: number): JSX.Element => <GuideItem key={idx} guide={guide} />;
+    public renderListItem = (riverRegion: IRiverRegion, idx: number): JSX.Element =>
+        <RiverGroup key={idx} riverRegion={riverRegion} />
 
-    public sortAlphbetically = (a: IListEntry, b: IListEntry): number => {
-        if (a.display_name < b.display_name) { return -1; }
-        if (a.display_name > b.display_name) { return 1; }
+    public sortAlphbetically = (a: IRiverRegion, b: IRiverRegion): number => {
+        if (a.river < b.river) { return -1; }
+        if (a.river > b.river) { return 1; }
         return 0;
     }
 
     public render(): JSX.Element {
-        const children: IListEntry[] = this.getChildren();
-
+        const children: IRiverRegion[] = this.getChildren();
+        const isExpanded: boolean = this.props.filters.searchString !== "" || this.state.isExpanded;
         return (
             <div>
                 <ListItem
-                    selected={this.state.isExpanded}
+                    selected={isExpanded}
                     button
                     onClick={this.handleClick}
                 >
@@ -79,16 +82,17 @@ class ListGroup extends Component<IListGroupProps, IListGroupState> {
                         variant="outlined"
                         style={{ marginRight: "1em" }}
                     />
-                    {this.state.isExpanded ? <ExpandLess /> : <ExpandMore />}
+                    {isExpanded ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
                 <Divider />
                 <Collapse
-                    in={this.state.isExpanded}
+                    in={isExpanded}
                     timeout="auto"
                     unmountOnExit
                 >
                     <List disablePadding>
                         {children
+                            .filter(this.onlyUnique)
                             .sort(this.sortAlphbetically)
                             .map(this.renderListItem)}
                     </List>
@@ -102,6 +106,7 @@ function mapStateToProps(state: IState): IListGroupStateProps {
     return ({
         auth: state.auth,
         listEntries: state.filteredList,
+        filters: state.filters,
     });
 }
 

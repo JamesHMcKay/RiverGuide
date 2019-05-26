@@ -27,7 +27,7 @@ class GuideItem extends Component<IGuideItemProps, {}> {
         return (
             <div>
                 <ListItem button onClick={this.handleClick}>
-                    <ListItemIcon>
+                    <ListItemIcon style = {{marginLeft: "2em"}}>
                         <PlaceIcon />
                     </ListItemIcon>
                     <ListItemText inset primary={this.props.guide.display_name} />

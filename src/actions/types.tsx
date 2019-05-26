@@ -28,3 +28,4 @@ export const GET_ENTRIES: string = "GET_ENTRIES";
 export const LOADING_ENTRIES: string = "LOADING_ENTRIES";
 export const GET_ITEM_DETAILS: string = "GET_ITEM_DETAILS";
 export const GET_WEATHER: string = "GET_WEATHER";
+export const SET_FILTER: string = "SET_FILTER";

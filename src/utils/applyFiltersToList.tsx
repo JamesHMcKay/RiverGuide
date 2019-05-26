@@ -1,19 +1,8 @@
-import { IListEntry, IMapBounds, IGuide } from "./types";
-
-interface IFilterValues {
-    filters: string[];
-    searchString: string;
-}
+import { IGuide, IListEntry, IMapBounds } from "./types";
 
 function hasIndex(obj: string, str: string): boolean {
     return obj.toLowerCase().indexOf(str) > -1;
 }
-
-// const checkFilter = ({ attribute: string, values:  }, guide) =>
-//     values.indexOf(guide[attribute]) > -1;
-
-// const applyFilters = ([head, ...tail]): string[] => (guide: IGuide) =>
-//     !head || (checkFilter(head, guide) && applyFilters(tail)(guide));
 
 function checkIfInBounds(mapBounds: IMapBounds, guide: IListEntry): boolean {
     const upperLat: number = mapBounds._ne.lat;
@@ -34,22 +23,25 @@ function applyMapBounds(mapBounds: IMapBounds): (guide: IListEntry) => boolean {
     !mapBounds._ne || checkIfInBounds(mapBounds, guide));
 }
 
-// apply filters + search
-function applyFiltersToList(guideList: IListEntry[], filterValues: IFilterValues, mapBounds: IMapBounds): IListEntry[] {
+function applySearchString(guide: IListEntry, searchString: string): boolean {
+    let result: boolean = false;
+    result = hasIndex(guide.display_name, searchString) ||
+                hasIndex(guide.region, searchString);
+    if (guide.river_name) {
+        result = result || hasIndex(guide.river_name, searchString);
+    }
+
+    return result;
+}
+
+function applyFiltersToList(guideList: IListEntry[], searchString: string, mapBounds: IMapBounds): IListEntry[] {
     // const { filters: string[], searchString: string } = filterValues;
     let filteredList: IListEntry[] = guideList;
-    if (filterValues.searchString === "") {
+    if (searchString === "") {
         filteredList = guideList.filter(applyMapBounds(mapBounds));
     } else {
         filteredList = guideList.filter((guide: IListEntry): boolean => {
-            if (filterValues.searchString === "") {
-                return true;
-            }
-            return (
-                hasIndex(guide.display_name, filterValues.searchString) ||
-                hasIndex(guide.region, filterValues.searchString)
-                // hasIndex(guide.river_name, filterValues.searchString)
-            );
+            return applySearchString(guide, searchString);
         });
     }
     return filteredList;

@@ -39,6 +39,7 @@ export const setCategory = (category, cancelToken) => dispatch => {
                         position: {lat: item.location.lat, lon: item.location.lon },
                         observables: item.observables,
                         region: item.data_source,
+                        river_name: "undefined",
                         type: "gauge",
                     }));
                 dispatch({

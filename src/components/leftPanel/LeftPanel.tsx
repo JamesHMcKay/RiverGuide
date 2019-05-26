@@ -67,36 +67,8 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
             </div>
         );
 
-        // const buttons: JSX.Element = (
-        //     <div>
-        //         <div className="add-icon">
-        //             <Tooltip title="Add a Guide" placement="right">
-        //                 <Button
-        //                     onClick={this.handleClick.bind(this, "createModal")}
-        //                     variant="fab"
-        //                     color="primary"
-        //                 >
-        //                     <AddIcon />
-        //                 </Button>
-        //             </Tooltip>
-        //         </div>
-        //         <div className="filter-icon">
-        //             <Tooltip title="Filter Guides" placement="right">
-        //                 <Button
-        //                     onClick={this.handleClick.bind(this, "filterModal")}
-        //                     variant="fab"
-        //                     color="primary"
-        //                 >
-        //                     {/* <FontAwesomeIcon icon="filter" /> */}
-        //                 </Button>
-        //             </Tooltip>
-        //         </div>
-        //     </div>
-        // );
-
         return (
             <div className="list-container">
-                {Object.keys(this.props.infoPage).length === 0}
                 {isLoading ? loading : renderedList}
             </div>
         );

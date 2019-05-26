@@ -61,7 +61,6 @@ export interface IPanelMapStateToProps {
     gauges: IGauge[];
     infoPage: IInfoPage;
     filterdGuides: IListEntry[];
-    filters: IFilter[];
     listEntries: IListEntry[];
 }
 
@@ -70,7 +69,7 @@ export interface IPanelProps extends IPanelMapStateToProps {
     setMapBounds: (mapBounds: IMapBounds) => void;
     generateFilteredList: (
         guides: IListEntry[],
-        filters: IFilter[],
+        filters: string,
         mapBounds: IMapBounds,
     ) => void;
     openInfoPage: (guide: IListEntry) => void;
@@ -155,7 +154,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
             this.props.setMapBounds(mapBounds);
             this.props.generateFilteredList(
                 this.props.listEntries,
-                this.props.filters,
+                "",
                 mapBounds,
             );
     }
@@ -243,7 +242,6 @@ const mapStateToProps: (state: IState) => IPanelMapStateToProps = (state: IState
     gauges: state.gauges,
     infoPage: state.infoPage,
     filterdGuides: state.filteredList,
-    filters: state.filteredGuides,
     listEntries: state.listEntries,
 });
 
