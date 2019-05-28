@@ -48,7 +48,7 @@ div[class^='DateFormatInput'] {
     height: 10%;
   }
 
-.flow-report-section {
+.flow-details-section {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }

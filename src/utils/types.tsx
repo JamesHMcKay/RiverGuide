@@ -38,6 +38,7 @@ export interface IFlowLevel {
 export interface IObsValue {
     stage_height: number;
     flow: number;
+    temperature: number;
 }
 
 export interface IHistory {

@@ -254,6 +254,13 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         });
     }
 
+    public getSelectedGuide = (): IListEntry | undefined => {
+        if (this.props.selectedGuide) {
+            return this.props.selectedGuide;
+        }
+        return this.state.selectedGuide;
+    }
+
     public getSelectedSection = (): JSX.Element => {
         if (this.props.selectedGuide) {
             return (
@@ -269,6 +276,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
     }
 
     public render(): JSX.Element {
+        const selectedGuide: IListEntry | undefined = this.getSelectedGuide();
         return (
             <div>
                 <DialogTitle>
@@ -319,13 +327,16 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                             onChange={this.updateDescription}
                             fullWidth={true}
                         />
-                    <FlowReport
-                        selectedGuide={this.state.selectedGuide}
-                        handleChange={this.handleFlowChange}
-                        date={this.state.date}
-                        gaugeHistoryFromInfoPage={this.props.gaugeHistory}
-                        flow={this.state.flow}
-                    />
+                    {selectedGuide &&
+                        <FlowReport
+                            selectedGuide={selectedGuide}
+                            handleChange={this.handleFlowChange}
+                            date={this.state.date}
+                            gaugeHistoryFromInfoPage={this.props.gaugeHistory}
+                            flow={this.state.flow}
+                        />
+                    }
+
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={this.props.handleClose} color="primary">

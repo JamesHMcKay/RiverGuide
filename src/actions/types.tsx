@@ -29,3 +29,4 @@ export const LOADING_ENTRIES: string = "LOADING_ENTRIES";
 export const GET_ITEM_DETAILS: string = "GET_ITEM_DETAILS";
 export const GET_WEATHER: string = "GET_WEATHER";
 export const SET_FILTER: string = "SET_FILTER";
+export const CLEAR_GAUGE_HISTORY: string = "CLEAR_GAUGE_HISTORY";

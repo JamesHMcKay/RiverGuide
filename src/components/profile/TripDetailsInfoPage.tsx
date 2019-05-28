@@ -38,7 +38,6 @@ class TripDetailsInfoPage extends Component<ITripDetailsInfoPageProps> {
                         selectedGuide = {this.props.infoPage.selectedGuide}
                         gaugeHistory = {this.props.infoPage.history}
                     />
-
                 </Dialog>
             </div>
         );

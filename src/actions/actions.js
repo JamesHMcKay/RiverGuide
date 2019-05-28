@@ -22,9 +22,12 @@ import {
     REMOVE_FROM_FAVOURITES,
     SET_MAP_BOUNDS,
     SET_FILTER,
+    GET_GAUGE_HISTORY,
+    CLEAR_GAUGE_HISTORY,
 } from "./types";
 
 const serverLocation = process.env.REACT_APP_SERVER_URL;
+const riverServiceLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
 
 // Toggle Modals
 export const toggleModal = modal => dispatch => {
@@ -239,32 +242,36 @@ export const generateFilteredList = (guides, searchString, mapBounds) => dispatc
     });
 };
 
-export const getGaugeHistory = guide => dispatch => {
-    // check for gauge data
-    // if (guide.gauge_id) {
-    //     const request = {
-    //         action: "get_flows",
-    //         crossDomain: true,
-    //         id: guide.gauge_id,
-    //     }
-    //     axios
-    //         .post(riverServiceLocation, request)
-    //         .then(res => {
-    //             let data = res.data.flows;
-    //             let result = data.map(item => (
-    //                 {
-    //                     flow: item.flow,
-    //                     time: item.time,
-    //                 }));
-    //             console.log("GET GAUGE HISTORY = ", result);
-    //             dispatch({
-    //                 type: GET_GAUGE_HISTORY,
-    //                 payload: {
-    //                     gaugeHistory: result
-    //                 }
-    //             });
-    //         });
-    // }
+export const getGaugeHistory = gaugeId => dispatch => {
+    if (gaugeId) {
+        const request = {
+            action: "get_flows",
+            id: [gaugeId],
+            crossDomain: true,
+        }
+        axios
+            .post(riverServiceLocation, request)
+            .then(res => {
+                let data = res.data.flows;
+                let result = data.map(item => (
+                    {
+                        flow: item.flow,
+                        time: item.time,
+                        values: {
+                            flow: item.flow,
+                            stage_height: item.stage_height,
+                        }
+                    }));
+                dispatch({
+                    type: GET_GAUGE_HISTORY,
+                    payload: result.reverse(),
+                });
+            });
+    } else {
+        dispatch({
+            type: CLEAR_GAUGE_HISTORY
+        });
+    }
 }
 
 // close info page
