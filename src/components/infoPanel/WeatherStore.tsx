@@ -83,7 +83,7 @@ export class WeatherStore {
                 lon: input.coord.lon,
             },
             wind: {
-                speed: input.wind.speed,
+                speed: input.wind.speed * 3.6,
                 direction: input.wind.direction,
             },
             temperature: input.main.temp,
@@ -96,7 +96,7 @@ export class WeatherStore {
     public darkskyWeatherConverter(input: IDarkSkyWeather): Partial<IWeather> {
         const output: Partial<IWeather> = {
             wind: {
-                speed: input.windSpeed,
+                speed: input.windSpeed * 3.6,
                 direction: input.windBearing,
                 gust: input.windGust,
                 bearing: input.windDirection,
@@ -112,7 +112,7 @@ export class WeatherStore {
     public darkskyForecastConverter(input: IDarkSkyForecast): Partial<IWeather> {
         const output: Partial<IWeather> = {
             wind: {
-                speed: input.windSpeed,
+                speed: input.windSpeed * 3.6,
                 direction: input.windBearing,
                 bearing: input.windDirection,
             },

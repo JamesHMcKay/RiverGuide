@@ -18,15 +18,21 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import { CurrentWeather } from "./CurrentWeather";
 
-const WIND_DIRECTIONS: Array<{abbrv: string; translation: string}> = [
-    {abbrv: "SW", translation: "South Westerlies"},
-    {abbrv: "NW", translation: "North Westerlies"},
-    {abbrv: "S", translation: "Southerlies"},
-    {abbrv: "N", translation: "Northerlies"},
-    {abbrv: "E", translation: "Easterlies"},
-    {abbrv: "W", translation: "Westerlies"},
-    {abbrv: "NE", translation: "North Easterlies"},
-    {abbrv: "SE", translation: "South Easterlies"},
+interface IWindDir {
+    abbrv: string;
+    translation: string;
+    bearing: number;
+}
+
+const WIND_DIRECTIONS: IWindDir[] = [
+    {abbrv: "SW", translation: "South Westerlies", bearing: 225},
+    {abbrv: "NW", translation: "North Westerlies", bearing: 315},
+    {abbrv: "S", translation: "Southerlies", bearing: 180},
+    {abbrv: "N", translation: "Northerlies", bearing: 0},
+    {abbrv: "E", translation: "Easterlies", bearing: 90},
+    {abbrv: "W", translation: "Westerlies", bearing: 270},
+    {abbrv: "NE", translation: "North Easterlies", bearing: 45},
+    {abbrv: "SE", translation: "South Easterlies", bearing: 135},
 ];
 
 const WEATHER_ICONS: Array<{icon: string; element: JSX.Element}> = [
@@ -158,6 +164,26 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
         }
     }
 
+    public computeHeadingDiff = (x: number, y: number): number => {
+        return Math.abs((x - y + 540 ) % 360 - 180);
+    }
+
+    public convertWindDirection = (bearing: number): string => {
+        const bearingDiff: Array<{name: string; diff: number}> = WIND_DIRECTIONS.map((item: IWindDir) => ({
+            name: item.abbrv,
+            diff: this.computeHeadingDiff(item.bearing, bearing),
+        }));
+        const diffs: number[] = bearingDiff.map((item: {name: string; diff: number}) => item.diff);
+        const minDiff: number = Math.min(...diffs);
+        const minValue: Array<{name: string; diff: number}> = bearingDiff.filter(
+            (item: {name: string; diff: number}) => item.diff === minDiff,
+        );
+        if (minValue.length > 0) {
+            return minValue[0].name;
+        }
+        return "";
+    }
+
     public getForecastWindDirection = (day: number): JSX.Element | null => {
         const forecast: Partial<IWeather> | null = this.getForecastDay(day);
         if (forecast && forecast.wind) {
@@ -165,7 +191,7 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
                 <div className="weather-wind-direction">
                     <span className="wind-text">Wind</span>
                     <span className="wind-direction">
-                        {forecast.wind.direction}
+                        {this.convertWindDirection(forecast.wind.direction)}
                     </span>
                     <span className="wind-text">Direction</span>
                 </div>);
