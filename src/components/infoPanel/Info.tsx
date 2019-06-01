@@ -53,7 +53,7 @@ interface IInfoProps extends IInfoStateProps {
 class Info extends Component<IInfoProps, IInfoState> {
     constructor(props: IInfoProps) {
         super(props);
-        let favourited: boolean = false;
+        const favourited: boolean = false;
         // if (props.auth.isAuthenticated) {
         //     favourited = props.auth.user.favourites.indexOf(
         //         props.infoPage.selectedGuide.id,

@@ -148,7 +148,7 @@ class Login extends Component<ILoginProps, ILoginState> {
                                     )}
                             </InputGroup>
                             <a href={`https://riverapi.herokuapp.com/connect/facebook`} className="link">
-                            <Button type="button" style={{ width: '100%' }}>
+                            <Button type="button" style={{ width: "100%" }}>
                                 {"Login with Facebook"}
                             </Button>
                             </a>
