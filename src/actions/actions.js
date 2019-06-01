@@ -1,6 +1,4 @@
 import axios from "axios";
-import setAuthToken from "../utils/setAuthToken";
-import jwt_decode from "jwt-decode";
 
 import {
     APPEND_GUIDES,
@@ -9,9 +7,7 @@ import {
     CLOSE_MODAL,
     DELETE_LOG,
     EDIT_LOG,
-    GET_ERRORS,
     OPEN_MODAL,
-    SET_CURRENT_USER,
     GET_LOGS,
     SEARCH_GUIDES,
     FILTER_GUIDES,
@@ -29,6 +25,8 @@ import {
 const serverLocation = process.env.REACT_APP_SERVER_URL;
 const riverServiceLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
 
+const riverApiLocation = 'https://riverapi.herokuapp.com/';
+
 // Toggle Modals
 export const toggleModal = modal => dispatch => {
     if (modal) {
@@ -40,111 +38,6 @@ export const toggleModal = modal => dispatch => {
         dispatch({ type: CLOSE_MODAL });
         dispatch({ type: CLEAR_ERRORS });
     }
-};
-
-// Register User
-export const registerUser = (userData) => dispatch => {
-    axios
-        .post(serverLocation + "/users/register", userData)
-        .then(res => {
-            dispatch({
-                type: CLOSE_MODAL,
-                payload: "registerModal",
-            });
-            dispatch({ type: CLEAR_ERRORS });
-            dispatch({
-                type: OPEN_MODAL,
-                payload: "welcomeModal",
-            });
-        })
-        .catch(err => {
-            dispatch({
-                type: GET_ERRORS,
-                payload: err.response,
-            });
-            dispatch({
-                type: OPEN_MODAL,
-                payload: "registerModal",
-            });
-        });
-};
-
-// Login - Get User Token
-export const loginUser = userData => dispatch => {
-    axios
-        .post(serverLocation + "/users/login", userData)
-        .then(res => {
-            // Save to localStorage
-            const { token } = res.data;
-            // Set token to ls
-            localStorage.setItem("jwtToken", token);
-            // Set token to Auth header
-            setAuthToken(token);
-            // Decode token to get user data
-            const decoded = jwt_decode(token);
-            // Set current user
-            dispatch(setCurrentUser(decoded));
-            dispatch({
-                type: CLOSE_MODAL,
-                payload: "loginModal",
-            });
-            dispatch({ type: CLEAR_ERRORS });
-        })
-        .catch(err => {
-            dispatch({
-                type: GET_ERRORS,
-                payload: err.response,
-            });
-            dispatch({
-                type: OPEN_MODAL,
-                payload: "loginModal",
-            });
-        });
-};
-
-// Set logged in user
-export const setCurrentUser = decoded => {
-    return {
-        type: SET_CURRENT_USER,
-        payload: decoded,
-    };
-};
-
-// Log user out
-export const logoutUser = () => dispatch => {
-    // Remove token from localstorage
-    localStorage.removeItem("jwtToken");
-    // Remove auth header for future requests
-    setAuthToken(false);
-    // Set current user to {} & isAuthenticated false
-    dispatch(setCurrentUser({}));
-};
-
-// Change user password
-export const changePassword = userData => dispatch => {
-    axios
-        .put(serverLocation + "/users/login", userData)
-        .then(res => {
-            dispatch({
-                type: CLOSE_MODAL,
-                payload: "changePasswordModal",
-            });
-            dispatch({ type: CLEAR_ERRORS });
-            dispatch({
-                type: OPEN_MODAL,
-                payload: "successModal",
-            });
-        })
-        .catch(err => {
-            dispatch({
-                type: GET_ERRORS,
-                payload: err.response,
-            });
-            dispatch({
-                type: OPEN_MODAL,
-                payload: "changePasswordModal",
-            });
-        });
 };
 
 // Get guides
@@ -176,7 +69,8 @@ export const createGuide = (guideData, category) => dispatch => {
 
 // Get logbook logs
 export const makeLogbookRequest = () => dispatch => {
-    axios.get(serverLocation + "/logbook").then(res => {
+    axios.get(riverApiLocation + "logbooks").then(res => {
+        console.log("got logbook", res);
         dispatch({
             type: GET_LOGS,
             payload: res.data,

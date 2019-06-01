@@ -54,13 +54,13 @@ class Info extends Component<IInfoProps, IInfoState> {
     constructor(props: IInfoProps) {
         super(props);
         let favourited: boolean = false;
-        if (props.auth.isAuthenticated) {
-            favourited = props.auth.user.favourites.indexOf(
-                props.infoPage.selectedGuide.id,
-            ) > -1
-                ? true
-                : false;
-        }
+        // if (props.auth.isAuthenticated) {
+        //     favourited = props.auth.user.favourites.indexOf(
+        //         props.infoPage.selectedGuide.id,
+        //     ) > -1
+        //         ? true
+        //         : false;
+        // }
 
         this.state = {
             favourited,

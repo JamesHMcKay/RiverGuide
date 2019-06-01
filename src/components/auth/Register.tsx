@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import zxcvbn, { ZXCVBNResult } from "zxcvbn";
-import { registerUser, toggleModal } from "../../actions/actions";
+import { toggleModal } from "../../actions/actions";
+import { registerUser } from "../../actions/getAuth";
 import { IState } from "../../reducers/index";
 import { IAuth, IRegisterData } from "../../utils/types";
 

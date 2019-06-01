@@ -11,8 +11,6 @@ const initialUser: IUser = {
     favourites: [],
     email: "",
     name: "",
-    avatar: "",
-    creationDate: "",
 };
 
 const initialState: IAuth = {

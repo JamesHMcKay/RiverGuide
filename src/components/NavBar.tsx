@@ -126,13 +126,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                     Log a trip
                 </Button>
                 <Button color="primary" onClick={this.handleMenu} name="user">
-                    {/* {this.props.auth.user.name} */}
-                    {/* <img
-                        src={this.props.auth.user.avatar}
-                        height="30px"
-                        width="30px"
-                        alt="User Avatar"
-                    /> */}
+                    My profile
                 </Button>
             </div>
         );

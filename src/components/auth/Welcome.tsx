@@ -3,7 +3,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
 
-import { loginUser, toggleModal } from "../../actions/actions";
+import { toggleModal } from "../../actions/actions";
+import { loginUser } from "../../actions/getAuth";
 import { IErrors, ILoginDetails } from "../../utils/types";
 
 import {
@@ -73,7 +74,7 @@ class Welcome extends Component<IWelcomeProps, IWelcomeState> {
         e.preventDefault();
 
         const userData: ILoginDetails = {
-            email: this.state.email,
+            identifier: this.state.email,
             password: this.state.password,
         };
 

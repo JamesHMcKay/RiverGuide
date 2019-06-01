@@ -52,7 +52,7 @@ export const setCategory = (category, cancelToken) => dispatch => {
         .get(`${strapi_location}`,
             {
                 headers: {'Authorization': ''},
-                params: {query: '{wwguides{id,river_name,section_name,region,latitude,longitude,gauge_id}}'},
+                params: {query: '{wwguides(limit:999){id,river_name,section_name,region,latitude,longitude,gauge_id}}'},
                 cancelToken: cancelToken.token
             }
         )

@@ -1,11 +1,10 @@
-import moment from "moment";
 import React from "react";
-import { IUserProfile } from "../../utils/types";
 
 import { Col, Row } from "reactstrap";
+import { IUser } from "../../utils/types";
 
 interface IProfileBannerProps {
-    user: IUserProfile;
+    user: IUser;
 }
 
 function ProfileBanner(props: IProfileBannerProps): JSX.Element {
@@ -19,22 +18,14 @@ function ProfileBanner(props: IProfileBannerProps): JSX.Element {
                         justifyContent: "center",
                     }}
                 >
-                    <img
-                        className="profile-img"
-                        src={props.user.avatar}
-                        height="110px"
-                        width="110px"
-                        alt="User Avatar"
-                    />
                     <p>
-                        Member since
+                        Email
                         <br />
-                        {moment(props.user.creationDate).format("MMM YYYY")}
+                        {props.user.email}
                     </p>
                 </Col>
                 <Col md="9" lg="9">
                     <h3>{props.user.name}</h3>
-                    <h5>Christchurch, Canterbury, New Zealand</h5>
                 </Col>
             </Row>
         </div>

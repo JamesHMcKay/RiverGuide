@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
 
-import { logoutUser, toggleModal } from "../../actions/actions";
+import { toggleModal } from "../../actions/actions";
+import { logoutUser } from "../../actions/getAuth";
 
 import { Button, Form, Modal, ModalFooter, ModalHeader } from "reactstrap";
 

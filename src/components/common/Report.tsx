@@ -45,10 +45,6 @@ class Report extends Component<IReportProps, IReportState> {
   public onSubmit(e: any): void {
     e.preventDefault();
     if (this.state.email && this.state.password) {
-      const userData: ILoginDetails = {
-        email: this.state.email,
-        password: this.state.password,
-      };
       // this.props.loginUser(userData);
     } else {
       // raise warning

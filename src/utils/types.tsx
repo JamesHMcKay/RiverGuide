@@ -120,7 +120,7 @@ export interface IFilter {
 }
 
 export interface ILoginDetails {
-    email: string;
+    identifier: string;
     password: string;
 }
 
@@ -140,15 +140,10 @@ export interface IOpenLog {
     _id: string;
 }
 
-export interface IUserProfile {
-    name: string;
-    avatar: string;
-    creationDate: string;
-}
-
-export interface IUser extends IUserProfile {
+export interface IUser {
     favourites: string[];
     email: string;
+    name: string;
 }
 
 export interface IAuth {

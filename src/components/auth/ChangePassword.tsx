@@ -5,7 +5,8 @@ import zxcvbn, { ZXCVBNResult } from "zxcvbn";
 import { IState } from "../../reducers/index";
 import { IAuth, IErrors, IUserData } from "../../utils/types";
 
-import { changePassword, toggleModal } from "../../actions/actions";
+import { toggleModal } from "../../actions/actions";
+import { changePassword } from "../../actions/getAuth";
 
 import {
     Button,
@@ -126,7 +127,7 @@ class ChangePassword extends Component<IChangePasswordProps, IChangePasswordStat
         e.preventDefault();
 
         const updateUser: IUserData = {
-            email: this.props.auth.user.email,
+            identifier: this.props.auth.user.email,
             password: this.state.password,
             newPassword: this.state.newPassword,
             newPassword2: this.state.newPassword2,

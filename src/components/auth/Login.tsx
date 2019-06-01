@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
 import { IErrors, ILoginDetails } from "../../utils/types";
 
-import { loginUser, toggleModal } from "../../actions/actions";
+import { toggleModal } from "../../actions/actions";
+import { loginUser } from "../../actions/getAuth";
 
 import {
     Button,
@@ -21,7 +22,7 @@ import {
 } from "reactstrap";
 
 interface ILoginState {
-    email: string;
+    identifier: string;
     password: string;
     showPassword: boolean;
     errors?: IErrors;
@@ -41,7 +42,7 @@ class Login extends Component<ILoginProps, ILoginState> {
     constructor(props: ILoginProps) {
         super(props);
         this.state = {
-            email: "",
+            identifier: "",
             password: "",
             showPassword: false,
         };
@@ -62,7 +63,7 @@ class Login extends Component<ILoginProps, ILoginState> {
     }
 
     public onChangeEmail = (e: any): void => {
-        this.setState({ email: e.target.value });
+        this.setState({ identifier: e.target.value });
     }
 
     public onChangePassword = (e: any): void => {
@@ -73,7 +74,7 @@ class Login extends Component<ILoginProps, ILoginState> {
         e.preventDefault();
 
         const userData: ILoginDetails = {
-            email: this.state.email,
+            identifier: this.state.identifier,
             password: this.state.password,
         };
 
@@ -95,7 +96,7 @@ class Login extends Component<ILoginProps, ILoginState> {
                 <Form onSubmit={this.onSubmit}>
                     <ModalBody>
                         <FormGroup>
-                            <Label for="email">Email</Label>
+                            <Label for="email">Email or username</Label>
                             <Input
                                 className={classnames("", {
                                     "is-invalid":
@@ -104,7 +105,7 @@ class Login extends Component<ILoginProps, ILoginState> {
                                 type="text"
                                 name="email"
                                 id="email"
-                                value={this.state.email}
+                                value={this.state.identifier}
                                 onChange={this.onChangeEmail}
                             />
                             {errors.data &&
@@ -146,6 +147,11 @@ class Login extends Component<ILoginProps, ILoginState> {
                                         </div>
                                     )}
                             </InputGroup>
+                            <a href={`https://riverapi.herokuapp.com/connect/facebook`} className="link">
+                            <Button type="button" style={{ width: '100%' }}>
+                                {"Login with Facebook"}
+                            </Button>
+                            </a>
                         </FormGroup>
                     </ModalBody>
                     <ModalFooter>
