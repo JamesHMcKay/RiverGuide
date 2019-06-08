@@ -62,10 +62,11 @@ class ListGroup extends Component<IRiverGroupProps, IListGroupState> {
     public render(): JSX.Element {
         const children: IListEntry[] = this.getChildren();
         const isExpanded: boolean = this.props.filters.searchString !== "" || this.state.isExpanded;
+        const isSelected: boolean = this.props.filters.searchString === "" && this.state.isExpanded;
         return (
             <div>
                 <ListItem
-                    selected={isExpanded}
+                    selected={isSelected}
                     button
                     onClick={this.handleClick}
                 >

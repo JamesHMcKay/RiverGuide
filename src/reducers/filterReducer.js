@@ -11,6 +11,6 @@ export default function(state = initialState, action) {
             newState = action.payload;
             return newState;
         default:
-            return initialState;
+            return state;
     }
 }

@@ -42,6 +42,7 @@ interface IControlBarStateToProps {
     openModal: string;
     mapBounds: IMapBounds;
     listEntries: IListEntry[];
+    filters: IFilter;
 }
 
 interface IControlBarState {
@@ -115,8 +116,10 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
                         }}
                     >
                         <TextField
+                            id="standard-search"
                             className="search-field"
-                            label="Search Guides"
+                            color="white"
+                            label="Search"
                             type="search"
                             margin="normal"
                             variant="outlined"
@@ -124,9 +127,10 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
                             style={{
                                 width: "100%",
                                 paddingBottom: ".5em",
-                                color: "#fff",
+                                color: "white",
                                 minWidth: "300px",
                             }}
+                            value={this.props.filters.searchString}
                         />
                     </div>
                     <Hidden mdUp>
@@ -198,6 +202,7 @@ const mapStateToProps: (state: IState) => IControlBarStateToProps = (state: ISta
     openModal: state.openModal,
     listEntries: state.listEntries,
     mapBounds: state.mapBounds,
+    filters: state.filters,
 });
 
 export default connect(

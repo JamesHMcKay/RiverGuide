@@ -1,7 +1,7 @@
 import { GET_WEATHER } from "../actions/types";
 import { WeatherStore } from "../components/infoPanel/WeatherStore";
 
-const initialState = {};
+const initialState = new WeatherStore();
 
 export default function(state = initialState, action) {
     switch (action.type) {
@@ -10,6 +10,6 @@ export default function(state = initialState, action) {
             newState.gaugeHistory = action.payload;
             return newState;
         default:
-            return new WeatherStore();
+            return state;
     }
 }
