@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { logoutUser, setCurrentUser } from "./actions/getAuth";
 import "./App.css";
-import store from "./store";
+import configureStore from "./store";
 import setAuthToken from "./utils/setAuthToken";
 
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -14,7 +14,14 @@ import Panel from "./components/Panel";
 import ProfileContainer from "./components/profile/ProfileContainer";
 import Modals from "./components/utils/Modals";
 
+import createHistory from "history/createBrowserHistory";
+import ConnectPage from "./components/connect/Connect";
+
 import theme from "./utils/theme";
+
+// Create redux store with history
+const history: any = createHistory();
+const store: any = configureStore({}, history);
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -53,6 +60,7 @@ class App extends Component {
                                     path="/profile"
                                     component={ProfileContainer}
                                 />
+                                <Route exact path="/connect/:provider" component={ConnectPage} />
                             </Switch>
                             <Modals />
                         </div>

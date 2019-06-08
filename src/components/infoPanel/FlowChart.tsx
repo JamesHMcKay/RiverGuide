@@ -18,6 +18,7 @@ import Moment from "moment";
 import * as Am4charts from "@amcharts/amcharts4/charts";
 import * as Am4core from "@amcharts/amcharts4/core";
 import Am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import DataDropDown from "./DataDropDown";
 
 // amchart theme
 Am4core.useTheme(Am4themes_animated);
@@ -193,6 +194,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
                 >
                     {item.type}
                 </Button>);
+            result.push(<DataDropDown key = "data-drop-down"/>);
             return result;
         } else {
             return null;

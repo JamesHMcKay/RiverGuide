@@ -4,6 +4,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import FormControl from "@material-ui/core/FormControl";
 import Icon from "@material-ui/core/Icon";
 import Input from "@material-ui/core/Input";
+import InputAdornment from "@material-ui/core/InputAdornment";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -211,7 +212,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
                 >
                  {this.getAvailableTypes()}
               </Select>
-                <TextField
+                {/* <TextField
                 id="flow"
                 type="number"
                 label={this.getUnit()}
@@ -223,6 +224,16 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
                 margin="normal"
                 variant="outlined"
                 fullWidth={false}
+                /> */}
+                <Input
+                    id="adornment-weight"
+                    value={this.displayFlow()}
+                    onChange={this.handleChange}
+                    endAdornment={<InputAdornment position="end">{this.getUnit()}</InputAdornment>}
+                    aria-describedby="weight-helper-text"
+                    inputProps={{
+                        "aria-label": "Weight",
+                    }}
                 />
                 </div>
                     {this.warningText()}

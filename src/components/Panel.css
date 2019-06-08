@@ -13,7 +13,7 @@
 .right-panel {
     float: right;
     overflow-y: auto;
-    height: 76vh;
+    height: 90vh;
 }
 
 .left-panel {
@@ -60,7 +60,7 @@ input.form-control-lg.form-control {
 }
 
 .list-container {
-    height: 76vh;
+    height: 90vh;
     padding: 0 0 0 0;
     width: 100%;
     background-color: white;
@@ -152,4 +152,9 @@ input.form-control-lg.form-control {
 .slide-appear.slide-appear-active {
     transform: translate(0%);
     transition: transform 500ms ease-in-out;
+}
+
+.provider-button-stack {
+    display: flex;
+    flex-direction: column;
 }

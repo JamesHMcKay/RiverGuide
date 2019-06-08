@@ -87,7 +87,6 @@ export const openInfoPage = guide => dispatch => {
             infoSelected: true,
         },
     });
-    console.log("opening info page");
     if (guide.type === "gauge") {
 
     } else {
@@ -111,7 +110,6 @@ export const openInfoPage = guide => dispatch => {
                     gradeOverall: item.grade_overall,
                     description: item.description,
                 };
-            console.log("got guide details: ", result);
             dispatch({
                 type: GET_ITEM_DETAILS,
                 payload: result,
@@ -133,7 +131,6 @@ export const openInfoPage = guide => dispatch => {
                 let data = res.data.flows;
                 let result = data.map(item => (
                     {
-                        flow: item.flow,
                         time: item.time,
                         values: {
                             flow: item.flow,

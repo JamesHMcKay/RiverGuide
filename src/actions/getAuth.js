@@ -11,6 +11,7 @@ import {
 } from "./types";
 
 const serverLocation = 'https://riverapi.herokuapp.com/';
+const testServerLocation = 'https://hidden-fjord-65594.herokuapp.com/';
 
 // Register User
 export const registerUser = (userData) => dispatch => {
@@ -45,9 +46,10 @@ export const registerUser = (userData) => dispatch => {
     .catch(error => {
         // Handle error.
         console.log('An error occurred:', error);
+        console.log("error response", error.response);
         dispatch({
             type: GET_ERRORS,
-            payload: error.response,
+            payload: {message: error.response.data.message}
         });
         dispatch({
             type: OPEN_MODAL,
@@ -88,7 +90,7 @@ export const loginUser = userData => dispatch => {
         console.log('An error occurred:', error);
         dispatch({
             type: GET_ERRORS,
-            payload: error.response,
+            payload: {message: error.response.data.message}
         });
         dispatch({
             type: OPEN_MODAL,
@@ -145,4 +147,42 @@ export const changePassword = userData => dispatch => {
                 payload: "changePasswordModal",
             });
         });
+};
+
+
+// Register User
+export const providerLogin = (action, history) => dispatch => {
+    // Request API. 
+    // Add your own code here to customize or restrict how the public can register new users.
+    axios
+    .get(testServerLocation + `auth/${action.provider}/callback${action.search}`)
+    .then(response => {
+        // Handle success.
+        console.log('Response recieved');
+        console.log('User profile', response.data.user);
+        console.log('User token', response.data.jwt);
+        history.push("/");
+        localStorage.setItem("jwtToken", response.data.jwt);
+        localStorage.setItem("user", response.data.user);
+        setAuthToken(response.data.jwt);
+        dispatch(setCurrentUser(response.data.user));
+
+        dispatch({
+            type: CLOSE_MODAL,
+            payload: "registerModal",
+        });
+        dispatch({ type: CLEAR_ERRORS });
+    })
+    .catch(error => {
+        // Handle error.
+        console.log('An error occurred:', error);
+        dispatch({
+            type: GET_ERRORS,
+            payload: {message: error.response.data.message}
+        });
+        dispatch({
+            type: OPEN_MODAL,
+            payload: "registerModal",
+        });
+    });
 };

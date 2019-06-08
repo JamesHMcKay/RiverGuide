@@ -146,7 +146,7 @@ class ChangePassword extends Component<IChangePasswordProps, IChangePasswordStat
 
         return (
             <Modal isOpen={this.props.isOpen} toggle={this.closeModal}>
-                <ModalHeader toggle={this.closeModal}>
+                {/* <ModalHeader toggle={this.closeModal}>
                     Pick A New Password
                 </ModalHeader>
                 <Form onSubmit={this.onSubmit}>
@@ -259,7 +259,7 @@ class ChangePassword extends Component<IChangePasswordProps, IChangePasswordStat
                             Cancel
                         </Button>
                     </ModalFooter>
-                </Form>
+                </Form> */}
             </Modal>
         );
     }

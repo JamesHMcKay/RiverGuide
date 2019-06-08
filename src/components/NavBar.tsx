@@ -101,13 +101,13 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                         marginRight: "1em",
                     }}
                 >
-                    Get started
+                    Sign up
                 </Button>
                 <Button
                     color="primary"
                     onClick={this.openModal.bind(this, "loginModal")}
                 >
-                    Sign in
+                    Log in
                 </Button>
             </div>
         );

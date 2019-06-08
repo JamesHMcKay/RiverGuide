@@ -1,30 +1,26 @@
-import classnames from "classnames";
-import PropTypes from "prop-types";
+import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import green from "@material-ui/core/colors/green";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import IconButton from "@material-ui/core/IconButton";
+import Input from "@material-ui/core/Input";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import zxcvbn, { ZXCVBNResult } from "zxcvbn";
 import { toggleModal } from "../../actions/actions";
 import { registerUser } from "../../actions/getAuth";
 import { IState } from "../../reducers/index";
 import { IAuth, IRegisterData } from "../../utils/types";
-
-import {
-    Button,
-    Form,
-    FormGroup,
-    Input,
-    InputGroup,
-    InputGroupAddon,
-    Label,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-    Progress,
-} from "reactstrap";
+import SocialLink from "./SocialLink";
 
 interface IRegisterState {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
     password2: string;
@@ -32,6 +28,7 @@ interface IRegisterState {
     passwordScore: number;
     passwordColor: string;
     errors: any;
+    loading: boolean;
 }
 
 interface IRegisterPropsState {
@@ -44,12 +41,12 @@ interface IReigsterProps extends IRegisterPropsState {
     toggleModal: (modal?: string) => void;
     registerUser: (userData: IRegisterData) => void;
 }
-
 class Register extends Component<IReigsterProps, IRegisterState> {
     constructor(props: IReigsterProps) {
         super(props);
         this.state = {
-            name: "",
+            firstName: "",
+            lastName: "",
             email: "",
             password: "",
             password2: "",
@@ -57,232 +54,170 @@ class Register extends Component<IReigsterProps, IRegisterState> {
             passwordScore: 0,
             passwordColor: "",
             errors: {},
+            loading: false,
         };
-
-        this.closeModal = this.closeModal.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
-        this.togglePassword = this.togglePassword.bind(this);
-        this.onPasswordChange = this.onPasswordChange.bind(this);
     }
 
-    public componentDidMount(): void {
-        if (this.props.auth.isAuthenticated) {
-            // Close modal
-        }
-    }
-
-    public componentWillReceiveProps(nextProps: IReigsterProps): void {
+    public componentWillReceiveProps = (nextProps: IReigsterProps): void => {
         if (nextProps.errors) {
-            this.setState({ errors: nextProps.errors });
+            this.setState({
+                errors: nextProps.errors,
+                loading: false,
+            });
         }
     }
 
-    public togglePassword(): void {
-        this.setState({ showPassword: !this.state.showPassword });
-    }
-
-    public onNameChange = (e: any): void => {
-        this.setState({ name: e.target.value });
-    }
-
-    public onEmailChange = (e: any): void => {
+    public onChangeEmail = (e: any): void => {
         this.setState({ email: e.target.value });
     }
 
-    public onPassword2Change = (e: any): void => {
-        this.setState({ password2: e.target.value });
+    public onChangePassword = (e: any): void => {
+        this.setState({ password: e.target.value });
     }
 
-    public onPasswordChange(e: any): void {
-        const checkPassword: ZXCVBNResult = zxcvbn(e.target.value);
-        let score: number = checkPassword.score + 1;
-        let color: string;
+    public onRegister = (e: any): void => {
+            e.preventDefault();
+            this.setState({
+                loading: true,
+            });
+            const newUser: IRegisterData = {
+                name: this.state.firstName + this.state.lastName,
+                email: this.state.email,
+                password: this.state.password,
+                password2: this.state.password,
+            };
 
-        score = e.target.value === "" ? 0 : score;
-
-        switch (score) {
-            case 0:
-                color = "danger";
-                break;
-            case 1:
-                color = "danger";
-                break;
-            case 2:
-                color = "warning";
-                break;
-            case 3:
-                color = "success";
-                break;
-            case 4:
-                color = "success";
-                score = 5;
-                break;
-            default:
-                color = "success";
-        }
-
-        this.setState({
-            password: e.target.value,
-            passwordScore: score,
-            passwordColor: color,
-        });
+            this.props.registerUser(newUser);
     }
 
-    public onSubmit(e: any): void {
-        e.preventDefault();
-
-        const newUser: IRegisterData = {
-            name: this.state.name,
-            email: this.state.email,
-            password: this.state.password,
-            password2: this.state.password2,
-        };
-
-        this.props.registerUser(newUser);
-    }
-
-    public closeModal(): void {
+    public closeModal = (): void => {
         this.props.toggleModal();
     }
 
+    public handleClickShowPassword = (): void => {
+        this.setState({ showPassword: !this.state.showPassword });
+    }
+
+    public changeEntry = (e: any): void => {
+        const state: IRegisterState = this.state;
+        state[e.target.id as keyof IRegisterState] = e.target.value;
+        this.setState({
+            ...state,
+        });
+    }
+
     public render(): JSX.Element {
-        const { errors } = this.state;
+        const providers: string[] = ["facebook", "google"];
 
         return (
-            <Modal isOpen={this.props.isOpen} toggle={this.closeModal}>
-                <ModalHeader toggle={this.closeModal}>Welcome!</ModalHeader>
-                <Form onSubmit={this.onSubmit}>
-                    <ModalBody>
-                        <FormGroup>
-                            <Label for="name">Full Name</Label>
-                            <Input
-                                className={classnames("", {
-                                    "is-invalid":
-                                        errors.data && errors.data.name,
-                                })}
-                                type="text"
-                                name="name"
-                                id="name"
-                                value={this.state.name}
-                                onChange={this.onNameChange}
-                            />
-                            {errors.data &&
-                                errors.data.name && (
-                                    <div className="invalid-feedback">
-                                        {errors.data.name}
-                                    </div>
-                                )}
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="email">Email</Label>
-                            <Input
-                                className={classnames("", {
-                                    "is-invalid":
-                                        errors.data && errors.data.email,
-                                })}
-                                type="text"
-                                name="email"
-                                id="email"
-                                value={this.state.email}
-                                onChange={this.onEmailChange}
-                            />
-                            {errors.data &&
-                                errors.data.email && (
-                                    <div className="invalid-feedback">
-                                        {errors.data.email}
-                                    </div>
-                                )}
-                            <small className="form-text text-muted">
-                                This site uses Gravatar so if you want a profile
-                                image, use a Gravatar email
-                            </small>
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="password">Password</Label>
-                            <InputGroup>
-                                <Input
-                                    className={classnames("", {
-                                        "is-invalid":
-                                            errors.data && errors.data.password,
-                                    })}
-                                    type={
-                                        this.state.showPassword
-                                            ? "text"
-                                            : "password"
-                                    }
-                                    name="password"
-                                    id="password"
-                                    value={this.state.password}
-                                    onChange={this.onPasswordChange}
-                                />
-                                <InputGroupAddon addonType="append">
-                                    <Button onClick={this.togglePassword}>
-                                        {this.state.showPassword
-                                            ? "Hide"
-                                            : "Show"}
-                                    </Button>
-                                </InputGroupAddon>
-                                {errors.data &&
-                                    errors.data.password && (
-                                        <div className="invalid-feedback">
-                                            {errors.data.password}
-                                        </div>
-                                    )}
-                            </InputGroup>
-                            <Progress
-                                max="5"
-                                value={this.state.passwordScore}
-                                color={this.state.passwordColor}
-                                style={{ marginTop: ".5em" }}
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="password2">Confirm Password</Label>
-                            <InputGroup>
-                                <Input
-                                    className={classnames("", {
-                                        "is-invalid":
-                                            errors.data && errors.data.password2,
-                                    })}
-                                    type={
-                                        this.state.showPassword
-                                            ? "text"
-                                            : "password"
-                                    }
-                                    name="password2"
-                                    id="password2"
-                                    value={this.state.password2}
-                                    onChange={this.onPassword2Change}
-                                />
-                                {errors.data &&
-                                    errors.data.password2 && (
-                                        <div className="invalid-feedback">
-                                            {errors.data.password2}
-                                        </div>
-                                    )}
-                            </InputGroup>
-                        </FormGroup>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" type="submit">
-                            Register
-                        </Button>{" "}
-                        <Button color="secondary" onClick={this.closeModal}>
-                            Cancel
-                        </Button>
-                    </ModalFooter>
-                </Form>
-            </Modal>
+            <div>
+                <Dialog onClose={this.closeModal} aria-labelledby="example dialog" open={this.props.isOpen}>
+                <DialogContent>
+
+                <div className = "provider-button-stack">
+                    {providers.map((provider: string) =>
+                        <SocialLink pretext = "Sign up with " provider={provider} key={provider} />)}
+                </div>
+
+                <DialogContentText align = "center" variant = "h6">
+                        {"- or -"}
+                    </DialogContentText>
+
+                    <DialogContentText>
+                        {"First name"}
+                    </DialogContentText>
+                    <Input
+                    id="firstName"
+                    type={"text"}
+                    value={this.state.firstName}
+                    onChange={this.changeEntry}
+                    fullWidth
+                    />
+                    <DialogContentText>
+                    {"Last name"}
+                    </DialogContentText>
+                    <Input
+                    id="lastName"
+                    type={"text"}
+                    value={this.state.lastName}
+                    onChange={this.changeEntry}
+                    fullWidth
+                    />
+
+                    <DialogContentText>
+                    {"Email"}
+                    </DialogContentText>
+                    <Input
+                    id="email"
+                    type={"text"}
+                    value={this.state.email}
+                    onChange={this.changeEntry}
+                    fullWidth
+                    />
+
+                    <DialogContentText>
+                        {"Password"}
+                    </DialogContentText>
+
+                    <Input
+                    id="password"
+                    type={this.state.showPassword ? "text" : "password"}
+                    value={this.state.password}
+                    onChange={this.changeEntry}
+                    fullWidth
+                    endAdornment={
+                    <InputAdornment position="end">
+                    <IconButton aria-label="Toggle password visibility" onClick={this.handleClickShowPassword}>
+                    {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                    </InputAdornment>
+                    }
+                    />
+                {this.state.errors &&
+                <div>
+                    {this.state.errors.message}
+                </div>}
+                <div
+                    style={{
+                        margin: "1em",
+                        position: "relative",
+                    }}
+                >
+                    <Button
+                        variant = "contained"
+                        color="primary"
+                        onClick={this.onRegister}
+                        disabled={this.state.loading}
+                        fullWidth>
+                                Sign up
+                    </Button>
+                    {this.state.loading &&
+                        <CircularProgress
+                            size={24}
+                            style={{
+                                color: green[500],
+                                position: "absolute",
+                                top: "50%",
+                                left: "50%",
+                                marginTop: -12,
+                                marginLeft: -12,
+                            }}
+                        />
+                    }
+                </div>
+
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={this.closeModal} color="primary">
+                    Cancel
+                    </Button>
+                </DialogActions>
+
+                </Dialog>
+            </div>
         );
     }
 }
-
-Register.propTypes = {
-    toggleModal: PropTypes.func.isRequired,
-    registerUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired,
-};
 
 function mapStateToProps(state: IState): IRegisterPropsState {
     return ({

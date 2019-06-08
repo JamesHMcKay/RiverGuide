@@ -43,7 +43,6 @@ export interface IObsValue {
 
 export interface IHistory {
     time: string;
-    flow: number;
     values: Partial<IObsValue>;
 }
 
@@ -167,12 +166,7 @@ export interface ILogEntry {
 }
 
 export interface IErrors {
-    data: {
-        password: boolean;
-        newPassword: boolean;
-        newPassword2: boolean;
-        email: boolean;
-    };
+    message: string;
 }
 
 export enum IThemeColor {

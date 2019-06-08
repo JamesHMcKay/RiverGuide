@@ -9,7 +9,7 @@ import ChangePassword from "../auth/ChangePassword";
 import Login from "../auth/Login";
 import Logout from "../auth/Logout";
 import Register from "../auth/Register";
-import Welcome from "../auth/Welcome";
+import DownloadModal from "../infoPanel/DownloadModal";
 import EditModal from "../infoPanel/EditModal";
 import WeatherModal from "../infoPanel/WeatherModal";
 import FiltersModal from "../list/FiltersModal";
@@ -28,12 +28,12 @@ class Modals extends Component {
                 <Logout />
                 <Register />
                 <Login />
-                <Welcome />
                 <TripDetailsInfoPage />
                 <TripDetailsAnyPage />
                 <FiltersModal />
                 <WeatherModal />
                 <EditModal />
+                <DownloadModal />
             </div>
         );
     }
