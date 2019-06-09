@@ -25,7 +25,6 @@ import {
 const serverLocation = process.env.REACT_APP_SERVER_URL;
 const riverServiceLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
 
-const riverApiLocation = 'https://riverapi.herokuapp.com/';
 const trickleLocation = 'https://trickleapi.herokuapp.com/';
 
 // Toggle Modals
@@ -72,7 +71,7 @@ export const createGuide = (guideData, category) => dispatch => {
 
 // Get logbook logs
 export const makeLogbookRequest = (user_id) => dispatch => {
-    let query = "{logs(user_id:\"" + user_id + "\"){log_id, user_id, date, participants, rating, description, guide_id, public, observables, weather}}"
+    //let query = "{logs(user_id:\"" + user_id + "\"){log_id, user_id, date, participants, rating, description, guide_id, public, observables, weather}}"
     axios.get(trickleLocation + "logs",
     {
         //params: {query: query},
