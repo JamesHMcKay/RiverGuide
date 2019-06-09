@@ -11,7 +11,7 @@ import {
 } from "./types";
 
 const serverLocation = 'https://riverapi.herokuapp.com/';
-const testServerLocation = 'https://hidden-fjord-65594.herokuapp.com/';
+const testServerLocation = 'https://trickleapi.herokuapp.com/';
 
 // Register User
 export const registerUser = (userData) => dispatch => {
@@ -38,10 +38,6 @@ export const registerUser = (userData) => dispatch => {
             payload: "registerModal",
         });
         dispatch({ type: CLEAR_ERRORS });
-        dispatch({
-            type: OPEN_MODAL,
-            payload: "welcomeModal",
-        });
     })
     .catch(error => {
         // Handle error.

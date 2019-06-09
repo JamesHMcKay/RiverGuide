@@ -1,23 +1,13 @@
-import { isNotEmpty } from "@amcharts/amcharts4/.internal/core/utils/Utils";
 import Button from "@material-ui/core/Button";
-import DialogContent from "@material-ui/core/DialogContent";
-import FormControl from "@material-ui/core/FormControl";
-import Icon from "@material-ui/core/Icon";
 import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
-import TextField from "@material-ui/core/TextField";
-import InfoIcon from "@material-ui/icons/Info";
-import { normalizeUnits } from "moment";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getGaugeHistory } from "../../actions/actions";
-import gaugeHistoryReducer from "../../reducers/gaugeHistoryReducer";
 import { IState } from "../../reducers/index";
-import { IGauge, IGaugeHistory, IGuide, IHistory, IListEntry, IObservable, IObsValue } from "../../utils/types";
+import { IGauge, IGaugeHistory, IHistory, IListEntry, IObservable, IObsValue } from "../../utils/types";
 
 interface IUnitSelection {
     label: string;
@@ -35,7 +25,7 @@ interface IFlowReportProps extends IFlowReportStateProps {
     date: Date;
     getGaugeHistory: (gaugeId: string | undefined) => void;
     gaugeHistoryFromInfoPage?: IHistory[];
-    flow?: string;
+    observables: Partial<IObsValue>;
 }
 
 interface IFlowReportStateProps {
@@ -47,7 +37,7 @@ interface IFlowReportState {
     gauge?: IGauge;
     manualySet: boolean;
     unit: IUnitSelection;
-    type: string;
+    type: keyof IObsValue;
 }
 
 class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
@@ -80,24 +70,27 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         return isSameDay;
     }
 
-    public getAverageFlowForDay = (history: IHistory[]): number => {
+    public getAverageFlowForDay = (history: IHistory[]): Partial<IObsValue> => {
         const date: Date = this.props.date;
         const filteredHistory: IHistory[] = history.filter(
             (item: IHistory) => this.filterHistory(item, date),
         );
-        let averageFlow: number = 0;
-        let averageLevel: number = 0;
-        if (filteredHistory.length > 0) {
-
-            const type: string = this.state.type;
-            const key: keyof IObsValue = type as keyof IObsValue;
-            const result: number[] = filteredHistory.map((reading: IHistory): number => reading.values[key] || 0);
-
-            const flows: number[] = result;
-            averageFlow = this.computeMean(flows);
-            averageLevel = 0;
+        if (filteredHistory.length > 0 && this.state.gauge) {
+            const output: Partial<IObsValue> = filteredHistory[0].values;
+            const gauge: IGauge = this.state.gauge;
+            const types: string[] = gauge.observables.map((item: IObservable) => item.type);
+            for (const type of types) {
+                const key: keyof IObsValue = type as keyof IObsValue;
+                const result: number[] = filteredHistory.map((reading: IHistory): number => reading.values[key] || 0);
+                const flows: number[] = result;
+                output[key] = this.computeMean(flows);
+            }
+            return output;
+        } else {
+            return {
+                flow: 0,
+            };
         }
-        return averageFlow !== 0 ? averageFlow : averageLevel;
     }
 
     public componentDidUpdate(prevProps: IFlowReportProps): void {
@@ -119,21 +112,26 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         if (this.state.gauge) {
             const gauge: IGauge = this.state.gauge;
             return gauge.observables.map((item: IObservable) => (
-                <MenuItem key={item.type} value={item.type}>{item.type}</MenuItem>
+                <MenuItem key={item.type} value={item.type}>
+                    {item.type}
+                </MenuItem>
             ));
         }
 
-        return [<MenuItem value="flow">
-        {"flow"}
-      </MenuItem>];
+        return [
+            <MenuItem value="flow">
+                {"flow"}
+            </MenuItem>,
+        ];
     }
 
     public displayFlow = (): string | undefined => {
-        if (this.state.manualySet) {
-            return this.props.flow;
+        if (this.state.manualySet && this.props.observables) {
+            const result: number | undefined = this.props.observables[this.state.type];
+            return result ? result.toString() : undefined;
         }
 
-        let flow: number = 0;
+        let flow: Partial<IObsValue> = {flow: 0};
         if (this.props.gaugeHistoryFromInfoPage && this.props.gaugeHistoryFromInfoPage.length > 0) {
             flow = this.getAverageFlowForDay(this.props.gaugeHistoryFromInfoPage);
             this.props.handleChange(flow);
@@ -141,14 +139,22 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
             flow = this.getAverageFlowForDay(this.props.gaugeHistory.gaugeHistory);
             this.props.handleChange(flow);
         }
-        return flow.toFixed(2);
+
+        if (flow[this.state.type]) {
+            const result: number | undefined = flow[this.state.type];
+            return result ? result.toFixed(2) : undefined;
+        }
+
+        return "0";
     }
 
     public handleChange = (event: any): void => {
         this.setState({
             manualySet: true,
         });
-        this.props.handleChange(event.target.value);
+        const observables: Partial<IObsValue> = this.props.observables;
+        observables[this.state.type as keyof IObsValue] = parseFloat(event.target.value);
+        this.props.handleChange({...observables});
     }
 
     public handleTypeChange = (event: any): void => {
@@ -212,19 +218,6 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
                 >
                  {this.getAvailableTypes()}
               </Select>
-                {/* <TextField
-                id="flow"
-                type="number"
-                label={this.getUnit()}
-                InputLabelProps={{
-                    shrink: true,
-                  }}
-                value={this.displayFlow()}
-                onChange={this.handleChange}
-                margin="normal"
-                variant="outlined"
-                fullWidth={false}
-                /> */}
                 <Input
                     id="adornment-weight"
                     value={this.displayFlow()}

@@ -81,8 +81,8 @@ class LogItem extends Component<ILogItemProps, ILogItemState> {
     public render(): JSX.Element {
         const {
             date,
-            section,
-            participantCount,
+            guide_id,
+            participants: partipants,
             rating,
             description,
         }: ILogEntry = this.props.item;
@@ -91,7 +91,7 @@ class LogItem extends Component<ILogItemProps, ILogItemState> {
             <div>
                 <Card>
                     <CardHeader onClick={this.toggleContent}>
-                        {this.parseDate(date)} - {section}
+                        {this.parseDate(date)} - {guide_id}
                         {/* <div class="open-icon"> */}
                             {/* <FontAwesomeIcon
                                 icon={
@@ -108,7 +108,7 @@ class LogItem extends Component<ILogItemProps, ILogItemState> {
                             <Badge>24&deg;C Sunny</Badge>{" "}
                             <Badge>
                                 {/* <FontAwesomeIcon icon="user" />{" "} */}
-                                {participantCount}
+                                {partipants}
                             </Badge>{" "}
                             <Badge>{this.renderStars(rating)}</Badge>
                             <br />

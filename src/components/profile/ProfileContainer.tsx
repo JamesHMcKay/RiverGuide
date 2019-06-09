@@ -10,7 +10,7 @@ import ProfileBanner from "./ProfileBanner";
 import "./profile.css";
 
 interface IProfileContainerProps extends IProfileContainerStateProps {
-    makeLogbookRequest: () => void;
+    makeLogbookRequest: (userId: string) => void;
 }
 
 interface IProfileContainerStateProps {
@@ -19,7 +19,7 @@ interface IProfileContainerStateProps {
 
 class ProfileContainer extends Component<IProfileContainerProps> {
     public componentDidMount(): void {
-        this.props.makeLogbookRequest();
+        this.props.makeLogbookRequest(this.props.auth.user.id);
     }
 
     public render(): JSX.Element {

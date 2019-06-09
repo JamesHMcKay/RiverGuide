@@ -35,7 +35,6 @@ const aboutMenuItems: IMenuItem[] = [
 
 const userMenuItems: IMenuItem[] = [
     { name: "My profile", route: "profile" },
-    { name: "River logbook", route: "profile" },
     { name: "Logout", route: "/", modal: "logoutModal" },
 ];
 
@@ -81,6 +80,10 @@ class NavBar extends Component<INavBarProps, INavBarState> {
 
     public handleMapLink = (): void => {
         this.setState({ mapView: true });
+    }
+
+    public handleProfileLink = (): void => {
+        this.setState({ mapView: false });
     }
 
     public render(): JSX.Element {
@@ -151,6 +154,16 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                                         onClick={this.handleMapLink}
                                     >
                                         Map view
+                                    </Button>
+                                </Link>
+                            )}
+                            {(this.state.mapView && isAuthenticated) && (
+                                <Link to="/profile">
+                                    <Button
+                                        color="secondary"
+                                        onClick={this.handleProfileLink}
+                                    >
+                                        My profile
                                     </Button>
                                 </Link>
                             )}

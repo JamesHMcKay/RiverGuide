@@ -1,3 +1,5 @@
+import { IWeather } from "../components/infoPanel/WeatherStore";
+
 export interface ILatLon {
     lat: number;
     lon?: number;
@@ -143,6 +145,7 @@ export interface IUser {
     favourites: string[];
     email: string;
     name: string;
+    id: string;
 }
 
 export interface IAuth {
@@ -157,12 +160,16 @@ export interface ILatLon {
 }
 
 export interface ILogEntry {
-    _id: string;
+    log_id: string;
+    user_id: string;
     date: string;
-    participantCount: number;
+    participants: number;
     rating: number;
     description: string;
-    section: string;
+    guide_id: string;
+    public: boolean;
+    observables?: IObsValue;
+    weather?: IWeather;
 }
 
 export interface IErrors {

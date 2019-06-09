@@ -9,6 +9,7 @@ import ChangePassword from "../auth/ChangePassword";
 import Login from "../auth/Login";
 import Logout from "../auth/Logout";
 import Register from "../auth/Register";
+import DataInfoModal from "../infoPanel/DataInfoModal";
 import DownloadModal from "../infoPanel/DownloadModal";
 import EditModal from "../infoPanel/EditModal";
 import WeatherModal from "../infoPanel/WeatherModal";
@@ -34,6 +35,7 @@ class Modals extends Component {
                 <WeatherModal />
                 <EditModal />
                 <DownloadModal />
+                <DataInfoModal />
             </div>
         );
     }

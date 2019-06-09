@@ -1,34 +1,23 @@
 import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
-import { DateFormatInput, TimeFormatInput } from "material-ui-next-pickers";
+import { DateFormatInput } from "material-ui-next-pickers";
 import React, { Component } from "react";
 import IoAndroidAdd from "react-icons/lib/io/android-add";
 import IoAndroidPerson from "react-icons/lib/io/android-person";
 import IoAndroidStar from "react-icons/lib/io/android-star";
 import { connect } from "react-redux";
-import { createLogEntry, toggleModal } from "../../actions/actions";
+import { createLogEntry } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import { IHistory, IListEntry, ILogEntry } from "../../utils/types";
-import { IGuide, IInfoPage } from "../../utils/types";
+import { IAuth, IHistory, IListEntry, ILogEntry, IObsValue } from "../../utils/types";
 
 import FlowReport from "./FlowReport";
 import SectionSelect from "./SectionSelect";
 
-const initialState: ILogEntry = {
-    _id: "",
-    section: "",
-    date: "",
-    participantCount: 1,
-    rating: 3,
-    description: "",
-};
-
-interface ITripDetailsModelProps {
+interface ITripDetailsModelProps extends ITripDetailsModalStateProps {
     createLogEntry: (item: ILogEntry) => void;
     handleClose: () => void;
     selectedGuide?: IListEntry;
@@ -43,13 +32,25 @@ interface ITripDetailsModelState {
     preventHoverChangePeople: boolean;
     preventHoverChangeRating: boolean;
     selectedGuide?: IListEntry;
-    flow?: string;
+}
+
+interface ITripDetailsModalStateProps {
+    auth: IAuth;
 }
 
 class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsModelState> {
     constructor(props: ITripDetailsModelProps) {
         super(props);
-        const initialLogEntry: ILogEntry = initialState;
+        const initialLogEntry: ILogEntry = {
+            log_id: "",
+            guide_id: "",
+            date: "",
+            participants: 1,
+            rating: 0,
+            description: "",
+            user_id: this.props.auth.user.id,
+            public: false,
+        };
 
         this.state = {
             logEntry: initialLogEntry,
@@ -60,26 +61,24 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
             rating: 1,
         };
         this.onChange = this.onChange.bind(this);
-        this.handleChange = this.handleChange.bind(this);
         this.handleSectionChange = this.handleSectionChange.bind(this);
-        this.handleSave = this.handleSave.bind(this);
     }
 
-    public handleChange(e: any): void {
-        const key: string = e.target.name;
-        if (this.state.logEntry && key in Object.keys(this.state.logEntry)) {
-            const logEntry: ILogEntry = this.state.logEntry;
-            logEntry[key as keyof ILogEntry] = e.target.value;
-            this.setState({ logEntry });
-        }
-    }
+    // public handleChange(e: any): void {
+    //     const key: string = e.target.name;
+    //     if (this.state.logEntry && key in Object.keys(this.state.logEntry)) {
+    //         const logEntry: ILogEntry = this.state.logEntry;
+    //         logEntry[key as keyof ILogEntry] = e.target.value;
+    //         this.setState({ logEntry });
+    //     }
+    // }
 
     public handleSectionChange(selectedGuide: IListEntry): void {
         if (this.state.logEntry) {
             let logEntry: ILogEntry = this.state.logEntry;
             logEntry = {
                 ...logEntry,
-                section: selectedGuide.id,
+                guide_id: selectedGuide.id,
             };
             this.setState({
                 logEntry,
@@ -88,11 +87,11 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         }
     }
 
-    public handleSave(): void {
+    public handleSave = (): void => {
         let logEntry: ILogEntry = this.state.logEntry;
         logEntry = {
             ...logEntry,
-            participantCount: this.state.peopleCount,
+            participants: this.state.peopleCount,
             date: this.state.date.toISOString(),
             rating: this.state.rating,
         };
@@ -248,9 +247,14 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         });
     }
 
-    public handleFlowChange = (flow: string): void => {
+    public handleFlowChange = (observables: IObsValue): void => {
+        let logEntry: ILogEntry = this.state.logEntry;
+        logEntry = {
+            ...logEntry,
+            observables,
+        };
         this.setState({
-            flow,
+            logEntry,
         });
     }
 
@@ -333,7 +337,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                             handleChange={this.handleFlowChange}
                             date={this.state.date}
                             gaugeHistoryFromInfoPage={this.props.gaugeHistory}
-                            flow={this.state.flow}
+                            observables={this.state.logEntry.observables || {flow: 0}}
                         />
                     }
 
@@ -351,7 +355,13 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
     }
 }
 
+function mapStateToProps(state: IState): ITripDetailsModalStateProps {
+    return ({
+        auth: state.auth,
+    });
+}
+
 export default connect(
-    null,
+    mapStateToProps,
     { createLogEntry },
 )(TripDetailsModal);

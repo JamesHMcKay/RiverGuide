@@ -14,7 +14,7 @@ const DEFAULT_LON: number = 171.7799;
 const DEFAULT_ZOOM: number = 6;
 
 const TOKEN: string =
-    "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqbXZ0bnp6dzA3NG0zc3BiYjMxaWJrcTIifQ.BKESeoXyOqkiB8j1sjbxQg";
+    "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqd29oc2hzdjF3YnM0Ym4wa3o4azFhd2MifQ.dqrE-W1cXNGKpV5FGPZFww";
 
 interface IMapComponentProps {
     guides: IListEntry[];

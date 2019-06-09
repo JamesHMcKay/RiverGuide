@@ -65,7 +65,7 @@ class EditTripModal extends Component<IEditTripModalProps, IEditTripModalState> 
             let logEntry: ILogEntry = this.state.logEntry;
             logEntry = {
                 ...logEntry,
-                section: e.value,
+                guide_id: e.value,
             };
             this.setState({ logEntry });
         }
