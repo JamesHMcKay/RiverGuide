@@ -167,8 +167,9 @@ class Info extends Component<IInfoProps, IInfoState> {
             {/* <img src={title_image} alt="Feature image" /> */}
                 <Grid
                     container
-                    item xs={12}
-                    spacing={10}
+                    item
+                    xs={12}
+                    spacing={3}
                     justify="space-between"
                     style={{
                         height: "200px",
