@@ -3,15 +3,11 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import { CancelTokenSource } from "axios";
 import axios from "axios";
-import PropTypes, { string } from "prop-types";
 import React, { Component } from "react";
 // Components
-import ReactDOM from "react-dom";
 import { connect } from "react-redux";
-import { CSSTransition } from "react-transition-group";
 import {
     generateFilteredList,
-    makeGuideRequest,
     setMapBounds,
 } from "../actions/actions";
 import { makeGaugeRequest } from "../actions/getGauges";
@@ -25,14 +21,11 @@ import * as weather from "openweather-apis";
 
 import Grid from "@material-ui/core/Grid";
 import "mapbox-gl/dist/mapbox-gl.css";
-import ControlBar from "./ControlBar";
 import Info from "./infoPanel/Info";
 import LeftPanel from "./leftPanel/LeftPanel";
 import { MapComponent } from "./map/MapComponent";
 
 import {
-    IFeatureOfInterest,
-    IFilter,
     IGauge,
     IGuide,
     IInfoPage,
@@ -216,7 +209,6 @@ class Panel extends Component<IPanelProps, IPanelState> {
     public render(): JSX.Element {
         return (
             <Grid container spacing={0}>
-            <ControlBar/>
             <Hidden mdUp>
                 {!this.props.infoPage.infoSelected && this.getToggleButton()}
             </Hidden>

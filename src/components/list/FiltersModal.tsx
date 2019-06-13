@@ -14,7 +14,6 @@ import {
 } from "@material-ui/core";
 
 // Components
-import FilterDropDown from "./FilterDropDown";
 
 function Transition(props: any): JSX.Element {
     return <Slide direction="up" {...props} />;

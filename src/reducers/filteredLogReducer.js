@@ -1,17 +1,16 @@
-import { GET_ENTRIES, GENERATE_FILTERED_LIST } from "../actions/types";
-import applyFiltersToList from "../utils/applyFiltersToList";
+import { GENERATE_FILTERED_LOG_LIST, GET_LOGS } from "../actions/types";
+import applyFiltersToLogList from "../utils/applyFiltersToLogList";
 
 const initialState = [];
 
 export default function(state = initialState, action) {
     switch (action.type) {
-        case GET_ENTRIES:
+        case GET_LOGS:
             return action.payload;
-        case GENERATE_FILTERED_LIST:
-            return applyFiltersToList(
+        case GENERATE_FILTERED_LOG_LIST:
+            return applyFiltersToLogList(
                 action.payload.entries,
                 action.payload.searchString,
-                action.payload.mapBounds,
             );
         default:
             return state;

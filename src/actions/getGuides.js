@@ -129,18 +129,20 @@ export const openInfoPage = guide => dispatch => {
             .post(riverServiceLocation, request)
             .then(res => {
                 let data = res.data.flows;
-                let result = data.map(item => (
-                    {
-                        time: item.time,
-                        values: {
-                            flow: item.flow,
-                            stage_height: item.stage_height,
-                        }
-                    }));
-                dispatch({
-                    type: ADD_HISTORIC_FLOW,
-                    payload: result.reverse(),
-                });
+                if (data) {
+                    let result = data.map(item => (
+                        {
+                            time: item.time,
+                            values: {
+                                flow: item.flow,
+                                stage_height: item.stage_height,
+                            }
+                        }));
+                    dispatch({
+                        type: ADD_HISTORIC_FLOW,
+                        payload: result.reverse(),
+                    });
+                }
             });
     }
 };

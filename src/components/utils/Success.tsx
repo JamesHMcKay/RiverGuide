@@ -15,10 +15,6 @@ interface ISuccessStateProps {
 }
 
 class Success extends Component<ISuccessProps> {
-    constructor(props: ISuccessProps) {
-        super(props);
-    }
-
     public closeModal = (): void => {
         this.props.toggleModal("successModal");
     }

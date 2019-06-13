@@ -20,12 +20,13 @@ import {
     SET_FILTER,
     GET_GAUGE_HISTORY,
     CLEAR_GAUGE_HISTORY,
+    GENERATE_FILTERED_LOG_LIST,
 } from "./types";
 
 const serverLocation = process.env.REACT_APP_SERVER_URL;
 const riverServiceLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
 
-const trickleLocation = 'https://trickleapi.herokuapp.com/';
+const trickleLocation = 'https://riverapi.herokuapp.com/';
 
 // Toggle Modals
 export const toggleModal = modal => dispatch => {
@@ -76,10 +77,14 @@ export const makeLogbookRequest = (user_id) => dispatch => {
     {
         //params: {query: query},
     }).then(res => {
-        console.log("got logbook", res);
+        let logs = res.data.map(item => ({
+            ...item,
+            log_id: item.id,
+        }));
+
         dispatch({
             type: GET_LOGS,
-            payload: res.data,
+            payload: logs,
         });
     });
 };
@@ -124,15 +129,25 @@ export const filterGuideList = (attribute, values) => dispatch => {
     });
 };
 
-export const generateFilteredList = (guides, searchString, mapBounds) => dispatch => {
-    dispatch({
-        type: GENERATE_FILTERED_LIST,
-        payload: {
-            guides,
-            searchString,
-            mapBounds,
-        },
-    });
+export const generateFilteredList = (entries, searchString, mapBounds, isLogList) => dispatch => {
+    if (isLogList) {
+        dispatch({
+            type: GENERATE_FILTERED_LOG_LIST,
+            payload: {
+                entries,
+                searchString,
+            },
+        });
+    } else {
+        dispatch({
+            type: GENERATE_FILTERED_LIST,
+            payload: {
+                entries,
+                searchString,
+                mapBounds,
+            },
+        });
+    }
 
     dispatch({
         type: SET_FILTER,

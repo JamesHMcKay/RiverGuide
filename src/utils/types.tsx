@@ -159,17 +159,25 @@ export interface ILatLon {
     lng?: number;
 }
 
-export interface ILogEntry {
-    log_id: string;
+export interface ILogListItem extends ILogBase {
+    guide_name: string;
+    flow: string;
+}
+
+export interface ILogEntry extends ILogBase {
     user_id: string;
+    observables?: IObsValue;
+    weather?: IWeather;
+    public: boolean;
+    description: string;
+}
+
+export interface ILogBase {
+    log_id: string;
+    guide_id: string;
     date: string;
     participants: number;
     rating: number;
-    description: string;
-    guide_id: string;
-    public: boolean;
-    observables?: IObsValue;
-    weather?: IWeather;
 }
 
 export interface IErrors {

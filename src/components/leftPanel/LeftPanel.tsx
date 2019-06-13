@@ -1,15 +1,13 @@
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 
 // Material UI
-import { Button, CircularProgress, List, Tooltip } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
+import { CircularProgress, List } from "@material-ui/core";
 
 // Components
 import { IState } from "../../reducers/index";
-import { IAuth, IGauge, IGuide, IInfoPage, IListEntry } from "./../../utils/types";
+import { IAuth, IGauge, IInfoPage, IListEntry } from "./../../utils/types";
 // Styles
 import "./LeftPanel.css";
 import ListGroup from "./ListGroup";
@@ -23,7 +21,6 @@ interface ILeftPanelProps extends ILeftPanelStateProps {
 
 interface ILeftPanelStateProps {
     auth: IAuth;
-    guides: IGuide[];
     filteredGuides: IListEntry[];
     infoPage: IInfoPage;
     listEntries: IListEntry[];
@@ -75,14 +72,9 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
     }
 }
 
-LeftPanel.propTypes = {
-    auth: PropTypes.object.isRequired,
-};
-
 function mapStateToProps(state: IState): ILeftPanelStateProps {
     return ({
         auth: state.auth,
-        guides: state.guides,
         infoPage: state.infoPage,
         filteredGuides: state.filteredList,
         listEntries: state.listEntries,

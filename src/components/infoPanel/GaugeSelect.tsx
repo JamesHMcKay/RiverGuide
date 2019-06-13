@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Select from "react-select";
 import { IState } from "../../reducers/index";
-import { IGauge, IGuide, IListEntry } from "../../utils/types";
-
-import { FormGroup, Label } from "reactstrap";
+import { IGauge, IListEntry } from "../../utils/types";
 
 interface IGaugeSelectProps extends IGaugeSelectStateProps {
     handleChange: (selectedGuide: IGauge) => void;

@@ -18,9 +18,6 @@ interface IDownloadModalProps extends IDataInfoModalStateProps {
 }
 
 class DataInfoModal extends Component<IDownloadModalProps> {
-    constructor(props: IDownloadModalProps) {
-        super(props);
-    }
 
     // public componentWillReceiveProps = (nextProps: IDownloadModalProps): void => {
     //     if (nextProps.errors) {

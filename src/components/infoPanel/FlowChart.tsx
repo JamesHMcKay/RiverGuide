@@ -1,15 +1,12 @@
 
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
-import { IGauge, IGuide, IHistory, IInfoPage, IObservable, IObsValue } from "../../utils/types";
+import { IGauge, IHistory, IInfoPage, IObservable, IObsValue } from "../../utils/types";
 
 // Material UI
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 
 import Moment from "moment";
@@ -175,7 +172,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
     }
 
     public getButtonVariant(type: string):
-        "text" | "flat" | "outlined" | "contained" | "raised" | "fab" | "extendedFab" | undefined {
+        "text" | "outlined" | "contained" | undefined {
         if (type === this.state.selectedType) {
             return "contained";
         }
@@ -204,7 +201,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
     public render(): JSX.Element {
         return (
             // <Card>
-                <Grid container item xs={12} spacing={24} justify="space-between">
+                <Grid container item xs={12} spacing={10} justify="space-between">
 
                 <Grid container item md={6} lg={6} justify="flex-start">
                     <Typography variant="h5" gutterBottom>

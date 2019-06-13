@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
@@ -15,10 +14,6 @@ interface IFlowBadgeStateProps {
 }
 
 class FlowBadge extends Component<IFlowBadgeProps> {
-    constructor(props: IFlowBadgeProps) {
-        super(props);
-    }
-
     public getObservables = (gaugeId: string | undefined): IObservable[] | undefined => {
         let observables: IObservable[] | undefined;
         if (this.props.observables) {
@@ -76,10 +71,6 @@ class FlowBadge extends Component<IFlowBadgeProps> {
         }
     }
 }
-
-FlowBadge.propTypes = {
-    gauges: PropTypes.array.isRequired,
-};
 
 function mapStateToProps(state: IState): IFlowBadgeStateProps {
     return ({

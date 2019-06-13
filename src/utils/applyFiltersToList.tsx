@@ -1,4 +1,4 @@
-import { IGuide, IListEntry, IMapBounds } from "./types";
+import { IListEntry, IMapBounds } from "./types";
 
 function hasIndex(obj: string, str: string): boolean {
     return obj.toLowerCase().indexOf(str) > -1;

@@ -1,31 +1,16 @@
 import React, { Component } from "react";
 
 // Material UI
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
-import IconButton from "@material-ui/core/IconButton";
-import TextField from "@material-ui/core/TextField";
-import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
-import EditIcon from "@material-ui/icons/Edit";
-
-import Avatar from "@material-ui/core/Avatar";
 import QueryBuilder from "@material-ui/icons/QueryBuilder";
 
 import LandscapeRounded from "@material-ui/icons/LandscapeRounded";
 import Timeline from "@material-ui/icons/Timeline";
 
-import WarningRounded from "@material-ui/icons/WarningRounded";
-
-import Divider from "@material-ui/core/Divider";
-import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import BeachAccessIcon from "@material-ui/icons/BeachAccess";
-import ImageIcon from "@material-ui/icons/Image";
-import WorkIcon from "@material-ui/icons/Work";
+import WarningRounded from "@material-ui/icons/WarningRounded";
 import { IItemDetails } from "../../utils/types";
 
 interface IKeyFactsCardState {
@@ -57,7 +42,7 @@ class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
 
     public getKeyFacts = (): JSX.Element => {
         return (
-        <Grid container item spacing={24} justify="space-between">
+        <Grid container item spacing={10} justify="space-between">
         <Grid item md={12} lg={3}>
         <ListItem>
                 <WarningRounded fontSize="large" />

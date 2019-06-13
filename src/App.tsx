@@ -17,6 +17,7 @@ import Modals from "./components/utils/Modals";
 import createHistory from "history/createBrowserHistory";
 import ConnectPage from "./components/connect/Connect";
 
+import ControlBar from "./components/ControlBar";
 import theme from "./utils/theme";
 
 // Create redux store with history
@@ -54,8 +55,13 @@ class App extends Component {
                     <MuiThemeProvider theme={theme}>
                         <div className="App">
                             <NavBar />
+                            <Route component={ControlBar} />
                             <Switch>
-                                <Route exact path="/" component={Panel} />
+                                <Route
+                                    exact
+                                    path={["/whitewater", "/gauges", "/jetboating", "/fishing", "/"]}
+                                    component={Panel}
+                                />
                                 <Route
                                     path="/profile"
                                     component={ProfileContainer}

@@ -8,8 +8,7 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { updateGuide } from "../../actions/updateGuide";
-import { IState } from "../../reducers/index";
-import { IGauge, IInfoPage, IListEntry, ILogEntry, IOpenLog } from "../../utils/types";
+import { IGauge, IInfoPage } from "../../utils/types";
 import GaugeSelect from "./GaugeSelect";
 
 interface IEditGuideState {

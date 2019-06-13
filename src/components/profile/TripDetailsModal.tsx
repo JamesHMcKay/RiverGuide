@@ -4,7 +4,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
-import { DateFormatInput } from "material-ui-next-pickers";
+// import { DateFormatInput } from "material-ui-next-pickers";
 import React, { Component } from "react";
 import IoAndroidAdd from "react-icons/lib/io/android-add";
 import IoAndroidPerson from "react-icons/lib/io/android-person";
@@ -14,6 +14,14 @@ import { createLogEntry } from "../../actions/actions";
 import { IState } from "../../reducers/index";
 import { IAuth, IHistory, IListEntry, ILogEntry, IObsValue } from "../../utils/types";
 
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  KeyboardDatePicker,
+  KeyboardTimePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
+
+import { Grid } from "@material-ui/core";
 import FlowReport from "./FlowReport";
 import SectionSelect from "./SectionSelect";
 
@@ -27,7 +35,7 @@ interface ITripDetailsModelProps extends ITripDetailsModalStateProps {
 interface ITripDetailsModelState {
     logEntry: ILogEntry;
     peopleCount: number;
-    date: Date;
+    date: Date | null;
     rating: number;
     preventHoverChangePeople: boolean;
     preventHoverChangeRating: boolean;
@@ -92,7 +100,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         logEntry = {
             ...logEntry,
             participants: this.state.peopleCount,
-            date: this.state.date.toISOString(),
+            date: this.state.date ? this.state.date.toISOString() : "",
             rating: this.state.rating,
         };
         this.props.createLogEntry(logEntry as ILogEntry);
@@ -223,11 +231,11 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         );
     }
 
-    public handleDateChange = (date: Date): void => {
+    public handleDateChange = (date: Date | null): void => {
         let logEntry: ILogEntry = this.state.logEntry;
         logEntry = {
             ...logEntry,
-            date: date.toISOString(),
+            date: date ? date.toISOString() : "",
         };
         this.setState({
             logEntry,
@@ -305,13 +313,38 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                         />
                         }
                     <div className="date-picker-container">
-                        <DateFormatInput
+                        {/* <DateFormatInput
                             name="date-input"
-                            label="Date"
+                            // label="Date"
                             value={this.state.date}
                             onChange={this.handleDateChange}
-                            variant="standard"
-                        />
+                            // variant="standard"
+                        /> */}
+
+<MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <Grid container justify="space-around">
+        <KeyboardDatePicker
+          margin="normal"
+          id="mui-pickers-date"
+          label="Date picker"
+          value={this.state.date}
+          onChange={this.handleDateChange}
+          KeyboardButtonProps={{
+            "aria-label": "change date",
+          }}
+        />
+        <KeyboardTimePicker
+          margin="normal"
+          id="mui-pickers-time"
+          label="Time picker"
+          value={this.state.date}
+          onChange={this.handleDateChange}
+          KeyboardButtonProps={{
+            "aria-label": "change time",
+          }}
+        />
+      </Grid>
+      </MuiPickersUtilsProvider>
                     </div>
                     <DialogContentText>
                         {"Rating"}
@@ -331,7 +364,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                             onChange={this.updateDescription}
                             fullWidth={true}
                         />
-                    {selectedGuide &&
+                    {(selectedGuide && this.state.date) &&
                         <FlowReport
                             selectedGuide={selectedGuide}
                             handleChange={this.handleFlowChange}

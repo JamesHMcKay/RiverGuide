@@ -30,3 +30,4 @@ export const GET_ITEM_DETAILS: string = "GET_ITEM_DETAILS";
 export const GET_WEATHER: string = "GET_WEATHER";
 export const SET_FILTER: string = "SET_FILTER";
 export const CLEAR_GAUGE_HISTORY: string = "CLEAR_GAUGE_HISTORY";
+export const GENERATE_FILTERED_LOG_LIST: string = "GENERATE_FILTERED_LOG_LIST";

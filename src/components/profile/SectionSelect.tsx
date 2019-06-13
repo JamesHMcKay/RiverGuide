@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Select from "react-select";
 import { IState } from "../../reducers/index";
-import { IGuide, IListEntry } from "../../utils/types";
+import { IListEntry } from "../../utils/types";
 
 import { FormGroup, Label } from "reactstrap";
 

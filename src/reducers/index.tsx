@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 import authReducer from "./authReducer";
 import categoryReducer from "./categoryReducer";
 import errorReducer from "./errorReducer";
+import filteredLogReducer from "./filteredLogReducer";
 import filterReducer from "./filterReducer";
 import gaugeHistoryReducer from "./gaugeHistoryReducer";
 import gaugeReducer from "./gaugeReducer";
@@ -49,6 +50,7 @@ export interface IState {
     listItemDetails: IItemDetails;
     weatherStore: WeatherStore;
     filters: IFilter;
+    filteredLogList: ILogEntry[];
 }
 
 export default combineReducers({
@@ -69,4 +71,5 @@ export default combineReducers({
     listItemDetails: listItemDetailsReducer,
     weatherStore: weatherReducer,
     filters: filterReducer,
+    filteredLogList: filteredLogReducer,
 });

@@ -1,11 +1,8 @@
-import AppBar from "@material-ui/core/AppBar";
 import Grid from "@material-ui/core/Grid";
-import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import title_image from "../../img/riverwiki.jpg";
-import Report from "../common/Report";
 import KeyFactsCard from "./KeyFactsCard";
 
 import {
@@ -15,14 +12,13 @@ import {
     toggleModal,
 } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import { IAuth, IGuide, IInfoPage, IListEntry, IMarker } from "../../utils/types";
-import FlowBadge from "../common/FlowBadge";
+import { IAuth, IInfoPage, IListEntry, IMarker } from "../../utils/types";
 import { CurrentWeather } from "./CurrentWeather";
 import "./Info.css";
-import { IWeatherStore, WeatherStore } from "./WeatherStore";
+import { WeatherStore } from "./WeatherStore";
 
 // Material UI
-import { Button, Chip, IconButton, Paper, Tooltip } from "@material-ui/core";
+import { Button, Chip, IconButton, Tooltip } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -172,7 +168,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                 <Grid
                     container
                     item xs={12}
-                    spacing={24}
+                    spacing={10}
                     justify="space-between"
                     style={{
                         height: "200px",

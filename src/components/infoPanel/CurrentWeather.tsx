@@ -1,4 +1,3 @@
-import moment from "moment";
 import React from "react";
 import cloudy from "../../img/cloudy.svg";
 import fog from "../../img/fog.svg";
@@ -9,12 +8,6 @@ import snow from "../../img/snow.svg";
 import sun from "../../img/sun.svg";
 import wind from "../../img/wind.svg";
 import { IWeather, IWeatherStore, WeatherStore } from "./WeatherStore";
-
-// Material UI
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-
-const CALM_WIND_THRESHOLD: number = 2;
 
 interface ICurrentWeatherState {
     weatherStore: any;

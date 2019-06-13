@@ -13,8 +13,6 @@ import wind from "../../img/wind.svg";
 import { IWeather, IWeatherStore, WeatherStore } from "./WeatherStore";
 
 // Material UI
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import { CurrentWeather } from "./CurrentWeather";
 

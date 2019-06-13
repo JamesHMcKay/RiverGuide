@@ -13,8 +13,7 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 
 // Components
 import { IState } from "../../reducers/index";
-import { IAuth, IFilter, IGauge, IGuide, IInfoPage, IListEntry, IRiverRegion } from "./../../utils/types";
-import GuideItem from "./ListItem";
+import { IAuth, IFilter, IListEntry, IRiverRegion } from "./../../utils/types";
 import RiverGroup from "./RiverGroup";
 
 interface IListGroupProps extends IListGroupStateProps {

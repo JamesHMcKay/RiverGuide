@@ -5,7 +5,6 @@ import { IState } from "../../reducers/index";
 import { IAuth } from "../../utils/types";
 
 import Logbook from "./Logbook";
-import ProfileBanner from "./ProfileBanner";
 
 import "./profile.css";
 
@@ -25,7 +24,7 @@ class ProfileContainer extends Component<IProfileContainerProps> {
     public render(): JSX.Element {
         return (
             <div className="container">
-                <ProfileBanner user={this.props.auth.user} />
+                {/* <ProfileBanner user={this.props.auth.user} /> */}
                 <Logbook />
             </div>
         );

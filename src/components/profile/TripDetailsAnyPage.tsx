@@ -15,10 +15,6 @@ interface ITripDetailsAnyPageStateProps {
 }
 
 class TripDetailsAnyPage extends Component<ITripDetailsInfoPageProps> {
-    constructor(props: ITripDetailsInfoPageProps) {
-        super(props);
-    }
-
     public handleClose = (): void => {
         this.props.toggleModal();
     }

@@ -3,13 +3,8 @@ import React, { Component } from "react";
 
 // Material UI
 import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
-import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
-import EditIcon from "@material-ui/icons/Edit";
 
 marked.setOptions({
     gfm: true,

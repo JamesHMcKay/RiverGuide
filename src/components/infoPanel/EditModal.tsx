@@ -16,10 +16,6 @@ interface IEditModalStateProps {
 }
 
 class EditModal extends Component<IEditModalProps> {
-    constructor(props: IEditModalProps) {
-        super(props);
-    }
-
     public handleClose = (): void => {
         this.props.toggleModal();
     }

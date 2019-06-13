@@ -1,7 +1,7 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import * as kmeans from "node-kmeans";
 import React, { Component } from "react";
-import ReactMapGL, { FlyToInterpolator, InteractiveMap, Marker, ViewState } from "react-map-gl";
+import ReactMapGL, { InteractiveMap, Marker, ViewState } from "react-map-gl";
 import uuidv1 from "uuid";
 import WebMercatorViewport from "viewport-mercator-project";
 import { IGuide, ILatLon, IListEntry, IMapBounds } from "../../utils/types";
@@ -210,7 +210,7 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
 
     public onClusterClick(cluster: ICluster): void {
         const boundingBox: IBoundingBox = cluster.boundingBox;
-        const {longitude, latitude, zoom} = new WebMercatorViewport(this.state.viewport)
+        const {longitude, latitude} = new WebMercatorViewport(this.state.viewport)
         .fitBounds([[boundingBox.minLon, boundingBox.minLat], [boundingBox.maxLon, boundingBox.maxLat]]);
 
         const viewport: IViewport = {
@@ -234,7 +234,7 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
             cluster.lat &&
             cluster.lon && (
                     <Marker
-                    key={cluster.lat}
+                    key={uuidv1()}
                     longitude={cluster.lon}
                     latitude={cluster.lat}
                      >
