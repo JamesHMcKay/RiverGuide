@@ -159,6 +159,8 @@ export interface ILatLon {
     lng?: number;
 }
 
+export interface ILogComplete extends ILogListItem, ILogEntry {}
+
 export interface ILogListItem extends ILogBase {
     guide_name: string;
     flow: string;

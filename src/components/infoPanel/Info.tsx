@@ -202,6 +202,9 @@ class Info extends Component<IInfoProps, IInfoState> {
                     </Grid>
                     <Grid container item md={6} lg={6} justify="flex-end">
                     {this.getReportButton()}
+                            <Button color="secondary" onClick={this.openModal.bind(this, "editModal")}>
+                                <EditIcon />
+                            </Button>
                     </Grid>
                 </Grid>
 
@@ -244,20 +247,6 @@ class Info extends Component<IInfoProps, IInfoState> {
                     {markerList && markerList.length > 0 && (
                             <MapCard markers={markerList} />
                     )}
-                </Grid>
-                <Grid item xs={12} sm={12}>
-                    <div
-                        style={{
-                            marginLeft: "93%",
-                            padding: "1em 0",
-                        }}
-                    >
-                        <Tooltip title={"Edit " + entry.display_name} placement="left">
-                            <Button color="secondary" onClick={this.openModal.bind(this, "editModal")}>
-                                <EditIcon />
-                            </Button>
-                        </Tooltip>
-                    </div>
                 </Grid>
             </Grid>
         );

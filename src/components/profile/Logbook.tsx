@@ -13,7 +13,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import { ILogEntry, ILogListItem, IObsValue } from "../../utils/types";
+import { ILogComplete, ILogListItem, IObsValue } from "../../utils/types";
+import LogbookHead from "./LogbookHead";
 import "./profile.css";
 
 interface IEnhancedTableProps {
@@ -28,7 +29,6 @@ interface IEnhancedTableProps {
 
 const headRows: IHeadRow[] = [
   { id: "date", numeric: false, disablePadding: false, label: "Date" },
-  { id: "log_id", numeric: false, disablePadding: true, label: "Log ID" },
   { id: "guide_name", numeric: false, disablePadding: false, label: "Guide name" },
   { id: "rating", numeric: true, disablePadding: false, label: "Rating" },
   { id: "participants", numeric: true, disablePadding: false, label: "Participants" },
@@ -36,7 +36,6 @@ const headRows: IHeadRow[] = [
 ];
 
 const columnOrder: Array<keyof ILogListItem> = [
-  "log_id",
   "guide_name",
   "rating",
   "participants",
@@ -136,7 +135,7 @@ interface ILogBookProps extends ILogBookStateProps {
 }
 
 interface ILogBookStateProps {
-    log: ILogEntry[];
+    log: ILogComplete[];
     openModal: string;
 }
 
@@ -169,7 +168,7 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
         };
     }
 
-    public listsAreEqual = (listOne: ILogEntry[], listTwo: ILogEntry[]): boolean => {
+    public listsAreEqual = (listOne: ILogComplete[], listTwo: ILogComplete[]): boolean => {
         if (listOne.length !== listTwo.length) {
             return false;
         }
@@ -201,15 +200,15 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
       return "";
     }
 
-    public createList = (inputList: ILogEntry[]): ILogListItem[] => {
-        const listItems: ILogListItem[] = inputList.map((item: ILogEntry) => ({
-            guide_name: item.guide_id,
+    public createList = (inputList: ILogComplete[]): ILogListItem[] => {
+        const listItems: ILogListItem[] = inputList.map((item: ILogComplete) => ({
+            guide_name: item.guide_name,
             guide_id: item.guide_id,
             date: item.date,
             participants: item.participants,
             rating: item.rating,
             log_id: item.log_id,
-            flow: this.getFlow(item.observables),
+            flow: item.flow,
         }));
         return listItems;
     }
@@ -326,12 +325,13 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
         return (
             <div style={{width: "100%", marginTop: "3em"}}>
             <Paper style={{width: "100%", marginTop: "3em"}}>
-              {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+              <LogbookHead
+                selectedLogIds = {this.state.selected}
+              />
               <div style={{overflowX: "auto"}}>
                 <Table
                   style={{minWidth: 750}}
                   aria-labelledby="tableTitle"
-                //   size='medium'
                 >
                   <EnhancedTableHead
                     numSelected={this.state.selected.length}

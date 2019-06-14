@@ -1,4 +1,18 @@
 import { combineReducers } from "redux";
+import { WeatherStore } from "../components/infoPanel/WeatherStore";
+import {
+    IAuth,
+    IErrors,
+    IFilter,
+    IGauge,
+    IGaugeHistory,
+    IGuide,
+    IInfoPage,
+    IItemDetails,
+    IListEntry,
+    ILogComplete,
+    IMapBounds,
+    IOpenLog } from "../utils/types";
 import authReducer from "./authReducer";
 import categoryReducer from "./categoryReducer";
 import errorReducer from "./errorReducer";
@@ -15,23 +29,9 @@ import logReducer from "./logReducer";
 import mapBoundsReducer from "./mapBoundsReducer";
 import modalReducer from "./modalReducer";
 import openLogReducer from "./openLogReducer";
+import selectedLogIdReducer from "./selectedLogIdReducer";
 import sensorDataReducer from "./sensorDataReducer";
 import weatherReducer from "./weatherReducer";
-
-import { WeatherStore } from "../components/infoPanel/WeatherStore";
-import {
-    IAuth,
-    IErrors,
-    IFilter,
-    IGauge,
-    IGaugeHistory,
-    IGuide,
-    IInfoPage,
-    IItemDetails,
-    IListEntry,
-    ILogEntry,
-    IMapBounds,
-    IOpenLog } from "../utils/types";
 
 export interface IState {
     guides: IGuide[];
@@ -44,13 +44,14 @@ export interface IState {
     openLog: IOpenLog;
     category: string;
     errors: IErrors;
-    log: ILogEntry[];
+    log: ILogComplete[];
     gaugeHistory: IGaugeHistory;
     listEntries: IListEntry[];
     listItemDetails: IItemDetails;
     weatherStore: WeatherStore;
     filters: IFilter;
-    filteredLogList: ILogEntry[];
+    filteredLogList: ILogComplete[];
+    selectedLogId: string;
 }
 
 export default combineReducers({
@@ -72,4 +73,5 @@ export default combineReducers({
     weatherStore: weatherReducer,
     filters: filterReducer,
     filteredLogList: filteredLogReducer,
+    selectedLogId: selectedLogIdReducer,
 });

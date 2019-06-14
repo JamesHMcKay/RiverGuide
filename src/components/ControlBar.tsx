@@ -89,16 +89,6 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
         this.props.setCategory(tabNames[this.state.index].toLowerCase(), this.state.cancelToken);
     }
 
-    public handleChange = (event: any, value: number): void => {
-        this.setState({ index: value });
-        this.state.cancelToken.cancel();
-        const newToken: CancelTokenSource = axios.CancelToken.source();
-        this.setState({
-            cancelToken: newToken,
-        });
-        this.props.setCategory(tabNames[value].toLowerCase(), newToken);
-    }
-
     public handleSearch = (event: any): void => {
         // this.props.searchGuideList(event.target.value, this.props.guides);
         const isLogList: boolean = tabNames[this.state.index] === "Log book";
@@ -119,8 +109,8 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
         this.setState({
             cancelToken: newToken,
         });
-        if (category === "logbook") {
-            this.props.setCategory("whitewater", newToken);
+        if (category === "Log book") {
+            // this.props.setCategory("whitewater", newToken);
         } else {
             this.props.setCategory(category.toLowerCase(), newToken);
         }

@@ -2,13 +2,11 @@ import axios from "axios";
 
 import {
     APPEND_GUIDES,
-    APPEND_LOGS,
     CLEAR_ERRORS,
     CLOSE_MODAL,
     DELETE_LOG,
-    EDIT_LOG,
     OPEN_MODAL,
-    GET_LOGS,
+    GET_ENTRIES,
     SEARCH_GUIDES,
     FILTER_GUIDES,
     GENERATE_FILTERED_LIST,
@@ -21,12 +19,15 @@ import {
     GET_GAUGE_HISTORY,
     CLEAR_GAUGE_HISTORY,
     GENERATE_FILTERED_LOG_LIST,
+    SET_LOG_GUIDE_NAMES,
+    SET_SELECTED_LOG_ID,
 } from "./types";
 
 const serverLocation = process.env.REACT_APP_SERVER_URL;
 const riverServiceLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
+const strapi_location = "https://riverapi.herokuapp.com/graphql";
 
-const trickleLocation = 'https://riverapi.herokuapp.com/';
+const riverapiLocation = 'https://riverapi.herokuapp.com/';
 
 // Toggle Modals
 export const toggleModal = modal => dispatch => {
@@ -68,38 +69,49 @@ export const createGuide = (guideData, category) => dispatch => {
         });
 };
 
-
-
 // Get logbook logs
 export const makeLogbookRequest = (user_id) => dispatch => {
     //let query = "{logs(user_id:\"" + user_id + "\"){log_id, user_id, date, participants, rating, description, guide_id, public, observables, weather}}"
-    axios.get(trickleLocation + "logs",
-    {
-        //params: {query: query},
-    }).then(res => {
-        let logs = res.data.map(item => ({
+    let req = [
+        axios.get(riverapiLocation + "logs",
+        {
+            //params: {query: query},
+        }),
+        axios
+        .get(`${strapi_location}`,
+            {
+                headers: {'Authorization': ''},
+                params: {query: '{wwguides(limit:999){id,river_name,section_name,region,latitude,longitude,gauge_id}}'},
+            }
+        )
+      ];
+
+      Promise.all(req).then((res) => {
+        let logs = res[0].data.map(item => ({
             ...item,
             log_id: item.id,
         }));
 
+        let data = res[1].data.data.wwguides;
+        let result = data.map(item => (
+            {
+                id: item.id,
+                display_name: item.section_name,
+                river_name: item.river_name,
+                position: {lat: item.latitude < 90 ? item.latitude : -45, lon: item.longitude },
+                region: item.region,
+                gauge_id: item.gauge_id,
+                type: "wwguide",
+            }));
         dispatch({
-            type: GET_LOGS,
-            payload: logs,
-        });
-    });
-};
-
-// Create logbook entry
-export const createLogEntry = logEntry => dispatch => {
-    axios.post(trickleLocation + "logs", logEntry).then(res => {
-        dispatch({
-            type: APPEND_LOGS,
-            payload: res.data,
+            type: SET_LOG_GUIDE_NAMES,
+            payload: {logs: logs, listEntries: result},
         });
         dispatch({
-            type: CLOSE_MODAL,
+            type: GET_ENTRIES,
+            payload: result,
         });
-    });
+      });
 };
 
 // search guide list
@@ -204,18 +216,32 @@ export const updateOpenLog = openLog => dispatch => {
     });
 };
 
+
+// Create logbook entry
+export const createLogEntry = logEntry => dispatch => {
+    axios.post(riverapiLocation + "logs", logEntry).then(res => {
+        // dispatch({
+        //     type: APPEND_LOGS,
+        //     payload: res.data,
+        // });
+        dispatch({
+            type: CLOSE_MODAL,
+        });
+    });
+};
+
 // Edit logbook entry
 export const editLogEntry = updatedLogEntry => dispatch => {
     axios
         .put(
-            serverLocation + "/logbook/" + updatedLogEntry._id,
+            riverapiLocation + "logs/" + updatedLogEntry.log_id,
             updatedLogEntry,
         )
         .then(res => {
-            dispatch({
-                type: EDIT_LOG,
-                payload: res.data,
-            });
+            // dispatch({
+            //     type: EDIT_LOG,
+            //     payload: res.data,
+            // });
             dispatch({
                 type: CLOSE_MODAL,
             });
@@ -224,7 +250,7 @@ export const editLogEntry = updatedLogEntry => dispatch => {
 
 // Delete logbook entry
 export const deleteLogEntry = logId => dispatch => {
-    axios.delete(serverLocation + "/logbook/" + logId).then(res => {
+    axios.delete(riverapiLocation + "logs/" + logId).then(res => {
         dispatch({
             type: DELETE_LOG,
             payload: logId,
@@ -261,3 +287,11 @@ export const removeFromFavourites = (guideId, email) => dispatch => {
         )
         .catch(err => console.log(err));
 };
+
+
+export const setSelectedLogId = selectedLogId => dispatch => {
+    dispatch({
+        type: SET_SELECTED_LOG_ID,
+        payload: selectedLogId,
+    });
+}

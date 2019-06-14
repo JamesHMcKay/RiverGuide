@@ -10,14 +10,13 @@ import IoAndroidAdd from "react-icons/lib/io/android-add";
 import IoAndroidPerson from "react-icons/lib/io/android-person";
 import IoAndroidStar from "react-icons/lib/io/android-star";
 import { connect } from "react-redux";
-import { createLogEntry } from "../../actions/actions";
+import { createLogEntry, editLogEntry } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import { IAuth, IHistory, IListEntry, ILogEntry, IObsValue } from "../../utils/types";
+import { IAuth, IHistory, IListEntry, ILogComplete, ILogEntry, IObsValue } from "../../utils/types";
 
 import DateFnsUtils from "@date-io/date-fns";
 import {
   KeyboardDatePicker,
-  KeyboardTimePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 
@@ -27,9 +26,12 @@ import SectionSelect from "./SectionSelect";
 
 interface ITripDetailsModelProps extends ITripDetailsModalStateProps {
     createLogEntry: (item: ILogEntry) => void;
+    editLogEntry: (item: ILogEntry) => void;
     handleClose: () => void;
     selectedGuide?: IListEntry;
     gaugeHistory?: IHistory[];
+    initialLogEntry?: ILogComplete;
+    isUpdate?: boolean;
 }
 
 interface ITripDetailsModelState {
@@ -49,39 +51,46 @@ interface ITripDetailsModalStateProps {
 class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsModelState> {
     constructor(props: ITripDetailsModelProps) {
         super(props);
-        const initialLogEntry: ILogEntry = {
-            log_id: "",
-            guide_id: "",
-            date: "",
-            participants: 1,
-            rating: 0,
-            description: "",
-            user_id: this.props.auth.user.id,
-            public: false,
-        };
+        if (this.props.initialLogEntry) {
+            const presetLogEntry: ILogComplete = {
+                ...this.props.initialLogEntry,
+            };
+            const peopleCount: number = presetLogEntry.participants;
+            const dateParsed: Date = new Date(presetLogEntry.date);
+            this.state = {
+                logEntry: presetLogEntry,
+                peopleCount,
+                date: dateParsed,
+                preventHoverChangePeople: true,
+                preventHoverChangeRating: true,
+                rating: presetLogEntry.rating,
+                selectedGuide: this.props.selectedGuide,
+            };
+        } else {
+            const guideId: string | undefined = this.props.selectedGuide ? this.props.selectedGuide.id : "";
+            const initialLogEntry: ILogEntry = {
+                log_id: "",
+                guide_id: guideId || "",
+                date: "",
+                participants: 1,
+                rating: 0,
+                description: "",
+                user_id: this.props.auth.user.id,
+                public: false,
+            };
 
-        this.state = {
-            logEntry: initialLogEntry,
-            peopleCount: 1,
-            date: new Date(),
-            preventHoverChangePeople: false,
-            preventHoverChangeRating: false,
-            rating: 1,
-        };
-        this.onChange = this.onChange.bind(this);
-        this.handleSectionChange = this.handleSectionChange.bind(this);
+            this.state = {
+                logEntry: initialLogEntry,
+                peopleCount: 1,
+                date: new Date(),
+                preventHoverChangePeople: false,
+                preventHoverChangeRating: false,
+                rating: 1,
+            };
+        }
     }
 
-    // public handleChange(e: any): void {
-    //     const key: string = e.target.name;
-    //     if (this.state.logEntry && key in Object.keys(this.state.logEntry)) {
-    //         const logEntry: ILogEntry = this.state.logEntry;
-    //         logEntry[key as keyof ILogEntry] = e.target.value;
-    //         this.setState({ logEntry });
-    //     }
-    // }
-
-    public handleSectionChange(selectedGuide: IListEntry): void {
+    public handleSectionChange = (selectedGuide: IListEntry): void => {
         if (this.state.logEntry) {
             let logEntry: ILogEntry = this.state.logEntry;
             logEntry = {
@@ -103,7 +112,11 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
             date: this.state.date ? this.state.date.toISOString() : "",
             rating: this.state.rating,
         };
-        this.props.createLogEntry(logEntry as ILogEntry);
+        if (this.props.isUpdate) {
+            this.props.editLogEntry(logEntry as ILogEntry);
+        } else {
+            this.props.createLogEntry(logEntry as ILogEntry);
+        }
         this.props.handleClose();
     }
 
@@ -129,7 +142,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         });
     }
 
-    public onChange(e: any): void {
+    public onChange = (e: any): void => {
         this.setState({
             peopleCount: e.target.value,
         });
@@ -313,38 +326,30 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                         />
                         }
                     <div className="date-picker-container">
-                        {/* <DateFormatInput
-                            name="date-input"
-                            // label="Date"
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Grid container justify="space-around">
+                        <KeyboardDatePicker
+                            margin="normal"
+                            id="mui-pickers-date"
+                            label="Date picker"
                             value={this.state.date}
                             onChange={this.handleDateChange}
-                            // variant="standard"
+                            KeyboardButtonProps={{
+                            "aria-label": "change date",
+                            }}
+                        />
+                        {/* <KeyboardTimePicker
+                            margin="normal"
+                            id="mui-pickers-time"
+                            label="Time picker"
+                            value={this.state.date}
+                            onChange={this.handleDateChange}
+                            KeyboardButtonProps={{
+                            "aria-label": "change time",
+                            }}
                         /> */}
-
-<MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <Grid container justify="space-around">
-        <KeyboardDatePicker
-          margin="normal"
-          id="mui-pickers-date"
-          label="Date picker"
-          value={this.state.date}
-          onChange={this.handleDateChange}
-          KeyboardButtonProps={{
-            "aria-label": "change date",
-          }}
-        />
-        <KeyboardTimePicker
-          margin="normal"
-          id="mui-pickers-time"
-          label="Time picker"
-          value={this.state.date}
-          onChange={this.handleDateChange}
-          KeyboardButtonProps={{
-            "aria-label": "change time",
-          }}
-        />
-      </Grid>
-      </MuiPickersUtilsProvider>
+                        </Grid>
+                    </MuiPickersUtilsProvider>
                     </div>
                     <DialogContentText>
                         {"Rating"}
@@ -373,7 +378,6 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                             observables={this.state.logEntry.observables || {flow: 0}}
                         />
                     }
-
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={this.props.handleClose} color="primary">
@@ -396,5 +400,5 @@ function mapStateToProps(state: IState): ITripDetailsModalStateProps {
 
 export default connect(
     mapStateToProps,
-    { createLogEntry },
+    { createLogEntry, editLogEntry },
 )(TripDetailsModal);

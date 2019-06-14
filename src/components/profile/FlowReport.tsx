@@ -48,7 +48,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
             (gauge: IGauge): boolean => (gauge.id === this.props.selectedGuide.gauge_id))[0];
 
         this.state = {
-            manualySet: false,
+            manualySet: true,
             unit: UNIT_OPTIONS[0],
             type: "flow",
             gauge,
@@ -83,7 +83,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
                 const key: keyof IObsValue = type as keyof IObsValue;
                 const result: number[] = filteredHistory.map((reading: IHistory): number => reading.values[key] || 0);
                 const flows: number[] = result;
-                output[key] = this.computeMean(flows);
+                output[key] = Math.round(this.computeMean(flows) * 10) / 10;
             }
             return output;
         } else {
@@ -98,6 +98,9 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         const prevSelectedGuide: string | undefined = prevProps.selectedGuide.gauge_id;
 
         const shouldUpdate: boolean | undefined = selectedGuide !== prevSelectedGuide;
+
+        const newGaugeHistory: boolean = prevProps.gaugeHistory.gaugeHistory !== this.props.gaugeHistory.gaugeHistory;
+        const newDate: boolean = prevProps.date !== this.props.date;
         if (shouldUpdate) {
             const gauge: IGauge = this.props.gauges.filter(
                 (item: IGauge): boolean => (item.id === selectedGuide))[0];
@@ -105,6 +108,10 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
             this.setState({
                 gauge,
             });
+            this.updateFlow();
+        }
+        if (newGaugeHistory || newDate) {
+            this.updateFlow();
         }
     }
 
@@ -119,33 +126,28 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         }
 
         return [
-            <MenuItem value="flow">
+            <MenuItem value="flow" key={"flow"}>
                 {"flow"}
             </MenuItem>,
         ];
     }
 
-    public displayFlow = (): string | undefined => {
-        if (this.state.manualySet && this.props.observables) {
-            const result: number | undefined = this.props.observables[this.state.type];
-            return result ? result.toString() : undefined;
-        }
-
+    public updateFlow = (): void => {
         let flow: Partial<IObsValue> = {flow: 0};
         if (this.props.gaugeHistoryFromInfoPage && this.props.gaugeHistoryFromInfoPage.length > 0) {
             flow = this.getAverageFlowForDay(this.props.gaugeHistoryFromInfoPage);
             this.props.handleChange(flow);
+            this.setState({manualySet: false});
         } else if (this.props.gaugeHistory.gaugeHistory && this.props.gaugeHistory.gaugeHistory.length > 0) {
             flow = this.getAverageFlowForDay(this.props.gaugeHistory.gaugeHistory);
             this.props.handleChange(flow);
+            this.setState({manualySet: false});
         }
+    }
 
-        if (flow[this.state.type]) {
-            const result: number | undefined = flow[this.state.type];
-            return result ? result.toFixed(2) : undefined;
-        }
-
-        return "0";
+    public displayFlow = (): string | undefined => {
+        const result: number | undefined = this.props.observables[this.state.type];
+        return result ? result.toString() : undefined;
     }
 
     public handleChange = (event: any): void => {
@@ -168,12 +170,13 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
     }
 
     public warningText = (): JSX.Element => {
-
         if (this.state.gauge && this.isFlowComputed()) {
-            return (<div>{"Flow computed from average"}</div>);
+            return (<div>{"Flow computed from the average for this date"}</div>);
         } else if (this.state.gauge) {
             return (
-                <Button onClick = {(): void => this.setState({manualySet: false})}>
+                <Button onClick = {(): void => {
+                    this.setState({manualySet: false});
+                    this.updateFlow(); }}>
             {"Click here to compute flow"}
                 </Button>
             );
@@ -218,6 +221,16 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
                 >
                  {this.getAvailableTypes()}
               </Select>
+              {!this.state.manualySet &&
+               <div>
+                   {this.displayFlow() + this.getUnit()}
+                   <Button onClick = {(): void => {
+                    this.setState({manualySet: true}); }}>
+                    {"Click to edit"}
+                </Button>
+                </div>
+            }
+            {this.state.manualySet &&
                 <Input
                     id="adornment-weight"
                     value={this.displayFlow()}
@@ -227,7 +240,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
                     inputProps={{
                         "aria-label": "Weight",
                     }}
-                />
+                />}
                 </div>
                     {this.warningText()}
                 </div>

@@ -77,7 +77,6 @@ export const setCategory = (category, cancelToken) => dispatch => {
     }
 };
 
-
 // open info page
 export const openInfoPage = guide => dispatch => {
     dispatch({
@@ -117,7 +116,6 @@ export const openInfoPage = guide => dispatch => {
         })
         .catch(err => console.log(err));
     }
-
 
     if (guide.gauge_id) {
         const request = {
