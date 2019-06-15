@@ -4,7 +4,7 @@ import {
     CLOSE_MODAL
 } from "./types";
 
-const serverLocation = 'https://riverapi.herokuapp.com';
+const serverLocation = 'https://rapidsapi.herokuapp.com';
 
 export const updateGuide = item => dispatch => {
     const request = {

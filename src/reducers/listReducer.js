@@ -1,4 +1,4 @@
-import { GET_ENTRIES, GENERATE_FILTERED_LIST } from "../actions/types";
+import { GET_ENTRIES, GENERATE_FILTERED_LIST, LOADING_ENTRIES } from "../actions/types";
 import applyFiltersToList from "../utils/applyFiltersToList";
 
 const initialState = [];
@@ -13,6 +13,8 @@ export default function(state = initialState, action) {
                 action.payload.searchString,
                 action.payload.mapBounds,
             );
+        case LOADING_ENTRIES:
+            return [];
         default:
             return state;
     }

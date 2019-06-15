@@ -20,6 +20,9 @@ import ConnectPage from "./components/connect/Connect";
 import ControlBar from "./components/ControlBar";
 import theme from "./utils/theme";
 
+import * as darksky from "dark-sky-api";
+import * as weather from "openweather-apis";
+
 // Create redux store with history
 const history: any = createHistory();
 const store: any = configureStore({}, history);
@@ -46,6 +49,12 @@ if (localStorage.jwtToken) {
         window.location.href = "/";
     }
 }
+
+weather.setAPPID("521cea2fce8675d0fe0678216dc01d5c");
+weather.setLang("en");
+
+darksky.units = "si";
+darksky.apiKey = "ab0e334c507c7f0de8fde5e61f27d6df";
 
 class App extends Component {
     public render(): JSX.Element {

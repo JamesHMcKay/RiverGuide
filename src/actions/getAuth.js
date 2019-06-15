@@ -10,8 +10,8 @@ import {
     SET_CURRENT_USER,
 } from "./types";
 
-const serverLocation = 'https://riverapi.herokuapp.com/';
-const testServerLocation = 'https://trickleapi.herokuapp.com/';
+const serverLocation = 'https://rapidsapi.herokuapp.com/';
+const testServerLocation = 'https://rapidsapi.herokuapp.com/';
 
 // Register User
 export const registerUser = (userData) => dispatch => {

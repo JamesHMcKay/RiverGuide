@@ -25,6 +25,7 @@ import infoReducer from "./infoReducer";
 import listEntryReducer from "./listEntryReducer";
 import listItemDetailsReducer from "./listItemDetailsReducer";
 import listReducer from "./listReducer";
+import logPageOpenReducer from "./logPageOpenReducer";
 import logReducer from "./logReducer";
 import mapBoundsReducer from "./mapBoundsReducer";
 import modalReducer from "./modalReducer";
@@ -52,6 +53,7 @@ export interface IState {
     filters: IFilter;
     filteredLogList: ILogComplete[];
     selectedLogId: string;
+    logPageOpen: boolean;
 }
 
 export default combineReducers({
@@ -74,4 +76,5 @@ export default combineReducers({
     filters: filterReducer,
     filteredLogList: filteredLogReducer,
     selectedLogId: selectedLogIdReducer,
+    logPageOpen: logPageOpenReducer,
 });

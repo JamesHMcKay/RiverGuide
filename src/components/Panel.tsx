@@ -1,8 +1,6 @@
 import Hidden from "@material-ui/core/Hidden";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
-import { CancelTokenSource } from "axios";
-import axios from "axios";
 import React, { Component } from "react";
 // Components
 import { connect } from "react-redux";
@@ -16,9 +14,6 @@ import {
 } from "../actions/getGuides";
 import { IState } from "../reducers/index";
 
-import * as darksky from "dark-sky-api";
-import * as weather from "openweather-apis";
-
 import Grid from "@material-ui/core/Grid";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Info from "./infoPanel/Info";
@@ -27,7 +22,6 @@ import { MapComponent } from "./map/MapComponent";
 
 import {
     IGauge,
-    IGuide,
     IInfoPage,
     IListEntry,
     IMapBounds } from "./../utils/types";
@@ -36,21 +30,12 @@ import {
 import "./Panel.css";
 
 export interface IPanelState {
-    searchText: string;
-    searchList: IGuide[];
-    gaugeList: IGauge[];
-    selectedGuide?: IGuide;
-    selectedHistory: [];
     infoSelected: boolean;
-    units: string;
-    searchApplied: boolean;
     search_panel: string;
     mapRef: React.RefObject<MapComponent>;
-    cancelToken: CancelTokenSource;
 }
 
 export interface IPanelMapStateToProps {
-    guides: IGuide[];
     gauges: IGauge[];
     infoPage: IInfoPage;
     filterdGuides: IListEntry[];
@@ -66,80 +51,23 @@ export interface IPanelProps extends IPanelMapStateToProps {
         mapBounds: IMapBounds,
     ) => void;
     openInfoPage: (guide: IListEntry) => void;
-    getSensorData: () => void;
 }
 
 class Panel extends Component<IPanelProps, IPanelState> {
     constructor(props: IPanelProps) {
         super(props);
         this.state = {
-            searchText: "",
-            searchList: [],
-            gaugeList: [],
-            selectedHistory: [],
             infoSelected: false,
-            units: "",
-            searchApplied: false,
             search_panel: "list",
             mapRef: React.createRef(),
-            cancelToken: axios.CancelToken.source(),
         };
-
-        weather.setAPPID("521cea2fce8675d0fe0678216dc01d5c");
-        weather.setLang("en");
-
-        darksky.units = "si";
-        darksky.apiKey = "ab0e334c507c7f0de8fde5e61f27d6df";
-
-        this.onChange = this.onChange.bind(this);
-        this.onClick = this.onClick.bind(this);
-        this.closeInfo = this.closeInfo.bind(this);
     }
 
     public componentDidMount(): void {
         this.props.makeGaugeRequest();
-        this.props.makeGaugeRequest();
     }
 
-    public componentWillReceiveProps(props: IPanelProps): void {
-        this.setState({
-            searchList: props.guides,
-            gaugeList: props.gauges,
-        });
-    }
-
-    public searchMatchesGuide(guide: IGuide, searchText: string): boolean {
-        return (
-            guide.title.toLowerCase().indexOf(searchText) > 0 ||
-            guide.river.toLowerCase().indexOf(searchText) > 0 ||
-            guide.region.toLowerCase().indexOf(searchText) > 0
-        );
-    }
-
-    public onChange(ev: any): void {
-        const searchResults: IGuide[] = this.props.guides.filter((guide: IGuide) =>
-            this.searchMatchesGuide(guide, ev.target.value.toLowerCase()),
-        );
-        let searchApplied: boolean = false;
-        if (ev.target.value && ev.target.value !== "") {
-            searchApplied = true;
-        }
-        this.setState({
-            searchText: ev.target.value,
-            searchList: searchResults,
-            searchApplied,
-        });
-    }
-
-    public closeInfo(): void {
-        // this.setState({
-        //     selectedGuide: {},
-        //     selectedHistory: [],
-        //     infoSelected: false
-        // });
-    }
-
-    public onClick(guide: IListEntry): void {
+    public onClick = (guide: IListEntry): void => {
         this.props.openInfoPage(guide);
     }
 
@@ -154,7 +82,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
 
     public getInfoPage = (): JSX.Element => {
         return (
-            <Info/>
+            <Info isLogbookInfo={false}/>
         );
     }
 
@@ -198,9 +126,10 @@ class Panel extends Component<IPanelProps, IPanelState> {
         return (
             <div className="left-panel">
                 <LeftPanel
-                    gaugeList={this.state.gaugeList}
+                    gaugeList={this.props.gauges}
                     gauges={this.props.gauges}
                     onClick={this.onClick}
+                    filteredList={this.props.filterdGuides}
                 />
             </div>
         );
@@ -230,7 +159,6 @@ class Panel extends Component<IPanelProps, IPanelState> {
 }
 
 const mapStateToProps: (state: IState) => IPanelMapStateToProps = (state: IState): IPanelMapStateToProps => ({
-    guides: state.guides,
     gauges: state.gauges,
     infoPage: state.infoPage,
     filterdGuides: state.filteredList,

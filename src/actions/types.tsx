@@ -33,3 +33,6 @@ export const CLEAR_GAUGE_HISTORY: string = "CLEAR_GAUGE_HISTORY";
 export const GENERATE_FILTERED_LOG_LIST: string = "GENERATE_FILTERED_LOG_LIST";
 export const SET_LOG_GUIDE_NAMES: string = "SET_LOG_GUIDE_NAMES";
 export const SET_SELECTED_LOG_ID: string = "SET_SELECTED_LOG_ID";
+export const LOADING_LOG_ENTRIES: string = "LOADING_LOG_ENTRIES";
+export const OPEN_LOG_PAGE: string = "OPEN_LOG_PAGE";
+export const CLOSE_LOG_PAGE: string = "CLOSE_LOG_PAGE";

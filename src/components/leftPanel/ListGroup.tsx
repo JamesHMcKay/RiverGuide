@@ -18,10 +18,10 @@ import RiverGroup from "./RiverGroup";
 
 interface IListGroupProps extends IListGroupStateProps {
     region: string;
+    listEntries: IListEntry[];
 }
 
 interface IListGroupStateProps {
-    listEntries: IListEntry[];
     auth: IAuth;
     filters: IFilter;
 }
@@ -56,7 +56,7 @@ class ListGroup extends Component<IListGroupProps, IListGroupState> {
     }
 
     public renderListItem = (riverRegion: IRiverRegion, idx: number): JSX.Element =>
-        <RiverGroup key={idx} riverRegion={riverRegion} />
+        <RiverGroup listEntries = {this.props.listEntries} key={idx} riverRegion={riverRegion} />
 
     public sortAlphbetically = (a: IRiverRegion, b: IRiverRegion): number => {
         if (a.river < b.river) { return -1; }
@@ -105,7 +105,6 @@ class ListGroup extends Component<IListGroupProps, IListGroupState> {
 function mapStateToProps(state: IState): IListGroupStateProps {
     return ({
         auth: state.auth,
-        listEntries: state.filteredList,
         filters: state.filters,
     });
 }

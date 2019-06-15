@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { openInfoPage } from "../../actions/getGuides";
+import { openInfoPage, openLogInfoPage } from "../../actions/getGuides";
 
 // Material UI
 import Divider from "@material-ui/core/Divider";
@@ -16,11 +16,13 @@ import FlowBadge from "../common/FlowBadge";
 interface IGuideItemProps {
     guide: IListEntry;
     openInfoPage: (guide: IListEntry) => void;
+    openLogInfoPage: (guide: IListEntry) => void;
 }
 
 class GuideItem extends Component<IGuideItemProps, {}> {
     public handleClick = (): void => {
         this.props.openInfoPage(this.props.guide);
+        this.props.openLogInfoPage(this.props.guide);
     }
 
     public render(): JSX.Element {
@@ -41,5 +43,5 @@ class GuideItem extends Component<IGuideItemProps, {}> {
 
 export default connect(
     null,
-    { openInfoPage },
+    { openInfoPage, openLogInfoPage },
 )(GuideItem);

@@ -18,13 +18,14 @@ import "./Info.css";
 import { WeatherStore } from "./WeatherStore";
 
 // Material UI
-import { Button, Chip, IconButton, Tooltip } from "@material-ui/core";
+import { Button, IconButton, Tooltip } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 
 // Components
+import Logbook from "../profile/Logbook";
 import FlowChart from "./FlowChart";
 import InfoCard from "./InfoCard";
 import MapCard from "./MapCard";
@@ -44,19 +45,13 @@ interface IInfoProps extends IInfoStateProps {
     closeInfoPage: () => void;
     removeFromFavourites: (guideId: string, email: string) => void;
     addToFavourites: (guideId: string, email: string) => void;
+    isLogbookInfo: boolean;
 }
 
 class Info extends Component<IInfoProps, IInfoState> {
     constructor(props: IInfoProps) {
         super(props);
         const favourited: boolean = false;
-        // if (props.auth.isAuthenticated) {
-        //     favourited = props.auth.user.favourites.indexOf(
-        //         props.infoPage.selectedGuide.id,
-        //     ) > -1
-        //         ? true
-        //         : false;
-        // }
 
         this.state = {
             favourited,
@@ -80,22 +75,6 @@ class Info extends Component<IInfoProps, IInfoState> {
         } else {
             this.props.addToFavourites(guideId, email);
         }
-    }
-
-    public getTags = (activity?: string, grade?: string, catchType?: string): JSX.Element[] => {
-        const gradeTag: string | undefined = grade && "Grade " + grade;
-        return (
-        [activity, gradeTag, catchType]
-        .filter((tag: string | undefined) => tag)
-        .map((tag: string | undefined) => (
-            <Chip
-                key={tag}
-                color="secondary"
-                variant="outlined"
-                label={tag}
-                style={{ margin: "0 .5em" }}
-            />
-        )));
     }
 
     public getFavButton = (): JSX.Element => {
@@ -146,8 +125,68 @@ class Info extends Component<IInfoProps, IInfoState> {
         );
     }
 
-    public render(): JSX.Element {
-        const entry: IListEntry = this.props.infoPage.selectedGuide;
+    public getFlowChart = (entry: IListEntry): JSX.Element | null => {
+        if (entry.gauge_id) {
+            return (
+                    <Grid
+                        item
+                        md={12}
+                        lg={12}
+                        style={{marginRight: "5%", marginLeft: "5%",  marginTop: "2%", marginBottom: "2%"}}
+                    >
+                        <FlowChart gaugeId={entry.gauge_id} />
+                    </Grid>
+                );
+        }
+        return null;
+    }
+
+    public getDescription = (): JSX.Element | null => {
+        if (this.props.infoPage.itemDetails) {
+            return (
+                <Grid
+                    item
+                    xs={12}
+                    sm={12}
+                    style={{marginRight: "5%", marginLeft: "5%", marginTop: "1%", marginBottom: "2%"}}
+                >
+                    <InfoCard title="Description" content={this.props.infoPage.itemDetails.description} />
+                </Grid>
+            );
+        }
+        return null;
+    }
+
+    public getKeyFacts = (): JSX.Element | null => {
+        if (this.props.infoPage.itemDetails) {
+            return (
+                <Grid
+                    item
+                    md={12}
+                    lg={12}
+                    style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0"}}
+                >
+                    <KeyFactsCard itemDetails={this.props.infoPage.itemDetails} />
+                </Grid>
+            );
+        }
+        return null;
+    }
+
+    public getLogbook = (): JSX.Element => {
+        return (
+            <Grid
+            item
+            md={12}
+            lg={12}
+            style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0"}}
+        >
+            <Logbook/>
+        </Grid>
+        );
+    }
+
+    public getMap = (entry: IListEntry): JSX.Element | null => {
         let markerList: IMarker[] | undefined =
             this.props.infoPage.itemDetails && this.props.infoPage.itemDetails.markerList;
         if (!markerList) {
@@ -161,10 +200,26 @@ class Info extends Component<IInfoProps, IInfoState> {
             };
             markerList = [marker];
         }
+        if (markerList && markerList.length > 0) {
+            return (
+                <Grid
+                    item
+                    xs={12}
+                    sm={12}
+                    style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "2%"}}
+                >
+                    <MapCard markers={markerList} />
+                </Grid>
+            );
+        }
+        return null;
+    }
 
+    public render(): JSX.Element {
+        const entry: IListEntry = this.props.infoPage.selectedGuide;
+        const isLogbookInfo: boolean = this.props.isLogbookInfo;
         return (
             <Grid container item xs={12} spacing={0} justify="space-between" className="right-panel" >
-            {/* <img src={title_image} alt="Feature image" /> */}
                 <Grid
                     container
                     item
@@ -188,7 +243,6 @@ class Info extends Component<IInfoProps, IInfoState> {
                             {this.getFavButton()}
                     </Grid>
                     <Grid container item md={1} lg={1} justify="flex-end">
-                    {/* {this.getTags("", "", "")} */}
                             {this.getCloseButton()}
                     </Grid>
                     <Grid container item md={6} lg={6} justify="flex-start">
@@ -202,52 +256,16 @@ class Info extends Component<IInfoProps, IInfoState> {
                     </Grid>
                     <Grid container item md={6} lg={6} justify="flex-end">
                     {this.getReportButton()}
-                            <Button color="secondary" onClick={this.openModal.bind(this, "editModal")}>
-                                <EditIcon />
-                            </Button>
+                        <Button color="secondary" onClick={this.openModal.bind(this, "editModal")}>
+                            <EditIcon />
+                        </Button>
                     </Grid>
                 </Grid>
-
-                {/* <FlowBadge siteName={this.props.entry.gaugeName} /> */}
-                {this.props.infoPage.itemDetails &&
-                    <Grid
-                        item
-                        md={12}
-                        lg={12}
-                        style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0"}}
-                        >
-                        <KeyFactsCard itemDetails={this.props.infoPage.itemDetails} />
-                    </Grid>
-                }
-                {entry.gauge_id &&
-                <Grid
-                item
-                md={12}
-                lg={12}
-                style={{marginRight: "5%", marginLeft: "5%",  marginTop: "2%", marginBottom: "2%"}}
-                >
-                       <FlowChart gaugeId={entry.gauge_id} />
-                </Grid> }
-
-                {this.props.infoPage.itemDetails &&
-                <Grid
-                item
-                xs={12}
-                sm={12}
-                style={{marginRight: "5%", marginLeft: "5%", marginTop: "1%", marginBottom: "2%"}}
-                >
-                        <InfoCard title="Description" content={this.props.infoPage.itemDetails.description} />
-                </Grid>}
-                <Grid
-                item
-                xs={12}
-                sm={12}
-                style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "2%"}}
-                >
-                    {markerList && markerList.length > 0 && (
-                            <MapCard markers={markerList} />
-                    )}
-                </Grid>
+                {isLogbookInfo && this.getLogbook()}
+                {!isLogbookInfo && this.getKeyFacts()}
+                {!isLogbookInfo && this.getFlowChart(entry)}
+                {!isLogbookInfo && this.getDescription()}
+                {this.getMap(entry)}
             </Grid>
         );
     }

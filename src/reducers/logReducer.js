@@ -1,4 +1,4 @@
-import { APPEND_LOGS, DELETE_LOG, EDIT_LOG, GET_LOGS, SET_LOG_GUIDE_NAMES } from "../actions/types";
+import { APPEND_LOGS, DELETE_LOG, EDIT_LOG, GET_LOGS } from "../actions/types";
 import completeLogEntry from "../utils/completeLogEntry";
 
 const initialState = [];
@@ -6,10 +6,9 @@ const initialState = [];
 export default (state = initialState, action) => {
     switch (action.type) {
         case GET_LOGS:
-            let logs = completeLogEntry(state.listEntries, action.payload);
-            return logs;
-        case SET_LOG_GUIDE_NAMES:
-            return completeLogEntry(action.payload.listEntries, action.payload.logs);
+            return completeLogEntry(action.payload.listEntries, action.payload.logs)
+        // case SET_LOG_GUIDE_NAMES:
+        //     return completeLogEntry(action.payload.listEntries, action.payload.logs);
         case APPEND_LOGS:
             // upon creation log is not placed chronologically
             return [...state, action.payload];

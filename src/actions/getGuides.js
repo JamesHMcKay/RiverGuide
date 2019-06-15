@@ -7,10 +7,14 @@ import {
     GET_ENTRIES,
     LOADING_ENTRIES,
     GET_ITEM_DETAILS,
+    SET_LOG_GUIDE_NAMES,
+    LOADING_LOG_ENTRIES,
+    CLOSE_LOG_PAGE,
 } from "./types";
 
-const strapi_location = "https://riverapi.herokuapp.com/graphql";
+const strapi_location = "https://rapidsapi.herokuapp.com/graphql";
 const riverServiceLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
+const riverapiLocation = 'https://rapidsapi.herokuapp.com/';
 
 // Set category
 export const setCategory = (category, cancelToken) => dispatch => {
@@ -76,6 +80,31 @@ export const setCategory = (category, cancelToken) => dispatch => {
         .catch(err => console.log(err));
     }
 };
+
+export const openLogInfoPage = guide => dispatch => {
+    dispatch({
+        type: LOADING_LOG_ENTRIES,
+    });
+    dispatch({
+        type: CLOSE_LOG_PAGE,
+    });
+    axios.get(riverapiLocation + "logs",
+        {
+            //params: {query: query},
+        }).then((res) => {
+            let logs = res.data.map(item => ({
+                ...item,
+                log_id: item.id,
+            }));
+
+            logs = logs.filter(item => item.guide_id === guide.id);
+
+            dispatch({
+                type: SET_LOG_GUIDE_NAMES,
+                payload: {logs: logs, listEntries: [guide]},
+            });
+          });
+}
 
 // open info page
 export const openInfoPage = guide => dispatch => {

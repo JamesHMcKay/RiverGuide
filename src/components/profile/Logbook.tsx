@@ -9,6 +9,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
+import Typography from "@material-ui/core/Typography";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
@@ -59,34 +60,34 @@ function EnhancedTableHead(props: IEnhancedTableProps): JSX.Element {
     );
 
     return (
-        <TableHead>
-            <TableRow>
-                <TableCell padding="checkbox">
-                    <Checkbox
-                        indeterminate={numSelected > 0 && numSelected < rowCount}
-                        checked={numSelected === rowCount}
-                        onChange={onSelectAllClick}
-                        inputProps={{ "aria-label": "Select all desserts" }}
-                    />
-                </TableCell>
-                {headerRowsOrdered.map((row: IHeadRow) => (
-                <TableCell
-                    key={row.id}
-                    align={row.numeric ? "right" : "left"}
-                    padding={row.disablePadding ? "none" : "default"}
-                    sortDirection={orderBy === row.id ? order : false}
-                >
-                    <TableSortLabel
-                    active={orderBy === row.id}
-                    direction={order}
-                    onClick={createSortHandler(row.id)}
-                    >
-                    {row.label}
-                    </TableSortLabel>
-                </TableCell>
-                ))}
-            </TableRow>
-        </TableHead>
+      <TableHead>
+          <TableRow>
+              <TableCell padding="checkbox">
+                  <Checkbox
+                      indeterminate={numSelected > 0 && numSelected < rowCount}
+                      checked={numSelected === rowCount}
+                      onChange={onSelectAllClick}
+                      inputProps={{ "aria-label": "Select all desserts" }}
+                  />
+              </TableCell>
+              {headerRowsOrdered.map((row: IHeadRow) => (
+              <TableCell
+                  key={row.id}
+                  align={row.numeric ? "right" : "left"}
+                  padding={row.disablePadding ? "none" : "default"}
+                  sortDirection={orderBy === row.id ? order : false}
+              >
+                  <TableSortLabel
+                  active={orderBy === row.id}
+                  direction={order}
+                  onClick={createSortHandler(row.id)}
+                  >
+                  {row.label}
+                  </TableSortLabel>
+              </TableCell>
+              ))}
+          </TableRow>
+      </TableHead>
     );
 }
 
@@ -323,8 +324,11 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
         );
 
         return (
-            <div style={{width: "100%", marginTop: "3em"}}>
-            <Paper style={{width: "100%", marginTop: "3em"}}>
+            <div style={{width: "100%", marginTop: "0em"}}>
+              <Typography variant="h5" gutterBottom>
+                {"Log book"}
+              </Typography>
+            <Paper style={{width: "100%", marginTop: "1em"}}>
               <LogbookHead
                 selectedLogIds = {this.state.selected}
               />

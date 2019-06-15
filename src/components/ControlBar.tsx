@@ -11,6 +11,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
 import {
+    closeInfoPage,
     generateFilteredList,
     searchGuideList,
 } from "../actions/actions";
@@ -43,6 +44,7 @@ interface IControlBarProps extends IControlBarStateToProps {
     searchGuideList: (value: string, guides: IGuide[]) => void;
     setCategory: (value: string, token: CancelTokenSource) => void;
     location: any;
+    closeInfoPage: () => void;
 }
 
 interface IControlBarStateToProps {
@@ -63,7 +65,6 @@ interface IControlBarState {
 const ITEM_HEIGHT: number = 48;
 
 class ControlBar extends Component<IControlBarProps, IControlBarState> {
-
     public state: IControlBarState = {
         index: 3,
         anchorEl: null,
@@ -111,6 +112,7 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
         });
         if (category === "Log book") {
             // this.props.setCategory("whitewater", newToken);
+            this.props.closeInfoPage();
         } else {
             this.props.setCategory(category.toLowerCase(), newToken);
         }
@@ -163,7 +165,7 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
         const open: boolean = Boolean(anchorEl);
 
         return (
-            <AppBar position="static" style={{ zIndex: 2 }}>
+            <AppBar position="static" style={{ zIndex: 2, height: "8vh" }}>
                 <Toolbar>
                     {this.getGuideSearchBox()}
                     <Hidden mdUp>
@@ -246,5 +248,5 @@ const mapStateToProps: (state: IState) => IControlBarStateToProps = (state: ISta
 
 export default connect(
     mapStateToProps,
-    { generateFilteredList, searchGuideList, setCategory },
+    { generateFilteredList, searchGuideList, setCategory, closeInfoPage },
 )(ControlBar);

@@ -17,13 +17,13 @@ interface ILeftPanelProps extends ILeftPanelStateProps {
     gauges: IGauge[];
     toggleModal: (name: string) => void;
     onClick: (guide: IListEntry) => void;
+    filteredList: IListEntry[];
+    specialItem?: JSX.Element;
 }
 
 interface ILeftPanelStateProps {
     auth: IAuth;
-    filteredGuides: IListEntry[];
     infoPage: IInfoPage;
-    listEntries: IListEntry[];
 }
 
 class LeftPanel extends Component<ILeftPanelProps, {}> {
@@ -41,16 +41,19 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
         this.props.toggleModal(modalName);
     }
 
-    public renderListGroup = (region: string, idx: number): JSX.Element => <ListGroup key={idx} region={region} />;
+    public renderListGroup = (region: string, idx: number): JSX.Element => <ListGroup
+        listEntries = {this.props.filteredList} key={idx} region={region}
+    />
 
     public render(): JSX.Element {
         const isAuthenticated: boolean = this.props.auth.isAuthenticated;
-        const isLoading: boolean = this.props.listEntries.length < 1;
+        const isLoading: boolean = this.props.filteredList.length < 1;
 
         const renderedList: JSX.Element = (
             <List>
-                {isAuthenticated && <ListGroup region="Favourites" />}
-                {this.props.filteredGuides
+                {this.props.specialItem && this.props.specialItem}
+                {isAuthenticated && <ListGroup listEntries = {this.props.filteredList} region="Favourites" />}
+                {this.props.filteredList
                     .map(this.getRegion)
                     .filter(this.onlyUnique)
                     .sort(this.sortAlphbetically)
@@ -76,8 +79,6 @@ function mapStateToProps(state: IState): ILeftPanelStateProps {
     return ({
         auth: state.auth,
         infoPage: state.infoPage,
-        filteredGuides: state.filteredList,
-        listEntries: state.listEntries,
     });
 }
 

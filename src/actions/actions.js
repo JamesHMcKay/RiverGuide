@@ -6,7 +6,6 @@ import {
     CLOSE_MODAL,
     DELETE_LOG,
     OPEN_MODAL,
-    GET_ENTRIES,
     SEARCH_GUIDES,
     FILTER_GUIDES,
     GENERATE_FILTERED_LIST,
@@ -21,13 +20,15 @@ import {
     GENERATE_FILTERED_LOG_LIST,
     SET_LOG_GUIDE_NAMES,
     SET_SELECTED_LOG_ID,
+    GET_LOGS,
+    OPEN_LOG_PAGE,
 } from "./types";
 
 const serverLocation = process.env.REACT_APP_SERVER_URL;
 const riverServiceLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
-const strapi_location = "https://riverapi.herokuapp.com/graphql";
+const strapi_location = "https://rapidsapi.herokuapp.com/graphql";
 
-const riverapiLocation = 'https://riverapi.herokuapp.com/';
+const riverapiLocation = 'https://rapidsapi.herokuapp.com/';
 
 // Toggle Modals
 export const toggleModal = modal => dispatch => {
@@ -108,8 +109,8 @@ export const makeLogbookRequest = (user_id) => dispatch => {
             payload: {logs: logs, listEntries: result},
         });
         dispatch({
-            type: GET_ENTRIES,
-            payload: result,
+            type: GET_LOGS,
+            payload: {logs: logs, listEntries: result},
         });
       });
 };
@@ -293,5 +294,11 @@ export const setSelectedLogId = selectedLogId => dispatch => {
     dispatch({
         type: SET_SELECTED_LOG_ID,
         payload: selectedLogId,
+    });
+}
+
+export const openLogPage = () => dispatch => {
+    dispatch({
+        type: OPEN_LOG_PAGE,
     });
 }

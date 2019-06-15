@@ -18,10 +18,10 @@ import GuideItem from "./ListItem";
 
 interface IRiverGroupProps extends IRiverGroupStateProps {
     riverRegion: IRiverRegion;
+    listEntries: IListEntry[];
 }
 
 interface IRiverGroupStateProps {
-    listEntries: IListEntry[];
     auth: IAuth;
     filters: IFilter;
 }
@@ -101,7 +101,6 @@ class ListGroup extends Component<IRiverGroupProps, IListGroupState> {
 function mapStateToProps(state: IState): IRiverGroupStateProps {
     return ({
         auth: state.auth,
-        listEntries: state.filteredList,
         filters: state.filters,
     });
 }
