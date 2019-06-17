@@ -12,6 +12,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import NavBar from "./components/NavBar";
 import Panel from "./components/Panel";
 import ProfileContainer from "./components/profile/ProfileContainer";
+import ProfilePage from "./components/profile/ProfilePage";
 import Modals from "./components/utils/Modals";
 
 import createHistory from "history/createBrowserHistory";
@@ -34,7 +35,7 @@ if (localStorage.jwtToken) {
     const decoded: any = jwt_decode(localStorage.jwtToken);
     // Set user and isAuthenticated
     if (localStorage.user) {
-        store.dispatch(setCurrentUser(localStorage.user));
+        store.dispatch(setCurrentUser(JSON.parse(localStorage.user)));
         setAuthToken(localStorage.jwtToken);
     }
 
@@ -72,8 +73,12 @@ class App extends Component {
                                     component={Panel}
                                 />
                                 <Route
-                                    path="/profile"
+                                    path="/logbook"
                                     component={ProfileContainer}
+                                />
+                                <Route
+                                    path="/profile"
+                                    component={ProfilePage}
                                 />
                                 <Route exact path="/connect/:provider" component={ConnectPage} />
                             </Switch>

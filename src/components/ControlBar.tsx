@@ -14,6 +14,7 @@ import {
     closeInfoPage,
     generateFilteredList,
     searchGuideList,
+    setTabIndex,
 } from "../actions/actions";
 import { setCategory } from "../actions/getGuides";
 import { IAuth, IFilter, IGuide, IListEntry, ILogEntry, IMapBounds } from "./../utils/types";
@@ -26,11 +27,9 @@ interface ITabCategory {
 }
 
 const categories: ITabCategory[] = [
-    {name: "Fishing", route: "/fishing"},
-    {name: "Jet boating", route: "'jetboating"},
     {name: "Gauges", route: "/gauges"},
     {name: "Whitewater", route: "/whitewater"},
-    {name: "Log book", route: "/profile"},
+    {name: "Log book", route: "/logbook"},
 ];
 
 const tabNames: string[] = categories.map((item: ITabCategory) => item.name);
@@ -45,6 +44,7 @@ interface IControlBarProps extends IControlBarStateToProps {
     setCategory: (value: string, token: CancelTokenSource) => void;
     location: any;
     closeInfoPage: () => void;
+    setTabIndex: (index: number) => void;
 }
 
 interface IControlBarStateToProps {
@@ -54,10 +54,10 @@ interface IControlBarStateToProps {
     filters: IFilter;
     auth: IAuth;
     logs: ILogEntry[];
+    index: number;
 }
 
 interface IControlBarState {
-    index: number;
     anchorEl: any;
     cancelToken: CancelTokenSource;
 }
@@ -65,34 +65,30 @@ interface IControlBarState {
 const ITEM_HEIGHT: number = 48;
 
 class ControlBar extends Component<IControlBarProps, IControlBarState> {
-    public state: IControlBarState = {
-        index: 3,
-        anchorEl: null,
-        cancelToken: axios.CancelToken.source(),
-    };
     constructor(props: IControlBarProps) {
         super(props);
 
         const index: number = categories.map((item: ITabCategory) => item.route).indexOf(this.props.location.pathname);
-        let defaultIndex: number = 3;
+        let defaultIndex: number = 1;
         if (index >= 0) {
             defaultIndex = index;
         }
-
+        this.props.setTabIndex(defaultIndex);
         this.state = {
-            index: defaultIndex,
             anchorEl: null,
             cancelToken: axios.CancelToken.source(),
         };
     }
 
     public componentDidMount(): void {
-        this.props.setCategory(tabNames[this.state.index].toLowerCase(), this.state.cancelToken);
+        if (this.props.index) {
+            this.props.setCategory(tabNames[this.props.index].toLowerCase(), this.state.cancelToken);
+        }
     }
 
     public handleSearch = (event: any): void => {
         // this.props.searchGuideList(event.target.value, this.props.guides);
-        const isLogList: boolean = tabNames[this.state.index] === "Log book";
+        const isLogList: boolean = tabNames[this.props.index] === "Log book";
         const entries: IListEntry[] | ILogEntry[] = isLogList ? this.props.logs : this.props.listEntries;
         this.props.generateFilteredList(
             entries,
@@ -104,14 +100,14 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
 
     public handleSelect = (event: any, category: string): void => {
         const index: number = categories.map((item: ITabCategory) => item.name).indexOf(category);
-        this.setState({ index });
+        this.props.setTabIndex(index);
         this.state.cancelToken.cancel();
         const newToken: CancelTokenSource = axios.CancelToken.source();
         this.setState({
             cancelToken: newToken,
         });
         if (category === "Log book") {
-            // this.props.setCategory("whitewater", newToken);
+            this.props.setCategory("whitewater", newToken);
             this.props.closeInfoPage();
         } else {
             this.props.setCategory(category.toLowerCase(), newToken);
@@ -195,7 +191,7 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
                                         component={RouterLink}
                                         to={item.route}
                                         key={item.name}
-                                        selected={tabNames[this.state.index] === item.name}
+                                        selected={tabNames[this.props.index] === item.name}
                                         onClick={(event: any): void => this.handleSelect(event, item.name)}
                                     >
                                         {item.name}
@@ -213,7 +209,7 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
                         }}
                     >
                         <Tabs
-                            value={this.state.index}
+                            value={this.props.index}
                             style={{
                                 color: "#fff",
                             }}
@@ -244,9 +240,10 @@ const mapStateToProps: (state: IState) => IControlBarStateToProps = (state: ISta
     mapBounds: state.mapBounds,
     filters: state.filters,
     auth: state.auth,
+    index: state.tabIndex,
 });
 
 export default connect(
     mapStateToProps,
-    { generateFilteredList, searchGuideList, setCategory, closeInfoPage },
+    { generateFilteredList, searchGuideList, setCategory, closeInfoPage, setTabIndex },
 )(ControlBar);

@@ -22,6 +22,7 @@ import {
     SET_SELECTED_LOG_ID,
     GET_LOGS,
     OPEN_LOG_PAGE,
+    SET_TAB_INDEX,
 } from "./types";
 
 const serverLocation = process.env.REACT_APP_SERVER_URL;
@@ -29,6 +30,13 @@ const riverServiceLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
 const strapi_location = "https://rapidsapi.herokuapp.com/graphql";
 
 const riverapiLocation = 'https://rapidsapi.herokuapp.com/';
+
+export const setTabIndex = index => dispatch => {
+    dispatch({
+        type: SET_TAB_INDEX,
+        payload: index,
+    });
+}
 
 // Toggle Modals
 export const toggleModal = modal => dispatch => {

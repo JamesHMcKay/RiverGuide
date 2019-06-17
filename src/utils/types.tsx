@@ -142,10 +142,11 @@ export interface IOpenLog {
 }
 
 export interface IUser {
-    favourites: string[];
     email: string;
-    name: string;
+    username: string;
+    createdAt: string;
     id: string;
+    provider: string;
 }
 
 export interface IAuth {

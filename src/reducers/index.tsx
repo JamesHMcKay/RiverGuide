@@ -32,6 +32,7 @@ import modalReducer from "./modalReducer";
 import openLogReducer from "./openLogReducer";
 import selectedLogIdReducer from "./selectedLogIdReducer";
 import sensorDataReducer from "./sensorDataReducer";
+import tabIndexReducer from "./tabIndexReducer";
 import weatherReducer from "./weatherReducer";
 
 export interface IState {
@@ -54,6 +55,7 @@ export interface IState {
     filteredLogList: ILogComplete[];
     selectedLogId: string;
     logPageOpen: boolean;
+    tabIndex: number;
 }
 
 export default combineReducers({
@@ -77,4 +79,5 @@ export default combineReducers({
     filteredLogList: filteredLogReducer,
     selectedLogId: selectedLogIdReducer,
     logPageOpen: logPageOpenReducer,
+    tabIndex: tabIndexReducer,
 });

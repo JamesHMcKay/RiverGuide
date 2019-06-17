@@ -30,7 +30,6 @@ class TripDetailsAnyPage extends Component<ITripDetailsInfoPageProps> {
                     <TripDetailsModal
                         handleClose = {this.handleClose}
                     />
-
                 </Dialog>
             </div>
         );

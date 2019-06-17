@@ -9,6 +9,7 @@ import {
     OPEN_MODAL,
     SET_CURRENT_USER,
 } from "./types";
+import parseUserObject from "../utils/parseUserObject";
 
 const serverLocation = 'https://rapidsapi.herokuapp.com/';
 const testServerLocation = 'https://rapidsapi.herokuapp.com/';
@@ -159,9 +160,9 @@ export const providerLogin = (action, history) => dispatch => {
         console.log('User token', response.data.jwt);
         history.push("/");
         localStorage.setItem("jwtToken", response.data.jwt);
-        localStorage.setItem("user", response.data.user);
+        localStorage.setItem("user", JSON.stringify(parseUserObject(response.data.user)));
         setAuthToken(response.data.jwt);
-        dispatch(setCurrentUser(response.data.user));
+        dispatch(setCurrentUser(parseUserObject(response.data.user)));
 
         dispatch({
             type: CLOSE_MODAL,
@@ -181,4 +182,21 @@ export const providerLogin = (action, history) => dispatch => {
             payload: "registerModal",
         });
     });
+};
+
+
+// Log user out
+export const changeUserDetails = (userDetails) => dispatch => {
+    axios
+    .put(serverLocation + "users/" + userDetails.id, {
+        username: userDetails.username,
+        email: userDetails.email,
+    })
+    .then(res => {
+        console.log("updated user details");
+    })
+    .catch(err => {
+    });
+
+    dispatch(setCurrentUser(userDetails));
 };

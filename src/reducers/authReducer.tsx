@@ -1,17 +1,17 @@
-import isEmpty from "../validation/is-empty";
-
 import {
     ADD_TO_FAVOURITES,
     REMOVE_FROM_FAVOURITES,
     SET_CURRENT_USER,
 } from "../actions/types";
 import { IAuth, IUser } from "../utils/types";
+import isEmpty from "../validation/is-empty";
 
 const initialUser: IUser = {
-    favourites: [],
     email: "",
-    name: "",
+    username: "",
     id: "",
+    createdAt: "",
+    provider: "",
 };
 
 const initialState: IAuth = {
@@ -32,7 +32,6 @@ export default function(state: IAuth = initialState, action: any): IAuth {
                 ...state,
                 user: {
                     ...state.user,
-                    favourites: [...state.user.favourites, action.payload],
                 },
             };
         case REMOVE_FROM_FAVOURITES:
@@ -40,7 +39,6 @@ export default function(state: IAuth = initialState, action: any): IAuth {
                 ...state,
                 user: {
                     ...state.user,
-                    favourites: state.user.favourites.filter((fav: any) => fav !== action.payload),
                 },
             };
         default:

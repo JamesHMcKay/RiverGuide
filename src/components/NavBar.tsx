@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { toggleModal } from "../actions/actions";
+import { setTabIndex, toggleModal } from "../actions/actions";
 
 // Material UI
 import AppBar from "@material-ui/core/AppBar";
@@ -25,21 +25,14 @@ export interface IMenuItem {
     modal?: string;
 }
 
-const aboutMenuItems: IMenuItem[] = [
-    { name: "Our vision", route: "vision" },
-    { name: "Meet the team", route: "team" },
-    { name: "Contact us", route: "contact" },
-    { name: "T's & C's", route: "terms-conditions" },
-];
-
 const userMenuItems: IMenuItem[] = [
     { name: "My profile", route: "profile" },
-    { name: "Logout", route: "/", modal: "logoutModal" },
 ];
 
 interface INavBarProps {
     toggleModal: (modal: string) => void;
     auth: IAuth;
+    setTabIndex: (index: number) => void;
 }
 
 interface INavBarState {
@@ -88,10 +81,6 @@ class NavBar extends Component<INavBarProps, INavBarState> {
     public render(): JSX.Element {
         const { anchorEl } = this.state;
         const {isAuthenticated} = this.props.auth;
-        const menu: IMenuItem[] =
-            Boolean(anchorEl) && anchorEl.name === "about"
-                ? aboutMenuItems
-                : userMenuItems;
 
         // user is not authenticated
         const noAuthButtons: JSX.Element = (
@@ -127,9 +116,32 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                 >
                     Log a trip
                 </Button>
-                <Button color="primary" onClick={this.handleMenu} name="user">
-                    My profile
+                <Button aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleMenu}>
+                    Profile
                 </Button>
+                <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={this.handleClose}
+                >
+                    {userMenuItems.map((item: IMenuItem) => (
+                        <Link
+                            to={item.route}
+                            key={item.name}
+                            onClick={(event: any): void => {this.props.setTabIndex(-1); }}
+                        >
+                            <MenuItem key={item.name} onClick={this.handleClose}>{item.name}</MenuItem>
+                        </Link>
+                    ))}
+                    <MenuItem
+                        key={"logout"}
+                        onClick={(event: any): void => {this.openModal("logoutModal"); }}
+                    >
+                        {"Logout"}
+                    </MenuItem>
+                </Menu>
             </div>
         );
 
@@ -137,65 +149,6 @@ class NavBar extends Component<INavBarProps, INavBarState> {
             <div>
                 <AppBar position="static">
                     <Toolbar style={{ background: "#fff" }}>
-                        <div className="about-buttons">
-                            <Button
-                                color="primary"
-                                size="large"
-                                onClick={this.handleMenu}
-                                name="about"
-                            >
-                                About us
-                            </Button>
-                            {!this.state.mapView && (
-                                <Link to="">
-                                    <Button
-                                        color="secondary"
-                                        onClick={this.handleMapLink}
-                                    >
-                                        Map view
-                                    </Button>
-                                </Link>
-                            )}
-                            {(this.state.mapView && isAuthenticated) && (
-                                <Link to="/profile">
-                                    <Button
-                                        color="secondary"
-                                        onClick={this.handleProfileLink}
-                                    >
-                                        My profile
-                                    </Button>
-                                </Link>
-                            )}
-                            <Menu
-                                open={Boolean(anchorEl)}
-                                anchorEl={anchorEl}
-                                getContentAnchorEl={null}
-                                anchorOrigin={{
-                                    vertical: "bottom",
-                                    horizontal: "left",
-                                }}
-                                transformOrigin={{
-                                    vertical: "top",
-                                    horizontal: "left",
-                                }}
-                                onClose={this.handleClose}
-                            >
-                                {menu.map((item: IMenuItem, idx: number) => (
-                                    <Link to={item.route}
-                                    key={idx}>
-                                        <MenuItem
-                                            key={idx}
-                                            onClick={this.handleItemSelect.bind(
-                                                this,
-                                                item,
-                                            )}
-                                        >
-                                            {item.name}
-                                        </MenuItem>
-                                    </Link>
-                                ))}
-                            </Menu>
-                        </div>
                         <div className="centered-logo">
                             <Link to="/" onClick={this.handleMapLink}>
                                 <div>
@@ -221,5 +174,5 @@ const mapStateToProps: (state: IState) => {auth: IAuth} = (state: IState): {auth
 
 export default connect(
     mapStateToProps,
-    { toggleModal },
+    { toggleModal, setTabIndex },
 )(NavBar);
