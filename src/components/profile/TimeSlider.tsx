@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { GetHandleProps, GetRailProps, Handles, Rail, Slider, SliderItem, Ticks, Tracks } from "react-compound-slider";
+import { GetRailProps, Handles, Rail, Slider, SliderItem, Ticks, Tracks } from "react-compound-slider";
 import { Handle, Tick, Track } from "./sliderComponents";
 
 interface ITimeSliderProps {
