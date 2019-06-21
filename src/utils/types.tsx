@@ -72,6 +72,12 @@ export interface IWhiteWaterDetails {
     gradeHardest: string;
     gradeOverall: string;
     markerList: IMarker[];
+    gradient: number;
+    section_length: number;
+    section_length_unit: string;
+    time_low: number;
+    time_high: number;
+    gradient_unit: string;
 }
 
 export interface IItemDetails extends Partial<IWhiteWaterDetails> {
@@ -114,6 +120,7 @@ export interface IInfoPage {
     history: IHistory[];
     selectedHistory: IHistory[];
     itemDetails: IItemDetails;
+    logs?: ILogComplete[];
 }
 
 export interface IFilter {
@@ -176,9 +183,11 @@ export interface ILogEntry extends ILogBase {
 }
 
 export interface ILogBase {
+    username: string;
     log_id: string;
     guide_id: string;
-    date: string;
+    start_date_time: string;
+    end_date_time: string;
     participants: number;
     rating: number;
 }

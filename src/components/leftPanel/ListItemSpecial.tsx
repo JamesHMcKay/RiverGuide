@@ -17,7 +17,6 @@ interface IGuideItemProps {
 class GuideItem extends Component<IGuideItemProps, {}> {
     public handleClick = (): void => {
         this.props.openLogPage();
-        this.props.makeLogbookRequest("userid");
     }
 
     public render(): JSX.Element {

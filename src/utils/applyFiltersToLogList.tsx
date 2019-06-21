@@ -7,7 +7,7 @@ function hasIndex(obj: string, str: string): boolean {
 function applySearchString(log: ILogComplete, searchString: string): boolean {
     let result: boolean = false;
     result = hasIndex(log.description, searchString) ||
-                hasIndex(log.date, searchString) ||
+                hasIndex(log.start_date_time, searchString) ||
                 hasIndex(log.guide_name, searchString);
 
     return result;

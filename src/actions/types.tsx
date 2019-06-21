@@ -37,3 +37,6 @@ export const LOADING_LOG_ENTRIES: string = "LOADING_LOG_ENTRIES";
 export const OPEN_LOG_PAGE: string = "OPEN_LOG_PAGE";
 export const CLOSE_LOG_PAGE: string = "CLOSE_LOG_PAGE";
 export const SET_TAB_INDEX: string = "SET_TAB_INDEX";
+export const SET_LOADING_SPINNER: string = "SET_LOADING_SPINNER";
+export const CLEAR_LOADING_SPINNER: string = "CLEAR_LOADING_SPINNER";
+export const GET_ITEM_LOGS: string = "GET_ITEM_LOGS";

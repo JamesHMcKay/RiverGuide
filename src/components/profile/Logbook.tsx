@@ -1,7 +1,5 @@
 import Checkbox from "@material-ui/core/Checkbox";
 import Paper from "@material-ui/core/Paper";
-// import _map from 'lodash/map';
-// import _groupBy from 'lodash/groupBy';
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -9,10 +7,9 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Typography from "@material-ui/core/Typography";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { toggleModal } from "../../actions/actions";
+import { setSelectedLogId, toggleModal } from "../../actions/actions";
 import { IState } from "../../reducers/index";
 import { ILogComplete, ILogListItem, IObsValue } from "../../utils/types";
 import LogbookHead from "./LogbookHead";
@@ -26,22 +23,16 @@ interface IEnhancedTableProps {
   orderBy: string;
   rowCount: number;
   columnOrder: Array<keyof ILogListItem>;
+  publicPage: boolean;
   }
 
 const headRows: IHeadRow[] = [
-  { id: "date", numeric: false, disablePadding: false, label: "Date" },
+  { id: "start_date_time", numeric: false, disablePadding: false, label: "Date" },
   { id: "guide_name", numeric: false, disablePadding: false, label: "Guide name" },
   { id: "rating", numeric: true, disablePadding: false, label: "Rating" },
   { id: "participants", numeric: true, disablePadding: false, label: "Participants" },
   { id: "flow", numeric: true, disablePadding: false, label: "Flow"},
-];
-
-const columnOrder: Array<keyof ILogListItem> = [
-  "guide_name",
-  "rating",
-  "participants",
-  "date",
-  "flow",
+  { id: "username", numeric: true, disablePadding: false, label: "User name"},
 ];
 
 function EnhancedTableHead(props: IEnhancedTableProps): JSX.Element {
@@ -63,12 +54,13 @@ function EnhancedTableHead(props: IEnhancedTableProps): JSX.Element {
       <TableHead>
           <TableRow>
               <TableCell padding="checkbox">
+                {!props.publicPage &&
                   <Checkbox
                       indeterminate={numSelected > 0 && numSelected < rowCount}
                       checked={numSelected === rowCount}
                       onChange={onSelectAllClick}
                       inputProps={{ "aria-label": "Select all desserts" }}
-                  />
+                  />}
               </TableCell>
               {headerRowsOrdered.map((row: IHeadRow) => (
               <TableCell
@@ -133,10 +125,13 @@ interface IHeadRow {
 
 interface ILogBookProps extends ILogBookStateProps {
     toggleModal: (modal?: string) => void;
+    setSelectedLogId: (logId: string) => void;
+    columnOrder: Array<keyof ILogListItem>;
+    publicPage: boolean;
+    log: ILogComplete[];
 }
 
 interface ILogBookStateProps {
-    log: ILogComplete[];
     openModal: string;
 }
 
@@ -164,7 +159,7 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
             order: "asc",
             rowsPerPage: 5,
             selected: [],
-            orderBy: "date",
+            orderBy: "start_date_time",
             listItems: this.createList(this.props.log),
         };
     }
@@ -205,11 +200,13 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
         const listItems: ILogListItem[] = inputList.map((item: ILogComplete) => ({
             guide_name: item.guide_name,
             guide_id: item.guide_id,
-            date: item.date,
+            start_date_time: item.start_date_time,
+            end_date_time: item.end_date_time,
             participants: item.participants,
             rating: item.rating,
             log_id: item.log_id,
             flow: item.flow,
+            username: item.username,
         }));
         return listItems;
     }
@@ -261,7 +258,7 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
         this.setSelected([]);
       }
 
-      public handleClick = (event: React.MouseEvent<unknown>, name: string): void => {
+      public handlePrivateClick = (name: string): void => {
         const selectedIndex: number = this.state.selected.indexOf(name);
         let newSelected: string[] = [];
 
@@ -277,8 +274,20 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
             this.state.selected.slice(selectedIndex + 1),
           );
         }
-
         this.setSelected(newSelected);
+      }
+
+      public handlePublicClick = (name: string): void => {
+        this.props.setSelectedLogId(name);
+        this.props.toggleModal("viewTripDetails");
+      }
+
+      public handleClick = (event: React.MouseEvent<unknown>, name: string): void => {
+        if (this.props.publicPage) {
+          this.handlePublicClick(name);
+        } else {
+          this.handlePrivateClick(name);
+        }
       }
 
       public handleChangePage = (event: unknown, newPage: number): void => {
@@ -294,10 +303,12 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
     public getColumns = (input: IGetColumnsArg): JSX.Element[] | null => {
         const output: JSX.Element[] = [(
             <TableCell padding="checkbox" key = {"checkbox"}>
+            {!this.props.publicPage &&
                 <Checkbox
                 checked={input.isItemSelected}
                 inputProps={{ "aria-labelledby": input.labelId }}
                 />
+              }
             </TableCell>
         )];
         for (const key of input.columnOrder) {
@@ -325,9 +336,6 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
 
         return (
             <div style={{width: "100%", marginTop: "0em"}}>
-              <Typography variant="h5" gutterBottom>
-                {"Log book"}
-              </Typography>
             <Paper style={{width: "100%", marginTop: "1em"}}>
               <LogbookHead
                 selectedLogIds = {this.state.selected}
@@ -344,7 +352,8 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
                     onSelectAllClick={this.handleSelectAllClick}
                     onRequestSort={this.handleRequestSort}
                     rowCount={listItems.length}
-                    columnOrder={columnOrder}
+                    columnOrder={this.props.columnOrder}
+                    publicPage={this.props.publicPage}
                   />
                   <TableBody>
                     {stableSort(listItems, getSorting(this.state.order, this.state.orderBy))
@@ -364,7 +373,7 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
                             key={row.log_id}
                             selected={isItemSelected}
                           >
-                            {this.getColumns({row, columnOrder, isItemSelected, labelId})}
+                            {this.getColumns({row, columnOrder: this.props.columnOrder, isItemSelected, labelId})}
                           </TableRow>
                         );
                       })}
@@ -399,12 +408,11 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
 
 function mapStateToProps(state: IState): ILogBookStateProps {
     return ({
-        log: state.filteredLogList,
         openModal: state.openModal,
     });
 }
 
 export default connect(
     mapStateToProps,
-    { toggleModal },
+    { toggleModal, setSelectedLogId },
 )(Logbook);

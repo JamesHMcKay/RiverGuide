@@ -13,6 +13,7 @@ import WeatherModal from "../infoPanel/WeatherModal";
 import TripDetailsAnyPage from "../profile/TripDetailsAnyPage";
 import TripDetailsEdit from "../profile/TripDetailsEdit";
 import TripDetailsInfoPage from "../profile/TripDetailsInfoPage";
+import TripDetailsView from "../profile/TripDetailsView";
 import Success from "../utils/Success";
 
 class Modals extends Component {
@@ -30,6 +31,7 @@ class Modals extends Component {
                 <DownloadModal />
                 <DataInfoModal />
                 <TripDetailsEdit />
+                <TripDetailsView />
             </div>
         );
     }

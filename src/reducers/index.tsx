@@ -25,6 +25,7 @@ import infoReducer from "./infoReducer";
 import listEntryReducer from "./listEntryReducer";
 import listItemDetailsReducer from "./listItemDetailsReducer";
 import listReducer from "./listReducer";
+import loadingSpinnerReducer from "./loadingSpinnerReducer";
 import logPageOpenReducer from "./logPageOpenReducer";
 import logReducer from "./logReducer";
 import mapBoundsReducer from "./mapBoundsReducer";
@@ -56,6 +57,7 @@ export interface IState {
     selectedLogId: string;
     logPageOpen: boolean;
     tabIndex: number;
+    loadingSpinner: string;
 }
 
 export default combineReducers({
@@ -80,4 +82,5 @@ export default combineReducers({
     selectedLogId: selectedLogIdReducer,
     logPageOpen: logPageOpenReducer,
     tabIndex: tabIndexReducer,
+    loadingSpinner: loadingSpinnerReducer,
 });

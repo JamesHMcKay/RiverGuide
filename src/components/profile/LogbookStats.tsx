@@ -23,7 +23,7 @@ class LogbookStats extends Component<ILogBookStatsProps> {
         const logs: ILogComplete[] = this.props.log;
         const dateNow: Date = new Date();
         const timeDiff: number[] = logs.map(
-            (item: ILogComplete) => this.getTimeDiff(dateNow, item.date),
+            (item: ILogComplete) => this.getTimeDiff(dateNow, item.start_date_time),
         );
 
         const sectionId: string[] = logs.map((
@@ -65,7 +65,7 @@ class LogbookStats extends Component<ILogBookStatsProps> {
 
 function mapStateToProps(state: IState): ILogBookStatsProps {
     return ({
-        log: state.filteredLogList,
+        log: state.log,
     });
 }
 

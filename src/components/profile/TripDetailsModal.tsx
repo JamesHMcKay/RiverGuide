@@ -1,10 +1,7 @@
 import Button from "@material-ui/core/Button";
-import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
-// import { DateFormatInput } from "material-ui-next-pickers";
 import React, { Component } from "react";
 import IoAndroidAdd from "react-icons/lib/io/android-add";
 import IoAndroidPerson from "react-icons/lib/io/android-person";
@@ -12,6 +9,7 @@ import IoAndroidStar from "react-icons/lib/io/android-star";
 import { connect } from "react-redux";
 import { createLogEntry, editLogEntry } from "../../actions/actions";
 import { IState } from "../../reducers/index";
+import DialogTitle from "../../utils/dialogTitle";
 import { IAuth, IHistory, IListEntry, ILogComplete, ILogEntry, IObsValue } from "../../utils/types";
 
 import DateFnsUtils from "@date-io/date-fns";
@@ -21,8 +19,12 @@ import {
 } from "@material-ui/pickers";
 
 import { Grid } from "@material-ui/core";
+import ToggleButton from "@material-ui/lab/ToggleButton";
+import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
+import loadingButton from "../../utils/loadingButton";
 import FlowReport from "./FlowReport";
 import SectionSelect from "./SectionSelect";
+import TimeSlider from "./TimeSlider";
 
 interface ITripDetailsModelProps extends ITripDetailsModalStateProps {
     createLogEntry: (item: ILogEntry) => void;
@@ -37,15 +39,20 @@ interface ITripDetailsModelProps extends ITripDetailsModalStateProps {
 interface ITripDetailsModelState {
     logEntry: ILogEntry;
     peopleCount: number;
-    date: Date | null;
+    date: Date;
+    start_date: Date;
+    end_date: Date;
+    timeRange: number[];
     rating: number;
     preventHoverChangePeople: boolean;
     preventHoverChangeRating: boolean;
     selectedGuide?: IListEntry;
+    error?: string;
 }
 
 interface ITripDetailsModalStateProps {
     auth: IAuth;
+    loadingSpinner: string;
 }
 
 class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsModelState> {
@@ -56,41 +63,50 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                 ...this.props.initialLogEntry,
             };
             const peopleCount: number = presetLogEntry.participants;
-            const dateParsed: Date = new Date(presetLogEntry.date);
+            const dateParsed: Date = new Date(presetLogEntry.start_date_time);
             this.state = {
                 logEntry: presetLogEntry,
                 peopleCount,
                 date: dateParsed,
+                start_date: dateParsed,
+                end_date: dateParsed,
                 preventHoverChangePeople: true,
                 preventHoverChangeRating: true,
                 rating: presetLogEntry.rating,
                 selectedGuide: this.props.selectedGuide,
+                timeRange: [9, 15],
             };
         } else {
             const guideId: string | undefined = this.props.selectedGuide ? this.props.selectedGuide.id : "";
             const initialLogEntry: ILogEntry = {
                 log_id: "",
                 guide_id: guideId || "",
-                date: "",
+                start_date_time: "",
+                end_date_time: "",
                 participants: 1,
                 rating: 0,
                 description: "",
                 user_id: this.props.auth.user.id,
-                public: false,
+                public: true,
+                username: this.props.auth.user.username,
             };
 
             this.state = {
                 logEntry: initialLogEntry,
                 peopleCount: 1,
                 date: new Date(),
+                start_date: new Date(),
+                end_date: new Date(),
                 preventHoverChangePeople: false,
                 preventHoverChangeRating: false,
                 rating: 1,
+                timeRange: [9, 15],
             };
         }
     }
 
     public handleSectionChange = (selectedGuide: IListEntry): void => {
+        this.setState({error: undefined});
         if (this.state.logEntry) {
             let logEntry: ILogEntry = this.state.logEntry;
             logEntry = {
@@ -109,15 +125,23 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         logEntry = {
             ...logEntry,
             participants: this.state.peopleCount,
-            date: this.state.date ? this.state.date.toISOString() : "",
+            start_date_time: this.state.date ? this.state.date.toISOString() : "",
+            end_date_time: this.state.date ? this.state.date.toISOString() : "",
             rating: this.state.rating,
+            username: this.state.logEntry.username,
         };
+
+        if (logEntry.guide_id === "") {
+            this.setState({error: "Select a section - if your section is not available let us know"});
+            return;
+        }
+
         if (this.props.isUpdate) {
             this.props.editLogEntry(logEntry as ILogEntry);
         } else {
             this.props.createLogEntry(logEntry as ILogEntry);
         }
-        this.props.handleClose();
+        // this.props.handleClose();
     }
 
     public getValue = (key: string): string => {
@@ -244,16 +268,30 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         );
     }
 
-    public handleDateChange = (date: Date | null): void => {
-        let logEntry: ILogEntry = this.state.logEntry;
-        logEntry = {
-            ...logEntry,
-            date: date ? date.toISOString() : "",
-        };
+    public handleTimeRangeChange = (timeRange: number[]): void => {
+        const startDate: Date = new Date(this.state.start_date);
+        const endDate: Date = new Date(this.state.end_date);
+        startDate.setHours(timeRange[0]);
+        endDate.setHours(timeRange[1]);
         this.setState({
-            logEntry,
-            date,
+            timeRange,
+            start_date: startDate,
+            end_date: endDate,
         });
+    }
+
+    public handleDateChange = (date: Date | null): void => {
+        if (date) {
+            const startDate: Date = new Date(date);
+            const endDate: Date = new Date(date);
+            startDate.setHours(this.state.timeRange[0]);
+            endDate.setHours(this.state.timeRange[1]);
+            this.setState({
+                date,
+                start_date: startDate,
+                end_date: endDate,
+            });
+        }
     }
 
     public updateDescription = (input: any): void => {
@@ -300,13 +338,29 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         }
     }
 
+    public handlePublicChange = (event: any, value: string): void => {
+        let logEntry: ILogEntry = this.state.logEntry;
+        logEntry = {
+            ...logEntry,
+            public: value === "public",
+        };
+        this.setState({
+            logEntry,
+        });
+    }
+
+    public getPublicValue = (): string => {
+        if (this.state.logEntry.public) {
+            return "public";
+        }
+        return "private";
+    }
+
     public render(): JSX.Element {
         const selectedGuide: IListEntry | undefined = this.getSelectedGuide();
         return (
             <div>
-                <DialogTitle>
-                    Add Trip to Logbook
-                </DialogTitle >
+                <DialogTitle handleClose={this.props.handleClose} title={"Add Trip to Logbook"}/>
                 <DialogContent>
                     {this.getSelectedSection()}
                     <DialogContentText>
@@ -338,17 +392,8 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                             "aria-label": "change date",
                             }}
                         />
-                        {/* <KeyboardTimePicker
-                            margin="normal"
-                            id="mui-pickers-time"
-                            label="Time picker"
-                            value={this.state.date}
-                            onChange={this.handleDateChange}
-                            KeyboardButtonProps={{
-                            "aria-label": "change time",
-                            }}
-                        /> */}
                         </Grid>
+                        <TimeSlider handleChange={this.handleTimeRangeChange} range={this.state.timeRange}/>
                     </MuiPickersUtilsProvider>
                     </div>
                     <DialogContentText>
@@ -373,20 +418,43 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                         <FlowReport
                             selectedGuide={selectedGuide}
                             handleChange={this.handleFlowChange}
-                            date={this.state.date}
+                            start_date={this.state.start_date}
+                            end_date={this.state.end_date}
                             gaugeHistoryFromInfoPage={this.props.gaugeHistory}
                             observables={this.state.logEntry.observables || {flow: 0}}
                         />
                     }
+                    <div>
+                        <ToggleButtonGroup value={this.getPublicValue()} exclusive onChange={this.handlePublicChange}>
+                            <ToggleButton value="public">
+                                {"Public"}
+                            </ToggleButton>
+                            <ToggleButton value="private">
+                                {"Private"}
+                            </ToggleButton>
+                        </ToggleButtonGroup>
+                    </div>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.props.handleClose} color="primary">
-                    Cancel
+                {this.state.error &&
+                <div>
+                    {this.state.error}
+                </div>}
+                <div
+                    style={{
+                        margin: "1em",
+                        position: "relative",
+                    }}
+                >
+                    <Button
+                        variant = "contained"
+                        color="primary"
+                        onClick={this.handleSave}
+                        disabled={this.props.loadingSpinner === "logTrip"}
+                        fullWidth>
+                                Submit
                     </Button>
-                    <Button onClick={this.handleSave} color="primary">
-                    Submit
-                    </Button>
-                </DialogActions>
+                    {this.props.loadingSpinner === "logTrip" && loadingButton()}
+                </div>
             </div>
         );
     }
@@ -395,6 +463,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
 function mapStateToProps(state: IState): ITripDetailsModalStateProps {
     return ({
         auth: state.auth,
+        loadingSpinner: state.loadingSpinner,
     });
 }
 

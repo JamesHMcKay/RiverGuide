@@ -40,6 +40,33 @@ class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
         this.setState({ tempValue: event.target.value });
     }
 
+    public getTimeRange = (): string => {
+        const timeHigh: number | undefined = this.props.itemDetails.time_high;
+        const timeLow: number | undefined = this.props.itemDetails.time_low;
+        if (timeHigh && timeLow) {
+            return timeLow.toString() + " - " + timeHigh.toString() + " hours";
+        }
+        const time: number | undefined = timeHigh || timeLow;
+        if (time) {
+            return time.toString() + " hours";
+        }
+        return "";
+    }
+
+    public getGradient = (): string => {
+        if (this.props.itemDetails.gradient && this.props.itemDetails.gradient_unit) {
+            return this.props.itemDetails.gradient.toString() + this.props.itemDetails.gradient_unit;
+        }
+        return "";
+    }
+
+    public getSectionLength = (): string => {
+        if (this.props.itemDetails.section_length && this.props.itemDetails.section_length_unit) {
+            return this.props.itemDetails.section_length.toString() + this.props.itemDetails.section_length_unit;
+        }
+        return "";
+    }
+
     public getKeyFacts = (): JSX.Element => {
         return (
         <Grid container item spacing={10} justify="space-between">
@@ -52,19 +79,19 @@ class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
         <Grid item md={12} lg={3}>
         <ListItem>
                 <Timeline fontSize="large" />
-              <ListItemText primary="Length" secondary="10km" />
+              <ListItemText primary="Length" secondary={this.getSectionLength()} />
             </ListItem>
         </Grid>
         <Grid item md={12} lg={3}>
         <ListItem>
             <QueryBuilder fontSize="large" />
-              <ListItemText primary="Time" secondary="8 - 10 hours" />
+              <ListItemText primary="Time" secondary={this.getTimeRange()} />
             </ListItem>
         </Grid>
         <Grid item md={12} lg={3}>
         <ListItem>
                 <LandscapeRounded fontSize="large" />
-              <ListItemText primary="Gradient" secondary="30 m/km" />
+              <ListItemText primary="Gradient" secondary={this.getGradient()} />
             </ListItem>
         </Grid>
           </Grid>

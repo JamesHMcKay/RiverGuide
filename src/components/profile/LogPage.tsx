@@ -9,7 +9,7 @@ import {
     toggleModal,
 } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import { IAuth } from "../../utils/types";
+import { IAuth, ILogComplete, ILogListItem } from "../../utils/types";
 
 // Material UI
 import { Button } from "@material-ui/core";
@@ -19,8 +19,17 @@ import CloseIcon from "@material-ui/icons/Close";
 import Logbook from "./Logbook";
 import LogbookStats from "./LogbookStats";
 
+const columnOrder: Array<keyof ILogListItem> = [
+    "guide_name",
+    "rating",
+    "participants",
+    "start_date_time",
+    "flow",
+];
+
 interface ILogPageStateProps {
     auth: IAuth;
+    log: ILogComplete[];
 }
 
 interface ILogPageProps extends ILogPageStateProps {
@@ -86,7 +95,7 @@ class LogPage extends Component<ILogPageProps> {
             lg={12}
             style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0"}}
         >
-            <Logbook/>
+            <Logbook columnOrder={columnOrder} publicPage={false} log={this.props.log}/>
         </Grid>
         );
     }
@@ -107,6 +116,7 @@ class LogPage extends Component<ILogPageProps> {
 function mapStateToProps(state: IState): ILogPageStateProps {
     return ({
         auth: state.auth,
+        log: state.log,
     });
 }
 

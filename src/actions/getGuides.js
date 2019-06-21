@@ -7,14 +7,13 @@ import {
     GET_ENTRIES,
     LOADING_ENTRIES,
     GET_ITEM_DETAILS,
-    SET_LOG_GUIDE_NAMES,
+    GET_ITEM_LOGS,
     LOADING_LOG_ENTRIES,
     CLOSE_LOG_PAGE,
 } from "./types";
 
 const strapi_location = "https://rapidsapi.herokuapp.com/graphql";
 const riverServiceLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
-const riverapiLocation = 'https://rapidsapi.herokuapp.com/';
 
 // Set category
 export const setCategory = (category, cancelToken) => dispatch => {
@@ -88,11 +87,15 @@ export const openLogInfoPage = guide => dispatch => {
     dispatch({
         type: CLOSE_LOG_PAGE,
     });
-    axios.get(riverapiLocation + "logs",
+
+    axios
+    .get(`${strapi_location}`,
         {
-            //params: {query: query},
-        }).then((res) => {
-            let logs = res.data.map(item => ({
+            headers: {'Authorization': ''},
+            params: {query: `query GuideIdPublic{logs(where: {public: true guide_id_contains: ["${guide.id}"]}){log_id, description, public, guide_id, description, participants, observables, start_date_time, end_date_time, username, rating, id }}`},
+        }
+    ).then((res) => {
+            let logs = res.data.data.logs.map(item => ({
                 ...item,
                 log_id: item.id,
             }));
@@ -100,8 +103,8 @@ export const openLogInfoPage = guide => dispatch => {
             logs = logs.filter(item => item.guide_id === guide.id);
 
             dispatch({
-                type: SET_LOG_GUIDE_NAMES,
-                payload: {logs: logs, listEntries: [guide]},
+                type: GET_ITEM_LOGS,
+                payload: logs,
             });
           });
 }
@@ -119,7 +122,7 @@ export const openInfoPage = guide => dispatch => {
 
     } else {
         let guideId = guide.id;
-        let query = "{wwguide(id:\"" + guideId + "\"){grade_overall,grade_hardest,description,entry_details,exit_details,marker_list}}"
+        let query = "{wwguide(id:\"" + guideId + "\"){grade_overall,grade_hardest,description,entry_details,exit_details,marker_list, section_length, gradient, time_low, time_high, section_length_unit, gradient_unit}}"
         axios
         .get(`${strapi_location}`,
             {
@@ -137,6 +140,12 @@ export const openInfoPage = guide => dispatch => {
                     gradeHardest: item.grade_hardest,
                     gradeOverall: item.grade_overall,
                     description: item.description,
+                    time_high: item.time_high,
+                    time_low: item.time_low,
+                    section_length: item.section_length,
+                    gradient: item.gradient,
+                    section_length_unit: item.section_length_unit,
+                    gradient_unit: item.gradient_unit,
                 };
             dispatch({
                 type: GET_ITEM_DETAILS,

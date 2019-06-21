@@ -40,6 +40,8 @@ class SectionSelect extends Component<ISectionSelectProps> {
             <FormGroup>
                 <Label for="section">Section</Label>
                 <Select
+                    menuPortalTarget={document.body}
+                    styles={{ menuPortal: (base: any): void => ({ ...base, zIndex: 9999 }) }}
                     name="section"
                     placeholder="Select a section"
                     onChange={this.handleSelectionChange}

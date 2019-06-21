@@ -15,10 +15,6 @@ interface ITripDetailsAnyPageStateProps {
 }
 
 class TripDetailsAnyPage extends Component<ITripDetailsInfoPageProps> {
-    public handleClose = (): void => {
-        this.props.toggleModal();
-    }
-
     public closeModal(): void {
         this.props.toggleModal();
     }
@@ -26,9 +22,13 @@ class TripDetailsAnyPage extends Component<ITripDetailsInfoPageProps> {
     public render(): JSX.Element {
         return (
             <div>
-                <Dialog onClose={this.closeModal} aria-labelledby="example dialog" open={this.props.isOpen}>
+                <Dialog
+                    onClose={(): void => this.props.toggleModal()}
+                    aria-labelledby="example dialog"
+                    open={this.props.isOpen}
+                >
                     <TripDetailsModal
-                        handleClose = {this.handleClose}
+                        handleClose = {(): void => this.props.toggleModal()}
                     />
                 </Dialog>
             </div>

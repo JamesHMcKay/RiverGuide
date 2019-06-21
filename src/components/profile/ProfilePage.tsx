@@ -6,11 +6,12 @@ import {
     makeLogbookRequest,
     setMapBounds,
 } from "../../actions/actions";
-import { changeUserDetails } from "../../actions/getAuth";
+import { changeUserDetails, deleteUser } from "../../actions/getAuth";
 import {
     openLogInfoPage,
 } from "../../actions/getGuides";
 import { IState } from "../../reducers/index";
+import loadingButton from "../../utils/loadingButton";
 import { IAuth, IGauge, IInfoPage, IListEntry, ILogComplete, IMapBounds, IUser } from "../../utils/types";
 import "./profile.css";
 
@@ -24,6 +25,7 @@ interface IProfilePageProps extends IProfilePageStateProps {
     openLogInfoPage: (guide: IListEntry) => void;
     setMapBounds: (mapBounds: IMapBounds) => void;
     changeUserDetails: (user: IUser) => void;
+    deleteUser: (user: IUser) => void;
 }
 
 interface IProfilePageStateProps {
@@ -34,6 +36,7 @@ interface IProfilePageStateProps {
     listEntries: IListEntry[];
     log: ILogComplete[];
     logPageOpen: boolean;
+    loadingSpinner: string;
 }
 
 interface IProfileListItem {
@@ -53,6 +56,23 @@ class ProfilePage extends Component<IProfilePageProps, IProfilePageState> {
             user: this.props.auth.user,
             editMode: false,
         };
+    }
+
+    public componentDidUpdate(prevProps: IProfilePageProps): void {
+        const userId: string = this.props.auth.user.id;
+        const prevUserId: string = prevProps.auth.user.id;
+
+        const shouldUpdate: boolean = prevUserId !== userId;
+        if (shouldUpdate) {
+            this.setState({
+                user: this.props.auth.user,
+                editMode: false,
+            });
+        }
+    }
+
+    public onDeleteClick = (event: any): void => {
+        this.props.deleteUser(this.state.user);
     }
 
     public onEditClick = (event: any): void => {
@@ -91,7 +111,7 @@ class ProfilePage extends Component<IProfilePageProps, IProfilePageState> {
         }
         return (
             <ListItem>
-            <ListItemText primary={this.state.user[item.type]}/>
+            <ListItemText primary={this.props.auth.user[item.type]}/>
         </ListItem>
         );
     }
@@ -105,7 +125,12 @@ class ProfilePage extends Component<IProfilePageProps, IProfilePageState> {
             );
         }
         return (
-            <Button variant="outlined" style={{marginRight: "10px"}} onClick={this.onEditClick}>
+            <Button
+                variant="outlined"
+                style={{marginRight: "10px"}}
+                onClick={this.onEditClick}
+                disabled={!this.props.auth.isAuthenticated}
+            >
                 Edit
             </Button>
         );
@@ -115,6 +140,11 @@ class ProfilePage extends Component<IProfilePageProps, IProfilePageState> {
         return (
             <Grid container spacing={0} justify={"center"}>
                 <List style={{ width: "100%", maxWidth: 360}}>
+                {!this.props.auth.isAuthenticated &&
+                    <ListItem>
+                        <ListItemText primary={"You are not logged in"}/>
+                    </ListItem>
+                }
                 {listItems.map((item: IProfileListItem) => (
                     <div>
                     <li>
@@ -147,13 +177,17 @@ class ProfilePage extends Component<IProfilePageProps, IProfilePageState> {
                 <ListItem>
                 <div style={{display: "flex", flexDirection: "row"}}>
                     {this.getEditSaveButton()}
-                    <Button variant="outlined">
+                    <Button
+                        variant="outlined"
+                        disabled={this.state.editMode || !this.props.auth.isAuthenticated}
+                        onClick={this.onDeleteClick}
+                    >
                         Delete account
                     </Button>
+                    {this.props.loadingSpinner === "deleteAccount" && loadingButton()}
                 </div>
                 </ListItem>
                 </List>
-
             </Grid>
         );
     }
@@ -169,10 +203,11 @@ function mapStateToProps(state: IState): IProfilePageStateProps {
         listEntries: state.listEntries,
         log: state.log,
         logPageOpen: state.logPageOpen,
+        loadingSpinner: state.loadingSpinner,
     });
 }
 
 export default connect(
     mapStateToProps,
-    { makeLogbookRequest, openLogInfoPage, setMapBounds, changeUserDetails },
+    { makeLogbookRequest, openLogInfoPage, setMapBounds, changeUserDetails, deleteUser },
 )(ProfilePage);

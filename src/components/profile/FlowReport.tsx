@@ -22,7 +22,8 @@ const UNIT_OPTIONS: IUnitSelection[] = [
 interface IFlowReportProps extends IFlowReportStateProps {
     handleChange: (e: any) => void;
     selectedGuide: IListEntry;
-    date: Date;
+    start_date: Date;
+    end_date: Date;
     getGaugeHistory: (gaugeId: string | undefined) => void;
     gaugeHistoryFromInfoPage?: IHistory[];
     observables: Partial<IObsValue>;
@@ -38,6 +39,7 @@ interface IFlowReportState {
     manualySet: boolean;
     unit: IUnitSelection;
     type: keyof IObsValue;
+    flowTimeDiff: number;
 }
 
 class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
@@ -52,6 +54,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
             unit: UNIT_OPTIONS[0],
             type: "flow",
             gauge,
+            flowTimeDiff: 0,
         };
         if (gauge) {
             this.props.getGaugeHistory(gauge.id);
@@ -62,20 +65,52 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
     public computeMean = (values: number[]): number => values.reduce(
         (a: number, b: number): number => a + b) / values.length
 
-    public filterHistory = (item: IHistory, compareDate: Date): boolean => {
+    public historyToNumber = (item: IHistory): number => {
         const dateParsed: Date = new Date(item.time);
-        const isSameDay: boolean = (dateParsed.getDate() === compareDate.getDate()
-            && dateParsed.getMonth() === compareDate.getMonth()
-            && dateParsed.getFullYear() === compareDate.getFullYear());
-        return isSameDay;
+        return dateParsed.getTime();
     }
 
-    public getAverageFlowForDay = (history: IHistory[]): Partial<IObsValue> => {
-        const date: Date = this.props.date;
-        const filteredHistory: IHistory[] = history.filter(
-            (item: IHistory) => this.filterHistory(item, date),
+    public filterHistory = (item: IHistory, lower: number, upper: number): boolean => {
+        const time: number = this.historyToNumber(item);
+        return (time <= upper && time >= lower);
+    }
+
+    public roundObsValues = (values: Partial<IObsValue>): Partial<IObsValue> => {
+        for (const type of Object.keys(values)) {
+            const key: keyof IObsValue = type as keyof IObsValue;
+            if (values[key]) {
+                const value: number = values[key] || 0;
+                values[key] = Math.round(value * 10) / 10;
+            }
+        }
+        return values;
+    }
+
+    public getNearestFlow = (history: IHistory[], time: number): IHistory => {
+        const historyTimes: number[] = history.map(
+            (item: IHistory) => Math.abs(this.historyToNumber(item) - time),
         );
+        const minDifferance: number = Math.min(...historyTimes);
+        const cloestPoint: number = historyTimes.indexOf(minDifferance);
+        this.setState({flowTimeDiff: minDifferance});
+        return history[cloestPoint];
+    }
+
+    public getAverageFlowForDay = (history: IHistory[]): Partial<IObsValue> | null => {
+        const upper: number = this.props.end_date.getTime();
+        const lower: number = this.props.start_date.getTime();
+        const filteredHistory: IHistory[] = history.filter(
+            (item: IHistory) => this.filterHistory(item, lower, upper),
+        );
+        if (filteredHistory.length === 0 && history.length > 0 && this.state.gauge) {
+            const midpoint: number = 0.5 * (upper + lower);
+            const nearest: IHistory = this.getNearestFlow(history, midpoint);
+            if (Math.abs(this.historyToNumber(nearest) - midpoint) < 2.6e8) {
+                return this.roundObsValues(nearest.values);
+            }
+        }
         if (filteredHistory.length > 0 && this.state.gauge) {
+            this.setState({flowTimeDiff: 0});
             const output: Partial<IObsValue> = filteredHistory[0].values;
             const gauge: IGauge = this.state.gauge;
             const types: string[] = gauge.observables.map((item: IObservable) => item.type);
@@ -86,11 +121,8 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
                 output[key] = Math.round(this.computeMean(flows) * 10) / 10;
             }
             return output;
-        } else {
-            return {
-                flow: 0,
-            };
         }
+        return null;
     }
 
     public componentDidUpdate(prevProps: IFlowReportProps): void {
@@ -100,7 +132,8 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         const shouldUpdate: boolean | undefined = selectedGuide !== prevSelectedGuide;
 
         const newGaugeHistory: boolean = prevProps.gaugeHistory.gaugeHistory !== this.props.gaugeHistory.gaugeHistory;
-        const newDate: boolean = prevProps.date !== this.props.date;
+        const newStartDate: boolean = prevProps.start_date !== this.props.start_date;
+        const newEndDate: boolean = prevProps.end_date !== this.props.end_date;
         if (shouldUpdate) {
             const gauge: IGauge = this.props.gauges.filter(
                 (item: IGauge): boolean => (item.id === selectedGuide))[0];
@@ -110,7 +143,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
             });
             this.updateFlow();
         }
-        if (newGaugeHistory || newDate) {
+        if (newGaugeHistory || newEndDate || newStartDate) {
             this.updateFlow();
         }
     }
@@ -133,15 +166,16 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
     }
 
     public updateFlow = (): void => {
-        let flow: Partial<IObsValue> = {flow: 0};
+        const flow: Partial<IObsValue> = {flow: 0};
+        this.setState({flowTimeDiff: 0});
         if (this.props.gaugeHistoryFromInfoPage && this.props.gaugeHistoryFromInfoPage.length > 0) {
-            flow = this.getAverageFlowForDay(this.props.gaugeHistoryFromInfoPage);
-            this.props.handleChange(flow);
-            this.setState({manualySet: false});
+            const compFlow: Partial<IObsValue> | null = this.getAverageFlowForDay(this.props.gaugeHistoryFromInfoPage);
+            this.props.handleChange(compFlow ? compFlow : flow);
+            this.setState({manualySet: !compFlow});
         } else if (this.props.gaugeHistory.gaugeHistory && this.props.gaugeHistory.gaugeHistory.length > 0) {
-            flow = this.getAverageFlowForDay(this.props.gaugeHistory.gaugeHistory);
-            this.props.handleChange(flow);
-            this.setState({manualySet: false});
+            const compFlow: Partial<IObsValue> | null = this.getAverageFlowForDay(this.props.gaugeHistory.gaugeHistory);
+            this.props.handleChange(compFlow ? compFlow : flow);
+            this.setState({manualySet: !compFlow});
         }
     }
 
@@ -171,8 +205,8 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
 
     public warningText = (): JSX.Element => {
         if (this.state.gauge && this.isFlowComputed()) {
-            return (<div>{"Flow computed from the average for this date"}</div>);
-        } else if (this.state.gauge) {
+            return (<div>{"Flow computed based on your trip date"}</div>);
+        } else if (this.state.gauge && this.state.flowTimeDiff < 8.64e7) {
             return (
                 <Button onClick = {(): void => {
                     this.setState({manualySet: false});
@@ -180,8 +214,17 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
             {"Click here to compute flow"}
                 </Button>
             );
+        } else if (this.state.gauge) {
+            return (<div>{"No automatic flow calculations available for this date"}</div>);
         }
         return (<div>{"Enter flow value"}</div>);
+    }
+
+    public timeWarningText = (): JSX.Element | null => {
+        if (this.state.flowTimeDiff > 8.64e7 && !this.state.manualySet) {
+            return (<div>{"Computed flow is more than 24 hours from your trip date."}</div>);
+        }
+        return null;
     }
 
     public getUnit = (): string => {
@@ -243,6 +286,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
                 />}
                 </div>
                     {this.warningText()}
+                    {this.timeWarningText()}
                 </div>
         );
     }

@@ -12,7 +12,7 @@ import {
     toggleModal,
 } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import { IAuth, IInfoPage, IListEntry, IMarker } from "../../utils/types";
+import { IAuth, IInfoPage, IListEntry, ILogComplete, ILogListItem, IMarker } from "../../utils/types";
 import { CurrentWeather } from "./CurrentWeather";
 import "./Info.css";
 import { WeatherStore } from "./WeatherStore";
@@ -30,14 +30,29 @@ import FlowChart from "./FlowChart";
 import InfoCard from "./InfoCard";
 import MapCard from "./MapCard";
 
+const logTypes: string[] = [
+    "Public",
+    "My logs",
+];
+
+const columnOrder: Array<keyof ILogListItem> = [
+    "start_date_time",
+    "username",
+    "rating",
+    "participants",
+    "flow",
+  ];
+
 interface IInfoState {
     favourited: boolean;
+    selectedType: string;
 }
 
 interface IInfoStateProps {
     auth: IAuth;
     infoPage: IInfoPage;
     weatherStore: WeatherStore;
+    log: ILogComplete[];
 }
 
 interface IInfoProps extends IInfoStateProps {
@@ -55,6 +70,7 @@ class Info extends Component<IInfoProps, IInfoState> {
 
         this.state = {
             favourited,
+            selectedType: "Public",
         };
     }
 
@@ -173,16 +189,69 @@ class Info extends Component<IInfoProps, IInfoState> {
         return null;
     }
 
+    public selectTypeClick(type: string): void {
+        this.setState({
+            selectedType: type,
+        });
+    }
+
+    public getButtonColor(type: string): "inherit" | "primary" | "secondary" | "default" | undefined {
+        if (type === this.state.selectedType) {
+            return "primary";
+        }
+        return "default";
+    }
+
+    public getButtonVariant(type: string):
+        "text" | "outlined" | "contained" | undefined {
+        if (type === this.state.selectedType) {
+            return "contained";
+        }
+        return "outlined";
+    }
+
+    public getButtons = (): JSX.Element[] => {
+            const result: JSX.Element[] = logTypes.map((item: string) =>
+                <Button
+                    style = {{marginLeft: "10px"}}
+                    variant={this.getButtonVariant(item)}
+                    color={this.getButtonColor(item)} key={item}
+                    onClick = {(): void => this.selectTypeClick(item)}
+                >
+                    {item}
+                </Button>);
+            return result;
+    }
+
+    public getLogBookEntries = (): ILogComplete[] => {
+        if (this.state.selectedType === "Public") {
+            return this.props.infoPage.logs || [];
+        }
+        return this.props.log.filter((item: ILogComplete) => item.guide_id === this.props.infoPage.selectedGuide.id);
+    }
+
     public getLogbook = (): JSX.Element => {
         return (
             <Grid
+            container
             item
             md={12}
             lg={12}
-            style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0"}}
+            justify="space-between"
+            style={{marginRight: "5%", marginLeft: "5%",  marginTop: "2%", marginBottom: "2%"}}
         >
-            <Logbook/>
+            {/* <Grid container item xs={12} spacing={10} justify="space-between"> */}
+            <Grid container item md={6} lg={6} justify="flex-start">
+                <Typography variant="h5" gutterBottom>
+                    Logbook
+                </Typography>
+            </Grid>
+            <Grid container item md={6} lg={6} justify="flex-end">
+                    {this.getButtons()}
+            </Grid>
+            <Logbook log={this.getLogBookEntries()} columnOrder={columnOrder} publicPage={true}/>
         </Grid>
+        // </Grid>
         );
     }
 
@@ -276,6 +345,7 @@ function mapStateToProps(state: IState): IInfoStateProps {
         auth: state.auth,
         infoPage: state.infoPage,
         weatherStore: state.weatherStore,
+        log: state.log,
     });
 }
 

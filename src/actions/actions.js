@@ -23,6 +23,9 @@ import {
     GET_LOGS,
     OPEN_LOG_PAGE,
     SET_TAB_INDEX,
+    SET_LOADING_SPINNER,
+    CLEAR_LOADING_SPINNER,
+    GET_ERRORS,
 } from "./types";
 
 const serverLocation = process.env.REACT_APP_SERVER_URL;
@@ -82,9 +85,10 @@ export const createGuide = (guideData, category) => dispatch => {
 export const makeLogbookRequest = (user_id) => dispatch => {
     //let query = "{logs(user_id:\"" + user_id + "\"){log_id, user_id, date, participants, rating, description, guide_id, public, observables, weather}}"
     let req = [
-        axios.get(riverapiLocation + "logs",
+        axios.get(`${strapi_location}`,
         {
-            //params: {query: query},
+            headers: {'Authorization': ''},
+            params: {query: `query userLogs{logs(where: {user_id_contains: ["${user_id}"]}){log_id, description, public, guide_id, description, participants, observables, start_date_time, end_date_time, username, rating, id }}`},
         }),
         axios
         .get(`${strapi_location}`,
@@ -96,7 +100,7 @@ export const makeLogbookRequest = (user_id) => dispatch => {
       ];
 
       Promise.all(req).then((res) => {
-        let logs = res[0].data.map(item => ({
+        let logs = res[0].data.data.logs.map(item => ({
             ...item,
             log_id: item.id,
         }));
@@ -228,13 +232,29 @@ export const updateOpenLog = openLog => dispatch => {
 
 // Create logbook entry
 export const createLogEntry = logEntry => dispatch => {
+    dispatch({
+        type: SET_LOADING_SPINNER,
+        payload: "logTrip",
+    });
     axios.post(riverapiLocation + "logs", logEntry).then(res => {
         // dispatch({
         //     type: APPEND_LOGS,
         //     payload: res.data,
         // });
         dispatch({
+            type: CLEAR_LOADING_SPINNER,
+        });
+        dispatch({
             type: CLOSE_MODAL,
+        });
+        dispatch(makeLogbookRequest(logEntry.user_id));
+    }).catch(err => {
+        dispatch({
+            type: GET_ERRORS,
+            payload: {message: err.response.data.message}
+        });
+        dispatch({
+            type: CLEAR_LOADING_SPINNER
         });
     });
 };

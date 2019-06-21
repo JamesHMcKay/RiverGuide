@@ -1,6 +1,5 @@
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
-import jwt_decode from "jwt-decode";
 
 import {
     CLEAR_ERRORS,
@@ -8,6 +7,8 @@ import {
     GET_ERRORS,
     OPEN_MODAL,
     SET_CURRENT_USER,
+    SET_LOADING_SPINNER,
+    CLEAR_LOADING_SPINNER,
 } from "./types";
 import parseUserObject from "../utils/parseUserObject";
 
@@ -30,9 +31,9 @@ export const registerUser = (userData) => dispatch => {
         console.log('User profile', response.data.user);
         console.log('User token', response.data.jwt);
         localStorage.setItem("jwtToken", response.data.jwt);
+        localStorage.setItem("user", JSON.stringify(parseUserObject(response.data.user)));
         setAuthToken(response.data.jwt);
-        const decoded = jwt_decode(response.data.jwt);
-        dispatch(setCurrentUser(decoded));
+        dispatch(setCurrentUser(parseUserObject(response.data.user)));
 
         dispatch({
             type: CLOSE_MODAL,
@@ -71,11 +72,9 @@ export const loginUser = userData => dispatch => {
         console.log('User token', response.data.jwt);
 
         localStorage.setItem("jwtToken", response.data.jwt);
-        localStorage.setItem("user", response.data.user);
+        localStorage.setItem("user", JSON.stringify(parseUserObject(response.data.user)));
         setAuthToken(response.data.jwt);
-        const decoded = jwt_decode(response.data.jwt);
-        console.log('decoded', decoded);
-        dispatch(setCurrentUser(response.data.user));
+        dispatch(setCurrentUser(parseUserObject(response.data.user)));
         dispatch({
             type: CLOSE_MODAL,
             payload: "loginModal",
@@ -119,34 +118,6 @@ export const logoutUser = () => dispatch => {
     });
 };
 
-// Change user password
-export const changePassword = userData => dispatch => {
-    axios
-        .put(serverLocation + "/users/login", userData)
-        .then(res => {
-            dispatch({
-                type: CLOSE_MODAL,
-                payload: "changePasswordModal",
-            });
-            dispatch({ type: CLEAR_ERRORS });
-            dispatch({
-                type: OPEN_MODAL,
-                payload: "successModal",
-            });
-        })
-        .catch(err => {
-            dispatch({
-                type: GET_ERRORS,
-                payload: err.response,
-            });
-            dispatch({
-                type: OPEN_MODAL,
-                payload: "changePasswordModal",
-            });
-        });
-};
-
-
 // Register User
 export const providerLogin = (action, history) => dispatch => {
     // Request API. 
@@ -184,8 +155,6 @@ export const providerLogin = (action, history) => dispatch => {
     });
 };
 
-
-// Log user out
 export const changeUserDetails = (userDetails) => dispatch => {
     axios
     .put(serverLocation + "users/" + userDetails.id, {
@@ -199,4 +168,30 @@ export const changeUserDetails = (userDetails) => dispatch => {
     });
 
     dispatch(setCurrentUser(userDetails));
+};
+
+export const deleteUser = (userDetails) => dispatch => {
+    dispatch({
+        type: SET_LOADING_SPINNER,
+        payload: "deleteAccount",
+    });
+    axios
+    .delete(serverLocation + "users/" + userDetails.id)
+    .then(res => {
+        dispatch({
+            type: CLEAR_LOADING_SPINNER
+        });
+        console.log("deleted user");
+    })
+    .catch(err => {
+        dispatch({
+            type: GET_ERRORS,
+            payload: {message: err.response.data.message}
+        });
+        dispatch({
+            type: CLEAR_LOADING_SPINNER
+        });
+    });
+
+    dispatch(logoutUser());
 };
