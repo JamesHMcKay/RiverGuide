@@ -137,7 +137,10 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                     ))}
                     <MenuItem
                         key={"logout"}
-                        onClick={(event: any): void => {this.openModal("logoutModal"); }}
+                        onClick={(event: any): void => {
+                            this.openModal("logoutModal");
+                            this.setState({ anchorEl: null });
+                        }}
                     >
                         {"Logout"}
                     </MenuItem>

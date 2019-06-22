@@ -10,6 +10,8 @@ import {
     SET_LOADING_SPINNER,
     CLEAR_LOADING_SPINNER,
     SET_USER_DETAILS,
+    CLEAR_USER_DETAILS,
+    CLEAR_LOGS,
 } from "./types";
 import parseUserObject from "../utils/parseUserObject";
 
@@ -65,7 +67,9 @@ export const loginUser = userData => dispatch => {
         localStorage.setItem("jwtToken", response.data.jwt);
         localStorage.setItem("user", JSON.stringify(parseUserObject(response.data.user)));
         setAuthToken(response.data.jwt);
-        dispatch(setCurrentUser(parseUserObject(response.data.user)));
+        const userObject = parseUserObject(response.data.user);
+        dispatch(setCurrentUser(userObject));
+        dispatch(getUserDetails(userObject.id));
         dispatch({
             type: CLOSE_MODAL,
             payload: "loginModal",
@@ -177,6 +181,12 @@ export const logoutUser = () => dispatch => {
         type: CLOSE_MODAL,
         payload: "logoutModal",
     });
+    dispatch({
+        type: CLEAR_USER_DETAILS,
+    });
+    dispatch({
+        type: CLEAR_LOGS,
+    });
 };
 
 // Register User
@@ -190,7 +200,9 @@ export const providerLogin = (action, history) => dispatch => {
         localStorage.setItem("jwtToken", response.data.jwt);
         localStorage.setItem("user", JSON.stringify(parseUserObject(response.data.user)));
         setAuthToken(response.data.jwt);
-        dispatch(setCurrentUser(parseUserObject(response.data.user)));
+        const userObject = parseUserObject(response.data.user);
+        dispatch(setCurrentUser(userObject));
+        dispatch(getUserDetails(userObject.id));
         dispatch({
             type: CLOSE_MODAL,
             payload: "registerModal",

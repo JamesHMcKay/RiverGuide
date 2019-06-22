@@ -1,10 +1,9 @@
+import { FormGroup } from "@material-ui/core";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Select from "react-select";
 import { IState } from "../../reducers/index";
 import { IListEntry } from "../../utils/types";
-
-import { FormGroup, Label } from "reactstrap";
 
 interface ISectionSelectProps extends ISectionSelectStateProps {
     handleChange: (selectedGuide: IListEntry) => void;
@@ -38,7 +37,6 @@ class SectionSelect extends Component<ISectionSelectProps> {
     public render(): JSX.Element {
         return (
             <FormGroup>
-                <Label for="section">Section</Label>
                 <Select
                     menuPortalTarget={document.body}
                     styles={{ menuPortal: (base: any): void => ({ ...base, zIndex: 9999 }) }}

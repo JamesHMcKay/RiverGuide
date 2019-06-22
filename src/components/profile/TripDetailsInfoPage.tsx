@@ -1,14 +1,15 @@
 import Dialog from "@material-ui/core/Dialog";
+import withMobileDialog from "@material-ui/core/withMobileDialog";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 import { IState } from "../../reducers/index";
 import { IInfoPage } from "../../utils/types";
-
 import TripDetailsModal from "./TripDetailsModal";
 
 interface ITripDetailsInfoPageProps extends ITripDetailsInfoPageStateProps {
     toggleModal: (modal?: string) => void;
+    fullScreen: boolean;
 }
 
 interface ITripDetailsInfoPageStateProps {
@@ -28,7 +29,11 @@ class TripDetailsInfoPage extends Component<ITripDetailsInfoPageProps> {
     public render(): JSX.Element {
         return (
             <div>
-                <Dialog onClose={this.closeModal} aria-labelledby="example dialog" open={this.props.isOpen}>
+                <Dialog
+                    onClose={this.closeModal}
+                    open={this.props.isOpen}
+                    fullScreen={this.props.fullScreen}
+                >
                     <TripDetailsModal
                         handleClose = {this.handleClose}
                         selectedGuide = {this.props.infoPage.selectedGuide}
@@ -50,4 +55,4 @@ function mapStateToProps(state: IState): ITripDetailsInfoPageStateProps {
 export default connect(
     mapStateToProps,
     { toggleModal},
-)(TripDetailsInfoPage);
+)(withMobileDialog()(TripDetailsInfoPage));

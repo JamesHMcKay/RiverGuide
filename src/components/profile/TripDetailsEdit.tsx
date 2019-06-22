@@ -13,7 +13,7 @@ interface ITripDetailsEditProps extends ITripDetailsEditStateProps {
 
 interface ITripDetailsEditStateProps {
     isOpen: boolean;
-    selectedLogId: string;
+    selectedLogId: string[];
     log: ILogComplete[];
     listEntries: IListEntry[];
 }
@@ -31,7 +31,7 @@ class TripDetailsEdit extends Component<ITripDetailsEditProps> {
     public getLogEntry(): ILogComplete | undefined {
         if (this.props.selectedLogId !== null) {
             const selectedLog: ILogComplete[] = this.props.log.filter(
-                (item: ILogComplete) => item.log_id === this.props.selectedLogId,
+                (item: ILogComplete) => item.log_id === this.props.selectedLogId[0],
             );
             return selectedLog[0];
         }
@@ -66,7 +66,7 @@ function mapStateToProps(state: IState): ITripDetailsEditStateProps {
     return ({
         isOpen: state.openModal === "editTripDetails",
         selectedLogId: state.selectedLogId,
-        log: state.filteredLogList,
+        log: state.log,
         listEntries: state.listEntries,
     });
 }

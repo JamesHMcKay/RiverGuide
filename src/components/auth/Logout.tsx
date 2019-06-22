@@ -5,7 +5,10 @@ import { IState } from "../../reducers/index";
 import { toggleModal } from "../../actions/actions";
 import { logoutUser } from "../../actions/getAuth";
 
-import { Button, Form, Modal, ModalFooter, ModalHeader } from "reactstrap";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
 
 interface ILogoutProps extends ILogoutStateProps {
     logoutUser: () => void;
@@ -17,19 +20,9 @@ interface ILogoutStateProps {
 }
 
 class Logout extends Component<ILogoutProps> {
-    constructor(props: ILogoutProps) {
-        super(props);
-        this.closeModal = this.closeModal.bind(this);
-        this.onLogoutClick = this.onLogoutClick.bind(this);
-    }
-
-    public onLogoutClick(e: any): void {
+    public onLogoutClick = (e: any): void => {
         e.preventDefault();
         this.props.logoutUser();
-    }
-
-    public closeModal(): void {
-        this.props.toggleModal();
     }
 
     public onSubmit(e: any): void {
@@ -38,21 +31,20 @@ class Logout extends Component<ILogoutProps> {
 
     public render(): JSX.Element {
         return (
-            <Modal isOpen={this.props.isOpen} toggle={this.closeModal}>
-                <ModalHeader toggle={this.closeModal}>
-                    See You Again Soon
-                </ModalHeader>
-                <Form onSubmit={this.onSubmit}>
-                    <ModalFooter>
-                        <Button color="primary" onClick={this.onLogoutClick}>
-                            Logout
-                        </Button>{" "}
-                        <Button color="secondary" onClick={this.closeModal}>
-                            Cancel
-                        </Button>
-                    </ModalFooter>
-                </Form>
-            </Modal>
+            <Dialog
+                onClose={(): void => this.props.toggleModal()}
+                open={this.props.isOpen}
+            >
+                <DialogContent>Are you sure you want to logout?</DialogContent>
+                <DialogActions>
+                    <Button variant="outlined" onClick={(): void => this.props.toggleModal()} color="primary">
+                        Cancel
+                    </Button>
+                    <Button variant="outlined" onClick={this.onLogoutClick} color="primary">
+                        Logout
+                    </Button>
+                </DialogActions>
+            </Dialog>
         );
     }
 }

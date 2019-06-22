@@ -87,6 +87,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                 rating: 0,
                 description: "",
                 user_id: this.props.auth.user.id,
+                id: "",
                 public: true,
                 username: this.props.auth.user.username,
             };

@@ -3,19 +3,18 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { deleteLogEntry, setSelectedLogId, toggleModal } from "../../actions/actions";
+import { deleteLogEntry, toggleModal } from "../../actions/actions";
 import { IState } from "../../reducers";
 import { ILogComplete } from "../../utils/types";
 
 interface ILogbookHeadProps extends ILogbookHeadStateProps {
     deleteLogEntry: (logId: string) => void;
-    selectedLogIds: string[];
-    setSelectedLogId: (logId: string) => void;
     toggleModal: (modal?: string) => void;
 }
 
 interface ILogbookHeadStateProps {
     log: ILogComplete[];
+    selectedLogIds: string[];
 }
 
 interface ILogbookHeadState {
@@ -41,12 +40,12 @@ class LogbookHead extends Component<ILogbookHeadProps, ILogbookHeadState> {
         this.props.toggleModal("editTripDetails");
     }
 
-    public componentDidUpdate(prevProps: ILogbookHeadProps): void {
-        const idChange: boolean = this.props.selectedLogIds[0] !== prevProps.selectedLogIds[0];
-        if (this.props.selectedLogIds.length === 1 && idChange) {
-            this.props.setSelectedLogId(this.props.selectedLogIds[0]);
-        }
-    }
+    // public componentDidUpdate(prevProps: ILogbookHeadProps): void {
+    //     const idChange: boolean = this.props.selectedLogIds[0] !== prevProps.selectedLogIds[0];
+    //     if (this.props.selectedLogIds.length === 1 && idChange) {
+    //         this.props.setSelectedLogId(this.props.selectedLogIds[0]);
+    //     }
+    // }
 
     public handleClose = (): void => {
         this.setState({
@@ -105,10 +104,11 @@ class LogbookHead extends Component<ILogbookHeadProps, ILogbookHeadState> {
 function mapStateToProps(state: IState): ILogbookHeadStateProps {
     return ({
         log: state.filteredLogList,
+        selectedLogIds: state.selectedLogId,
     });
 }
 
 export default connect(
     mapStateToProps,
-    { deleteLogEntry, setSelectedLogId, toggleModal },
+    { deleteLogEntry, toggleModal },
 )(LogbookHead);

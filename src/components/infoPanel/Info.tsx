@@ -120,7 +120,9 @@ class Info extends Component<IInfoProps, IInfoState> {
                 }
                 placement="right"
             >
-            <IconButton onClick={(): void => {this.toggleFavourite(isFav); }}>
+            <IconButton
+                onClick={(): void => {this.toggleFavourite(isFav); }}
+            >
                 {isFav ? (
                     <FavoriteIcon style={{ color: "#fb1" }} />
                 ) : (
@@ -326,7 +328,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                                     {`${entry.river_name} river  •  ${entry.region} `}
                                     </Typography>
                             </div>
-                            {this.getFavButton()}
+                            {this.props.auth.isAuthenticated && this.getFavButton()}
                     </Grid>
                     <Grid container item md={1} lg={1} justify="flex-end">
                             {this.getCloseButton()}
@@ -341,10 +343,12 @@ class Info extends Component<IInfoProps, IInfoState> {
                         />
                     </Grid>
                     <Grid container item md={6} lg={6} justify="flex-end">
-                    {this.getReportButton()}
+                    {this.props.auth.isAuthenticated && this.getReportButton()}
+                    {this.props.auth.isAuthenticated &&
                         <Button color="secondary" onClick={this.openModal.bind(this, "editModal")}>
                             <EditIcon />
                         </Button>
+                    }
                     </Grid>
                 </Grid>
                 {isLogbookInfo && this.getLogbook()}

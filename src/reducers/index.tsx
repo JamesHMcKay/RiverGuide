@@ -56,7 +56,7 @@ export interface IState {
     weatherStore: WeatherStore;
     filters: IFilter;
     filteredLogList: ILogComplete[];
-    selectedLogId: string;
+    selectedLogId: string[];
     logPageOpen: boolean;
     tabIndex: number;
     loadingSpinner: string;

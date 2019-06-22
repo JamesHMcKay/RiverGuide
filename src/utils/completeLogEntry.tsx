@@ -1,6 +1,6 @@
 import { IListEntry, ILogComplete, ILogEntry, IObsValue } from "./types";
 
-function getFlow(observables: IObsValue | undefined): string {
+export function getFlow(observables: IObsValue | undefined): string {
     if (!observables) {
       return "";
     } else {

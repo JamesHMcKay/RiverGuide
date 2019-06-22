@@ -127,12 +127,12 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
     }
 
     public getleftPanel = (): JSX.Element => {
-        const guideIdWithEntry: string[] = this.props.log.map(
-            (item: ILogComplete) => item.guide_id,
-        ).filter(this.onlyUnique);
-        const hasLogEntry: IListEntry[] = this.props.filterdGuides.filter(
-            (item: IListEntry) => guideIdWithEntry.indexOf(item.id) >= 0,
-        );
+        // const guideIdWithEntry: string[] = this.props.log.map(
+        //     (item: ILogComplete) => item.guide_id,
+        // ).filter(this.onlyUnique);
+        // const hasLogEntry: IListEntry[] = this.props.filterdGuides.filter(
+        //     (item: IListEntry) => guideIdWithEntry.indexOf(item.id) >= 0,
+        // );
 
         return (
             <div className="left-panel">
@@ -140,7 +140,7 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
                     gaugeList={this.props.gauges}
                     gauges={this.props.gauges}
                     onClick={this.onClick}
-                    filteredList={hasLogEntry}
+                    filteredList={this.props.filterdGuides}
                     specialItem={<ListItemSpecial/>}
                 />
             </div>

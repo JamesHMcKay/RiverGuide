@@ -184,6 +184,7 @@ export interface ILogEntry extends ILogBase {
 export interface ILogBase {
     username: string;
     log_id: string;
+    id: string;
     guide_id: string;
     start_date_time: string;
     end_date_time: string;

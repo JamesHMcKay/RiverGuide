@@ -25,6 +25,7 @@ import {
     SET_LOADING_SPINNER,
     CLEAR_LOADING_SPINNER,
     GET_ERRORS,
+    EDIT_LOG,
 } from "./types";
 
 const serverLocation = process.env.REACT_APP_SERVER_URL;
@@ -53,11 +54,6 @@ export const toggleModal = modal => dispatch => {
     }
 };
 
-// Get guides
-export const makeGuideRequest = category => dispatch => {
-    console.log("makeGuideRequest no longer in operation");
-};
-
 // Create guides
 export const createGuide = (guideData, category) => dispatch => {
     axios
@@ -82,12 +78,11 @@ export const createGuide = (guideData, category) => dispatch => {
 
 // Get logbook logs
 export const makeLogbookRequest = (user_id) => dispatch => {
-    //let query = "{logs(user_id:\"" + user_id + "\"){log_id, user_id, date, participants, rating, description, guide_id, public, observables, weather}}"
     let req = [
         axios.get(`${strapi_location}`,
         {
             headers: {'Authorization': ''},
-            params: {query: `query userLogs{logs(where: {user_id_contains: ["${user_id}"]}){log_id, description, public, guide_id, description, participants, observables, start_date_time, end_date_time, username, rating, id }}`},
+            params: {query: `query userLogs{logs(where: {user_id: ["${user_id}"]}){log_id, description, public, guide_id, description, participants, observables, start_date_time, end_date_time, username, rating, id, user_id }}`},
         }),
         axios
         .get(`${strapi_location}`,
@@ -231,6 +226,7 @@ export const updateOpenLog = openLog => dispatch => {
 
 // Create logbook entry
 export const createLogEntry = logEntry => dispatch => {
+    console.log("creating log entry", logEntry);
     dispatch({
         type: SET_LOADING_SPINNER,
         payload: "logTrip",
@@ -256,18 +252,25 @@ export const createLogEntry = logEntry => dispatch => {
 
 // Edit logbook entry
 export const editLogEntry = updatedLogEntry => dispatch => {
+    dispatch({
+        type: SET_LOADING_SPINNER,
+        payload: "logTrip",
+    });
     axios
         .put(
             riverapiLocation + "logs/" + updatedLogEntry.log_id,
             updatedLogEntry,
         )
         .then(res => {
-            // dispatch({
-            //     type: EDIT_LOG,
-            //     payload: res.data,
-            // });
+            dispatch({
+                type: CLEAR_LOADING_SPINNER,
+            });
             dispatch({
                 type: CLOSE_MODAL,
+            });
+            dispatch({
+                type: EDIT_LOG,
+                payload: updatedLogEntry,
             });
         });
 };
@@ -278,6 +281,10 @@ export const deleteLogEntry = logId => dispatch => {
         dispatch({
             type: DELETE_LOG,
             payload: logId,
+        });
+        dispatch({
+            type: SET_SELECTED_LOG_ID,
+            payload: [],
         });
     });
 };

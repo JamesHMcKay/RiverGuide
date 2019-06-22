@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
 import { IGauge, IGuide } from "../../utils/types";
 import FlowBadge from "../common/FlowBadge";
-import { GradeBadge } from "../common/GradeBadge";
 
 interface IMapPopupProps {
     guide: IGuide;
@@ -18,7 +17,6 @@ class MapPopup extends Component<IMapPopupProps, {}> {
         return (
             <div className="popup-content">
                 <h5>{guide.title}</h5>
-                <GradeBadge guide={guide} gauges={gauges} />
                 <FlowBadge gaugeId={guide.gaugeName} />
             </div>
         );

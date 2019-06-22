@@ -1,13 +1,15 @@
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { deleteLogEntry, toggleModal } from "../../actions/actions";
 import { IState } from "../../reducers/index";
+import DialogTitle from "../../utils/dialogTitle";
 import { IOpenLog } from "../../utils/types";
 
-import { Button, Modal, ModalBody, ModalHeader } from "reactstrap";
-
 interface IDeleteModalProps extends IDeleteModalStateProps {
-    toggleModal: (modal: string) => void;
+    toggleModal: (modal?: string) => void;
     deleteLogEntry: (logId: string) => void;
 }
 
@@ -36,17 +38,19 @@ class DeleteModal extends Component<IDeleteModalProps> {
 
     public render(): JSX.Element {
         return (
-            <Modal isOpen={this.props.isOpen} toggle={this.closeModal}>
-                <ModalHeader toggle={this.closeModal}>
-                    Delete this Log Entry?
-                </ModalHeader>
-                <ModalBody>
-                    <Button onClick={this.handleDelete} color="danger">
+            <Dialog
+            onClose={(): void => this.props.toggleModal()}
+            open={this.props.isOpen}
+            >
+            <DialogTitle handleClose={(): void => this.props.toggleModal()} title={"Delete this Log Entry?"}/>
+
+                <DialogContent>
+                    <Button onClick={this.handleDelete}>
                         Delete
                     </Button>{" "}
                     <Button onClick={this.closeModal}>Cancel</Button>
-                </ModalBody>
-            </Modal>
+                </DialogContent>
+            </Dialog>
         );
     }
 }

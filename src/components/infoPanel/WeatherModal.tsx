@@ -1,18 +1,13 @@
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { editLogEntry, toggleModal } from "../../actions/actions";
 import { IState } from "../../reducers/index";
+import DialogTitle from "../../utils/dialogTitle";
 import { IInfoPage, IListEntry, ILogEntry, IOpenLog } from "../../utils/types";
 import { WeatherForecast } from "./WeatherForecast";
 import { WeatherStore } from "./WeatherStore";
-
-import {
-    Button,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-} from "reactstrap";
 
 interface IWeatherModalProps extends IWeatherStateProps {
     toggleModal: (modal?: string) => void;
@@ -43,25 +38,19 @@ class WeatherModal extends Component<IWeatherModalProps> {
     public render(): JSX.Element {
         const entry: IListEntry = this.props.infoPage.selectedGuide;
         return (
-                <Modal
-                    isOpen={this.props.isOpen}
-                    toggle={(): void => this.props.toggleModal()}
-                    style={{alignItems: "center", justifyContent: "center"}}
-                >
-                    <ModalHeader toggle={(): void => this.props.toggleModal()}>
-                        Weather
-                    </ModalHeader>
-                    <ModalBody>
+            <Dialog
+                onClose={(): void => this.props.toggleModal()}
+                open={this.props.isOpen}
+            >
+                <DialogTitle handleClose={(): void => this.props.toggleModal()} title={"Weather"}/>
+                <DialogContent>
                     {entry && <WeatherForecast
                             lat={entry.position.lat || 0}
                             lon={entry.position.lon || 0}
                             weatherStore={this.props.weatherStore}
-                        />}
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button onClick={(): void => this.props.toggleModal()}>Close</Button>
-                    </ModalFooter>
-                </Modal>
+                    />}
+                </DialogContent>
+            </Dialog>
         );
     }
 }

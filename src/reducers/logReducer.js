@@ -1,5 +1,5 @@
-import { APPEND_LOGS, DELETE_LOG, EDIT_LOG, GET_LOGS } from "../actions/types";
-import completeLogEntry from "../utils/completeLogEntry";
+import { APPEND_LOGS, DELETE_LOG, EDIT_LOG, GET_LOGS, CLEAR_LOGS } from "../actions/types";
+import completeLogEntry, { getFlow } from "../utils/completeLogEntry";
 
 const initialState = [];
 
@@ -7,17 +7,19 @@ export default (state = initialState, action) => {
     switch (action.type) {
         case GET_LOGS:
             return completeLogEntry(action.payload.listEntries, action.payload.logs)
-        // case SET_LOG_GUIDE_NAMES:
-        //     return completeLogEntry(action.payload.listEntries, action.payload.logs);
         case APPEND_LOGS:
-            // upon creation log is not placed chronologically
             return [...state, action.payload];
         case EDIT_LOG:
-            return state.map(
-                log => (log._id === action.payload._id ? action.payload : log),
-            );
+            let updatedLogs = state.filter(log => log.id !== action.payload.id);
+            let updatedEntry = {
+                ...action.payload,
+                flow: getFlow(action.payload.observables)
+            }
+            return [updatedEntry, ...updatedLogs];
         case DELETE_LOG:
-            return state.filter(log => log._id !== action.payload);
+            return state.filter(log => log.id !== action.payload);
+        case CLEAR_LOGS:
+            return initialState;
         default:
             return state;
     }

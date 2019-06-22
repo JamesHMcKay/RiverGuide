@@ -125,7 +125,7 @@ interface IHeadRow {
 
 interface ILogBookProps extends ILogBookStateProps {
     toggleModal: (modal?: string) => void;
-    setSelectedLogId: (logId: string) => void;
+    setSelectedLogId: (logId: string[]) => void;
     columnOrder: Array<keyof ILogListItem>;
     publicPage: boolean;
     log: ILogComplete[];
@@ -133,11 +133,11 @@ interface ILogBookProps extends ILogBookStateProps {
 
 interface ILogBookStateProps {
     openModal: string;
+    selectedLogIds: string[];
 }
 
 interface ILogBookState {
     listItems: ILogListItem[];
-    selected: string[];
     orderBy: keyof ILogListItem;
     order: Order;
     page: number;
@@ -158,30 +158,29 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
             page: 0,
             order: "asc",
             rowsPerPage: 5,
-            selected: [],
             orderBy: "start_date_time",
             listItems: this.createList(this.props.log),
         };
     }
 
-    public listsAreEqual = (listOne: ILogComplete[], listTwo: ILogComplete[]): boolean => {
-        if (listOne.length !== listTwo.length) {
-            return false;
-        }
-        for (let i: number = 0; i < listOne.length; i++) {
-            if (listOne[i].log_id !== listTwo[i].log_id) {
-                return false;
-            }
-        }
+    // public listsAreEqual = (listOne: ILogComplete[], listTwo: ILogComplete[]): boolean => {
+    //     if (listOne.length !== listTwo.length) {
+    //         return false;
+    //     }
+    //     for (let i: number = 0; i < listOne.length; i++) {
+    //         if (listOne[i].log_id !== listTwo[i].log_id) {
+    //             return false;
+    //         }
+    //     }
 
-        return true;
-    }
+    //     return true;
+    // }
 
-    public componentDidUpdate(prevProps: ILogBookProps): void {
-        if (!this.listsAreEqual(this.props.log, prevProps.log)) {
-            this.setState({listItems: this.createList(this.props.log)});
-        }
-    }
+    // public componentDidUpdate(prevProps: ILogBookProps): void {
+    //     if (!this.listsAreEqual(this.props.log, prevProps.log)) {
+    //         this.setState({listItems: this.createList(this.props.log)});
+    //     }
+    // }
 
     public getFlow = (observables: IObsValue | undefined): string => {
       if (!observables) {
@@ -205,6 +204,7 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
             participants: item.participants,
             rating: item.rating,
             log_id: item.log_id,
+            id: item.id,
             flow: item.flow,
             username: item.username,
         }));
@@ -246,7 +246,7 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
       }
 
       public setSelected = (selection: string[]): void => {
-          this.setState({selected: selection});
+          this.props.setSelectedLogId(selection);
       }
 
     public handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -259,26 +259,26 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
       }
 
       public handlePrivateClick = (name: string): void => {
-        const selectedIndex: number = this.state.selected.indexOf(name);
+        const selectedIndex: number = this.props.selectedLogIds.indexOf(name);
         let newSelected: string[] = [];
 
         if (selectedIndex === -1) {
-          newSelected = newSelected.concat(this.state.selected, name);
+          newSelected = newSelected.concat(this.props.selectedLogIds, name);
         } else if (selectedIndex === 0) {
-          newSelected = newSelected.concat(this.state.selected.slice(1));
-        } else if (selectedIndex === this.state.selected.length - 1) {
-          newSelected = newSelected.concat(this.state.selected.slice(0, -1));
+          newSelected = newSelected.concat(this.props.selectedLogIds.slice(1));
+        } else if (selectedIndex === this.props.selectedLogIds.length - 1) {
+          newSelected = newSelected.concat(this.props.selectedLogIds.slice(0, -1));
         } else if (selectedIndex > 0) {
           newSelected = newSelected.concat(
-            this.state.selected.slice(0, selectedIndex),
-            this.state.selected.slice(selectedIndex + 1),
+            this.props.selectedLogIds.slice(0, selectedIndex),
+            this.props.selectedLogIds.slice(selectedIndex + 1),
           );
         }
         this.setSelected(newSelected);
       }
 
       public handlePublicClick = (name: string): void => {
-        this.props.setSelectedLogId(name);
+        this.props.setSelectedLogId([name]);
         this.props.toggleModal("viewTripDetails");
       }
 
@@ -298,7 +298,7 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
         this.setRowsPerPage(+event.target.value);
       }
 
-    public isSelected = (name: string): boolean => this.state.selected.indexOf(name) !== -1;
+    public isSelected = (name: string): boolean => this.props.selectedLogIds.indexOf(name) !== -1;
 
     public getColumns = (input: IGetColumnsArg): JSX.Element[] | null => {
         const output: JSX.Element[] = [(
@@ -328,7 +328,7 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
     }
 
     public render(): JSX.Element {
-        const listItems: ILogListItem[] = this.state.listItems;
+        const listItems: ILogListItem[] = this.createList(this.props.log);
         const emptyRows: number = this.state.rowsPerPage - Math.min(
           this.state.rowsPerPage,
           listItems.length - this.state.page * this.state.rowsPerPage,
@@ -337,16 +337,14 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
         return (
             <div style={{width: "100%", marginTop: "0em"}}>
             <Paper style={{width: "100%", marginTop: "1em"}}>
-              <LogbookHead
-                selectedLogIds = {this.state.selected}
-              />
+              <LogbookHead/>
               <div style={{overflowX: "auto"}}>
                 <Table
                   style={{minWidth: 750}}
                   aria-labelledby="tableTitle"
                 >
                   <EnhancedTableHead
-                    numSelected={this.state.selected.length}
+                    numSelected={this.props.selectedLogIds.length}
                     order={this.state.order}
                     orderBy={this.state.orderBy}
                     onSelectAllClick={this.handleSelectAllClick}
@@ -409,6 +407,7 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
 function mapStateToProps(state: IState): ILogBookStateProps {
     return ({
         openModal: state.openModal,
+        selectedLogIds: state.selectedLogId,
     });
 }
 
