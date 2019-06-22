@@ -40,3 +40,4 @@ export const SET_TAB_INDEX: string = "SET_TAB_INDEX";
 export const SET_LOADING_SPINNER: string = "SET_LOADING_SPINNER";
 export const CLEAR_LOADING_SPINNER: string = "CLEAR_LOADING_SPINNER";
 export const GET_ITEM_LOGS: string = "GET_ITEM_LOGS";
+export const SET_USER_DETAILS: string = "SET_USER_DETAILS";

@@ -9,6 +9,7 @@ import {
     SET_CURRENT_USER,
     SET_LOADING_SPINNER,
     CLEAR_LOADING_SPINNER,
+    SET_USER_DETAILS,
 } from "./types";
 import parseUserObject from "../utils/parseUserObject";
 
@@ -17,8 +18,6 @@ const testServerLocation = 'https://rapidsapi.herokuapp.com/';
 
 // Register User
 export const registerUser = (userData) => dispatch => {
-    // Request API. 
-    // Add your own code here to customize or restrict how the public can register new users.
     axios
     .post(serverLocation + 'auth/local/register', {
         username: userData.name,
@@ -42,7 +41,6 @@ export const registerUser = (userData) => dispatch => {
         dispatch({ type: CLEAR_ERRORS });
     })
     .catch(error => {
-        // Handle error.
         console.log('An error occurred:', error);
         console.log("error response", error.response);
         dispatch({
@@ -58,19 +56,12 @@ export const registerUser = (userData) => dispatch => {
 
 // Login - Get User Token
 export const loginUser = userData => dispatch => {
-
-    // Request API.
     axios
     .post(serverLocation + 'auth/local/', {
         identifier: userData.identifier,
         password: userData.password,
     })
     .then(response => {
-        // Handle success.
-        console.log('Well done!');
-        console.log('User profile', response.data.user);
-        console.log('User token', response.data.jwt);
-
         localStorage.setItem("jwtToken", response.data.jwt);
         localStorage.setItem("user", JSON.stringify(parseUserObject(response.data.user)));
         setAuthToken(response.data.jwt);
@@ -82,7 +73,6 @@ export const loginUser = userData => dispatch => {
         dispatch({ type: CLEAR_ERRORS });
     })
     .catch(error => {
-        // Handle error.
         console.log('An error occurred:', error);
         dispatch({
             type: GET_ERRORS,
@@ -94,6 +84,77 @@ export const loginUser = userData => dispatch => {
         });
     });
 };
+
+export const createUserDetails = (userid) => dispatch => {
+    axios
+     .post(serverLocation + 'userdetails/',
+        {user_id: userid,}
+     )
+     .then(response => {
+         console.log('User details created = ', response);
+         dispatch({
+            type: SET_USER_DETAILS,
+            payload: response.data,
+        });
+     })
+     .catch(error => {
+         dispatch({
+             type: GET_ERRORS,
+             payload: {message: error.response.data.message}
+         });
+     });
+}
+
+// add to favourites
+export const addToFavourites = (userDetails) => dispatch => {
+    dispatch({
+        type: SET_LOADING_SPINNER,
+        payload: "favButton",
+    });
+    axios
+        .put(`${serverLocation}userdetails/${userDetails.id}`, {
+            user_favourites: userDetails.user_favourites
+        })
+        .then(res => {
+            dispatch({
+                type: SET_USER_DETAILS,
+                payload: userDetails,
+            });
+            dispatch({
+                type: CLEAR_LOADING_SPINNER,
+            });
+        })
+        .catch(err => console.log(err));
+};
+
+export const getUserDetails = (userid) => dispatch => {
+     // Request API.
+     axios
+     .get(serverLocation + 'graphql',
+     {
+        headers: {'Authorization': ''},
+        params:  {query: `query userQuery{userdetails(where: {user_id_contains: ["${userid}"]}) {user_id, user_favourites, id}} `}
+     })
+     .then(response => {
+         if (response.data.data.userdetails.length === 0) {
+            dispatch(createUserDetails(userid));
+         }
+         const userDetails = {
+             ...response.data.data.userdetails[0],
+            user_favourites: response.data.data.userdetails[0].user_favourites || [],
+         }
+         dispatch({
+            type: SET_USER_DETAILS,
+            payload: userDetails,
+        });
+     })
+     .catch(error => {
+         dispatch({
+             type: GET_ERRORS,
+             payload: {message: error.response.data.message}
+         });
+     });
+}
 
 // Set logged in user
 export const setCurrentUser = decoded => {
@@ -125,16 +186,11 @@ export const providerLogin = (action, history) => dispatch => {
     axios
     .get(testServerLocation + `auth/${action.provider}/callback${action.search}`)
     .then(response => {
-        // Handle success.
-        console.log('Response recieved');
-        console.log('User profile', response.data.user);
-        console.log('User token', response.data.jwt);
         history.push("/");
         localStorage.setItem("jwtToken", response.data.jwt);
         localStorage.setItem("user", JSON.stringify(parseUserObject(response.data.user)));
         setAuthToken(response.data.jwt);
         dispatch(setCurrentUser(parseUserObject(response.data.user)));
-
         dispatch({
             type: CLOSE_MODAL,
             payload: "registerModal",
@@ -142,8 +198,6 @@ export const providerLogin = (action, history) => dispatch => {
         dispatch({ type: CLEAR_ERRORS });
     })
     .catch(error => {
-        // Handle error.
-        console.log('An error occurred:', error);
         dispatch({
             type: GET_ERRORS,
             payload: {message: error.response.data.message}
@@ -162,11 +216,9 @@ export const changeUserDetails = (userDetails) => dispatch => {
         email: userDetails.email,
     })
     .then(res => {
-        console.log("updated user details");
     })
     .catch(err => {
     });
-
     dispatch(setCurrentUser(userDetails));
 };
 
@@ -181,7 +233,6 @@ export const deleteUser = (userDetails) => dispatch => {
         dispatch({
             type: CLEAR_LOADING_SPINNER
         });
-        console.log("deleted user");
     })
     .catch(err => {
         dispatch({

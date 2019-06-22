@@ -12,7 +12,8 @@ import {
     IListEntry,
     ILogComplete,
     IMapBounds,
-    IOpenLog } from "../utils/types";
+    IOpenLog,
+    IUserDetails } from "../utils/types";
 import authReducer from "./authReducer";
 import categoryReducer from "./categoryReducer";
 import errorReducer from "./errorReducer";
@@ -34,6 +35,7 @@ import openLogReducer from "./openLogReducer";
 import selectedLogIdReducer from "./selectedLogIdReducer";
 import sensorDataReducer from "./sensorDataReducer";
 import tabIndexReducer from "./tabIndexReducer";
+import userDetailsReducer from "./userDetailsReducer";
 import weatherReducer from "./weatherReducer";
 
 export interface IState {
@@ -58,6 +60,7 @@ export interface IState {
     logPageOpen: boolean;
     tabIndex: number;
     loadingSpinner: string;
+    userDetails: IUserDetails;
 }
 
 export default combineReducers({
@@ -83,4 +86,5 @@ export default combineReducers({
     logPageOpen: logPageOpenReducer,
     tabIndex: tabIndexReducer,
     loadingSpinner: loadingSpinnerReducer,
+    userDetails: userDetailsReducer,
 });

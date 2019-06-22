@@ -3,7 +3,7 @@ import jwt_decode from "jwt-decode";
 import React, { Component } from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { logoutUser, setCurrentUser } from "./actions/getAuth";
+import { getUserDetails, logoutUser, setCurrentUser } from "./actions/getAuth";
 import "./App.css";
 import configureStore from "./store";
 import setAuthToken from "./utils/setAuthToken";
@@ -23,6 +23,7 @@ import theme from "./utils/theme";
 
 import * as darksky from "dark-sky-api";
 import * as weather from "openweather-apis";
+import { IUser } from "./utils/types";
 
 // Create redux store with history
 const history: any = createHistory();
@@ -35,7 +36,9 @@ if (localStorage.jwtToken) {
     const decoded: any = jwt_decode(localStorage.jwtToken);
     // Set user and isAuthenticated
     if (localStorage.user) {
-        store.dispatch(setCurrentUser(JSON.parse(localStorage.user)));
+        const user: IUser = JSON.parse(localStorage.user);
+        store.dispatch(setCurrentUser(user));
+        store.dispatch(getUserDetails(user.id));
         setAuthToken(localStorage.jwtToken);
     }
 

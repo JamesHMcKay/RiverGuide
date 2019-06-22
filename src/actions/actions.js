@@ -11,7 +11,6 @@ import {
     GENERATE_FILTERED_LIST,
     CLOSE_INFO,
     UPDATE_OPEN_LOG,
-    ADD_TO_FAVOURITES,
     REMOVE_FROM_FAVOURITES,
     SET_MAP_BOUNDS,
     SET_FILTER,
@@ -237,10 +236,6 @@ export const createLogEntry = logEntry => dispatch => {
         payload: "logTrip",
     });
     axios.post(riverapiLocation + "logs", logEntry).then(res => {
-        // dispatch({
-        //     type: APPEND_LOGS,
-        //     payload: res.data,
-        // });
         dispatch({
             type: CLEAR_LOADING_SPINNER,
         });
@@ -285,21 +280,6 @@ export const deleteLogEntry = logId => dispatch => {
             payload: logId,
         });
     });
-};
-
-// add to favourites
-export const addToFavourites = (guideId, email) => dispatch => {
-    axios
-        .put(`${serverLocation}/users/current/add-favourite/${guideId}`, {
-            email,
-        })
-        .then(res => {
-            dispatch({
-                type: ADD_TO_FAVOURITES,
-                payload: guideId,
-            });
-        })
-        .catch(err => console.log(err));
 };
 
 // remove from favourites

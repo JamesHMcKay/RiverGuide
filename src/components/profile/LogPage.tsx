@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import {
-    addToFavourites,
     closeInfoPage,
     removeFromFavourites,
     toggleModal,
@@ -36,7 +35,6 @@ interface ILogPageProps extends ILogPageStateProps {
     toggleModal: (modal?: string) => void;
     closeInfoPage: () => void;
     removeFromFavourites: (guideId: string, email: string) => void;
-    addToFavourites: (guideId: string, email: string) => void;
 }
 
 class LogPage extends Component<ILogPageProps> {
@@ -122,5 +120,5 @@ function mapStateToProps(state: IState): ILogPageStateProps {
 
 export default connect(
     mapStateToProps,
-    { closeInfoPage, addToFavourites, removeFromFavourites, toggleModal },
+    { closeInfoPage, removeFromFavourites, toggleModal },
 )(LogPage);

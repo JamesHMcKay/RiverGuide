@@ -7,7 +7,8 @@ import { CircularProgress, List } from "@material-ui/core";
 
 // Components
 import { IState } from "../../reducers/index";
-import { IAuth, IGauge, IInfoPage, IListEntry } from "./../../utils/types";
+import { IAuth, IGauge, IInfoPage, IListEntry, IUserDetails } from "./../../utils/types";
+import FavGroup from "./FavGroup";
 // Styles
 import "./LeftPanel.css";
 import ListGroup from "./ListGroup";
@@ -24,6 +25,7 @@ interface ILeftPanelProps extends ILeftPanelStateProps {
 interface ILeftPanelStateProps {
     auth: IAuth;
     infoPage: IInfoPage;
+    userDetails: IUserDetails;
 }
 
 class LeftPanel extends Component<ILeftPanelProps, {}> {
@@ -48,11 +50,15 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
     public render(): JSX.Element {
         const isAuthenticated: boolean = this.props.auth.isAuthenticated;
         const isLoading: boolean = this.props.filteredList.length < 1;
+        const favourites: string[] = this.props.userDetails.user_favourites;
 
+        const favList: IListEntry[] = this.props.filteredList.filter(
+            (item: IListEntry) => favourites.indexOf(item.id) > -1,
+        );
         const renderedList: JSX.Element = (
             <List>
                 {this.props.specialItem && this.props.specialItem}
-                {isAuthenticated && <ListGroup listEntries = {this.props.filteredList} region="Favourites" />}
+                {isAuthenticated && <FavGroup listEntries={favList}/>}
                 {this.props.filteredList
                     .map(this.getRegion)
                     .filter(this.onlyUnique)
@@ -79,6 +85,7 @@ function mapStateToProps(state: IState): ILeftPanelStateProps {
     return ({
         auth: state.auth,
         infoPage: state.infoPage,
+        userDetails: state.userDetails,
     });
 }
 

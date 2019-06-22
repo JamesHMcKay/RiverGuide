@@ -2,23 +2,23 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import title_image from "../../img/riverwiki.jpg";
-import KeyFactsCard from "./KeyFactsCard";
-
 import {
-    addToFavourites,
     closeInfoPage,
     removeFromFavourites,
     toggleModal,
 } from "../../actions/actions";
+import { addToFavourites } from "../../actions/getAuth";
+import title_image from "../../img/riverwiki.jpg";
 import { IState } from "../../reducers/index";
-import { IAuth, IInfoPage, IListEntry, ILogComplete, ILogListItem, IMarker } from "../../utils/types";
+import { IAuth, IInfoPage, IListEntry, ILogComplete, ILogListItem, IMarker, IUserDetails } from "../../utils/types";
 import { CurrentWeather } from "./CurrentWeather";
 import "./Info.css";
+import KeyFactsCard from "./KeyFactsCard";
 import { WeatherStore } from "./WeatherStore";
 
 // Material UI
 import { Button, IconButton, Tooltip } from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -44,7 +44,6 @@ const columnOrder: Array<keyof ILogListItem> = [
   ];
 
 interface IInfoState {
-    favourited: boolean;
     selectedType: string;
 }
 
@@ -53,23 +52,22 @@ interface IInfoStateProps {
     infoPage: IInfoPage;
     weatherStore: WeatherStore;
     log: ILogComplete[];
+    userDetails: IUserDetails;
+    loadingSpinner: string;
 }
 
 interface IInfoProps extends IInfoStateProps {
     toggleModal: (modal?: string) => void;
     closeInfoPage: () => void;
     removeFromFavourites: (guideId: string, email: string) => void;
-    addToFavourites: (guideId: string, email: string) => void;
+    addToFavourites: (userDetails: IUserDetails) => void;
     isLogbookInfo: boolean;
 }
 
 class Info extends Component<IInfoProps, IInfoState> {
     constructor(props: IInfoProps) {
         super(props);
-        const favourited: boolean = false;
-
         this.state = {
-            favourited,
             selectedType: "Public",
         };
     }
@@ -80,31 +78,50 @@ class Info extends Component<IInfoProps, IInfoState> {
 
     public handleClose = (): void => this.props.closeInfoPage();
 
-    public toggleFavourite = (): void => {
-        const { favourited } = this.state;
+    public toggleFavourite = (isFav: boolean): void => {
         const guideId: string = this.props.infoPage.selectedGuide.id;
-        const { email } = this.props.auth.user;
 
-        this.setState({ favourited: !favourited });
-        if (favourited) {
-            this.props.removeFromFavourites(guideId, email);
+        if (isFav) {
+            const newUserDetails: IUserDetails = {
+                ...this.props.userDetails,
+                user_favourites: this.props.userDetails.user_favourites.filter(
+                    (item: string) => item !== guideId,
+                ),
+            };
+
+            this.props.addToFavourites(newUserDetails);
         } else {
-            this.props.addToFavourites(guideId, email);
+            const newUserDetails: IUserDetails = {
+                ...this.props.userDetails,
+                user_favourites: this.props.userDetails.user_favourites.concat(guideId),
+            };
+            this.props.addToFavourites(newUserDetails);
         }
     }
 
     public getFavButton = (): JSX.Element => {
+        if (this.props.loadingSpinner === "favButton") {
+            return (
+                <CircularProgress/>
+            );
+        }
+
+        const guideId: string = this.props.infoPage.selectedGuide.id;
+        const isFav: boolean = this.props.userDetails.user_favourites.filter(
+            (item: string) => item === guideId,
+        ).length > 0;
+
         return (
             <Tooltip
                 title={
-                    this.state.favourited
+                    isFav
                         ? "Remove from favourites"
                         : "Add to favourites"
                 }
                 placement="right"
             >
-            <IconButton onClick={this.toggleFavourite}>
-                {this.state.favourited ? (
+            <IconButton onClick={(): void => {this.toggleFavourite(isFav); }}>
+                {isFav ? (
                     <FavoriteIcon style={{ color: "#fb1" }} />
                 ) : (
                     <FavoriteBorder style={{ color: "#fff" }} />
@@ -346,6 +363,8 @@ function mapStateToProps(state: IState): IInfoStateProps {
         infoPage: state.infoPage,
         weatherStore: state.weatherStore,
         log: state.log,
+        userDetails: state.userDetails,
+        loadingSpinner: state.loadingSpinner,
     });
 }
 

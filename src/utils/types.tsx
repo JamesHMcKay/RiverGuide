@@ -20,13 +20,6 @@ export interface IMarker {
     category: string;
 }
 
-// export interface IMarker {
-//     name: string;
-//     lat: number;
-//     lng: number;
-//     id: string;
-// }
-
 export interface IGradeRange {
     from: string;
     to: string;
@@ -146,6 +139,12 @@ export interface IUserData extends ILoginDetails {
 
 export interface IOpenLog {
     _id: string;
+}
+
+export interface IUserDetails {
+    id: string;
+    user_favourites: string[];
+    user_id: string;
 }
 
 export interface IUser {
