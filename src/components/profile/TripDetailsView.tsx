@@ -16,7 +16,7 @@ interface ITripDetailsViewProps extends ITripDetailsViewStateProps {
 
 interface ITripDetailsViewStateProps {
     isOpen: boolean;
-    selectedLogId: string;
+    selectedLogId: string[];
     log: ILogComplete[];
     listEntries: IListEntry[];
     infoPage: IInfoPage;
@@ -35,7 +35,7 @@ class TripDetailsView extends Component<ITripDetailsViewProps> {
         const logs: ILogComplete[] = this.props.log.concat(this.props.infoPage.logs || []);
         if (this.props.selectedLogId !== null) {
             const selectedLog: ILogComplete[] = logs.filter(
-                (item: ILogComplete) => item.log_id === this.props.selectedLogId,
+                (item: ILogComplete) => item.log_id === this.props.selectedLogId[0],
             );
             return selectedLog[0];
         }
