@@ -18,6 +18,7 @@ import Info from "../infoPanel/Info";
 import LeftPanel from "../leftPanel/LeftPanel";
 import ListItemSpecial from "../leftPanel/ListItemSpecial";
 import { MapComponent } from "../map/MapComponent";
+import { CONTENT_HEIGHT, CONTENT_HEIGHT_MOBILE } from "../Panel";
 import LogPage from "./LogPage";
 import "./profile.css";
 
@@ -75,18 +76,18 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
             );
     }
 
-    public getInfoPage = (): JSX.Element => {
+    public getInfoPage = (viewHeight: string): JSX.Element => {
         if (this.props.logPageOpen) {
             return (
                 <LogPage/>
             );
         }
         return (
-            <Info isLogbookInfo={true}/>
+            <Info isLogbookInfo={true} viewHeight={viewHeight}/>
         );
     }
 
-    public getMapPage = (): JSX.Element => {
+    public getMapPage = (viewHeight: string): JSX.Element => {
         return (
                 <MapComponent
                     ref={this.state.mapRef}
@@ -97,6 +98,7 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
                     }
                     onClick={this.onClick}
                     setMapBounds={this.updateMapBounds}
+                    viewHeight={viewHeight}
                 />
         );
     }
@@ -109,13 +111,18 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
 
     public getToggleButton = (): JSX.Element => {
         return (
-          <div style = {{width: "100%"}}>
-            <ToggleButtonGroup value={this.state.search_panel} exclusive onChange={this.handleToggle}>
-              <ToggleButton value="list" style = {{width: "50%"}}>
-                <p> Search List </p>
+          <div style = {{width: "100%", height: "5vh"}}>
+            <ToggleButtonGroup
+                value={this.state.search_panel}
+                exclusive
+                onChange={this.handleToggle}
+                style = {{width: "100%"}}
+            >
+              <ToggleButton value="list" style = {{width: "50%", height: "5vh"}}>
+               List view
               </ToggleButton>
-              <ToggleButton value="map" style = {{width: "50%"}}>
-              <p> Map </p>
+              <ToggleButton value="map" style = {{width: "50%", height: "5vh"}}>
+              Map view
               </ToggleButton>
             </ToggleButtonGroup>
           </div>
@@ -126,14 +133,7 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
         return self.indexOf(value) === index;
     }
 
-    public getleftPanel = (): JSX.Element => {
-        // const guideIdWithEntry: string[] = this.props.log.map(
-        //     (item: ILogComplete) => item.guide_id,
-        // ).filter(this.onlyUnique);
-        // const hasLogEntry: IListEntry[] = this.props.filterdGuides.filter(
-        //     (item: IListEntry) => guideIdWithEntry.indexOf(item.id) >= 0,
-        // );
-
+    public getleftPanel = (viewHeight: string): JSX.Element => {
         return (
             <div className="left-panel">
                 <LeftPanel
@@ -142,6 +142,7 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
                     onClick={this.onClick}
                     filteredList={this.props.filterdGuides}
                     specialItem={<ListItemSpecial/>}
+                    viewHeight={viewHeight}
                 />
             </div>
         );
@@ -151,20 +152,21 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
         const infoOpen: boolean = this.props.infoPage.infoSelected || this.props.logPageOpen;
         return (
             <Grid container spacing={0}>
-            <Hidden mdUp>
-                {!infoOpen && this.getToggleButton()}
-            </Hidden>
-            <Hidden smDown>
+             <Hidden smDown>
             <Grid item sm={4}>
-                    {this.getleftPanel()}
+                    {this.getleftPanel(CONTENT_HEIGHT)}
                 </Grid>
                 <Grid item sm={8}>
-                    {infoOpen ? this.getInfoPage() : this.getMapPage()}
+                    {infoOpen ? this.getInfoPage(CONTENT_HEIGHT) : this.getMapPage(CONTENT_HEIGHT)}
                 </Grid>
             </Hidden>
             <Hidden mdUp>
-                {infoOpen ? this.getInfoPage() :
-                    this.state.search_panel === "list" ? this.getleftPanel() : this.getMapPage()}
+                {infoOpen ? this.getInfoPage(CONTENT_HEIGHT_MOBILE) :
+                    this.state.search_panel === "list" ?
+                    this.getleftPanel(CONTENT_HEIGHT_MOBILE) : this.getMapPage(CONTENT_HEIGHT_MOBILE)}
+            </Hidden>
+            <Hidden mdUp>
+                {!infoOpen && this.getToggleButton()}
             </Hidden>
             </Grid>
         );

@@ -1,3 +1,4 @@
+import MenuIcon from "@material-ui/icons/Menu";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -17,6 +18,14 @@ import { IAuth } from "../utils/types";
 import logo from "../img/RiverWikiLogo.png";
 
 // Styles
+import Divider from "@material-ui/core/Divider";
+import Drawer from "@material-ui/core/Drawer";
+import Hidden from "@material-ui/core/Hidden";
+import IconButton from "@material-ui/core/IconButton";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import "./Navbar.css";
 
 export interface IMenuItem {
@@ -29,6 +38,21 @@ const userMenuItems: IMenuItem[] = [
     { name: "My profile", route: "profile" },
 ];
 
+const AUTH_MODALS: IMenuItem[] = [
+    {name: "Log a trip", route: "", modal: "addTripAnyPage"},
+    {name: "Log out", route: "", modal: "logoutModal"},
+];
+
+const NO_AUTH_MODALS: IMenuItem[] = [
+    {name: "Sign up", route: "", modal: "registerModal"},
+    {name: "Log in", route: "", modal: "loginModal"},
+];
+
+const MODALS: IMenuItem[] = [
+    {name: "Data for good", route: "", modal: "dataForGoodModal"},
+    {name: "Contact", route: "", modal: "ContactModal"},
+];
+
 interface INavBarProps {
     toggleModal: (modal: string) => void;
     auth: IAuth;
@@ -38,6 +62,7 @@ interface INavBarProps {
 interface INavBarState {
     anchorEl: any;
     mapView: boolean;
+    drawOpen: boolean;
 }
 
 class NavBar extends Component<INavBarProps, INavBarState> {
@@ -46,7 +71,20 @@ class NavBar extends Component<INavBarProps, INavBarState> {
         this.state = {
             anchorEl: null,
             mapView: true,
+            drawOpen: false,
         };
+    }
+
+    public handleDrawOpen = (event: any): void => {
+        this.setState({
+            drawOpen: true,
+        });
+    }
+
+    public handleDrawClose = (event: any): void => {
+        this.setState({
+            drawOpen: false,
+        });
     }
 
     public handleMenu = (event: any): void => {
@@ -77,6 +115,84 @@ class NavBar extends Component<INavBarProps, INavBarState> {
     public handleProfileLink = (): void => {
         this.setState({ mapView: false });
     }
+
+    public toggleDrawer = (open: boolean): any => (
+        event: React.KeyboardEvent | React.MouseEvent,
+      ): any => {
+        if (
+          event.type === "keydown" &&
+          ((event as React.KeyboardEvent).key === "Tab" ||
+            (event as React.KeyboardEvent).key === "Shift")
+        ) {
+          return;
+        }
+        this.setState({drawOpen: open });
+      }
+
+      public getListAuthenticated = (): JSX.Element => {
+          return (
+        <div
+          style={{width: 250}}
+          role="presentation"
+          onClick={this.toggleDrawer(false)}
+          onKeyDown={this.toggleDrawer(false)}
+        >
+          <List>
+          <div onKeyDown={this.toggleDrawer(false)}>
+                <IconButton onClick={this.handleDrawClose}>
+                {<ChevronRightIcon />}
+                </IconButton>
+                </div>
+            <Divider />
+
+                <ListItem button key={"profile"}>
+                <Link
+                to={"/profile"}
+                key={"profile"}
+            >
+                <ListItemText primary={"My profile"} />
+                </Link>
+                </ListItem>
+
+          </List>
+          <Divider />
+          <List>
+            {AUTH_MODALS.concat(MODALS).map((item: IMenuItem) => (
+              <ListItem button key={item.name} onClick={(): void => {this.openModal(item.modal || ""); }}>
+                <ListItemText primary={item.name} />
+              </ListItem>
+            ))}
+          </List>
+        </div>
+      );
+    }
+
+    public getListNotAuthenticated = (): JSX.Element => {
+        return (
+      <div
+        style={{width: 250}}
+        role="presentation"
+        onClick={this.toggleDrawer(false)}
+        onKeyDown={this.toggleDrawer(false)}
+      >
+        <List>
+        <div onKeyDown={this.toggleDrawer(false)}>
+              <IconButton onClick={this.handleDrawClose}>
+              {<ChevronRightIcon />}
+              </IconButton>
+              </div>
+          <Divider />
+          </List>
+        <List>
+          {NO_AUTH_MODALS.concat(MODALS).map((item: IMenuItem) => (
+            <ListItem button key={item.name} onClick={(): void => {this.openModal(item.modal || ""); }}>
+              <ListItemText primary={item.name} />
+            </ListItem>
+          ))}
+        </List>
+      </div>
+    );
+  }
 
     public render(): JSX.Element {
         const { anchorEl } = this.state;
@@ -148,11 +264,23 @@ class NavBar extends Component<INavBarProps, INavBarState> {
             </div>
         );
 
+        const burgerButtonMobile: JSX.Element = (
+            <IconButton
+                color="primary"
+                aria-label="Open drawer"
+                onClick={this.handleDrawOpen}
+                edge="start"
+                style={{float: "right", right: "10px", position: "absolute"}}
+          >
+            <MenuIcon />
+          </IconButton>
+        );
+
         return (
-            <div>
+            <div className="nav-bar-section" >
                 <AppBar position="static">
-                    <Toolbar style={{ background: "#fff" }}>
-                        <div className="centered-logo">
+                    <Toolbar style={{ background: "#fff", height: "10vh", display: "flex", flexDirection: "row"}}>
+                        <div style={{margin: "auto"}} >
                             <Link to="/" onClick={this.handleMapLink}>
                                 <div>
                                     <img
@@ -163,9 +291,21 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                                 </div>
                             </Link>
                         </div>
-                        {isAuthenticated ? authButtons : noAuthButtons}
+                        <Hidden smDown>
+                            {isAuthenticated ? authButtons : noAuthButtons}
+                        </Hidden>
+                        <Hidden mdUp>
+                            {burgerButtonMobile}
+                        </Hidden>
                     </Toolbar>
                 </AppBar>
+                <Drawer
+                    variant="persistent"
+                    anchor="right"
+                    open={this.state.drawOpen}
+                >
+                {isAuthenticated ? this.getListAuthenticated() : this.getListNotAuthenticated()}
+                </Drawer>
             </div>
         );
     }

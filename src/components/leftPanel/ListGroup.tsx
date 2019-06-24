@@ -64,9 +64,13 @@ class ListGroup extends Component<IListGroupProps, IListGroupState> {
         return 0;
     }
 
+    public isSearch = (): boolean => {
+        return this.props.filters.searchString.length > 3;
+    }
+
     public render(): JSX.Element {
         const children: IRiverRegion[] = this.getChildren();
-        const isExpanded: boolean = this.props.filters.searchString !== "" || this.state.isExpanded;
+        const isExpanded: boolean = this.isSearch() || this.state.isExpanded;
         const isSelected: boolean = this.props.filters.searchString === "" && this.state.isExpanded;
         return (
             <div>

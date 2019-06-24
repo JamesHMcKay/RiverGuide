@@ -367,7 +367,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                     <DialogContentText>
                         {"Number of participants"}
                     </DialogContentText>
-                    <div className="person-count">
+                    <div className="person-count" style={{justifyContent: "center"}}>
                         {this.getPersonList()}
                     </div>
                     {this.state.peopleCount > 5 &&
@@ -408,13 +408,16 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                     </DialogContentText>
                     <TextField
                             autoFocus
+                            multiline
+                            variant="outlined"
+                            rowsMax="8"
                             margin="dense"
                             id="comments"
                             type="text"
                             value={this.state.logEntry.description}
                             onChange={this.updateDescription}
                             fullWidth={true}
-                        />
+                    />
                     {(selectedGuide && this.state.date) &&
                         <FlowReport
                             selectedGuide={selectedGuide}

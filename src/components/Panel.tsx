@@ -29,6 +29,9 @@ import {
 // Styles
 import "./Panel.css";
 
+export const CONTENT_HEIGHT_MOBILE: string = "67vh";
+export const CONTENT_HEIGHT: string = "82vh";
+
 export interface IPanelState {
     infoSelected: boolean;
     search_panel: string;
@@ -80,13 +83,13 @@ class Panel extends Component<IPanelProps, IPanelState> {
             );
     }
 
-    public getInfoPage = (): JSX.Element => {
+    public getInfoPage = (viewHeight: string): JSX.Element => {
         return (
-            <Info isLogbookInfo={false}/>
+            <Info isLogbookInfo={false} viewHeight={viewHeight}/>
         );
     }
 
-    public getMapPage = (): JSX.Element => {
+    public getMapPage = (viewHeight: string): JSX.Element => {
         return (
                 <MapComponent
                     ref={this.state.mapRef}
@@ -97,6 +100,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
                     }
                     onClick={this.onClick}
                     setMapBounds={this.updateMapBounds}
+                    viewHeight={viewHeight}
                 />
         );
     }
@@ -109,20 +113,25 @@ class Panel extends Component<IPanelProps, IPanelState> {
 
     public getToggleButton = (): JSX.Element => {
         return (
-          <div style = {{width: "100%"}}>
-            <ToggleButtonGroup value={this.state.search_panel} exclusive onChange={this.handleToggle}>
-              <ToggleButton value="list" style = {{width: "50%"}}>
-                <p> Search List </p>
+          <div style = {{width: "100%", height: "5vh"}}>
+            <ToggleButtonGroup
+                value={this.state.search_panel}
+                exclusive
+                onChange={this.handleToggle}
+                style = {{width: "100%"}}
+            >
+              <ToggleButton value="list" style = {{width: "50%", height: "5vh"}}>
+               List view
               </ToggleButton>
-              <ToggleButton value="map" style = {{width: "50%"}}>
-              <p> Map </p>
+              <ToggleButton value="map" style = {{width: "50%", height: "5vh"}}>
+              Map view
               </ToggleButton>
             </ToggleButtonGroup>
           </div>
         );
     }
 
-    public getleftPanel = (): JSX.Element => {
+    public getleftPanel = (viewHeight: string): JSX.Element => {
         return (
             <div className="left-panel">
                 <LeftPanel
@@ -130,6 +139,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
                     gauges={this.props.gauges}
                     onClick={this.onClick}
                     filteredList={this.props.filterdGuides}
+                    viewHeight={viewHeight}
                 />
             </div>
         );
@@ -138,20 +148,22 @@ class Panel extends Component<IPanelProps, IPanelState> {
     public render(): JSX.Element {
         return (
             <Grid container spacing={0}>
-            <Hidden mdUp>
-                {!this.props.infoPage.infoSelected && this.getToggleButton()}
-            </Hidden>
             <Hidden smDown>
             <Grid item sm={4}>
-                    {this.getleftPanel()}
+                    {this.getleftPanel(CONTENT_HEIGHT)}
                 </Grid>
                 <Grid item sm={8}>
-                    {this.props.infoPage.infoSelected ? this.getInfoPage() : this.getMapPage()}
+                    {this.props.infoPage.infoSelected ?
+                        this.getInfoPage(CONTENT_HEIGHT) : this.getMapPage(CONTENT_HEIGHT)}
                 </Grid>
             </Hidden>
             <Hidden mdUp>
-                {this.props.infoPage.infoSelected ? this.getInfoPage() :
-                    this.state.search_panel === "list" ? this.getleftPanel() : this.getMapPage()}
+                {this.props.infoPage.infoSelected ? this.getInfoPage(CONTENT_HEIGHT_MOBILE) :
+                    this.state.search_panel === "list" ?
+                    this.getleftPanel(CONTENT_HEIGHT_MOBILE) : this.getMapPage(CONTENT_HEIGHT_MOBILE)}
+            </Hidden>
+            <Hidden mdUp>
+                {!this.props.infoPage.infoSelected && this.getToggleButton()}
             </Hidden>
             </Grid>
         );

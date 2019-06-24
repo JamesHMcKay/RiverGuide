@@ -62,6 +62,7 @@ interface IInfoProps extends IInfoStateProps {
     removeFromFavourites: (guideId: string, email: string) => void;
     addToFavourites: (userDetails: IUserDetails) => void;
     isLogbookInfo: boolean;
+    viewHeight: string;
 }
 
 class Info extends Component<IInfoProps, IInfoState> {
@@ -307,7 +308,13 @@ class Info extends Component<IInfoProps, IInfoState> {
         const entry: IListEntry = this.props.infoPage.selectedGuide;
         const isLogbookInfo: boolean = this.props.isLogbookInfo;
         return (
-            <Grid container item xs={12} spacing={0} justify="space-between" className="right-panel" >
+            <Grid
+                container
+                item xs={12}
+                spacing={0}
+                justify="space-between"
+                style={{float: "right", overflowY: "auto", height: this.props.viewHeight}}
+            >
                 <Grid
                     container
                     item
@@ -321,7 +328,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                         backgroundRepeat: "no-repeat"}}>
                     <Grid container item md={11} lg={11} justify="flex-start">
                             <div className="toolbar-middle">
-                                    <Typography variant="h3" style={{color: "white"}}>
+                                    <Typography variant="h2" style={{color: "white"}}>
                                     {entry.display_name}
                                     </Typography>
                                     <Typography variant="h6" style={{color: "white"}}>

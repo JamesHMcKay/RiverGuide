@@ -28,6 +28,8 @@ class TripDetailsAnyPage extends Component<ITripDetailsInfoPageProps> {
                     onClose={(): void => this.props.toggleModal()}
                     open={this.props.isOpen}
                     fullScreen={this.props.fullScreen}
+                    fullWidth={true}
+                    maxWidth={"sm"}
                 >
                     <TripDetailsModal
                         handleClose = {(): void => this.props.toggleModal()}

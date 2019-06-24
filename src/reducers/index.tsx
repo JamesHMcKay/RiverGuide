@@ -58,7 +58,7 @@ export interface IState {
     filteredLogList: ILogComplete[];
     selectedLogId: string[];
     logPageOpen: boolean;
-    tabIndex: number;
+    tabIndex: string;
     loadingSpinner: string;
     userDetails: IUserDetails;
 }

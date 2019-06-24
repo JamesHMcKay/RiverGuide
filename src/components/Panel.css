@@ -10,12 +10,6 @@
     display: flex;
 }
 
-.right-panel {
-    float: right;
-    overflow-y: auto;
-    height: 82vh;
-}
-
 .left-panel {
     z-index: 1;
     overflow-y: auto;
@@ -60,7 +54,6 @@ input.form-control-lg.form-control {
 }
 
 .list-container {
-    height: 82vh;
     padding: 0 0 0 0;
     width: 100%;
     background-color: white;

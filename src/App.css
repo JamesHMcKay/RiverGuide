@@ -27,6 +27,12 @@
 
 h1 {
     padding-top: 4px;
+    font-size: 16px;
+}
+
+.MuiTypography-h2 {
+    padding-top: 4px;
+    font-size: 5px;
 }
 
 .icon {
@@ -73,6 +79,23 @@ h1 {
     }
 }
 
+
+/* 
+.search-field {
+    width: 100%;
+} */
 /* Media Querys */
-@media only screen and (max-width: 670px) {
+.search-field {
+    width: 100%;
+}
+/* @media only screen and (max-width: 768px) {
+    .search-field {
+        width: 100%;
+    }
+} */
+/* Media Querys */
+@media only screen and (min-width: 960px) {
+    .search-field {
+        width: 33%;
+    }
 }

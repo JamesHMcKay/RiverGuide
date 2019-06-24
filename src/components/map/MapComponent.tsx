@@ -21,6 +21,7 @@ interface IMapComponentProps {
     filteredGuides: IListEntry[];
     onClick: (guide: IListEntry) => void;
     setMapBounds: (bounds: IMapBounds) => void;
+    viewHeight: string;
 }
 
 interface IMapComponentState {
@@ -360,7 +361,7 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
         };
 
         return (
-            <div style={{height: "82vh", width: "100%"}}>
+            <div style={{height: this.props.viewHeight, width: "100%"}}>
                 <ReactMapGL
                     width="100%"
                     height="100%"

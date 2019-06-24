@@ -33,7 +33,8 @@ class FavGroup extends Component<IFavGroupProps, IFavGroupState> {
     constructor(props: IFavGroupProps) {
         super(props);
         this.state = {
-            isExpanded: props.listEntries.length > 0 ? true : false,
+            // isExpanded: props.listEntries.length > 0 ? true : false,
+            isExpanded: false,
         };
     }
 

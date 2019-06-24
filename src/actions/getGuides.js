@@ -24,7 +24,7 @@ export const setCategory = (category, cancelToken) => dispatch => {
         type: CLOSE_INFO,
     });
 
-    if (category === "gauges") {
+    if (category === "data") {
         const request = {
             action: "get_features",
             filters: ["flow"],

@@ -1,6 +1,6 @@
 import { SET_TAB_INDEX } from "../actions/types";
 
-const initialState = 1;
+const initialState = "activities";
 
 export default function(state = initialState, action) {
     switch (action.type) {

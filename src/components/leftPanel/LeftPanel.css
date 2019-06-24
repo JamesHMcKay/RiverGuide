@@ -73,5 +73,12 @@
 
 .loader {
     width: 10%;
-    margin: 2em auto;
+    padding-left: 50%;
+    padding-top: 30%;
+}
+
+.noresults {
+    width: 100%;
+    padding-left: 40%;
+    padding-top: 30%;
 }

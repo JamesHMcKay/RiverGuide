@@ -29,10 +29,10 @@ class GuideItem extends Component<IGuideItemProps, {}> {
         return (
             <div>
                 <ListItem button onClick={this.handleClick}>
-                    <ListItemIcon style = {{marginLeft: "2em"}}>
+                    <ListItemIcon style = {{marginLeft: "1.5em"}}>
                         <PlaceIcon />
                     </ListItemIcon>
-                    <ListItemText inset primary={this.props.guide.display_name} />
+                    <ListItemText  primary={this.props.guide.display_name} />
                     <FlowBadge gaugeId={this.props.guide.gauge_id} observables={this.props.guide.observables} />
                 </ListItem>
                 <Divider />

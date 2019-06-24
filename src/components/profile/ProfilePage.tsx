@@ -138,7 +138,7 @@ class ProfilePage extends Component<IProfilePageProps, IProfilePageState> {
 
     public render(): JSX.Element {
         return (
-            <Grid container spacing={0} justify={"center"}>
+            <Grid container spacing={0} justify={"center"} style={{height: "82vh"}}>
                 <List style={{ width: "100%", maxWidth: 360}}>
                 {!this.props.auth.isAuthenticated &&
                     <ListItem>

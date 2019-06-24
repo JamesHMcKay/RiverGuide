@@ -16,7 +16,6 @@ import {
     SET_FILTER,
     GET_GAUGE_HISTORY,
     CLEAR_GAUGE_HISTORY,
-    GENERATE_FILTERED_LOG_LIST,
     SET_LOG_GUIDE_NAMES,
     SET_SELECTED_LOG_ID,
     GET_LOGS,
@@ -148,32 +147,42 @@ export const filterGuideList = (attribute, values) => dispatch => {
     });
 };
 
-export const generateFilteredList = (entries, searchString, mapBounds, isLogList) => dispatch => {
-    if (isLogList) {
-        dispatch({
-            type: GENERATE_FILTERED_LOG_LIST,
-            payload: {
-                entries,
-                searchString,
-            },
-        });
-    } else {
-        dispatch({
-            type: GENERATE_FILTERED_LIST,
-            payload: {
-                entries,
-                searchString,
-                mapBounds,
-            },
-        });
-    }
-
+export const setSearchString = (searchString) => dispatch => {
     dispatch({
         type: SET_FILTER,
         payload: {
             searchString,
         },
     });
+};
+
+export const generateFilteredList = (entries, searchString, mapBounds) => dispatch => {
+    dispatch({
+        type: GENERATE_FILTERED_LIST,
+        payload: {
+            entries,
+            searchString,
+            mapBounds,
+        },
+    });
+    // if (isLogList) {
+    //     dispatch({
+    //         type: GENERATE_FILTERED_LOG_LIST,
+    //         payload: {
+    //             entries,
+    //             searchString,
+    //         },
+    //     });
+    // } else {
+    //     dispatch({
+    //         type: GENERATE_FILTERED_LIST,
+    //         payload: {
+    //             entries,
+    //             searchString,
+    //             mapBounds,
+    //         },
+    //     });
+    // }
 };
 
 export const getGaugeHistory = gaugeId => dispatch => {

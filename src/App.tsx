@@ -21,8 +21,10 @@ import ConnectPage from "./components/connect/Connect";
 import ControlBar from "./components/ControlBar";
 import theme from "./utils/theme";
 
+import Hidden from "@material-ui/core/Hidden";
 import * as darksky from "dark-sky-api";
 import * as weather from "openweather-apis";
+import BottomNav from "./components/leftPanel/BottomNav";
 import { IUser } from "./utils/types";
 
 // Create redux store with history
@@ -67,12 +69,12 @@ class App extends Component {
                 <BrowserRouter>
                     <MuiThemeProvider theme={theme}>
                         <div className="App">
-                            <NavBar />
+                            <NavBar/>
                             <Route component={ControlBar} />
                             <Switch>
                                 <Route
                                     exact
-                                    path={["/whitewater", "/gauges", "/jetboating", "/fishing", "/"]}
+                                    path={["/activities", "/data", "/"]}
                                     component={Panel}
                                 />
                                 <Route
@@ -85,6 +87,9 @@ class App extends Component {
                                 />
                                 <Route exact path="/connect/:provider" component={ConnectPage} />
                             </Switch>
+                            <Hidden mdUp>
+                                <Route component={BottomNav} />
+                            </Hidden>
                             <Modals />
                         </div>
                     </MuiThemeProvider>

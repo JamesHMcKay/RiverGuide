@@ -1,6 +1,6 @@
 import { createMuiTheme, Theme } from "@material-ui/core/styles";
 
-const theme: Theme = createMuiTheme({
+const defaultTheme: Theme = createMuiTheme({
     typography: {
         fontFamily: [
             "-apple-system",
@@ -27,5 +27,21 @@ const theme: Theme = createMuiTheme({
         // }
     },
 });
+
+const { breakpoints } = defaultTheme;
+
+const theme: Theme = {
+  ...defaultTheme,
+  overrides: {
+    MuiTypography: {
+        subtitle1: {
+        fontSize: "16px",
+        [breakpoints.down("xs")]: {
+          fontSize: "16px",
+        },
+      },
+    },
+  },
+};
 
 export default theme;

@@ -7,7 +7,7 @@ import { CircularProgress, List } from "@material-ui/core";
 
 // Components
 import { IState } from "../../reducers/index";
-import { IAuth, IGauge, IInfoPage, IListEntry, IUserDetails } from "./../../utils/types";
+import { IAuth, IFilter, IGauge, IInfoPage, IListEntry, IUserDetails } from "./../../utils/types";
 import FavGroup from "./FavGroup";
 // Styles
 import "./LeftPanel.css";
@@ -20,12 +20,15 @@ interface ILeftPanelProps extends ILeftPanelStateProps {
     onClick: (guide: IListEntry) => void;
     filteredList: IListEntry[];
     specialItem?: JSX.Element;
+    viewHeight: string;
 }
 
 interface ILeftPanelStateProps {
     auth: IAuth;
     infoPage: IInfoPage;
     userDetails: IUserDetails;
+    listEntries: IListEntry[];
+    filters: IFilter;
 }
 
 class LeftPanel extends Component<ILeftPanelProps, {}> {
@@ -47,9 +50,25 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
         listEntries = {this.props.filteredList} key={idx} region={region}
     />
 
+    public loadingOrEmpty = (noResults: boolean): JSX.Element => {
+        if (noResults) {
+            return (
+                <div className="noresults">
+                    {"No results"}
+                </div>
+            );
+        }
+        return (
+            <div className="loader">
+                <CircularProgress size={20} />
+            </div>
+        );
+    }
+
     public render(): JSX.Element {
         const isAuthenticated: boolean = this.props.auth.isAuthenticated;
-        const isLoading: boolean = this.props.filteredList.length < 1;
+        const isLoading: boolean = this.props.listEntries.length < 1;
+        const noResults: boolean = !isLoading && this.props.filteredList.length < 1;
         const favourites: string[] = this.props.userDetails.user_favourites;
 
         const favList: IListEntry[] = this.props.filteredList.filter(
@@ -58,7 +77,7 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
         const renderedList: JSX.Element = (
             <List>
                 {this.props.specialItem && this.props.specialItem}
-                {isAuthenticated && <FavGroup listEntries={favList}/>}
+                {(isAuthenticated && !noResults) && <FavGroup listEntries={favList}/>}
                 {this.props.filteredList
                     .map(this.getRegion)
                     .filter(this.onlyUnique)
@@ -67,15 +86,9 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
             </List>
         );
 
-        const loading: JSX.Element = (
-            <div className="loader">
-                <CircularProgress size={20} />
-            </div>
-        );
-
         return (
-            <div className="list-container">
-                {isLoading ? loading : renderedList}
+            <div className="list-container" style={{height: this.props.viewHeight}}>
+                {isLoading || noResults ? this.loadingOrEmpty(noResults) : renderedList}
             </div>
         );
     }
@@ -86,6 +99,8 @@ function mapStateToProps(state: IState): ILeftPanelStateProps {
         auth: state.auth,
         infoPage: state.infoPage,
         userDetails: state.userDetails,
+        listEntries: state.listEntries,
+        filters: state.filters,
     });
 }
 
