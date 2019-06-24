@@ -158,7 +158,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
                 </Grid>
             </Hidden>
             <Hidden mdUp>
-                {this.props.infoPage.infoSelected ? this.getInfoPage(CONTENT_HEIGHT_MOBILE) :
+                {this.props.infoPage.infoSelected ? this.getInfoPage("72vh") :
                     this.state.search_panel === "list" ?
                     this.getleftPanel(CONTENT_HEIGHT_MOBILE) : this.getMapPage(CONTENT_HEIGHT_MOBILE)}
             </Hidden>

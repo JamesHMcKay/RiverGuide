@@ -1,5 +1,5 @@
 // Material UI
-import { AppBar, Tab, Tabs, Toolbar } from "@material-ui/core";
+import { Tab, Tabs, Toolbar } from "@material-ui/core";
 import Hidden from "@material-ui/core/Hidden";
 import { CancelTokenSource } from "axios";
 import axios from "axios";
@@ -97,38 +97,36 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
 
     public render(): JSX.Element {
         return (
-            <AppBar position="static" style={{ zIndex: 2, height: "8vh" }}>
-                <Toolbar>
-                    <SearchBox/>
-                    <Hidden smDown>
-                    <div
+            <Toolbar>
+                <SearchBox/>
+                <Hidden smDown>
+                <div
+                    style={{
+                        width: "73%",
+                        margin: "0 auto",
+                        color: "#fff",
+                    }}
+                >
+                    <Tabs
+                        value={tabIds.indexOf(this.props.index)}
                         style={{
-                            width: "73%",
-                            margin: "0 auto",
                             color: "#fff",
                         }}
                     >
-                        <Tabs
-                            value={tabIds.indexOf(this.props.index)}
-                            style={{
-                                color: "#fff",
-                            }}
-                        >
-                            {categories.map((item: ITabCategory) => (
-                                <Tab
-                                    component={RouterLink}
-                                    to={item.route}
-                                    label={item.name}
-                                    key={item.name}
-                                    onClick={(event: any): void => this.handleSelect(event, item.id)}
-                                    style={{color: "white"}}
-                                />
-                            ))}
-                        </Tabs>
-                    </div>
-                    </Hidden>
-                </Toolbar>
-            </AppBar>
+                        {categories.map((item: ITabCategory) => (
+                            <Tab
+                                component={RouterLink}
+                                to={item.route}
+                                label={item.name}
+                                key={item.name}
+                                onClick={(event: any): void => this.handleSelect(event, item.id)}
+                                style={{color: "white"}}
+                            />
+                        ))}
+                    </Tabs>
+                </div>
+                </Hidden>
+            </Toolbar>
         );
     }
 }

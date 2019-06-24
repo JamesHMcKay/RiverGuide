@@ -40,6 +40,12 @@ const theme: Theme = {
           fontSize: "16px",
         },
       },
+      h2: {
+        fontSize: "3em",
+        [breakpoints.down("xs")]: {
+          fontSize: "1.5em",
+        },
+      },
     },
   },
 };

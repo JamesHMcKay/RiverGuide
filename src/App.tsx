@@ -18,7 +18,7 @@ import Modals from "./components/utils/Modals";
 import createHistory from "history/createBrowserHistory";
 import ConnectPage from "./components/connect/Connect";
 
-import ControlBar from "./components/ControlBar";
+import TabBar from "./components/TabBar";
 import theme from "./utils/theme";
 
 import Hidden from "@material-ui/core/Hidden";
@@ -70,7 +70,7 @@ class App extends Component {
                     <MuiThemeProvider theme={theme}>
                         <div className="App">
                             <NavBar/>
-                            <Route component={ControlBar} />
+                            <Route component={TabBar} />
                             <Switch>
                                 <Route
                                     exact

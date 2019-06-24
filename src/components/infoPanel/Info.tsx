@@ -17,10 +17,10 @@ import KeyFactsCard from "./KeyFactsCard";
 import { WeatherStore } from "./WeatherStore";
 
 // Material UI
-import { Button, IconButton, Tooltip } from "@material-ui/core";
+import { Button, Hidden, IconButton, Tooltip } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import CloseIcon from "@material-ui/icons/Close";
-import EditIcon from "@material-ui/icons/Edit";
+// import EditIcon from "@material-ui/icons/Edit";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 
@@ -137,12 +137,12 @@ class Info extends Component<IInfoProps, IInfoState> {
     public getReportButton = (): JSX.Element => {
         return (
             <Button
-            className="reporting-button"
-            variant="outlined"
-            style={{height: "fit-content", color: "white", borderColor: "white"}}
-            onClick={this.openModal.bind(this, "addTripInfoPage")}
+                className="reporting-button"
+                variant="outlined"
+                style={{height: "fit-content", color: "white", borderColor: "white", float: "right"}}
+                onClick={this.openModal.bind(this, "addTripInfoPage")}
              >
-                Log a trip here
+                Log a trip
             </Button>
         );
     }
@@ -335,28 +335,41 @@ class Info extends Component<IInfoProps, IInfoState> {
                                     {`${entry.river_name} river  •  ${entry.region} `}
                                     </Typography>
                             </div>
-                            {this.props.auth.isAuthenticated && this.getFavButton()}
+                            <Hidden smDown>
+                                {this.props.auth.isAuthenticated && this.getFavButton()}
+                            </Hidden>
                     </Grid>
                     <Grid container item md={1} lg={1} justify="flex-end">
-                            {this.getCloseButton()}
+                            <Hidden smDown>
+                                {this.getCloseButton()}
+                            </Hidden>
+                        </Grid>
+                    <Grid
+                        container
+                        item
+                        spacing={0}
+                        justify="space-between"
+                        style={{display: "flex", flexDirection: "row"}}
+                    >
+                        {/* <Grid item sm={12} md={12} justify="flex-start"> */}
+                            <CurrentWeather
+                                lat={entry.position.lat || 0}
+                                lon={entry.position.lon || 0}
+                                weatherStore={this.props.weatherStore}
+                                onClick= {this.openModal.bind(this, "weatherModal")}
+                                textColor = {"white"}
+                            />
+                        {/* </Grid>
+                        <Grid item sm={12} md={12} justify="flex-end"> */}
+                            {this.props.auth.isAuthenticated && this.getReportButton()}
+                            {/* {this.props.auth.isAuthenticated &&
+                                <Button color="secondary" onClick={this.openModal.bind(this, "editModal")}>
+                                    <EditIcon />
+                                </Button>
+                            } */}
+                        {/* </Grid> */}
                     </Grid>
-                    <Grid container item md={6} lg={6} justify="flex-start">
-                        <CurrentWeather
-                            lat={entry.position.lat || 0}
-                            lon={entry.position.lon || 0}
-                            weatherStore={this.props.weatherStore}
-                            onClick= {this.openModal.bind(this, "weatherModal")}
-                            textColor = {"white"}
-                        />
-                    </Grid>
-                    <Grid container item md={6} lg={6} justify="flex-end">
-                    {this.props.auth.isAuthenticated && this.getReportButton()}
-                    {this.props.auth.isAuthenticated &&
-                        <Button color="secondary" onClick={this.openModal.bind(this, "editModal")}>
-                            <EditIcon />
-                        </Button>
-                    }
-                    </Grid>
+
                 </Grid>
                 {isLogbookInfo && this.getLogbook()}
                 {!isLogbookInfo && this.getKeyFacts()}
