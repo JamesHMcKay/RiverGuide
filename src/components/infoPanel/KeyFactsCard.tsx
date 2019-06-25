@@ -69,26 +69,26 @@ class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
 
     public getKeyFacts = (): JSX.Element => {
         return (
-        <Grid container item spacing={10} justify="space-between">
-        <Grid item md={12} lg={3}>
+        <Grid container item spacing={0} justify="center">
+        <Grid item xs={3} lg={3} justify="center">
         <ListItem>
                 <WarningRounded fontSize="large" />
               <ListItemText primary="Grade" secondary={this.props.itemDetails.gradeOverall} />
             </ListItem>
         </Grid>
-        <Grid item md={12} lg={3}>
+        <Grid item xs={3} lg={3} justify="center">
         <ListItem>
                 <Timeline fontSize="large" />
               <ListItemText primary="Length" secondary={this.getSectionLength()} />
             </ListItem>
         </Grid>
-        <Grid item md={12} lg={3}>
+        <Grid item xs={3} lg={3} justify="center">
         <ListItem>
             <QueryBuilder fontSize="large" />
               <ListItemText primary="Time" secondary={this.getTimeRange()} />
             </ListItem>
         </Grid>
-        <Grid item md={12} lg={3}>
+        <Grid item xs={3} lg={3} justify="center">
         <ListItem>
                 <LandscapeRounded fontSize="large" />
               <ListItemText primary="Gradient" secondary={this.getGradient()} />

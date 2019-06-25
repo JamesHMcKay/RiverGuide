@@ -36,13 +36,13 @@ const theme: Theme = {
     MuiTypography: {
         subtitle1: {
         fontSize: "16px",
-        [breakpoints.down("xs")]: {
+        [breakpoints.down("md")]: {
           fontSize: "16px",
         },
       },
       h2: {
         fontSize: "3em",
-        [breakpoints.down("xs")]: {
+        [breakpoints.down("md")]: {
           fontSize: "1.5em",
         },
       },

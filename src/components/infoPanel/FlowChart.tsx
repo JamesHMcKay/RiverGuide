@@ -128,7 +128,6 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
             valueAxis.tooltip.disabled = true;
         }
         valueAxis.title.text = this.getUnit();
-        // valueAxis.renderer.minWidth = 35;
 
         const series: Am4charts.LineSeries = chart.series.push(new Am4charts.LineSeries());
         series.dataFields.dateX = "date";
@@ -138,31 +137,9 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
 
         dateAxis.tooltipDateFormat = "dd MMM yyyy hh:mma";
         series.tooltipText = "{valueY.value}";
-        // chart.cursor = new Am4charts.XYCursor();
-
-
-        // Create a horizontal scrollbar range selector and place it underneath the date axis
         chart.scrollbarX = new Am4core.Scrollbar();
         chart.scrollbarX.parent = chart.bottomAxesContainer;
-        // chart.seriesContainer.draggable = false;
-        // chart.seriesContainer.resizable = false;
-        // chart.chartScrollbarProperties.enabled = false;
-
-        // set default range to load, range starts -1 ends 1
-        // chart.events.on("ready", (): void => {
-        //     dateAxis.zoom({start: 0.50, end: 1});
-        // });
     }
-
-    // public getLastUpdated(): JSX.Element {
-    //     return (
-    //         <p className="last-updated-flow">
-    //             <em>
-    //                 Flow Data Last Updated: {this.filterGauges()[0].lastUpdated}
-    //             </em>
-    //         </p>
-    //     );
-    // }
 
     public componentDidUpdate(): void {
         this.setChartOptions();
@@ -209,7 +186,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
                     input={<OutlinedInput labelWidth={40} name="age" id="outlined-age-simple" />}
                     >
                         {observables.map((item: IObservable) =>
-                        <MenuItem value={item.type}>{item.type}</MenuItem>)
+                        <MenuItem value={item.type}>{item.type.toUpperCase()}</MenuItem>)
                         }
                     </Select>
         </FormControl>
@@ -234,6 +211,11 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
                     </Button>
                 </Hidden>
             );
+            result.push(
+                <Hidden mdUp>
+                    {this.getFormSelect()}
+                </Hidden>
+            );
             result.push(<DataDropDown key = "data-drop-down"/>);
             return result;
         } else {
@@ -243,21 +225,19 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
 
     public render(): JSX.Element {
         return (
-                <Grid container item xs={12} spacing={0} justify="space-between">
-                    <div style={{display:"flex", width: "100%", minWidth: "320px"}}>
+            <Grid container item xs={12} spacing={0} justify="space-between">
+                <div style={{display:"flex", width: "100%", minWidth: "320px"}}>
                     <Typography variant="h5" gutterBottom style={{width: "15%"}}>
                         Data
                     </Typography>
-
                     <div className="flow-chart-buttons">
                         {this.getButtons()}
                     </div>
-                    </div>
-
-                    <div id="chartdiv" style={{width: "100%", height: "300px"}}></div>
-                    {/* {this.filterGauges().length > 0 && this.getLastUpdated()} */}
-                </Grid>
-        ); }
+                </div>
+                <div id="chartdiv" style={{width: "100%", height: "300px"}}></div>
+            </Grid>
+        );
+    }
 }
 
 function mapStateToProps(state: IState): IFlowChartStateProps {
