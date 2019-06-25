@@ -23,25 +23,6 @@
     clear: both;
 }
 
-.searchBar {
-    padding-left: 3%;
-    padding-top: 5px;
-    position: relative;
-    background-color: white;
-    height: 30px;
-    width: 30%;
-    border: 0;
-}
-
-.searchBox {
-    padding-left: 3%;
-    padding-top: 5px;
-    position: relative;
-    background-color: white;
-    height: 30px;
-    border: 0;
-}
-
 input.form-control-lg.form-control {
     border: 1px solid #343a40;
 }

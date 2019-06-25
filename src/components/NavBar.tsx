@@ -49,8 +49,8 @@ const NO_AUTH_MODALS: IMenuItem[] = [
 ];
 
 const MODALS: IMenuItem[] = [
-    {name: "Data for good", route: "", modal: "dataForGoodModal"},
-    {name: "Contact", route: "", modal: "ContactModal"},
+    {name: "Data for good", route: "", modal: "aboutModal"},
+    {name: "Contact", route: "", modal: "contactModal"},
 ];
 
 interface INavBarProps {
@@ -292,6 +292,18 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                             </Link>
                         </div>
                         <Hidden smDown>
+                            {MODALS.map((item: IMenuItem) => (
+                                 <Button
+                                 color="primary"
+                                 size="large"
+                                 onClick={this.openModal.bind(this, item.modal || "")}
+                                 style={{
+                                     marginRight: "1em",
+                                 }}
+                                    >
+                                        {item.name}
+                                    </Button>
+                            ))}
                             {isAuthenticated ? authButtons : noAuthButtons}
                         </Hidden>
                         <Hidden mdUp>

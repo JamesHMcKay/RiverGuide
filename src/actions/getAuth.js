@@ -16,9 +16,7 @@ import {
 import parseUserObject from "../utils/parseUserObject";
 
 const serverLocation = 'https://rapidsapi.herokuapp.com/';
-const testServerLocation = 'https://rapidsapi.herokuapp.com/';
 
-// Register User
 export const registerUser = (userData) => dispatch => {
     axios
     .post(serverLocation + 'auth/local/register', {
@@ -27,14 +25,12 @@ export const registerUser = (userData) => dispatch => {
         password: userData.password
     })
     .then(response => {
-        // Handle success.
-        console.log('Well done!');
-        console.log('User profile', response.data.user);
-        console.log('User token', response.data.jwt);
         localStorage.setItem("jwtToken", response.data.jwt);
         localStorage.setItem("user", JSON.stringify(parseUserObject(response.data.user)));
         setAuthToken(response.data.jwt);
-        dispatch(setCurrentUser(parseUserObject(response.data.user)));
+        const userObject = parseUserObject(response.data.user);
+        dispatch(setCurrentUser(userObject));
+        dispatch(getUserDetails(userObject.id));
 
         dispatch({
             type: CLOSE_MODAL,
@@ -43,8 +39,6 @@ export const registerUser = (userData) => dispatch => {
         dispatch({ type: CLEAR_ERRORS });
     })
     .catch(error => {
-        console.log('An error occurred:', error);
-        console.log("error response", error.response);
         dispatch({
             type: GET_ERRORS,
             payload: {message: error.response.data.message}
@@ -77,7 +71,6 @@ export const loginUser = userData => dispatch => {
         dispatch({ type: CLEAR_ERRORS });
     })
     .catch(error => {
-        console.log('An error occurred:', error);
         dispatch({
             type: GET_ERRORS,
             payload: {message: error.response.data.message}
@@ -95,7 +88,6 @@ export const createUserDetails = (userid) => dispatch => {
         {user_id: userid,}
      )
      .then(response => {
-         console.log('User details created = ', response);
          dispatch({
             type: SET_USER_DETAILS,
             payload: response.data,
@@ -194,7 +186,7 @@ export const providerLogin = (action, history) => dispatch => {
     // Request API. 
     // Add your own code here to customize or restrict how the public can register new users.
     axios
-    .get(testServerLocation + `auth/${action.provider}/callback${action.search}`)
+    .get(serverLocation + `auth/${action.provider}/callback${action.search}`)
     .then(response => {
         history.push("/");
         localStorage.setItem("jwtToken", response.data.jwt);

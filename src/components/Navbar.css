@@ -127,7 +127,7 @@
 }
 
 .auth-buttons {
-    width: 25vw;
+    /* width: 25vw; */
     text-align: right;
 }
 
@@ -138,7 +138,7 @@
 }
 
 .no-auth-buttons {
-    width: 25vw;
+    /* width: 25vw; */
     text-align: right;
 }
 

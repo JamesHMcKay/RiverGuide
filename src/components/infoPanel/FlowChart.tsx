@@ -16,6 +16,12 @@ import * as Am4charts from "@amcharts/amcharts4/charts";
 import * as Am4core from "@amcharts/amcharts4/core";
 import Am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import DataDropDown from "./DataDropDown";
+import Hidden from "@material-ui/core/Hidden";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import MenuItem from "@material-ui/core/MenuItem";
 
 // amchart theme
 Am4core.useTheme(Am4themes_animated);
@@ -132,11 +138,15 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
 
         dateAxis.tooltipDateFormat = "dd MMM yyyy hh:mma";
         series.tooltipText = "{valueY.value}";
-        chart.cursor = new Am4charts.XYCursor();
+        // chart.cursor = new Am4charts.XYCursor();
+
 
         // Create a horizontal scrollbar range selector and place it underneath the date axis
         chart.scrollbarX = new Am4core.Scrollbar();
         chart.scrollbarX.parent = chart.bottomAxesContainer;
+        // chart.seriesContainer.draggable = false;
+        // chart.seriesContainer.resizable = false;
+        // chart.chartScrollbarProperties.enabled = false;
 
         // set default range to load, range starts -1 ends 1
         // chart.events.on("ready", (): void => {
@@ -156,6 +166,12 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
 
     public componentDidUpdate(): void {
         this.setChartOptions();
+    }
+
+    public handleTypeChange = (event: any): void => {
+        this.setState({
+            selectedType: event.target.value,
+        })
     }
 
     public selectTypeClick(type: string): void {
@@ -179,18 +195,45 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         return "outlined";
     }
 
+    public getFormSelect = (): JSX.Element | null => {
+        const observables: IObservable[] | undefined = this.getObservables();
+        if (observables) {
+            return (
+                <FormControl variant="outlined" style={{minWidth: "120px"}}>
+                    <InputLabel>
+                    Type
+                    </InputLabel>
+                    <Select
+                    value={this.state.selectedType}
+                    onChange={this.handleTypeChange}
+                    input={<OutlinedInput labelWidth={40} name="age" id="outlined-age-simple" />}
+                    >
+                        {observables.map((item: IObservable) =>
+                        <MenuItem value={item.type}>{item.type}</MenuItem>)
+                        }
+                    </Select>
+        </FormControl>
+            );
+        }
+        return null;
+
+    }
+
     public getButtons = (): JSX.Element[] | null => {
         const observables: IObservable[] | undefined = this.getObservables();
         if (observables) {
             const result: JSX.Element[] = observables.map((item: IObservable) =>
-                <Button
-                    style = {{marginLeft: "10px"}}
-                    variant={this.getButtonVariant(item.type)}
-                    color={this.getButtonColor(item.type)} key={item.type}
-                    onClick = {(): void => this.selectTypeClick(item.type)}
-                >
-                    {item.type}
-                </Button>);
+                <Hidden smDown>
+                    <Button
+                        style = {{marginLeft: "10px"}}
+                        variant={this.getButtonVariant(item.type)}
+                        color={this.getButtonColor(item.type)} key={item.type}
+                        onClick = {(): void => this.selectTypeClick(item.type)}
+                    >
+                        {item.type}
+                    </Button>
+                </Hidden>
+            );
             result.push(<DataDropDown key = "data-drop-down"/>);
             return result;
         } else {
@@ -200,28 +243,20 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
 
     public render(): JSX.Element {
         return (
-            // <Card>
-                <Grid container item xs={12} spacing={10} justify="space-between">
-
-                <Grid container item md={6} lg={6} justify="flex-start">
-                    <Typography variant="h5" gutterBottom>
+                <Grid container item xs={12} spacing={0} justify="space-between">
+                    <div style={{display:"flex", width: "100%", minWidth: "320px"}}>
+                    <Typography variant="h5" gutterBottom style={{width: "15%"}}>
                         Data
                     </Typography>
-                </Grid>
 
-                <Grid container item md={6} lg={6} justify="flex-end">
                     <div className="flow-chart-buttons">
                         {this.getButtons()}
                     </div>
-                </Grid>
+                    </div>
 
-                    <Grid container item md={12} lg={12} justify="center">
                     <div id="chartdiv" style={{width: "100%", height: "300px"}}></div>
                     {/* {this.filterGauges().length > 0 && this.getLastUpdated()} */}
-                    </Grid>
-                {/* </CardContent> */}
                 </Grid>
-            // </Card>
         ); }
 }
 
