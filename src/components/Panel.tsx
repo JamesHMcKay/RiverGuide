@@ -22,7 +22,8 @@ import {
     IGauge,
     IInfoPage,
     IListEntry,
-    IMapBounds } from "./../utils/types";
+    IMapBounds, 
+    IFilter} from "./../utils/types";
 
 // Styles
 import "./Panel.css";
@@ -41,6 +42,7 @@ export interface IPanelMapStateToProps {
     filterdGuides: IListEntry[];
     listEntries: IListEntry[];
     searchPanel: string;
+    filters: IFilter;
 }
 
 export interface IPanelProps extends IPanelMapStateToProps {
@@ -48,7 +50,7 @@ export interface IPanelProps extends IPanelMapStateToProps {
     setMapBounds: (mapBounds: IMapBounds) => void;
     generateFilteredList: (
         guides: IListEntry[],
-        filters: string,
+        filters: IFilter,
         mapBounds: IMapBounds,
     ) => void;
     openInfoPage: (guide: IListEntry) => void;
@@ -75,7 +77,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
             this.props.setMapBounds(mapBounds);
             this.props.generateFilteredList(
                 this.props.listEntries,
-                "",
+                this.props.filters,
                 mapBounds,
             );
     }
@@ -143,6 +145,7 @@ const mapStateToProps: (state: IState) => IPanelMapStateToProps = (state: IState
     filterdGuides: state.filteredList,
     listEntries: state.listEntries,
     searchPanel: state.searchPanel,
+    filters: state.filters,
 });
 
 export default connect(

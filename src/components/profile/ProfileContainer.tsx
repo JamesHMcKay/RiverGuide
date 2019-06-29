@@ -11,7 +11,7 @@ import {
     openLogInfoPage,
 } from "../../actions/getGuides";
 import { IState } from "../../reducers/index";
-import { IAuth, IGauge, IInfoPage, IListEntry, ILogComplete, IMapBounds } from "../../utils/types";
+import { IAuth, IGauge, IInfoPage, IListEntry, ILogComplete, IMapBounds, IFilter } from "../../utils/types";
 import Info from "../infoPanel/Info";
 import LeftPanel from "../leftPanel/LeftPanel";
 import ListItemSpecial from "../leftPanel/ListItemSpecial";
@@ -31,7 +31,7 @@ interface IProfileContainerProps extends IProfileContainerStateProps {
     setMapBounds: (mapBounds: IMapBounds) => void;
     generateFilteredList: (
         guides: IListEntry[],
-        filters: string,
+        filters: IFilter,
         mapBounds: IMapBounds,
     ) => void;
 }
@@ -45,6 +45,7 @@ interface IProfileContainerStateProps {
     log: ILogComplete[];
     logPageOpen: boolean;
     searchPanel: string;
+    filters: IFilter;
 }
 
 class ProfileContainer extends Component<IProfileContainerProps, IProfileContainerState> {
@@ -68,7 +69,7 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
             this.props.setMapBounds(mapBounds);
             this.props.generateFilteredList(
                 this.props.listEntries,
-                "",
+                this.props.filters,
                 mapBounds,
             );
     }
@@ -151,6 +152,7 @@ function mapStateToProps(state: IState): IProfileContainerStateProps {
         log: state.log,
         logPageOpen: state.logPageOpen,
         searchPanel: state.searchPanel,
+        filters: state.filters,
     });
 }
 
