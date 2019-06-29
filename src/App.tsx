@@ -25,6 +25,7 @@ import Hidden from "@material-ui/core/Hidden";
 import * as darksky from "dark-sky-api";
 import * as weather from "openweather-apis";
 import BottomNav from "./components/leftPanel/BottomNav";
+import ToggleList from "./components/leftPanel/ToggleList";
 import { IUser } from "./utils/types";
 
 // Create redux store with history
@@ -88,6 +89,7 @@ class App extends Component {
                                 <Route exact path="/connect/:provider" component={ConnectPage} />
                             </Switch>
                             <Hidden mdUp>
+                                <ToggleList/>
                                 <Route component={BottomNav} />
                             </Hidden>
                             <Modals />

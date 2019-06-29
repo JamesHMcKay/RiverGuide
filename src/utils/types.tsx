@@ -56,51 +56,39 @@ export interface IListEntry {
     position: ILatLon;
     observables?: IObservable[];
     latest_flow?: number;
-    type: string;
+    activity: string;
 }
 
-export interface IWhiteWaterDetails {
-    entryDetails: string;
-    exitDetails: string;
-    gradeHardest: string;
-    gradeOverall: string;
-    markerList: IMarker[];
-    gradient: number;
-    section_length: number;
-    section_length_unit: string;
-    time_low: number;
-    time_high: number;
-    gradient_unit: string;
+export interface IKeyFactsNum {
+    gradient: IKeyFactsNumItem;
+    time: IKeyFactsNumItem;
+    section_length: IKeyFactsNumItem;
 }
 
-export interface IItemDetails extends Partial<IWhiteWaterDetails> {
+export interface IKeyFactsChar {
+    grade_overall: string;
+    grade_hardest: string;
+}
+
+export interface IKeyFactsNumItem {
+    value: number | number[];
+    unit: string;
+}
+
+export interface IItemDetails {
     id: string;
     description: string;
-}
-
-export interface IGuide {
-    _id: string;
-    author: string;
-    title: string;
-    river: string;
-    region: string;
-    gaugeName?: string;
-    grade?: string;
-    minFlow?: number;
-    maxFlow?: number;
-    markers: IMarker[];
-    flowSpecificGrades?: IGradeRange[];
-    lat?: number;
-    lng?: number;
-    description: string;
-    dateCreated: Date;
-    catch_type?: string;
-    activity?: string;
-    latestFlow?: number;
+    entryDetails: string;
+    exitDetails: string;
+    markerList: IMarker[];
+    key_facts_num: IKeyFactsNum;
+    key_facts_char: IKeyFactsChar;
 }
 
 export interface IGauge extends IListEntry {
     observables: IObservable[];
+    source: string;
+    lastUpdated: string;
 }
 
 export interface IGaugeHistory {
@@ -118,6 +106,7 @@ export interface IInfoPage {
 
 export interface IFilter {
     searchString: string;
+    activity: string;
 }
 
 export interface ILoginDetails {

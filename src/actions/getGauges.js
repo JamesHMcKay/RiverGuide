@@ -26,6 +26,8 @@ export const makeGaugeRequest = () => dispatch => {
                     observables: item.observables,
                     region: item.data_source,
                     type: "gauge",
+                    source: item.data_source,
+                    lastUpdated: "Date to come",
                 }));
             dispatch({
                 type: GET_GAUGES,

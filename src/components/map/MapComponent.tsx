@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import ReactMapGL, { InteractiveMap, Marker, ViewState } from "react-map-gl";
 import uuidv1 from "uuid";
 import WebMercatorViewport from "viewport-mercator-project";
-import { IGuide, ILatLon, IListEntry, IMapBounds } from "../../utils/types";
+import { ILatLon, IListEntry, IMapBounds } from "../../utils/types";
 import { IViewport } from "./InfoMapComponent";
 import MapCluster from "./MapCluster";
 import MapMarker from "./MapMarker";
@@ -85,9 +85,9 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
         this.computeCustersKmeans();
     }
 
-    public getRegion = (guide: IGuide): string => {
-        return guide.region;
-    }
+    // public getRegion = (guide: IListEntry): string => {
+    //     return guide.region;
+    // }
 
     public onlyUnique = (value: string, index: number, self: any): boolean => {
         return self.indexOf(value) === index;
@@ -361,7 +361,7 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
         };
 
         return (
-            <div style={{height: this.props.viewHeight, width: "100%"}}>
+            <div style={{width: "100%", height: "80vh"}}>
                 <ReactMapGL
                     width="100%"
                     height="100%"

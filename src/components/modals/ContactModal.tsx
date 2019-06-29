@@ -1,13 +1,13 @@
+import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import withMobileDialog from "@material-ui/core/withMobileDialog";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
-import withMobileDialog from "@material-ui/core/withMobileDialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import Button from "@material-ui/core/Button";
-import DialogTitle from "../../utils/dialogTitle";
 import { IState } from "../../reducers";
+import DialogTitle from "../../utils/dialogTitle";
 
 interface IContactModalProps extends IContactModalPropsStateProps {
     toggleModal: (modal?: string) => void;

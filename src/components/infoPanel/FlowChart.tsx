@@ -15,13 +15,12 @@ import Moment from "moment";
 import * as Am4charts from "@amcharts/amcharts4/charts";
 import * as Am4core from "@amcharts/amcharts4/core";
 import Am4themes_animated from "@amcharts/amcharts4/themes/animated";
-import DataDropDown from "./DataDropDown";
-import Hidden from "@material-ui/core/Hidden";
 import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
+import Hidden from "@material-ui/core/Hidden";
 import MenuItem from "@material-ui/core/MenuItem";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import Select from "@material-ui/core/Select";
+import DataDropDown from "./DataDropDown";
 
 // amchart theme
 Am4core.useTheme(Am4themes_animated);
@@ -148,7 +147,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
     public handleTypeChange = (event: any): void => {
         this.setState({
             selectedType: event.target.value,
-        })
+        });
     }
 
     public selectTypeClick(type: string): void {
@@ -177,13 +176,10 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         if (observables) {
             return (
                 <FormControl variant="outlined" style={{minWidth: "120px"}}>
-                    <InputLabel>
-                    Type
-                    </InputLabel>
                     <Select
                     value={this.state.selectedType}
                     onChange={this.handleTypeChange}
-                    input={<OutlinedInput labelWidth={40} name="age" id="outlined-age-simple" />}
+                    input={<OutlinedInput labelWidth={0} name="age" id="outlined-age-simple" />}
                     >
                         {observables.map((item: IObservable) =>
                         <MenuItem value={item.type}>{item.type.toUpperCase()}</MenuItem>)
@@ -209,12 +205,12 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
                     >
                         {item.type}
                     </Button>
-                </Hidden>
+                </Hidden>,
             );
             result.push(
                 <Hidden mdUp>
                     {this.getFormSelect()}
-                </Hidden>
+                </Hidden>,
             );
             result.push(<DataDropDown key = "data-drop-down"/>);
             return result;
@@ -226,9 +222,9 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
     public render(): JSX.Element {
         return (
             <Grid container item xs={12} spacing={0} justify="space-between">
-                <div style={{display:"flex", width: "100%", minWidth: "320px"}}>
+                <div style={{display: "flex", width: "100%", minWidth: "320px"}}>
                     <Typography variant="h5" gutterBottom style={{width: "15%"}}>
-                        Data
+                        History
                     </Typography>
                     <div className="flow-chart-buttons">
                         {this.getButtons()}

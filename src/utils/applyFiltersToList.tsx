@@ -1,4 +1,4 @@
-import { IListEntry, IMapBounds } from "./types";
+import { IFilter, IListEntry, IMapBounds } from "./types";
 
 function hasIndex(obj: string, str: string): boolean {
     return obj.toLowerCase().indexOf(str) > -1;
@@ -25,23 +25,32 @@ function applyMapBounds(mapBounds: IMapBounds): (guide: IListEntry) => boolean {
 
 function applySearchString(guide: IListEntry, searchString: string): boolean {
     let result: boolean = false;
-    result = hasIndex(guide.display_name, searchString) ||
-                hasIndex(guide.region, searchString);
+    result = hasIndex(guide.display_name.toLowerCase(), searchString) ||
+                hasIndex(guide.region.toLowerCase(), searchString);
     if (guide.river_name) {
-        result = result || hasIndex(guide.river_name, searchString);
+        result = result || hasIndex(guide.river_name.toLowerCase(), searchString);
     }
 
     return result;
 }
 
-function applyFiltersToList(guideList: IListEntry[], searchString: string, mapBounds: IMapBounds): IListEntry[] {
-    // const { filters: string[], searchString: string } = filterValues;
+function filterActivityType(guide: IListEntry, activity: string): boolean {
+    if (guide.activity === "gauge") {
+        return true;
+    }
+    return guide.activity === activity;
+}
+
+function applyFiltersToList(guideList: IListEntry[], filters: IFilter, mapBounds: IMapBounds): IListEntry[] {
     let filteredList: IListEntry[] = guideList;
-    if (searchString === "") {
+    if (filters.activity !== "all") {
+        guideList = guideList.filter((item: IListEntry) => filterActivityType(item, filters.activity));
+    }
+    if (filters.searchString === "") {
         filteredList = guideList.filter(applyMapBounds(mapBounds));
     } else {
         filteredList = guideList.filter((guide: IListEntry): boolean => {
-            return applySearchString(guide, searchString);
+            return applySearchString(guide, filters.searchString.toLowerCase());
         });
     }
     return filteredList;

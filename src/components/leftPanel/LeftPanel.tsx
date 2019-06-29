@@ -20,7 +20,6 @@ interface ILeftPanelProps extends ILeftPanelStateProps {
     onClick: (guide: IListEntry) => void;
     filteredList: IListEntry[];
     specialItem?: JSX.Element;
-    viewHeight: string;
 }
 
 interface ILeftPanelStateProps {
@@ -87,7 +86,7 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
         );
 
         return (
-            <div className="list-container" style={{height: this.props.viewHeight}}>
+            <div className="list-container">
                 {isLoading || noResults ? this.loadingOrEmpty(noResults) : renderedList}
             </div>
         );

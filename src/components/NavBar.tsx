@@ -26,6 +26,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ActivityFilter from "./ActivityFilter";
 import "./Navbar.css";
 
 export interface IMenuItem {
@@ -109,7 +110,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
     }
 
     public handleMapLink = (): void => {
-        this.setState({ mapView: true });
+        // this.setState({ mapView: true });
     }
 
     public handleProfileLink = (): void => {
@@ -277,9 +278,17 @@ class NavBar extends Component<INavBarProps, INavBarState> {
         );
 
         return (
-            <div className="nav-bar-section" >
+            <div>
                 <AppBar position="static">
-                    <Toolbar style={{ background: "#fff", height: "10vh", display: "flex", flexDirection: "row"}}>
+                    <Toolbar
+                        style={{
+                            background: "#fff",
+                            height: "10vh",
+                            minHeight: "60px",
+                            display: "flex",
+                            flexDirection: "row",
+                        }}
+                    >
                         <div style={{margin: "auto"}} >
                             <Link to="/" onClick={this.handleMapLink}>
                                 <div>
@@ -288,8 +297,10 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                                         alt=""
                                         className="nav-logo"
                                     />
+                                    <ActivityFilter/>
                                 </div>
                             </Link>
+
                         </div>
                         <Hidden smDown>
                             {MODALS.map((item: IMenuItem) => (

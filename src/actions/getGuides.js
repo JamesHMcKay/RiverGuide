@@ -43,7 +43,7 @@ export const setCategory = (category, cancelToken) => dispatch => {
                         observables: item.observables,
                         region: item.data_source,
                         river_name: "undefined",
-                        type: "gauge",
+                        activity: "gauge",
                     }));
                 dispatch({
                     type: GET_ENTRIES,
@@ -55,12 +55,12 @@ export const setCategory = (category, cancelToken) => dispatch => {
         .get(`${strapi_location}`,
             {
                 headers: {'Authorization': ''},
-                params: {query: '{wwguides(limit:999){id,river_name,section_name,region,latitude,longitude,gauge_id}}'},
+                params: {query: '{guides(limit:999){id,river_name,section_name,region,latitude,longitude,gauge_id, activity}}'},
                 cancelToken: cancelToken.token
             }
         )
         .then(res => {
-            let data = res.data.data.wwguides;
+            let data = res.data.data.guides;
             let result = data.map(item => (
                 {
                     id: item.id,
@@ -69,7 +69,7 @@ export const setCategory = (category, cancelToken) => dispatch => {
                     position: {lat: item.latitude < 90 ? item.latitude : -45, lon: item.longitude },
                     region: item.region,
                     gauge_id: item.gauge_id,
-                    type: "wwguide",
+                    activity: item.activity,
                 }));
             dispatch({
                 type: GET_ENTRIES,
@@ -123,7 +123,7 @@ export const openInfoPage = guide => dispatch => {
 
     } else {
         let guideId = guide.id;
-        let query = "{wwguide(id:\"" + guideId + "\"){grade_overall,grade_hardest,description,entry_details,exit_details,marker_list, section_length, gradient, time_low, time_high, section_length_unit, gradient_unit}}"
+        let query = "{guide(id:\"" + guideId + "\"){description,entry_details,exit_details,marker_list,key_facts_num,key_facts_char}}"
         axios
         .get(`${strapi_location}`,
             {
@@ -132,21 +132,16 @@ export const openInfoPage = guide => dispatch => {
             }
         )
         .then(res => {
-            let item = res.data.data.wwguide;
+            let item = res.data.data.guide;
             let result = 
                 {
                     id: item.id,
                     entryDetails: item.entry_details,
                     exitDetails: item.exit_details,
-                    gradeHardest: item.grade_hardest,
-                    gradeOverall: item.grade_overall,
                     description: item.description,
-                    time_high: item.time_high,
-                    time_low: item.time_low,
-                    section_length: item.section_length,
-                    gradient: item.gradient,
-                    section_length_unit: item.section_length_unit,
-                    gradient_unit: item.gradient_unit,
+                    key_facts_char: item.key_facts_char,
+                    key_facts_num: item.key_facts_num,
+                    marker_list: item.marker_list,
                 };
             dispatch({
                 type: GET_ITEM_DETAILS,

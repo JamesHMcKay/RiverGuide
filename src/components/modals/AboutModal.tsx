@@ -1,13 +1,13 @@
+import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import withMobileDialog from "@material-ui/core/withMobileDialog";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
-import withMobileDialog from "@material-ui/core/withMobileDialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import Button from "@material-ui/core/Button";
-import DialogTitle from "../../utils/dialogTitle";
 import { IState } from "../../reducers";
+import DialogTitle from "../../utils/dialogTitle";
 
 interface IAboutModalProps extends IAboutModalPropsStateProps {
     toggleModal: (modal?: string) => void;
@@ -36,13 +36,18 @@ class AboutModal extends Component<IAboutModalProps> {
                 <DialogTitle handleClose={this.handleClose} title={"Data for good"}/>
                 <DialogContent>
                     <DialogContentText>
-                        <p>The vision of <strong>(insert brandname)</strong> 
-                            is to generate the largest database of freshwater 
-                            recreation sites in New Zealand, while also generating 
+                        <p>The vision of <strong>(insert brandname)</strong>
+                            is to generate the largest database of freshwater
+                            recreation sites in New Zealand, while also generating
                             important data and insights that ensure they are conserved and improved forever.</p>
-                        <p>We aim to provide outdoor enthusiasts with the best tools to discover, plan, record and share their freshwater experiences, while being provided with the most up-to-date environmental conditions that will help them to plan a safe and enjoyable trip.</p>
-                        <p>The <strong>(insert brandname</strong>) database will be kept up-to-date by users just like yourself, so it is forever growing. Descriptions and rich content will be updated by engaged users with the latest information.</p>
-                        <p>Don't see your favourite activity on the site, or want to update one that is already there? Go ahead, sign up and get started!</p>
+                        <p>We aim to provide outdoor enthusiasts with the best tools to discover, plan, record
+                            and share their freshwater experiences, while being provided with the most up-to-date
+                            environmental conditions that will help them to plan a safe and enjoyable trip.</p>
+                        <p>The <strong>(insert brandname</strong>) database will be kept up-to-date by users just
+                        like yourself, so it is forever growing. Descriptions and rich content will be updated by
+                        engaged users with the latest information.</p>
+                        <p>Don't see your favourite activity on the site, or want to update one that is already
+                            there? Go ahead, sign up and get started!</p>
                     </DialogContentText>
                    </DialogContent>
                     <Button

@@ -1,19 +1,15 @@
 import axios from "axios";
 
 import {
-    APPEND_GUIDES,
     CLEAR_ERRORS,
     CLOSE_MODAL,
     DELETE_LOG,
     OPEN_MODAL,
-    SEARCH_GUIDES,
-    FILTER_GUIDES,
     GENERATE_FILTERED_LIST,
     CLOSE_INFO,
     UPDATE_OPEN_LOG,
     REMOVE_FROM_FAVOURITES,
     SET_MAP_BOUNDS,
-    SET_FILTER,
     GET_GAUGE_HISTORY,
     CLEAR_GAUGE_HISTORY,
     SET_LOG_GUIDE_NAMES,
@@ -25,6 +21,8 @@ import {
     CLEAR_LOADING_SPINNER,
     GET_ERRORS,
     EDIT_LOG,
+    SET_SEARCH_PANEL,
+    SET_FILTER,
 } from "./types";
 
 const serverLocation = process.env.REACT_APP_SERVER_URL;
@@ -53,28 +51,6 @@ export const toggleModal = modal => dispatch => {
     }
 };
 
-// Create guides
-export const createGuide = (guideData, category) => dispatch => {
-    axios
-        .post(`${serverLocation}/${category}`, guideData)
-        .then(res => {
-            dispatch({
-                type: CLOSE_MODAL,
-                payLoad: "createModal",
-            });
-            dispatch({
-                type: OPEN_MODAL,
-                payload: "successModal",
-            });
-            dispatch({
-                type: APPEND_GUIDES,
-                payload: res.data,
-            });
-        })
-        .catch(err => {
-        });
-};
-
 // Get logbook logs
 export const makeLogbookRequest = (user_id) => dispatch => {
     let req = [
@@ -87,7 +63,7 @@ export const makeLogbookRequest = (user_id) => dispatch => {
         .get(`${strapi_location}`,
             {
                 headers: {'Authorization': ''},
-                params: {query: '{wwguides(limit:999){id,river_name,section_name,region,latitude,longitude,gauge_id}}'},
+                params: {query: '{guides(limit:999){id,river_name,section_name,region,latitude,longitude,gauge_id,activity}}'},
             }
         )
       ];
@@ -98,7 +74,7 @@ export const makeLogbookRequest = (user_id) => dispatch => {
             log_id: item.id,
         }));
 
-        let data = res[1].data.data.wwguides;
+        let data = res[1].data.data.guides;
         let result = data.map(item => (
             {
                 id: item.id,
@@ -107,7 +83,7 @@ export const makeLogbookRequest = (user_id) => dispatch => {
                 position: {lat: item.latitude < 90 ? item.latitude : -45, lon: item.longitude },
                 region: item.region,
                 gauge_id: item.gauge_id,
-                type: "wwguide",
+                type: item.activity,
             }));
         dispatch({
             type: SET_LOG_GUIDE_NAMES,
@@ -120,14 +96,6 @@ export const makeLogbookRequest = (user_id) => dispatch => {
       });
 };
 
-// search guide list
-export const searchGuideList = searchString => dispatch => {
-    dispatch({
-        type: SEARCH_GUIDES,
-        payload: searchString,
-    });
-};
-
 // set map bounds
 export const setMapBounds = mapBounds => dispatch => {
     dispatch({
@@ -136,53 +104,34 @@ export const setMapBounds = mapBounds => dispatch => {
     });
 };
 
-// filter guide list
-export const filterGuideList = (attribute, values) => dispatch => {
-    dispatch({
-        type: FILTER_GUIDES,
-        payload: {
-            attribute,
-            values,
-        },
-    });
-};
+// export const setSearchString = (searchString) => dispatch => {
+//     dispatch({
+//         type: SET_SEARCH_STRING_FILTER,
+//         payload: searchString,
+//     });
+// };
 
-export const setSearchString = (searchString) => dispatch => {
+// export const setActivityFilter = (activity) => dispatch => {
+//     dispatch({
+//         type: SET_ACTIVITY_FILTER,
+//         payload: activity,
+//     });
+// };
+
+export const generateFilteredList = (entries, filters, mapBounds) => dispatch => {
     dispatch({
         type: SET_FILTER,
-        payload: {
-            searchString,
-        },
+        payload: filters
     });
-};
-
-export const generateFilteredList = (entries, searchString, mapBounds) => dispatch => {
+    console.log("FILTER = ", filters);
     dispatch({
         type: GENERATE_FILTERED_LIST,
         payload: {
             entries,
-            searchString,
+            filters,
             mapBounds,
         },
     });
-    // if (isLogList) {
-    //     dispatch({
-    //         type: GENERATE_FILTERED_LOG_LIST,
-    //         payload: {
-    //             entries,
-    //             searchString,
-    //         },
-    //     });
-    // } else {
-    //     dispatch({
-    //         type: GENERATE_FILTERED_LIST,
-    //         payload: {
-    //             entries,
-    //             searchString,
-    //             mapBounds,
-    //         },
-    //     });
-    // }
 };
 
 export const getGaugeHistory = gaugeId => dispatch => {
@@ -324,5 +273,12 @@ export const setSelectedLogId = selectedLogId => dispatch => {
 export const openLogPage = () => dispatch => {
     dispatch({
         type: OPEN_LOG_PAGE,
+    });
+}
+
+export const setSearchPanel = (value) => dispatch => {
+    dispatch({
+        type: SET_SEARCH_PANEL,
+        payload: value,
     });
 }

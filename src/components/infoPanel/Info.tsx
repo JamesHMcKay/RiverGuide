@@ -28,6 +28,7 @@ import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 import Logbook from "../profile/Logbook";
 import FlowChart from "./FlowChart";
 import InfoCard from "./InfoCard";
+import LatestData from "./LatestData";
 import MapCard from "./MapCard";
 
 const logTypes: string[] = [
@@ -45,6 +46,7 @@ const columnOrder: Array<keyof ILogListItem> = [
 
 interface IInfoState {
     selectedType: string;
+    descriptionHidden: boolean;
 }
 
 interface IInfoStateProps {
@@ -70,6 +72,7 @@ class Info extends Component<IInfoProps, IInfoState> {
         super(props);
         this.state = {
             selectedType: "Public",
+            descriptionHidden: false,
         };
     }
 
@@ -170,11 +173,18 @@ class Info extends Component<IInfoProps, IInfoState> {
                         lg={12}
                         style={{marginRight: "5%", marginLeft: "5%",  marginTop: "2%", marginBottom: "2%"}}
                     >
+                        <LatestData />
                         <FlowChart gaugeId={entry.gauge_id} />
                     </Grid>
                 );
         }
         return null;
+    }
+
+    public toggleDescription = (): void => {
+        this.setState({
+            descriptionHidden: !this.state.descriptionHidden,
+        });
     }
 
     public getDescription = (): JSX.Element | null => {
@@ -186,7 +196,12 @@ class Info extends Component<IInfoProps, IInfoState> {
                     sm={12}
                     style={{marginRight: "5%", marginLeft: "5%", marginTop: "1%", marginBottom: "2%"}}
                 >
-                    <InfoCard title="Description" content={this.props.infoPage.itemDetails.description} />
+                    <Button onClick={this.toggleDescription}> "Hide description"</Button>
+                    {!this.state.descriptionHidden && <InfoCard
+                        title="Description"
+                        content={this.props.infoPage.itemDetails.description}
+                        />
+                    }
                 </Grid>
             );
         }
@@ -313,7 +328,8 @@ class Info extends Component<IInfoProps, IInfoState> {
                 item xs={12}
                 spacing={0}
                 justify="space-between"
-                style={{float: "right", overflowY: "auto", height: this.props.viewHeight}}
+                style={{float: "right"}}
+                className="right-panel"
             >
                 <Grid
                     container

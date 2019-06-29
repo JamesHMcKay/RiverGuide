@@ -6,7 +6,6 @@ import {
     IFilter,
     IGauge,
     IGaugeHistory,
-    IGuide,
     IInfoPage,
     IItemDetails,
     IListEntry,
@@ -21,7 +20,6 @@ import filteredLogReducer from "./filteredLogReducer";
 import filterReducer from "./filterReducer";
 import gaugeHistoryReducer from "./gaugeHistoryReducer";
 import gaugeReducer from "./gaugeReducer";
-import guideReducer from "./guideReducer";
 import infoReducer from "./infoReducer";
 import listEntryReducer from "./listEntryReducer";
 import listItemDetailsReducer from "./listItemDetailsReducer";
@@ -32,6 +30,7 @@ import logReducer from "./logReducer";
 import mapBoundsReducer from "./mapBoundsReducer";
 import modalReducer from "./modalReducer";
 import openLogReducer from "./openLogReducer";
+import searchPanelReducer from "./searchPanelReducer";
 import selectedLogIdReducer from "./selectedLogIdReducer";
 import sensorDataReducer from "./sensorDataReducer";
 import tabIndexReducer from "./tabIndexReducer";
@@ -39,7 +38,6 @@ import userDetailsReducer from "./userDetailsReducer";
 import weatherReducer from "./weatherReducer";
 
 export interface IState {
-    guides: IGuide[];
     gauges: IGauge[];
     infoPage: IInfoPage;
     filteredList: IListEntry[];
@@ -61,13 +59,13 @@ export interface IState {
     tabIndex: string;
     loadingSpinner: string;
     userDetails: IUserDetails;
+    searchPanel: string;
 }
 
 export default combineReducers({
     openModal: modalReducer,
     auth: authReducer,
     errors: errorReducer,
-    guides: guideReducer,
     gauges: gaugeReducer,
     log: logReducer,
     filteredList: listReducer,
@@ -87,4 +85,5 @@ export default combineReducers({
     tabIndex: tabIndexReducer,
     loadingSpinner: loadingSpinnerReducer,
     userDetails: userDetailsReducer,
+    searchPanel: searchPanelReducer,
 });

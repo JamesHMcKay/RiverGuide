@@ -10,12 +10,12 @@ import DataInfoModal from "../infoPanel/DataInfoModal";
 import DownloadModal from "../infoPanel/DownloadModal";
 import EditModal from "../infoPanel/EditModal";
 import WeatherModal from "../infoPanel/WeatherModal";
+import AboutModal from "../modals/AboutModal";
+import ContactModal from "../modals/ContactModal";
 import TripDetailsAnyPage from "../profile/TripDetailsAnyPage";
 import TripDetailsEdit from "../profile/TripDetailsEdit";
 import TripDetailsInfoPage from "../profile/TripDetailsInfoPage";
 import TripDetailsView from "../profile/TripDetailsView";
-import ContactModal from "../modals/ContactModal";
-import AboutModal from "../modals/AboutModal";
 
 class Modals extends Component {
     public render(): JSX.Element {

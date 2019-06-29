@@ -1,6 +1,4 @@
 import Hidden from "@material-ui/core/Hidden";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import React, { Component } from "react";
 // Components
 import { connect } from "react-redux";
@@ -34,7 +32,6 @@ export const CONTENT_HEIGHT: string = "82vh";
 
 export interface IPanelState {
     infoSelected: boolean;
-    search_panel: string;
     mapRef: React.RefObject<MapComponent>;
 }
 
@@ -43,6 +40,7 @@ export interface IPanelMapStateToProps {
     infoPage: IInfoPage;
     filterdGuides: IListEntry[];
     listEntries: IListEntry[];
+    searchPanel: string;
 }
 
 export interface IPanelProps extends IPanelMapStateToProps {
@@ -61,7 +59,6 @@ class Panel extends Component<IPanelProps, IPanelState> {
         super(props);
         this.state = {
             infoSelected: false,
-            search_panel: "list",
             mapRef: React.createRef(),
         };
     }
@@ -105,33 +102,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
         );
     }
 
-    public handleToggle = (event: any, value: string): void => {
-        this.setState({
-            search_panel: value,
-        });
-    }
-
-    public getToggleButton = (): JSX.Element => {
-        return (
-          <div style = {{width: "100%", height: "5vh"}}>
-            <ToggleButtonGroup
-                value={this.state.search_panel}
-                exclusive
-                onChange={this.handleToggle}
-                style = {{width: "100%"}}
-            >
-              <ToggleButton value="list" style = {{width: "50%", height: "5vh"}}>
-               List view
-              </ToggleButton>
-              <ToggleButton value="map" style = {{width: "50%", height: "5vh"}}>
-              Map view
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </div>
-        );
-    }
-
-    public getleftPanel = (viewHeight: string): JSX.Element => {
+    public getleftPanel = (): JSX.Element => {
         return (
             <div className="left-panel">
                 <LeftPanel
@@ -139,7 +110,6 @@ class Panel extends Component<IPanelProps, IPanelState> {
                     gauges={this.props.gauges}
                     onClick={this.onClick}
                     filteredList={this.props.filterdGuides}
-                    viewHeight={viewHeight}
                 />
             </div>
         );
@@ -147,10 +117,10 @@ class Panel extends Component<IPanelProps, IPanelState> {
 
     public render(): JSX.Element {
         return (
-            <Grid container spacing={0}>
+            <Grid container spacing={0} className="panel-container">
             <Hidden smDown>
-            <Grid item sm={4}>
-                    {this.getleftPanel(CONTENT_HEIGHT)}
+                <Grid item sm={4}>
+                    {this.getleftPanel()}
                 </Grid>
                 <Grid item sm={8}>
                     {this.props.infoPage.infoSelected ?
@@ -159,11 +129,8 @@ class Panel extends Component<IPanelProps, IPanelState> {
             </Hidden>
             <Hidden mdUp>
                 {this.props.infoPage.infoSelected ? this.getInfoPage("72vh") :
-                    this.state.search_panel === "list" ?
-                    this.getleftPanel(CONTENT_HEIGHT_MOBILE) : this.getMapPage(CONTENT_HEIGHT_MOBILE)}
-            </Hidden>
-            <Hidden mdUp>
-                {!this.props.infoPage.infoSelected && this.getToggleButton()}
+                    this.props.searchPanel === "list" ?
+                    this.getleftPanel() : this.getMapPage(CONTENT_HEIGHT_MOBILE)}
             </Hidden>
             </Grid>
         );
@@ -175,6 +142,7 @@ const mapStateToProps: (state: IState) => IPanelMapStateToProps = (state: IState
     infoPage: state.infoPage,
     filterdGuides: state.filteredList,
     listEntries: state.listEntries,
+    searchPanel: state.searchPanel,
 });
 
 export default connect(

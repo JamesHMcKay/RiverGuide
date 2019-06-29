@@ -20,7 +20,7 @@ interface ITabBarStateToProps {
 class TabBar extends Component<ITabBarProps> {
     public render(): JSX.Element {
         return (
-            <AppBar position="static" style={{ zIndex: 2, height: "8vh", flexGrow: 1}}>
+            <AppBar position="static" style={{ zIndex: 2, minHeight: "60px", height: "10vh"}}>
                 <Hidden smDown>
                     <ControlBar location={this.props.location}/>
                 </Hidden>

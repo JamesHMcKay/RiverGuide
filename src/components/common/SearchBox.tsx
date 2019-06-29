@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
     generateFilteredList,
-    setSearchString,
 } from "../../actions/actions";
 import { IState } from "../../reducers/index";
 import { IFilter, IListEntry, ILogEntry, IMapBounds } from "./../../utils/types";
@@ -11,16 +10,14 @@ import { IFilter, IListEntry, ILogEntry, IMapBounds } from "./../../utils/types"
 interface ISearchBoxProps extends ISearchBoxStateToProps {
     generateFilteredList: (
         guides: IListEntry[] | ILogEntry[],
-        searchString: string,
+        filter: IFilter,
         mapBounds: IMapBounds) => void;
-    setSearchString: (searchString: string) => void;
 }
 
 interface ISearchBoxStateToProps {
     mapBounds: IMapBounds;
     listEntries: IListEntry[];
     filters: IFilter;
-    logs: ILogEntry[];
 }
 
 interface ISearchBoxState {
@@ -39,10 +36,13 @@ class SearchBox extends Component<ISearchBoxProps, ISearchBoxState> {
         this.setState({
             value: event.target.value,
         });
-        this.props.setSearchString(event.target.value || "");
+        const filter: IFilter = {
+            ...this.props.filters,
+            searchString: event.target.value,
+        };
         this.props.generateFilteredList(
             this.props.listEntries,
-            event.target.value,
+            filter,
             this.props.mapBounds,
         );
     }
@@ -76,10 +76,9 @@ const mapStateToProps: (state: IState) => ISearchBoxStateToProps = (state: IStat
     listEntries: state.listEntries,
     mapBounds: state.mapBounds,
     filters: state.filters,
-    logs: state.log,
 });
 
 export default connect(
     mapStateToProps,
-    { generateFilteredList, setSearchString },
+    { generateFilteredList },
 )(SearchBox);

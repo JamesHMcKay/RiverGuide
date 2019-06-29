@@ -1,15 +1,12 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-
-// Material UI components
 import Chip from "@material-ui/core/Chip";
 import Collapse from "@material-ui/core/Collapse";
-import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import GuideItem from "./ListItem";
 
 // Components
@@ -77,7 +74,7 @@ class FavGroup extends Component<IFavGroupProps, IFavGroupState> {
                     />
                     {isExpanded ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
-                <Divider />
+                {/* <Divider /> */}
                 <Collapse
                     in={isExpanded}
                     timeout="auto"

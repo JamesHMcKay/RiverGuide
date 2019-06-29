@@ -1,13 +1,10 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { openInfoPage, openLogInfoPage } from "../../actions/getGuides";
-
-// Material UI
-import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import PlaceIcon from "@material-ui/icons/PlaceOutlined";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { openInfoPage, openLogInfoPage } from "../../actions/getGuides";
 
 // Components
 import { IListEntry } from "../../utils/types";
@@ -35,7 +32,7 @@ class GuideItem extends Component<IGuideItemProps, {}> {
                     <ListItemText  primary={this.props.guide.display_name} />
                     <FlowBadge gaugeId={this.props.guide.gauge_id} observables={this.props.guide.observables} />
                 </ListItem>
-                <Divider />
+                {/* <Divider /> */}
             </div>
         );
     }

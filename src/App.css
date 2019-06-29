@@ -11,14 +11,10 @@
     flex-direction: column;
 }
 
-.nav-bar-section {
-    height: 10vh;
-}
-
 .middle-section {
     display: flex;
     flex-direction: column;
-    height: 82vh;
+    /* height: 82vh; */
 }
 
 .right-panel {
@@ -88,14 +84,23 @@ h1 {
 .search-field {
     width: 100%;
 }
-/* @media only screen and (max-width: 768px) {
-    .search-field {
-        width: 100%;
-    }
-} */
+
 /* Media Querys */
 @media only screen and (min-width: 960px) {
     .search-field {
         width: 33%;
+    }
+    .list-container {
+        height: 80vh;
+    }
+    .right-panel {
+        height: 80vh;
+        overflow: auto;
+    }
+}
+
+@media only screen and (max-width: 960px) {
+    .panel-container {
+        overflow-y: auto
     }
 }
