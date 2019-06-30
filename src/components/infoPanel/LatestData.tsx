@@ -1,17 +1,18 @@
 import Grid from "@material-ui/core/Grid";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import Typography from "@material-ui/core/Typography";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import { IGauge, IInfoPage, IObservable } from "../../utils/types";
+import { IExpansionPanels, IGauge, IInfoPage, IObservable } from "../../utils/types";
+import ExpansionHead from "./ExpansionHead";
 
 interface ILatestDataStateProps {
     infoPage: IInfoPage;
     gauges: IGauge[];
+    expansionPanels: IExpansionPanels;
 }
 
 interface ILatestDataProps extends ILatestDataStateProps {
@@ -70,10 +71,8 @@ class LatestData extends Component<ILatestDataProps> {
     public render(): JSX.Element {
         return (
             <div>
-                    <Typography variant="h5" gutterBottom>
-                        {"Latest data"}
-                    </Typography>
-                    {this.getData()}
+                <ExpansionHead title={"Latest Data"} panelName={"latestData"}/>
+                    {this.props.expansionPanels.latestData && this.getData()}
             </div>
         );
     }
@@ -83,6 +82,7 @@ function mapStateToProps(state: IState): ILatestDataStateProps {
     return ({
         infoPage: state.infoPage,
         gauges: state.gauges,
+        expansionPanels: state.expansionPanels,
     });
 }
 

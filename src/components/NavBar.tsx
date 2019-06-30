@@ -283,8 +283,9 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                     <Toolbar
                         style={{
                             background: "#fff",
-                            height: "10vh",
+                            height: "8vh",
                             minHeight: "60px",
+                            maxHeight: "8vh",
                             display: "flex",
                             flexDirection: "row",
                         }}

@@ -1,27 +1,33 @@
 import React, { Component } from "react";
-
-// Material UI
-import Typography from "@material-ui/core/Typography";
-
-// Component
-import { IMarker } from "../../utils/types";
+import { connect } from "react-redux";
+import { IState } from "../../reducers";
+import { IExpansionPanels, IMarker } from "../../utils/types";
 import InfoMapComponent from "../map/InfoMapComponent";
+import ExpansionHead from "./ExpansionHead";
 
-interface IMapCardProps {
+interface IMapCardProps extends IMapCardStateProps {
     markers: IMarker[];
+}
+
+interface IMapCardStateProps {
+    expansionPanels: IExpansionPanels;
 }
 
 class MapCard extends Component<IMapCardProps> {
     public render(): JSX.Element {
         return (
             <div>
-                <Typography variant="h5" gutterBottom>
-                    Local map
-                </Typography>
-                <InfoMapComponent markers={this.props.markers}/>
+                <ExpansionHead title={"Local Map"} panelName={"map"}/>
+                {this.props.expansionPanels.map && <InfoMapComponent markers={this.props.markers}/>}
             </div>
         );
     }
 }
 
-export default MapCard;
+function mapStateToProps(state: IState): IMapCardStateProps {
+    return ({
+        expansionPanels: state.expansionPanels,
+    });
+}
+
+export default connect(mapStateToProps)(MapCard);

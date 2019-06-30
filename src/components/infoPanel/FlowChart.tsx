@@ -1,33 +1,27 @@
 
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { IState } from "../../reducers/index";
-import { IGauge, IHistory, IInfoPage, IObservable, IObsValue } from "../../utils/types";
-
-// Material UI
-import Typography from "@material-ui/core/Typography";
-
-import Moment from "moment";
-
-// amchart imports
 import * as Am4charts from "@amcharts/amcharts4/charts";
 import * as Am4core from "@amcharts/amcharts4/core";
 import Am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import Hidden from "@material-ui/core/Hidden";
 import MenuItem from "@material-ui/core/MenuItem";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import Select from "@material-ui/core/Select";
+import Moment from "moment";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { IState } from "../../reducers/index";
+import { IExpansionPanels, IGauge, IHistory, IInfoPage, IObservable, IObsValue } from "../../utils/types";
 import DataDropDown from "./DataDropDown";
+import ExpansionHead from "./ExpansionHead";
 
-// amchart theme
 Am4core.useTheme(Am4themes_animated);
 
 interface IFlowChartStateProps {
     infoPage: IInfoPage;
     gauges: IGauge[];
+    expansionPanels: IExpansionPanels;
 }
 
 interface IFlowChartProps extends IFlowChartStateProps {
@@ -140,8 +134,10 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         chart.scrollbarX.parent = chart.bottomAxesContainer;
     }
 
-    public componentDidUpdate(): void {
-        this.setChartOptions();
+    public componentDidUpdate(nextProps: IFlowChartProps): void {
+        if (this.props.expansionPanels.flowHistory) {
+            this.setChartOptions();
+        }
     }
 
     public handleTypeChange = (event: any): void => {
@@ -220,18 +216,15 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
     }
 
     public render(): JSX.Element {
+        const visible: boolean = this.props.expansionPanels.flowHistory;
         return (
-            <Grid container item xs={12} spacing={0} justify="space-between">
-                <div style={{display: "flex", width: "100%", minWidth: "320px"}}>
-                    <Typography variant="h5" gutterBottom style={{width: "15%"}}>
-                        History
-                    </Typography>
-                    <div className="flow-chart-buttons">
-                        {this.getButtons()}
-                    </div>
-                </div>
-                <div id="chartdiv" style={{width: "100%", height: "300px"}}></div>
-            </Grid>
+            <div>
+                <ExpansionHead title={"History"} panelName={"flowHistory"}/>
+                {visible && <div className="flow-chart-buttons">
+                    {this.getButtons()}
+                </div>}
+                {visible && <div id="chartdiv" style={{width: "100%", height: "300px"}}></div>}
+            </div>
         );
     }
 }
@@ -240,6 +233,7 @@ function mapStateToProps(state: IState): IFlowChartStateProps {
     return ({
         infoPage: state.infoPage,
         gauges: state.gauges,
+        expansionPanels: state.expansionPanels,
     });
 }
 

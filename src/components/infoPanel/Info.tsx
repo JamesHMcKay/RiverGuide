@@ -46,7 +46,6 @@ const columnOrder: Array<keyof ILogListItem> = [
 
 interface IInfoState {
     selectedType: string;
-    descriptionHidden: boolean;
 }
 
 interface IInfoStateProps {
@@ -72,7 +71,6 @@ class Info extends Component<IInfoProps, IInfoState> {
         super(props);
         this.state = {
             selectedType: "Public",
-            descriptionHidden: false,
         };
     }
 
@@ -181,12 +179,6 @@ class Info extends Component<IInfoProps, IInfoState> {
         return null;
     }
 
-    public toggleDescription = (): void => {
-        this.setState({
-            descriptionHidden: !this.state.descriptionHidden,
-        });
-    }
-
     public getDescription = (): JSX.Element | null => {
         if (this.props.infoPage.itemDetails) {
             return (
@@ -196,12 +188,10 @@ class Info extends Component<IInfoProps, IInfoState> {
                     sm={12}
                     style={{marginRight: "5%", marginLeft: "5%", marginTop: "1%", marginBottom: "2%"}}
                 >
-                    <Button onClick={this.toggleDescription}> "Hide description"</Button>
-                    {!this.state.descriptionHidden && <InfoCard
+                    <InfoCard
                         title="Description"
                         content={this.props.infoPage.itemDetails.description}
-                        />
-                    }
+                    />
                 </Grid>
             );
         }

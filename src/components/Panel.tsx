@@ -19,11 +19,11 @@ import LeftPanel from "./leftPanel/LeftPanel";
 import { MapComponent } from "./map/MapComponent";
 
 import {
+    IFilter,
     IGauge,
     IInfoPage,
     IListEntry,
-    IMapBounds, 
-    IFilter} from "./../utils/types";
+    IMapBounds } from "./../utils/types";
 
 // Styles
 import "./Panel.css";

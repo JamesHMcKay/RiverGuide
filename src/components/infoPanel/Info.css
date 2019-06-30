@@ -312,7 +312,6 @@ weather-forecast {
 
 .flow-chart-buttons {
     display: flex;
-    width: 85%;
     justify-content: flex-end;
     margin-right: 15px;
 }

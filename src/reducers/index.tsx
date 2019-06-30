@@ -3,6 +3,7 @@ import { WeatherStore } from "../components/infoPanel/WeatherStore";
 import {
     IAuth,
     IErrors,
+    IExpansionPanels,
     IFilter,
     IGauge,
     IGaugeHistory,
@@ -16,6 +17,7 @@ import {
 import authReducer from "./authReducer";
 import categoryReducer from "./categoryReducer";
 import errorReducer from "./errorReducer";
+import expansionPanelsReducer from "./expansionPanelsReducer";
 import filteredLogReducer from "./filteredLogReducer";
 import filterReducer from "./filterReducer";
 import gaugeHistoryReducer from "./gaugeHistoryReducer";
@@ -60,6 +62,7 @@ export interface IState {
     loadingSpinner: string;
     userDetails: IUserDetails;
     searchPanel: string;
+    expansionPanels: IExpansionPanels;
 }
 
 export default combineReducers({
@@ -86,4 +89,5 @@ export default combineReducers({
     loadingSpinner: loadingSpinnerReducer,
     userDetails: userDetailsReducer,
     searchPanel: searchPanelReducer,
+    expansionPanels: expansionPanelsReducer,
 });

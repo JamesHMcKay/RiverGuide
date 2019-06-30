@@ -58,17 +58,19 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
             defaultIndex = index;
         }
         this.props.setTabIndex(categories[defaultIndex].id);
+        const cancelToken: CancelTokenSource = axios.CancelToken.source();
+        this.props.setCategory(categories[defaultIndex].id, cancelToken);
         this.state = {
             anchorEl: null,
-            cancelToken: axios.CancelToken.source(),
+            cancelToken,
         };
     }
 
-    public componentDidMount(): void {
-        if (this.props.index) {
-            this.props.setCategory(this.props.index, this.state.cancelToken);
-        }
-    }
+    // public componentDidMount(): void {
+    //     if (this.props.index) {
+    //         this.props.setCategory(this.props.index, this.state.cancelToken);
+    //     }
+    // }
 
     public handleSelect = (event: any, categoryId: string): void => {
         this.props.setTabIndex(categoryId);

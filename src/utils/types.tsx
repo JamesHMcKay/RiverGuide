@@ -204,3 +204,12 @@ export interface IRiverRegion {
     river: string;
     region: string;
 }
+
+export interface IExpansionPanels {
+    description: boolean;
+    keyFacts: boolean;
+    map: boolean;
+    logBook: boolean;
+    latestData: boolean;
+    flowHistory: boolean;
+}

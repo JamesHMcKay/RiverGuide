@@ -23,6 +23,7 @@ import {
     EDIT_LOG,
     SET_SEARCH_PANEL,
     SET_FILTER,
+    SET_EXPANSION_PANELS,
 } from "./types";
 
 const serverLocation = process.env.REACT_APP_SERVER_URL;
@@ -280,5 +281,12 @@ export const setSearchPanel = (value) => dispatch => {
     dispatch({
         type: SET_SEARCH_PANEL,
         payload: value,
+    });
+}
+
+export const setExpansionPanels = (expansionPanels) => dispatch => {
+    dispatch({
+        type: SET_EXPANSION_PANELS,
+        payload: expansionPanels,
     });
 }

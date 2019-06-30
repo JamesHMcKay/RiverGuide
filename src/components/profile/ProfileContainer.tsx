@@ -11,7 +11,7 @@ import {
     openLogInfoPage,
 } from "../../actions/getGuides";
 import { IState } from "../../reducers/index";
-import { IAuth, IGauge, IInfoPage, IListEntry, ILogComplete, IMapBounds, IFilter } from "../../utils/types";
+import { IAuth, IFilter, IGauge, IInfoPage, IListEntry, ILogComplete, IMapBounds } from "../../utils/types";
 import Info from "../infoPanel/Info";
 import LeftPanel from "../leftPanel/LeftPanel";
 import ListItemSpecial from "../leftPanel/ListItemSpecial";

@@ -1,10 +1,10 @@
+import Typography from "@material-ui/core/Typography";
 import marked from "marked";
 import React, { Component } from "react";
-
-// Material UI
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
+import { connect } from "react-redux";
+import { IState } from "../../reducers";
+import { IExpansionPanels } from "../../utils/types";
+import ExpansionHead from "./ExpansionHead";
 
 marked.setOptions({
     gfm: true,
@@ -12,91 +12,39 @@ marked.setOptions({
     sanitize: true,
 });
 
-interface IInfoCardState {
-    editIconShowing: boolean;
-    editMode: boolean;
-    value: string;
-    tempValue: string;
-}
-
-interface IInfoCardProps {
+interface IInfoCardProps extends IInfoCardStateProps {
     content: string;
     title: string;
 }
 
-class InfoCard extends Component<IInfoCardProps, IInfoCardState> {
-    public state: IInfoCardState = {
-        editIconShowing: false,
-        editMode: false,
-        value: "",
-        tempValue: "",
-    };
+interface IInfoCardStateProps {
+    expansionPanels: IExpansionPanels;
+}
 
-    public componentWillReceiveProps = (props: IInfoCardProps): void => {
-        this.setState({ value: props.content });
-    }
-
-    public handleChange = (event: any): void => {
-        this.setState({ tempValue: event.target.value });
-    }
-
+class InfoCard extends Component<IInfoCardProps> {
     public render(): JSX.Element {
         return (
             <div>
-                    <Typography variant="h5" gutterBottom>
-                        {this.props.title}
-                    </Typography>
-                    <br />
-                    {this.state.editMode ? (
-                        <TextField
-                            id="filled-multiline-flexible"
-                            value={this.state.tempValue}
-                            onChange={this.handleChange}
-                            multiline
-                            rowsMax="10"
-                            margin="normal"
-                            style={{ width: "100%" }}
-                        />
-                    ) : (
-                        <Typography component="div">
+                <ExpansionHead title={this.props.title} panelName={"description"}/>
+                <br />
+                {this.props.expansionPanels.description &&
+                    <Typography component="div">
                             <div
                                 dangerouslySetInnerHTML={{
                                     __html: marked(this.props.content),
                                 }}
                             />
-                        </Typography>
-                    )}
-
-                    {this.state.editMode && (
-                        <div>
-                            <br />
-                            <Button
-                                size="small"
-                                onClick={(): void => {
-                                    this.setState({
-                                        editMode: false,
-                                        value: this.state.tempValue,
-                                    });
-                                }}
-                            >
-                                Save
-                            </Button>
-                            <Button
-                                size="small"
-                                onClick={(): void => {
-                                    this.setState({
-                                        editMode: false,
-                                        tempValue: "",
-                                    });
-                                }}
-                            >
-                                Cancel
-                            </Button>
-                        </div>
-                    )}
+                    </Typography>
+                }
             </div>
         );
     }
 }
 
-export default InfoCard;
+function mapStateToProps(state: IState): IInfoCardStateProps {
+    return ({
+        expansionPanels: state.expansionPanels,
+    });
+}
+
+export default connect(mapStateToProps)(InfoCard);

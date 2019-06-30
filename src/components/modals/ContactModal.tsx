@@ -37,9 +37,9 @@ class ContactModal extends Component<IContactModalProps> {
                 <DialogContent>
                     <DialogContentText>
                     <p>
-                        Do you have suggestions for the site?
-                        Or is there bugs that need fixing?
-                        Please send us a message and we will respond as soon as we can.
+                        RiverGuide is developed and mainted by Environmental Insights New Zealand.
+                        If you have suggestions, feedback or would like to get in touch
+                        please send us a message and we will respond as soon as we can.
                     </p>
                     </DialogContentText>
                    </DialogContent>

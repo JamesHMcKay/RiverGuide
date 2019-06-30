@@ -1,17 +1,15 @@
-import React, { Component } from "react";
-
-// Material UI
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import QueryBuilder from "@material-ui/icons/QueryBuilder";
-
-import LandscapeRounded from "@material-ui/icons/LandscapeRounded";
-import Timeline from "@material-ui/icons/Timeline";
-
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import LandscapeRounded from "@material-ui/icons/LandscapeRounded";
+import QueryBuilder from "@material-ui/icons/QueryBuilder";
+import Timeline from "@material-ui/icons/Timeline";
 import WarningRounded from "@material-ui/icons/WarningRounded";
-import { IItemDetails, IKeyFactsChar, IKeyFactsNum, IKeyFactsNumItem } from "../../utils/types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { IState } from "../../reducers";
+import { IExpansionPanels, IItemDetails, IKeyFactsChar, IKeyFactsNum, IKeyFactsNumItem } from "../../utils/types";
+import ExpansionHead from "./ExpansionHead";
 
 interface IKeyFactProps<T> {
     key: keyof T;
@@ -37,8 +35,12 @@ interface IKeyFactsCardState {
     tempValue: string;
 }
 
-interface IKeyFactsCardProps {
+interface IKeyFactsCardProps extends IKeyFactsCardStateProps {
     itemDetails: IItemDetails;
+}
+
+interface IKeyFactsCardStateProps {
+    expansionPanels: IExpansionPanels;
 }
 
 class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
@@ -115,51 +117,24 @@ class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
         );
     }
 
-    // public getKeyFacts = (): JSX.Element => {
-    //     return (
-    //     <Grid container item spacing={2} justify="center">
-    //     <Grid item xs={6} lg={3} justify="center">
-    //     <ListItem>
-    //             <WarningRounded fontSize="large" />
-    //           <ListItemText primary="Grade" secondary={this.props.itemDetails.gradeOverall} />
-    //         </ListItem>
-    //     </Grid>
-    //     <Grid item xs={6} lg={3} justify="center">
-    //     <ListItem>
-    //             <Timeline fontSize="large" />
-    //           <ListItemText primary="Length" secondary={this.getSectionLength()} />
-    //         </ListItem>
-    //     </Grid>
-    //     <Grid item xs={6} lg={3} justify="center">
-    //     <ListItem>
-    //         <QueryBuilder fontSize="large" />
-    //           <ListItemText primary="Time" secondary={this.getTimeRange()} />
-    //         </ListItem>
-    //     </Grid>
-    //     <Grid item xs={6} lg={3} justify="center">
-    //     <ListItem>
-    //             <LandscapeRounded fontSize="large" />
-    //           <ListItemText primary="Gradient" secondary={this.getGradient()} />
-    //         </ListItem>
-    //     </Grid>
-    //       </Grid>
-    //     );
-    //   }
-
     public render(): JSX.Element {
         return (
-            <Grid container item xs={12} justify="space-between">
-                <Grid container item md={12} lg={12} justify="flex-start">
-                    <Typography variant="h5" gutterBottom>
-                        Key Facts
-                    </Typography>
-                </Grid>
-                <Grid container item md={12} lg={12} justify="center">
-                    {this.getNewKeyFacts()}
-                </Grid>
-            </Grid>
+            <div style={{width: "100%"}}>
+                <ExpansionHead title={"Key Facts"} panelName={"keyFacts"}/>
+                {this.props.expansionPanels.keyFacts &&
+                    <Grid container item md={12} lg={12} justify="center">
+                        {this.getNewKeyFacts()}
+                    </Grid>
+            }
+            </div>
         );
     }
 }
 
-export default KeyFactsCard;
+function mapStateToProps(state: IState): IKeyFactsCardStateProps {
+    return ({
+        expansionPanels: state.expansionPanels,
+    });
+}
+
+export default connect(mapStateToProps)(KeyFactsCard);
