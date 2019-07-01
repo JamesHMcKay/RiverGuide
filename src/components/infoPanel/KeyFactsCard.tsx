@@ -78,7 +78,7 @@ class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
             const itemProps: IKeyFactProps<IKeyFactsChar> = KEY_FACTS_CHAR_PROPS.filter(
                 (item: IKeyFactProps<IKeyFactsChar>) => item.key === key,
             )[0];
-            const result: JSX.Element = (<Grid item xs={6} lg={3} justify="center">
+            const result: JSX.Element = (<Grid item xs={6} lg={3} key={itemProps.name}>
             <ListItem>
                 {itemProps.icon}
                     <ListItemText
@@ -98,7 +98,7 @@ class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
             const itemProps: IKeyFactProps<IKeyFactsNum> = KEY_FACTS_NUM_PROPS.filter(
                 (item: IKeyFactProps<IKeyFactsNum>) => item.key === key,
             )[0];
-            const result: JSX.Element = (<Grid item xs={6} lg={3} justify="center">
+            const result: JSX.Element = (<Grid item xs={6} lg={3} key={itemProps.name}>
             <ListItem>
                 {itemProps.icon}
                         <ListItemText

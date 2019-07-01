@@ -47,7 +47,7 @@ class ActivityFilter extends Component<IActivityFilterProps> {
                 onChange={this.handleTypeChange}
             >
                 {ACTIVITY_MENU.map((item: {name: string, id: string}) =>
-                    <MenuItem value={item.id}>{item.name}</MenuItem>)
+                    <MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>)
                 }
             </Select>
         );

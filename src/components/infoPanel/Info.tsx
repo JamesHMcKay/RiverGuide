@@ -302,7 +302,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                     sm={12}
                     style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "2%"}}
                 >
-                    <MapCard markers={markerList} />
+                    <MapCard markers={markerList}/>
                 </Grid>
             );
         }

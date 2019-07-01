@@ -123,7 +123,7 @@ export const openInfoPage = guide => dispatch => {
 
     } else {
         let guideId = guide.id;
-        let query = "{guide(id:\"" + guideId + "\"){description,entry_details,exit_details,marker_list,key_facts_num,key_facts_char}}"
+        let query = "{guide(id:\"" + guideId + "\"){description,entry_details,exit_details,marker_list,key_facts_num,key_facts_char, latitude, longitude}}"
         axios
         .get(`${strapi_location}`,
             {
@@ -142,6 +142,7 @@ export const openInfoPage = guide => dispatch => {
                     key_facts_char: item.key_facts_char,
                     key_facts_num: item.key_facts_num,
                     marker_list: item.marker_list,
+                    position: {lat: item.latitude < 90 ? item.latitude : -45, lon: item.longitude },
                 };
             dispatch({
                 type: GET_ITEM_DETAILS,

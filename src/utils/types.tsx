@@ -83,6 +83,7 @@ export interface IItemDetails {
     markerList: IMarker[];
     key_facts_num: IKeyFactsNum;
     key_facts_char: IKeyFactsChar;
+    position: ILatLon;
 }
 
 export interface IGauge extends IListEntry {

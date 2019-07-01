@@ -301,20 +301,20 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                                     <ActivityFilter/>
                                 </div>
                             </Link>
-
                         </div>
                         <Hidden smDown>
                             {MODALS.map((item: IMenuItem) => (
                                  <Button
-                                 color="primary"
-                                 size="large"
-                                 onClick={this.openModal.bind(this, item.modal || "")}
-                                 style={{
-                                     marginRight: "1em",
-                                 }}
-                                    >
-                                        {item.name}
-                                    </Button>
+                                    key={item.name}
+                                    color="primary"
+                                    size="large"
+                                    onClick={this.openModal.bind(this, item.modal || "")}
+                                    style={{
+                                        marginRight: "1em",
+                                    }}
+                                >
+                                    {item.name}
+                                </Button>
                             ))}
                             {isAuthenticated ? authButtons : noAuthButtons}
                         </Hidden>
