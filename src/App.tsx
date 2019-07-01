@@ -69,7 +69,7 @@ class App extends Component {
             <Provider store={store}>
                 <BrowserRouter>
                     <MuiThemeProvider theme={theme}>
-                        <div className="App">
+                    <div className="App">
                             <NavBar/>
                             <Route component={TabBar} />
                             <Switch>

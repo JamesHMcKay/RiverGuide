@@ -67,7 +67,7 @@ class BottomNav extends Component<IBottomNavProps, IBottomNavState> {
             <BottomNavigation
                 value={tabIds.indexOf(this.props.index)}
                 showLabels
-                style={{width: "100%", height: "60px"}}
+                style={{width: "100%", minHeight: "60px", marginTop: "auto"}}
              >
                  {categories.map((item: ITabCategory) => (
                      <BottomNavigationAction

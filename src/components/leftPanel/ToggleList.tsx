@@ -26,7 +26,7 @@ class ToggleList extends Component<IToggleListProps> {
 
     public render(): JSX.Element {
         return (
-            <div style = {{width: "100%", marginTop: "auto"}}>
+            <div style = {{width: "100%"}}>
                 {!this.props.infoPage.infoSelected &&
                     <ToggleButtonGroup
                         value={this.props.searchPanel}
@@ -34,10 +34,10 @@ class ToggleList extends Component<IToggleListProps> {
                         onChange={this.handleToggle}
                         style = {{width: "100%"}}
                     >
-                        <ToggleButton value="list" style = {{width: "50%", height: "30px"}}>
+                        <ToggleButton value="list" style = {{width: "50%", minHeight: "25px"}}>
                         List view
                         </ToggleButton>
-                        <ToggleButton value="map" style = {{width: "50%", height: "30px"}}>
+                        <ToggleButton value="map" style = {{width: "50%", minHeight: "25px"}}>
                         Map view
                         </ToggleButton>
                     </ToggleButtonGroup>

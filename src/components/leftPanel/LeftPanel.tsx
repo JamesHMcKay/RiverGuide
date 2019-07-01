@@ -74,7 +74,7 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
             (item: IListEntry) => favourites.indexOf(item.id) > -1,
         );
         const renderedList: JSX.Element = (
-            <List>
+            <List style={{maxHeight: '100%', overflow: 'auto'}}>
                 {this.props.specialItem && this.props.specialItem}
                 {(isAuthenticated && !noResults) && <FavGroup listEntries={favList}/>}
                 {this.props.filteredList
