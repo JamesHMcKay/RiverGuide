@@ -52,7 +52,7 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
         this.state = {
             viewport: this.getViewport(this.props.locationMarker),
             deleteMode: false,
-            editMode: false,
+            editMode: true,
             openAddMarkerDialog: false,
             openDeleteDialog: false,
             newMarker: {
@@ -281,11 +281,11 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
 
     public render(): JSX.Element {
         const viewport: IViewport = this.state.viewport;
-        const editColor: PropTypes.Color = !this.state.editMode ? "primary" : "secondary";
+        // const editColor: PropTypes.Color = !this.state.editMode ? "primary" : "secondary";
         const {newMarker: {name, category, description}} = this.state;
         const markers: IMarker[] = Object.values(this.props.markers);
         return (
-            <div className="info-map">
+            <div className="info-map" style={{height: "400px"}}>
                 <ReactMapGL
                     width="100%"
                     height="100%"
@@ -303,9 +303,9 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
                     <NavigationControl onViewportChange={(): null => null}  onViewStateChange={(): null => null}  />
                 </div>
                 </ReactMapGL>
-                <div className="info-map-buttons">
+                {/* <div className="info-map-buttons">
                      {this.editButton(editColor)}
-                </div>
+                </div> */}
                 {/* Marker dialog */}
                 <div>
                 <MarkerModal
