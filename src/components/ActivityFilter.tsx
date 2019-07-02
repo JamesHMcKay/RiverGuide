@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import { generateFilteredList } from "../actions/actions";
 import { IState } from "../reducers/index";
 import { IFilter, IListEntry, ILogEntry, IMapBounds } from "../utils/types";
-import { fontStyle } from "@material-ui/system";
 
 const ACTIVITY_MENU: Array<{name: string, id: string}> = [
     {name: "White water", id: "kayaking"},
@@ -48,7 +47,8 @@ class ActivityFilter extends Component<IActivityFilterProps> {
                 value={this.props.filters.activity}
                 style={{fontStyle: "italic"}}
                 onChange={this.handleTypeChange}
-                inputProps={{style:{fontStyle: "italic"}}}
+                IconComponent={(): any => (null)}
+                inputProps={{style: {fontStyle: "italic"}}}
             >
                 {ACTIVITY_MENU.map((item: {name: string, id: string}) =>
                     <MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>)

@@ -1,5 +1,10 @@
+import { Button, Hidden, IconButton, Tooltip } from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import CloseIcon from "@material-ui/icons/Close";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
@@ -10,26 +15,16 @@ import {
 import { addToFavourites } from "../../actions/getAuth";
 import title_image from "../../img/riverwiki.jpg";
 import { IState } from "../../reducers/index";
-import { IAuth, IInfoPage, IListEntry, ILogComplete, ILogListItem, IMarker, IUserDetails } from "../../utils/types";
-import { CurrentWeather } from "./CurrentWeather";
-import "./Info.css";
-import KeyFactsCard from "./KeyFactsCard";
-import { WeatherStore } from "./WeatherStore";
-
-// Material UI
-import { Button, Hidden, IconButton, Tooltip } from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import CloseIcon from "@material-ui/icons/Close";
-// import EditIcon from "@material-ui/icons/Edit";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
-
-// Components
+import { IAuth, IInfoPage, IListEntry, ILogComplete, ILogListItem, IUserDetails } from "../../utils/types";
 import Logbook from "../profile/Logbook";
+import { CurrentWeather } from "./CurrentWeather";
 import FlowChart from "./FlowChart";
+import "./Info.css";
 import InfoCard from "./InfoCard";
+import KeyFactsCard from "./KeyFactsCard";
 import LatestData from "./LatestData";
 import MapCard from "./MapCard";
+import { WeatherStore } from "./WeatherStore";
 
 const logTypes: string[] = [
     "Public",
@@ -41,6 +36,12 @@ const columnOrder: Array<keyof ILogListItem> = [
     "username",
     "rating",
     "participants",
+    "flow",
+];
+
+const columnOrderMobile: Array<keyof ILogListItem> = [
+    "start_date_time",
+    "username",
     "flow",
   ];
 
@@ -180,7 +181,6 @@ class Info extends Component<IInfoProps, IInfoState> {
     }
 
     public getDescription = (): JSX.Element | null => {
-        console.log("item details info page", this.props.infoPage);
         if (this.props.infoPage.itemDetails) {
             return (
                 <Grid
@@ -266,7 +266,6 @@ class Info extends Component<IInfoProps, IInfoState> {
             justify="space-between"
             style={{marginRight: "5%", marginLeft: "5%",  marginTop: "2%", marginBottom: "2%"}}
         >
-            {/* <Grid container item xs={12} spacing={10} justify="space-between"> */}
             <Grid container item md={6} lg={6} justify="flex-start">
                 <Typography variant="h5" gutterBottom>
                     Logbook
@@ -275,14 +274,19 @@ class Info extends Component<IInfoProps, IInfoState> {
             <Grid container item md={6} lg={6} justify="flex-end">
                     {this.getButtons()}
             </Grid>
-            <Logbook log={this.getLogBookEntries()} columnOrder={columnOrder} publicPage={true}/>
+            <Hidden smDown>
+                <Logbook log={this.getLogBookEntries()} columnOrder={columnOrder} publicPage={true}/>
+            </Hidden>
+                <Hidden mdUp>
+                <Logbook log={this.getLogBookEntries()} columnOrder={columnOrderMobile} publicPage={true}/>
+            </Hidden>
         </Grid>
-        // </Grid>
         );
     }
 
     public getMap = (entry: IListEntry): JSX.Element | null => {
-        const guideId: string | undefined = this.props.infoPage.selectedGuide ? this.props.infoPage.selectedGuide.id : "";
+        const guideId: string | undefined =
+            this.props.infoPage.selectedGuide ? this.props.infoPage.selectedGuide.id : "";
         return (
             <Grid
                 item
@@ -323,7 +327,8 @@ class Info extends Component<IInfoProps, IInfoState> {
                                     {entry.display_name}
                                     </Typography>
                                     <Typography variant="h6" style={{color: "white"}}>
-                                    {`${entry.river_name} river  •  ${entry.region} `}
+                                    {/* {`${entry.river_name} river  •  ${entry.region} `} */}
+                                    {`${entry.river_name} river`}
                                     </Typography>
                             </div>
                             <Hidden smDown>
@@ -342,25 +347,15 @@ class Info extends Component<IInfoProps, IInfoState> {
                         justify="space-between"
                         style={{display: "flex", flexDirection: "row"}}
                     >
-                        {/* <Grid item sm={12} md={12} justify="flex-start"> */}
-                            <CurrentWeather
-                                lat={entry.position.lat || 0}
-                                lon={entry.position.lon || 0}
-                                weatherStore={this.props.weatherStore}
-                                onClick= {this.openModal.bind(this, "weatherModal")}
-                                textColor = {"white"}
-                            />
-                        {/* </Grid>
-                        <Grid item sm={12} md={12} justify="flex-end"> */}
-                            {this.props.auth.isAuthenticated && this.getReportButton()}
-                            {/* {this.props.auth.isAuthenticated &&
-                                <Button color="secondary" onClick={this.openModal.bind(this, "editModal")}>
-                                    <EditIcon />
-                                </Button>
-                            } */}
-                        {/* </Grid> */}
+                        <CurrentWeather
+                            lat={entry.position.lat || 0}
+                            lon={entry.position.lon || 0}
+                            weatherStore={this.props.weatherStore}
+                            onClick= {this.openModal.bind(this, "weatherModal")}
+                            textColor = {"white"}
+                        />
+                        {this.props.auth.isAuthenticated && this.getReportButton()}
                     </Grid>
-
                 </Grid>
                 {isLogbookInfo && this.getLogbook()}
                 {!isLogbookInfo && this.getKeyFacts()}
@@ -376,7 +371,9 @@ class Info extends Component<IInfoProps, IInfoState> {
                     <Button
                         variant="outlined"
                         onClick={(): void => {this.props.toggleModal("editModal"); }}
-                    >Edit</Button>
+                    >
+                        Edit
+                    </Button>
                 </Grid>
             </Grid>
         );

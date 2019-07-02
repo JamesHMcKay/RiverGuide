@@ -99,8 +99,6 @@ export const openLogInfoPage = guide => dispatch => {
                 ...item,
                 log_id: item.id,
             }));
-            console.log("guide id = ", guide.id)
-            console.log("got logs = ", logs);
             logs = logs.filter(item => item.guide_id === guide.id);
 
             dispatch({

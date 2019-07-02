@@ -124,7 +124,6 @@ export const generateFilteredList = (entries, filters, mapBounds) => dispatch =>
         type: SET_FILTER,
         payload: filters
     });
-    console.log("FILTER = ", filters);
     dispatch({
         type: GENERATE_FILTERED_LIST,
         payload: {
@@ -185,7 +184,6 @@ export const updateOpenLog = openLog => dispatch => {
 
 // Create logbook entry
 export const createLogEntry = logEntry => dispatch => {
-    console.log("creating log entry", logEntry);
     dispatch({
         type: SET_LOADING_SPINNER,
         payload: "logTrip",

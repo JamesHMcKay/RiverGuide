@@ -17,6 +17,7 @@ interface IToggleListProps extends IToggleListStateProps {
 interface IToggleListStateProps {
     searchPanel: string;
     infoPage: IInfoPage;
+    logPageOpen: boolean;
 }
 
 class ToggleList extends Component<IToggleListProps> {
@@ -27,7 +28,7 @@ class ToggleList extends Component<IToggleListProps> {
     public render(): JSX.Element {
         return (
             <div style = {{width: "100%"}}>
-                {!this.props.infoPage.infoSelected &&
+                {(!this.props.infoPage.infoSelected && !this.props.logPageOpen) &&
                     <ToggleButtonGroup
                         value={this.props.searchPanel}
                         exclusive
@@ -51,6 +52,7 @@ function mapStateToProps(state: IState): IToggleListStateProps {
     return ({
         searchPanel: state.searchPanel,
         infoPage: state.infoPage,
+        logPageOpen: state.logPageOpen,
     });
 }
 

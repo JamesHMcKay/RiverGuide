@@ -11,7 +11,7 @@ import { IState } from "../../reducers/index";
 import { IAuth, ILogComplete, ILogListItem } from "../../utils/types";
 
 // Material UI
-import { Button } from "@material-ui/core";
+import { Button, Hidden } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
 // Components
@@ -22,8 +22,13 @@ const columnOrder: Array<keyof ILogListItem> = [
     "guide_name",
     "rating",
     "participants",
-    "start_date_time",
     "flow",
+    "start_date_time",
+];
+
+const columnOrderMobile: Array<keyof ILogListItem> = [
+    "guide_name",
+    "start_date_time",
 ];
 
 interface ILogPageStateProps {
@@ -75,17 +80,15 @@ class LogPage extends Component<ILogPageProps> {
     public getLogbookStats = (): JSX.Element => {
         return (
             <Grid
-            item
-            md={12}
-            lg={12}
-            style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0"}}
+                container
+                style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0"}}
         >
             <LogbookStats/>
         </Grid>
         );
     }
 
-    public getLogbook = (): JSX.Element => {
+    public getLogbook = (columns: Array<keyof ILogListItem>): JSX.Element => {
         return (
             <Grid
             item
@@ -93,7 +96,7 @@ class LogPage extends Component<ILogPageProps> {
             lg={12}
             style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0"}}
         >
-            <Logbook columnOrder={columnOrder} publicPage={false} log={this.props.log}/>
+            <Logbook columnOrder={columns} publicPage={false} log={this.props.log}/>
         </Grid>
         );
     }
@@ -101,11 +104,18 @@ class LogPage extends Component<ILogPageProps> {
     public render(): JSX.Element {
         return (
             <Grid container item xs={12} spacing={0} justify="space-between" className="right-panel" >
-                <Grid container item md={12} lg={12} justify="flex-end">
+                <Hidden smDown>
+                    <Grid container item md={12} lg={12} justify="flex-end">
                         {this.getCloseButton()}
-                </Grid>
+                    </Grid>
+                </Hidden>
                 {this.getLogbookStats()}
-                {this.getLogbook()}
+                <Hidden smDown>
+                    {this.getLogbook(columnOrder)}
+                </Hidden>
+                <Hidden mdUp>
+                    {this.getLogbook(columnOrderMobile)}
+                </Hidden>
             </Grid>
         );
     }

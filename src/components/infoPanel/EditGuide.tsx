@@ -7,12 +7,12 @@ import TextField from "@material-ui/core/TextField";
 import React from "react";
 
 import { connect } from "react-redux";
-import { updateGuide } from "../../actions/updateGuide";
-import { IGauge, IInfoPage, IMarker, IListEntry } from "../../utils/types";
-import GaugeSelect from "./GaugeSelect";
-import EditMapComponent from "../map/EditMapComponent";
-import { IState } from "../../reducers";
 import uuid from "uuidv4";
+import { updateGuide } from "../../actions/updateGuide";
+import { IState } from "../../reducers";
+import { IGauge, IInfoPage, IListEntry, IMarker } from "../../utils/types";
+import EditMapComponent from "../map/EditMapComponent";
+import GaugeSelect from "./GaugeSelect";
 
 interface IEditGuideState {
     description: string;
@@ -44,7 +44,6 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
             gaugeId = this.props.infoPage.selectedGuide.gauge_id;
             id = this.props.infoPage.selectedGuide.id;
         }
-
 
         const markers: {[key: string]: IMarker } = {};
         const markerList: IMarker[] = this.getMarkerList();
@@ -114,7 +113,6 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
         return [];
     }
 
-
     public getLocation = (): IMarker[] => {
         if (this.props.infoPage.selectedGuide) {
             const marker: IMarker = {
@@ -130,10 +128,11 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
         return [];
     }
 
-
     public getMarkerList = (): IMarker[] => {
-        let markerList: IMarker[] | undefined =
-            this.props.infoPage.itemDetails &&  this.props.infoPage.itemDetails.markerList ? this.props.infoPage.itemDetails.markerList : [];
+        const markerList: IMarker[] | undefined =
+            this.props.infoPage.itemDetails &&
+                this.props.infoPage.itemDetails.markerList ?
+                    this.props.infoPage.itemDetails.markerList : [];
         return markerList;
     }
 

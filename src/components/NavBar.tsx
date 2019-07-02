@@ -18,6 +18,7 @@ import { IAuth } from "../utils/types";
 import logo from "../img/RiverWikiLogo.png";
 
 // Styles
+import { Typography } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
@@ -28,7 +29,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ActivityFilter from "./ActivityFilter";
 import "./Navbar.css";
-import { Typography } from "@material-ui/core";
 
 export interface IMenuItem {
     name: string;
@@ -291,7 +291,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                             flexDirection: "row",
                         }}
                     >
-                        <div style={{margin: "auto", display: "flex", flexDirection: "row"}} >
+                        <div style={{marginRight: "auto", marginLeft: "10%", display: "flex", flexDirection: "row"}} >
                             <Link to="/" onClick={this.handleMapLink}>
                                 <div>
                                     <img
@@ -299,7 +299,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                                         alt=""
                                         className="nav-logo"
                                     />
-                                    
+
                                 </div>
                             </Link>
                             <div style={{display: "flex", flexDirection: "column"}}>

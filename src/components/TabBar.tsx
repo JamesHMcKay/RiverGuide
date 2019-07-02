@@ -15,6 +15,7 @@ interface ITabBarProps extends ITabBarStateToProps {
 
 interface ITabBarStateToProps {
     infoPage: IInfoPage;
+    logPageOpen: boolean;
 }
 
 class TabBar extends Component<ITabBarProps> {
@@ -25,7 +26,7 @@ class TabBar extends Component<ITabBarProps> {
                     <ControlBar location={this.props.location}/>
                 </Hidden>
                 <Hidden mdUp>
-                    {this.props.infoPage.infoSelected ?
+                    {this.props.infoPage.infoSelected || this.props.logPageOpen ?
                         <InfoControlBar/> :
                         <ControlBar location={this.props.location}/>
                     }
@@ -37,6 +38,7 @@ class TabBar extends Component<ITabBarProps> {
 
 const mapStateToProps: (state: IState) => ITabBarStateToProps = (state: IState): ITabBarStateToProps => ({
     infoPage: state.infoPage,
+    logPageOpen: state.logPageOpen,
 });
 
 export default connect(

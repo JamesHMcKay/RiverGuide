@@ -9,7 +9,7 @@ const initialState: IExpansionPanels = {
     map: true,
     logBook: true,
     latestData: true,
-    flowHistory: true,
+    flowHistory: window.innerWidth > 960,
 };
 
 export default function(state: IExpansionPanels = initialState, action: any): IExpansionPanels {

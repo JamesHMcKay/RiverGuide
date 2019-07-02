@@ -33,29 +33,41 @@ class LogbookStats extends Component<ILogBookStatsProps> {
         const dateYear: number[] = timeDiff.filter((item: number) => item < 3.154e10);
 
         return (
-            <Grid container item spacing={10} justify="space-between">
-                <Grid item md={12} lg={3}>
+            <Grid container item spacing={0} justify="space-between">
+                <Grid item xs={6} lg={3}>
                     <ListItem>
                         <QueryBuilder fontSize="large" />
-                        <ListItemText primary="Number of sections" secondary={sectionId.length} />
+                        <ListItemText
+                            style={{marginLeft: "10px"}}
+                            primary="Number of sections"
+                            secondary={sectionId.length} />
                     </ListItem>
                 </Grid>
-                <Grid item md={12} lg={3}>
+                <Grid item xs={6} lg={3}>
                     <ListItem>
                         <QueryBuilder fontSize="large" />
-                        <ListItemText primary="Last 30 days" secondary={dateThirtyDays.length} />
+                        <ListItemText
+                            style={{marginLeft: "10px"}}
+                            primary="Last 30 days"
+                            secondary={dateThirtyDays.length} />
                     </ListItem>
                 </Grid>
-                <Grid item md={12} lg={3}>
+                <Grid item xs={6} lg={3}>
                     <ListItem>
                         <QueryBuilder fontSize="large" />
-                        <ListItemText primary="Last year" secondary={dateYear.length} />
+                        <ListItemText
+                            style={{marginLeft: "10px"}}
+                            primary="Last year"
+                            secondary={dateYear.length} />
                     </ListItem>
                 </Grid>
-                <Grid item md={12} lg={3}>
+                <Grid item xs={6} lg={3}>
                     <ListItem>
                         <QueryBuilder fontSize="large" />
-                        <ListItemText primary="All time" secondary={logs.length} />
+                        <ListItemText
+                            style={{marginLeft: "10px"}}
+                            primary="All time"
+                            secondary={logs.length} />
                     </ListItem>
                 </Grid>
             </Grid>

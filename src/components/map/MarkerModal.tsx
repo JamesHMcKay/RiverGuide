@@ -1,9 +1,9 @@
+import { Button, DialogActions, IconButton, MenuItem, TextField } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import React, { Component } from "react";
 import CloseIcon from "@material-ui/icons/Close";
-import { TextField, IconButton, MenuItem, Button, DialogActions } from "@material-ui/core";
+import React, { Component } from "react";
 
 const categoryList: string[] = ["Put In", "Take out", "Carpark", "Track",
     "Rapid", "Play", "Feature", "Waterfall", "Hazard", "Portage"].sort();
@@ -77,7 +77,11 @@ export default class MarkerModal extends Component<IMarkerModalProps> {
                             />
                         </DialogContent>
                         <DialogActions>
-                            <Button disabled={!this.props.name || !this.props.category } onClick={this.props.handleSave} color="secondary">
+                            <Button
+                                disabled={!this.props.name || !this.props.category }
+                                onClick={this.props.handleSave}
+                                color="secondary"
+                            >
                                 Save
                             </Button>
                             {this.props.deleteMode ?

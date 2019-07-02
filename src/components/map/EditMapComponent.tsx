@@ -1,17 +1,17 @@
 import { PropTypes } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import CloseIcon from "@material-ui/icons/Close";
 import EditIcon from "@material-ui/icons/Edit";
 import React, { Component } from "react";
 import ReactMapGL, { Marker, NavigationControl } from "react-map-gl";
 import uuid from "uuidv4";
 import WebMercatorViewport from "viewport-mercator-project";
 import { IMarker } from "../../utils/types";
-import MapMarker from "./MapMarker";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import CloseIcon from "@material-ui/icons/Close";
 import { DEFAULT_VIEW_PORT } from "./InfoMapComponent";
+import MapMarker from "./MapMarker";
 import MarkerModal from "./MarkerModal";
 
 const TOKEN: string =

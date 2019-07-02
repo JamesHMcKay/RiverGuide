@@ -1,6 +1,6 @@
 // Material UI
 import { Button, CircularProgress, IconButton, Toolbar, Tooltip } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
+import ArrowBackRounded from "@material-ui/icons/ArrowBackRounded";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
@@ -65,7 +65,7 @@ class InfoControlBar extends Component<IInfoControlBarProps> {
                 width: "30%",
             }}
             >
-                <CloseIcon />
+                <ArrowBackRounded />
             </Button>
         );
     }
@@ -109,7 +109,7 @@ class InfoControlBar extends Component<IInfoControlBarProps> {
             <Toolbar style={{display: "flex", flexDirection: "row"}}>
                 {this.getCloseButton()}
                 <div style={{width: "70%", float: "right"}}>
-                {this.props.auth.isAuthenticated && this.getFavButton()}
+                {this.props.auth.isAuthenticated && this.props.infoPage.infoSelected && this.getFavButton()}
                 </div>
             </Toolbar>
         );

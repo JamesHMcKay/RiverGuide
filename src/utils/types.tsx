@@ -161,6 +161,7 @@ export interface ILogComplete extends ILogListItem, ILogEntry {}
 export interface ILogListItem extends ILogBase {
     guide_name: string;
     flow: string;
+    river_name: string;
 }
 
 export interface ILogEntry extends ILogBase {

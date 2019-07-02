@@ -17,6 +17,7 @@ function completeLogEntry(listEntries: IListEntry[] | undefined, logs: ILogEntry
     const result: ILogComplete[] = logs.map((item: ILogEntry) => ({
         ...item,
         guide_name: "",
+        river_name: "",
         flow: getFlow(item.observables),
     }));
     if (listEntries) {
@@ -24,6 +25,7 @@ function completeLogEntry(listEntries: IListEntry[] | undefined, logs: ILogEntry
             const listEntry: IListEntry[] = listEntries.filter((item: IListEntry) => item.id === log.guide_id);
             if (listEntry.length > 0) {
                 log.guide_name = listEntry[0].display_name;
+                log.river_name = listEntry[0].river_name || "";
             }
         }
     }

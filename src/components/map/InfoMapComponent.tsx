@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import ReactMapGL, { Marker, NavigationControl } from "react-map-gl";
-import uuid from "uuidv4";
-import { IMarker, IGauge, IInfoPage } from "../../utils/types";
-import MapMarker from "./MapMarker";
-import { IState } from "../../reducers";
 import { connect } from "react-redux";
+import uuid from "uuidv4";
+import { IState } from "../../reducers";
+import { IGauge, IInfoPage, IMarker } from "../../utils/types";
+import MapMarker from "./MapMarker";
 import ViewMarkerModal from "./ViewMarkerModal";
-import { Hidden, Typography } from "@material-ui/core";
 
 const TOKEN: string =
     "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqd29oc2hzdjF3YnM0Ym4wa3o4azFhd2MifQ.dqrE-W1cXNGKpV5FGPZFww";
@@ -65,7 +64,7 @@ class InfoMapComponent extends Component<IInfoMapProps, IInfoMapState> {
             markers[id] = marker;
         }
         this.state = {
-            markerList: markerList,
+            markerList,
             viewport: this.getViewport(markerList),
             deleteMode: false,
             editMode: false,
@@ -97,7 +96,7 @@ class InfoMapComponent extends Component<IInfoMapProps, IInfoMapState> {
                 viewport: this.getViewport(markerList),
                 markerList,
                 markers,
-            })
+            });
         }
     }
 
@@ -153,7 +152,9 @@ class InfoMapComponent extends Component<IInfoMapProps, IInfoMapState> {
 
     public getMarkers = (): Array<(0 | JSX.Element)> => {
         let markerList: IMarker[] | undefined =
-            this.props.infoPage.itemDetails &&  this.props.infoPage.itemDetails.markerList ? this.props.infoPage.itemDetails.markerList : [];
+            this.props.infoPage.itemDetails &&
+                this.props.infoPage.itemDetails.markerList ?
+                    this.props.infoPage.itemDetails.markerList : [];
         if (this.props.infoPage.selectedGuide) {
             const marker: IMarker = {
                 name: "Location",
@@ -217,7 +218,6 @@ class InfoMapComponent extends Component<IInfoMapProps, IInfoMapState> {
     }
 
     public render(): JSX.Element {
-        console.log(this.state);
         const viewport: IViewport = this.state.viewport;
         return (
             <div className="info-map" style={{height: this.props.height}}>

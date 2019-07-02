@@ -40,13 +40,6 @@ class LogbookHead extends Component<ILogbookHeadProps, ILogbookHeadState> {
         this.props.toggleModal("editTripDetails");
     }
 
-    // public componentDidUpdate(prevProps: ILogbookHeadProps): void {
-    //     const idChange: boolean = this.props.selectedLogIds[0] !== prevProps.selectedLogIds[0];
-    //     if (this.props.selectedLogIds.length === 1 && idChange) {
-    //         this.props.setSelectedLogId(this.props.selectedLogIds[0]);
-    //     }
-    // }
-
     public handleClose = (): void => {
         this.setState({
             confirmDeleteDialogOpen: false,
@@ -56,47 +49,47 @@ class LogbookHead extends Component<ILogbookHeadProps, ILogbookHeadState> {
     public render(): JSX.Element {
         const numSelected: number = this.props.selectedLogIds.length;
         return (
-            <div >
-                {numSelected > 0 &&
-                    <Typography color="inherit" variant="subtitle1">
-                    {numSelected} selected
-                </Typography>}
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton aria-label="Delete" onClick={(): void => {this.setState({confirmDeleteDialogOpen: true}); }}>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton aria-label="Filter list">
-            </IconButton>
-          </Tooltip>
-        )}
-        {numSelected === 1 &&
-                  <Tooltip title="Edit">
-                  <IconButton aria-label="Edit" onClick={this.editLog}>
-                    <EditIcon />
-                  </IconButton>
+            <div style={{minHeight: "50px", display: "flex", flexDirection: "row"}}>
+                <Tooltip title="Delete">
+                    <IconButton
+                        aria-label="Delete"
+                        onClick={(): void => {this.setState({confirmDeleteDialogOpen: true}); }}
+                        disabled={numSelected < 1}
+                    >
+                        <DeleteIcon />
+                    </IconButton>
                 </Tooltip>
-        }
-        <Dialog
-            open={this.state.confirmDeleteDialogOpen}
-            onClose={this.handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-        >
-        <DialogTitle id="alert-dialog-title">{`Delete ${numSelected} log book entries?`}</DialogTitle>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={this.deleteLogs} color="primary" autoFocus>
-            Okay
-          </Button>
-        </DialogActions>
-      </Dialog>
-      </div>
+                <Tooltip title="Edit">
+                    <IconButton
+                        aria-label="Edit"
+                        onClick={this.editLog}
+                        disabled={numSelected !== 1}
+                    >
+                        <EditIcon />
+                    </IconButton>
+                </Tooltip>
+                {numSelected > 0 &&
+                    <Typography style={{margin: "auto"}} color="inherit" variant="h6">
+                        {numSelected} selected
+                    </Typography>
+                }
+                <Dialog
+                    open={this.state.confirmDeleteDialogOpen}
+                    onClose={this.handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{`Delete ${numSelected} log book entries?`}</DialogTitle>
+                    <DialogActions>
+                    <Button onClick={this.handleClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={this.deleteLogs} color="primary" autoFocus>
+                        Okay
+                    </Button>
+                    </DialogActions>
+                 </Dialog>
+            </div>
         );
     }
 }

@@ -16,23 +16,39 @@ import LogbookHead from "./LogbookHead";
 import "./profile.css";
 
 interface IEnhancedTableProps {
-  numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof ILogListItem) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-  columnOrder: Array<keyof ILogListItem>;
-  publicPage: boolean;
+    numSelected: number;
+    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof ILogListItem) => void;
+    onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
+    order: Order;
+    orderBy: string;
+    rowCount: number;
+    columnOrder: Array<keyof ILogListItem>;
+    publicPage: boolean;
+}
+
+function dateWrapper(inputDate: string): JSX.Element {
+  const dateParsed: Date = new Date(inputDate);
+  return (
+    <div>
+      {dateParsed.toDateString()}
+    </div>
+  );
+}
+
+function renderElement(input: any, key: keyof ILogListItem): React.ReactNode  {
+  if (key === "start_date_time") {
+    return dateWrapper(input);
   }
+  return input;
+}
 
 const headRows: IHeadRow[] = [
-  { id: "start_date_time", numeric: false, disablePadding: false, label: "Date" },
-  { id: "guide_name", numeric: false, disablePadding: false, label: "Guide name" },
-  { id: "rating", numeric: true, disablePadding: false, label: "Rating" },
-  { id: "participants", numeric: true, disablePadding: false, label: "Participants" },
-  { id: "flow", numeric: true, disablePadding: false, label: "Flow"},
-  { id: "username", numeric: true, disablePadding: false, label: "User name"},
+    { id: "start_date_time", numeric: false, disablePadding: false, label: "Date"},
+    { id: "guide_name", numeric: false, disablePadding: true, label: "Guide name" },
+    { id: "rating", numeric: true, disablePadding: false, label: "Rating" },
+    { id: "participants", numeric: true, disablePadding: false, label: "Participants" },
+    { id: "flow", numeric: true, disablePadding: false, label: "Flow"},
+    { id: "username", numeric: true, disablePadding: false, label: "User name"},
 ];
 
 function EnhancedTableHead(props: IEnhancedTableProps): JSX.Element {
@@ -59,7 +75,6 @@ function EnhancedTableHead(props: IEnhancedTableProps): JSX.Element {
                       indeterminate={numSelected > 0 && numSelected < rowCount}
                       checked={numSelected === rowCount}
                       onChange={onSelectAllClick}
-                      inputProps={{ "aria-label": "Select all desserts" }}
                   />}
               </TableCell>
               {headerRowsOrdered.map((row: IHeadRow) => (
@@ -163,25 +178,6 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
         };
     }
 
-    // public listsAreEqual = (listOne: ILogComplete[], listTwo: ILogComplete[]): boolean => {
-    //     if (listOne.length !== listTwo.length) {
-    //         return false;
-    //     }
-    //     for (let i: number = 0; i < listOne.length; i++) {
-    //         if (listOne[i].log_id !== listTwo[i].log_id) {
-    //             return false;
-    //         }
-    //     }
-
-    //     return true;
-    // }
-
-    // public componentDidUpdate(prevProps: ILogBookProps): void {
-    //     if (!this.listsAreEqual(this.props.log, prevProps.log)) {
-    //         this.setState({listItems: this.createList(this.props.log)});
-    //     }
-    // }
-
     public getFlow = (observables: IObsValue | undefined): string => {
       if (!observables) {
         return "";
@@ -207,6 +203,7 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
             id: item.id,
             flow: item.flow,
             username: item.username,
+            river_name: item.river_name,
         }));
         return listItems;
     }
@@ -258,7 +255,7 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
         this.setSelected([]);
       }
 
-      public handlePrivateClick = (name: string): void => {
+      public handleCheckClick = (name: string): void => {
         const selectedIndex: number = this.props.selectedLogIds.indexOf(name);
         let newSelected: string[] = [];
 
@@ -283,11 +280,8 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
       }
 
       public handleClick = (event: React.MouseEvent<unknown>, name: string): void => {
-        if (this.props.publicPage) {
-          this.handlePublicClick(name);
-        } else {
-          this.handlePrivateClick(name);
-        }
+        event.stopPropagation();
+        this.handleCheckClick(name);
       }
 
       public handleChangePage = (event: unknown, newPage: number): void => {
@@ -305,23 +299,30 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
             <TableCell padding="checkbox" key = {"checkbox"}>
             {!this.props.publicPage &&
                 <Checkbox
-                checked={input.isItemSelected}
-                inputProps={{ "aria-labelledby": input.labelId }}
+                  onClick={(event: any): void => this.handleClick(event, input.row.log_id)}
+                  checked={input.isItemSelected}
+                  inputProps={{ "aria-labelledby": input.labelId }}
                 />
               }
             </TableCell>
         )];
         for (const key of input.columnOrder) {
             if (output.length === 1) {
-                output.push(<TableCell
-                  component="th"
-                  id={input.labelId}
-                  scope="row"
-                  padding="none"
-                  key={key}
-                >{input.row[key]}</TableCell>);
+                output.push(
+                  <TableCell
+                    component="th"
+                    id={input.labelId}
+                    scope="row"
+                    padding="none"
+                    key={key}
+                  >{renderElement(input.row[key], key)}</TableCell>,
+                );
             } else {
-                output.push(<TableCell key={key} align="right">{input.row[key]}</TableCell>);
+                output.push(
+                  <TableCell key={key} align="right">
+                    {renderElement(input.row[key], key)}
+                  </TableCell>,
+                );
             }
         }
         return output;
@@ -337,10 +338,10 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
         return (
             <div style={{width: "100%", marginTop: "0em"}}>
             <Paper style={{width: "100%", marginTop: "1em"}}>
-              <LogbookHead/>
+              {!this.props.publicPage && <LogbookHead/>}
               <div style={{overflowX: "auto"}}>
                 <Table
-                  style={{minWidth: 750}}
+                  // style={{minWidth: 750}}
                   aria-labelledby="tableTitle"
                 >
                   <EnhancedTableHead
@@ -364,7 +365,7 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
                         return (
                           <TableRow
                             hover
-                            onClick={(event: any): void => this.handleClick(event, row.log_id)}
+                            onClick={(event: any): void => {this.handlePublicClick(row.log_id); }}
                             role="checkbox"
                             aria-checked={isItemSelected}
                             tabIndex={-1}

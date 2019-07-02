@@ -45,7 +45,6 @@ class ExpansionHead extends Component<IExpansionHeadProps> {
             <div>
                 <Grid
                     container
-                    item
                     spacing={0}
                     justify="space-between"
                     style={{display: "flex", flexDirection: "row", cursor: "pointer"}}
