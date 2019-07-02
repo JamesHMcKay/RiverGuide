@@ -122,7 +122,6 @@ weather-forecast {
 }
 
 .info-map {
-    height: 300px;
     display: flex;
     flex-direction: row;
     position: relative;

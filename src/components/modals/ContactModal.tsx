@@ -43,13 +43,6 @@ class ContactModal extends Component<IContactModalProps> {
                     </p>
                     </DialogContentText>
                    </DialogContent>
-                    <Button
-                        variant = "contained"
-                        color="primary"
-                        onClick={this.handleClose}
-                        fullWidth>
-                                Close
-                    </Button>
                 </Dialog>
             </div>
         );

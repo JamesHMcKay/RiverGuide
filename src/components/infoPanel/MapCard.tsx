@@ -1,4 +1,4 @@
-import { Button } from "@material-ui/core";
+import { Button, Hidden } from "@material-ui/core";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
@@ -8,7 +8,7 @@ import InfoMapComponent from "../map/InfoMapComponent";
 import ExpansionHead from "./ExpansionHead";
 
 interface IMapCardProps extends IMapCardStateProps {
-    markers: IMarker[];
+    guideId: string;
 }
 
 interface IMapCardStateProps {
@@ -23,16 +23,22 @@ class MapCard extends Component<IMapCardProps> {
     public render(): JSX.Element {
         return (
             <div>
+                <Hidden smDown>
                 <ExpansionHead title={"Local Map"} panelName={"map"}/>
-                {this.props.expansionPanels.map && <InfoMapComponent
-                        markers={this.props.markers}
-                        draggable={false}
-                    />
-                }
-                                <Button
-                    variant="outlined"
-                    onClick={(): void => {this.props.toggleModal("mapModal"); }}
-                >Open map in dialog</Button>
+                    {this.props.expansionPanels.map && <InfoMapComponent
+                            draggable={true}
+                            guideId={this.props.guideId}
+                            height={"300px"}
+                        />
+                    }
+                </Hidden>
+                <Hidden mdUp>
+                    <Button
+                        size="medium"
+                        onClick={(): void => {this.props.toggleModal("mapModal"); }}
+                    >Local map</Button>
+                </Hidden>
+
             </div>
         );
     }

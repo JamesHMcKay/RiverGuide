@@ -43,7 +43,7 @@ export const setCategory = (category, cancelToken) => dispatch => {
                         observables: item.observables,
                         region: item.data_source,
                         river_name: "undefined",
-                        activity: "gauge",
+                        activity: "data",
                     }));
                 dispatch({
                     type: GET_ENTRIES,
@@ -141,7 +141,7 @@ export const openInfoPage = guide => dispatch => {
                     description: item.description,
                     key_facts_char: item.key_facts_char,
                     key_facts_num: item.key_facts_num,
-                    marker_list: item.marker_list,
+                    markerList: item.marker_list !== "" ? item.marker_list : [],
                     position: {lat: item.latitude < 90 ? item.latitude : -45, lon: item.longitude },
                 };
             dispatch({

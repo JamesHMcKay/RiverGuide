@@ -12,6 +12,8 @@ interface IMapMarkerProps {
     onClick: () => void;
     editMode: boolean;
     toolTip: string;
+    color?: string;
+    subtext?: string;
 }
 
 export default class MapMarker extends PureComponent<IMapMarkerProps> {
@@ -25,18 +27,28 @@ export default class MapMarker extends PureComponent<IMapMarkerProps> {
 
     public render(): JSX.Element {
         const {size = 80, onClick} = this.props;
+
+        const toolTipContent: React.ReactNode = (
+            <div style={{height: "fit-content"}}>
+                <p><strong>{this.props.toolTip}</strong></p>
+                {this.props.subtext && <p>{this.props.subtext}</p> }
+            </div>);
+
         return (
+            <Tooltip title={toolTipContent} onClick={onClick} style={{maxWidth: 300}}>
             <svg
                 height={size}
                 viewBox="0 0 80 80"
                 style={{...pinStyle, transform: `translate(${-size / 2}px,${-size}px)`}}
-                onClick={onClick}
+                // onClick={onClick}
             >
-                {this.getToolTip(<IoIosLocation
-                            size={80}
-                            className="map-marker"
-                    />)}
+                <IoIosLocation
+                    size={80}
+                    className="map-marker"
+                    style={{color: this.props.color || "blue"}}
+                />
             </svg>
+            </Tooltip>
         );
       }
 }

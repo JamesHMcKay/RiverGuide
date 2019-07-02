@@ -1,16 +1,25 @@
 import React, { Component } from "react";
 import ReactMapGL, { Marker, NavigationControl } from "react-map-gl";
 import uuid from "uuidv4";
-import WebMercatorViewport from "viewport-mercator-project";
-import { IMarker } from "../../utils/types";
+import { IMarker, IGauge, IInfoPage } from "../../utils/types";
 import MapMarker from "./MapMarker";
+import { IState } from "../../reducers";
+import { connect } from "react-redux";
+import ViewMarkerModal from "./ViewMarkerModal";
+import { Hidden, Typography } from "@material-ui/core";
 
 const TOKEN: string =
     "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqd29oc2hzdjF3YnM0Ym4wa3o4azFhd2MifQ.dqrE-W1cXNGKpV5FGPZFww";
 
-interface IInfoMapProps {
-    markers: IMarker[];
+interface IInfoMapStateProps {
+    infoPage: IInfoPage;
+    gauges: IGauge[];
+}
+
+interface IInfoMapProps extends IInfoMapStateProps {
     draggable: boolean;
+    guideId: string;
+    height: string;
 }
 
 export interface IViewport {
@@ -20,6 +29,7 @@ export interface IViewport {
 }
 
 interface IInfoMapState {
+    markerList: IMarker[];
     viewport: IViewport;
     deleteMode: boolean;
     editMode: boolean;
@@ -34,26 +44,29 @@ interface IInfoMapState {
         long: number,
         id: string;
     };
+    viewModalOpen: boolean;
+    selectedMarker?: IMarker;
 }
 
-const DEFAULT_VIEW_PORT: IViewport = {
+export const DEFAULT_VIEW_PORT: IViewport = {
     longitude: -122.45,
     latitude: 37.78,
     zoom: 14,
 };
 
-export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapState> {
+class InfoMapComponent extends Component<IInfoMapProps, IInfoMapState> {
     constructor(props: IInfoMapProps) {
         super(props);
         const markers: {[key: string]: IMarker } = {};
-
-        for (const marker of props.markers) {
+        const markerList: IMarker[] = this.getMarkerList();
+        for (const marker of markerList) {
             const id: string = uuid();
             marker.id = id;
             markers[id] = marker;
         }
         this.state = {
-            viewport: this.getViewport(),
+            markerList: markerList,
+            viewport: this.getViewport(markerList),
             deleteMode: false,
             editMode: false,
             markers,
@@ -67,57 +80,109 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
                 long: 0,
                 id: "",
             },
+            viewModalOpen: false,
         };
     }
 
-    public getViewport(): IViewport {
-        const bounds: IMarker[] = this.props.markers;
-        let viewport: IViewport = DEFAULT_VIEW_PORT;
-        if (bounds.length >= 2) {
-            const putInLat: number = bounds[0].lat;
-            const putInLon: number = bounds[0].lng;
-
-            const takeOutLat: number = bounds[bounds.length - 1].lat;
-            const takeOutLon: number = bounds[bounds.length - 1].lng;
-
-            const { longitude, latitude, zoom } = new WebMercatorViewport(
-                this.state.viewport,
-            ).fitBounds([[putInLon, putInLat], [takeOutLon, takeOutLat]], {
-                padding: 20,
-                offset: [0, 0],
-            });
-
-            viewport = {
-                longitude,
-                latitude,
-                zoom,
-            };
-        } else if (bounds.length === 1) {
-            viewport = {
-                latitude: bounds[0].lat,
-                longitude: bounds[0].lng,
-                zoom: 10,
-            };
+    public componentDidUpdate = (nextProps: IInfoMapProps): void => {
+        if (nextProps.guideId !== this.props.guideId) {
+            const markers: {[key: string]: IMarker } = {};
+            const markerList: IMarker[] = this.getMarkerList();
+            for (const marker of markerList) {
+                const id: string = uuid();
+                marker.id = id;
+                markers[id] = marker;
+            }
+            this.setState({
+                viewport: this.getViewport(markerList),
+                markerList,
+                markers,
+            })
         }
+    }
+
+    public getViewport = (markerList: IMarker[]): IViewport => {
+        const bounds: IMarker[] = markerList;
+        let viewport: IViewport = DEFAULT_VIEW_PORT;
+        viewport = {
+            latitude: bounds[0].lat,
+            longitude: bounds[0].lng,
+            zoom: 10,
+        };
         return viewport;
     }
 
+    public getGaugeLocation = (): IMarker[] => {
+        const gauges: IGauge[] = this.props.gauges.filter(
+            (item: IGauge) => item.id === this.props.infoPage.selectedGuide.gauge_id,
+        );
+        if (gauges.length > 0) {
+            const gaugeMarkers: IMarker[] = gauges.map((item: IGauge) =>
+                ({
+                    name: item.display_name,
+                    lat: item.position.lat,
+                    lng: item.position.lon || 0,
+                    id: item.display_name,
+                    description: "Gauge",
+                    category: "Gauge",
+                }));
+            return gaugeMarkers;
+        }
+        return [];
+    }
+
+    public getMarkerList = (): IMarker[] => {
+        let markerList: IMarker[] | undefined =
+            this.props.infoPage.itemDetails ? this.props.infoPage.itemDetails.markerList : [];
+        if (this.props.infoPage.selectedGuide) {
+            const marker: IMarker = {
+                name: "Location",
+                lat: this.props.infoPage.selectedGuide.position.lat,
+                lng: this.props.infoPage.selectedGuide.position.lon || 0,
+                id: "1",
+                description: "",
+                category: "",
+            };
+            markerList = markerList.concat(marker);
+        }
+        if (this.props.infoPage.selectedGuide && this.props.infoPage.selectedGuide.activity !== "data") {
+            markerList = markerList.concat(this.getGaugeLocation());
+        }
+        return markerList;
+    }
+
     public getMarkers = (): Array<(0 | JSX.Element)> => {
-        const markersList: IMarker[] = Object.values(this.state.markers);
-        const list: Array<(0 | JSX.Element)> = markersList.map(
+        let markerList: IMarker[] | undefined =
+            this.props.infoPage.itemDetails &&  this.props.infoPage.itemDetails.markerList ? this.props.infoPage.itemDetails.markerList : [];
+        if (this.props.infoPage.selectedGuide) {
+            const marker: IMarker = {
+                name: "Location",
+                lat: this.props.infoPage.selectedGuide.position.lat,
+                lng: this.props.infoPage.selectedGuide.position.lon || 0,
+                id: "1",
+                description: "",
+                category: this.props.infoPage.selectedGuide.display_name,
+            };
+            markerList = markerList.concat(marker);
+        }
+        if (this.props.infoPage.selectedGuide && this.props.infoPage.selectedGuide.activity !== "data") {
+            markerList = markerList.concat(this.getGaugeLocation());
+        }
+        const list: Array<(0 | JSX.Element)> = markerList.map(
             (marker: IMarker) =>
                 marker.lat &&
                 marker.lng && (
                     <Marker
-                        key={marker.lat}
+                        key={uuid()}
                         longitude={marker.lng}
                         latitude={marker.lat}
                     >
                         <MapMarker
                             size={30}
                             toolTip={marker.name}
+                            subtext={marker.category}
                             editMode={this.state.editMode}
-                            onClick={(): void => {return; }}
+                            onClick={(): void => {this.handleOpen(marker); }}
                         />
                   </Marker>
                 ),
@@ -127,8 +192,6 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
 
     public setViewportNav(newViewport: IViewport): void {
         const viewport: IViewport = {
-            // width: this.state.viewport.width,
-            // height: this.state.viewport.height,
             latitude: newViewport.latitude,
             longitude: newViewport.longitude,
             zoom: newViewport.zoom,
@@ -136,10 +199,28 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
         this.setState({ viewport });
     }
 
+    public handleOpen = (marker: IMarker): void => {
+        if (this.props.draggable) {
+            this.setState({
+                selectedMarker: marker,
+                viewModalOpen: true,
+            });
+        } else {
+            this.setState({
+                selectedMarker: marker,
+            });
+        }
+    }
+
+    public handleClose = (): void => {
+        this.setState({ viewModalOpen: false, selectedMarker: undefined });
+    }
+
     public render(): JSX.Element {
+        console.log(this.state);
         const viewport: IViewport = this.state.viewport;
         return (
-            <div className="info-map">
+            <div className="info-map" style={{height: this.props.height}}>
                 <ReactMapGL
                     dragPan={this.props.draggable}
                     touchAction="pan-y"
@@ -158,7 +239,23 @@ export default class InfoMapComponent extends Component<IInfoMapProps, IInfoMapS
                         onViewStateChange={(): null => null}  />
                 </div>
                 </ReactMapGL>
+                {this.state.selectedMarker &&
+                    <ViewMarkerModal
+                        handleClose={this.handleClose}
+                        marker={this.state.selectedMarker}
+                        isOpen={this.state.viewModalOpen}
+                    />
+                }
             </div>
         );
     }
 }
+
+function mapStateToProps(state: IState): IInfoMapStateProps {
+    return ({
+        infoPage: state.infoPage,
+        gauges: state.gauges,
+    });
+}
+
+export default connect(mapStateToProps)(InfoMapComponent);

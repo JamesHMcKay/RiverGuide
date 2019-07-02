@@ -50,13 +50,6 @@ class AboutModal extends Component<IAboutModalProps> {
                             there? Go ahead, sign up and get started!</p>
                     </DialogContentText>
                    </DialogContent>
-                    <Button
-                        variant = "contained"
-                        color="primary"
-                        onClick={this.handleClose}
-                        fullWidth>
-                                Close
-                    </Button>
                 </Dialog>
             </div>
         );

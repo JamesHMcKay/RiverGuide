@@ -2,31 +2,29 @@ import { PropTypes } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import EditIcon from "@material-ui/icons/Edit";
 import React, { Component } from "react";
-import ReactMapGL, { Marker, NavigationControl, ViewState } from "react-map-gl";
+import ReactMapGL, { Marker, NavigationControl } from "react-map-gl";
 import uuid from "uuidv4";
 import WebMercatorViewport from "viewport-mercator-project";
 import { IMarker } from "../../utils/types";
 import MapMarker from "./MapMarker";
-
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import IconButton from "@material-ui/core/IconButton";
-import MenuItem from "@material-ui/core/MenuItem";
-import TextField from "@material-ui/core/TextField";
 import CloseIcon from "@material-ui/icons/Close";
+import { DEFAULT_VIEW_PORT } from "./InfoMapComponent";
+import MarkerModal from "./MarkerModal";
 
 const TOKEN: string =
     "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqd29oc2hzdjF3YnM0Ym4wa3o4azFhd2MifQ.dqrE-W1cXNGKpV5FGPZFww";
 
 interface IEditMapProps {
-    markers: IMarker[];
+    markers: {[key: string]: IMarker};
+    gaugeMarkers: IMarker[];
+    locationMarker: IMarker[];
+    updateMarkers: (markers: {[key: string]: IMarker}) => void;
 }
 
 export interface IViewport {
-    // width: number;
-    // height: number;
     longitude: number;
     latitude: number;
     zoom: number;
@@ -36,7 +34,6 @@ interface IEditMapState {
     viewport: IViewport;
     deleteMode: boolean;
     editMode: boolean;
-    markers: {[key: string]: IMarker};
     openAddMarkerDialog: boolean;
     openDeleteDialog: boolean;
     newMarker: {
@@ -49,30 +46,13 @@ interface IEditMapState {
     };
 }
 
-const categoryList: string[] = ["Put In", "Carpark", "Track",
-    "Rapid", "Play", "Feature", "Waterfall", "Hazard", "Portage"].sort();
-
 export default class EditMapComponent extends Component<IEditMapProps, IEditMapState> {
     constructor(props: IEditMapProps) {
         super(props);
-        const markers: {[key: string]: IMarker } = {};
-
-        for (const marker of props.markers) {
-            const id: string = uuid();
-            marker.id = id;
-            markers[id] = marker;
-        }
         this.state = {
-            viewport: {
-                // width: 800,
-                // height: 300,
-                longitude: -122.45,
-                latitude: 37.78,
-                zoom: 14,
-            },
+            viewport: this.getViewport(this.props.locationMarker),
             deleteMode: false,
             editMode: false,
-            markers,
             openAddMarkerDialog: false,
             openDeleteDialog: false,
             newMarker: {
@@ -86,9 +66,9 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
         };
     }
 
-    public onMarkerClick(markerId: string): void {
-        if (this.state.editMode) {
-            const markers: { [key: string]: IMarker} = {...this.state.markers};
+    public onMarkerClick(markerId: string, canEdit: boolean): void {
+        if (this.state.editMode && canEdit) {
+            const markers: { [key: string]: IMarker} = {...this.props.markers};
             this.setState({
                     deleteMode: true,
                     openAddMarkerDialog: true,
@@ -106,18 +86,15 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
 
     public onMarkerDragEnd = (markerId: string, event: any): void => {
         if (this.state.editMode) {
-            const markers: { [key: string]: IMarker } = {...this.state.markers};
+            const markers: { [key: string]: IMarker } = {...this.props.markers};
             markers[markerId].lat = event.lngLat[1];
             markers[markerId].lng = event.lngLat[0];
-            this.setState({
-                markers,
-        });
+            this.props.updateMarkers(markers);
         } else {event.preventDefault(); }
     }
 
-    public getMarkers = (): Array<(0 | JSX.Element)> => {
-        const markersList: IMarker[] = Object.values(this.state.markers);
-        const list: Array<(0 | JSX.Element)> = markersList.map(
+    public getMarkers = (markerList: IMarker[], color: string, canEdit: boolean): Array<(0 | JSX.Element)> => {
+        const list: Array<(0 | JSX.Element)> = markerList.map(
             (marker: IMarker) =>
                 marker.lat &&
                 marker.lng && (
@@ -125,16 +102,15 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
                         key={marker.lat}
                         longitude={marker.lng}
                         latitude={marker.lat}
-                        draggable
-                        // onDragStart={this.onMarkerDragStart}
+                        draggable={canEdit}
                         onDragEnd={(event: any): void => this.onMarkerDragEnd(marker.id, event)}
-                        // onDrag={this.onMarkerDrag}
                     >
                         <MapMarker
                             size={30}
                             toolTip={marker.name}
                             editMode={this.state.editMode}
-                            onClick={(): void => this.onMarkerClick(marker.id)}
+                            onClick={(): void => this.onMarkerClick(marker.id, canEdit)}
+                            color={color}
                         />
                   </Marker>
                 ),
@@ -143,7 +119,7 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
     }
 
     public setViewport(): IViewport {
-        const bounds: IMarker[] = this.props.markers;
+        const bounds: IMarker[] = Object.values(this.props.markers);
         let viewport: IViewport = {
             ...this.state.viewport,
         };
@@ -232,11 +208,9 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
                 description,
                 category,
             };
-        const markers: { [key: string]: IMarker } = {...this.state.markers};
+        const markers: { [key: string]: IMarker } = {...this.props.markers};
         markers[id] = marker;
-        this.setState({
-            markers,
-        });
+        this.props.updateMarkers(markers);
         this.handleClose();
         this.resetNewMarkerState();
     }
@@ -249,12 +223,12 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
     }
 
     public deleteMarker = (): void => {
-        const markers: { [key: string]: IMarker} = {...this.state.markers};
+        const markers: { [key: string]: IMarker} = {...this.props.markers};
         delete markers[this.state.newMarker.id];
         this.setState({
-                markers,
                 deleteMode: false,
             });
+        this.props.updateMarkers(markers);
         this.resetNewMarkerState();
         this.handleDeleteClose();
         this.handleClose();
@@ -275,17 +249,41 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
     public editButton = (editColor: PropTypes.Color): JSX.Element => {
         const toolTip: string = !this.state.editMode ? "On" : "Off";
         return (
-            <Button color={editColor} aria-label="Add" title={`Turn edit mode ${toolTip}`}
+            <Button
+                color={editColor}
+                aria-label="Add"
+                title={`Turn edit mode ${toolTip}`}
                 onClick={(): void => {this.setState({editMode: !this.state.editMode}); }}
             >
                 {this.state.editMode ? <CloseIcon /> : <EditIcon  />}
             </Button>);
     }
 
+    public setViewportNav(newViewport: IViewport): void {
+        const viewport: IViewport = {
+            latitude: newViewport.latitude,
+            longitude: newViewport.longitude,
+            zoom: newViewport.zoom,
+        };
+        this.setState({ viewport });
+    }
+
+    public getViewport = (markerList: IMarker[]): IViewport => {
+        const bounds: IMarker[] = markerList;
+        let viewport: IViewport = DEFAULT_VIEW_PORT;
+        viewport = {
+            latitude: bounds[0].lat,
+            longitude: bounds[0].lng,
+            zoom: 10,
+        };
+        return viewport;
+    }
+
     public render(): JSX.Element {
-        const viewport: IViewport = this.setViewport();
+        const viewport: IViewport = this.state.viewport;
         const editColor: PropTypes.Color = !this.state.editMode ? "primary" : "secondary";
         const {newMarker: {name, category, description}} = this.state;
+        const markers: IMarker[] = Object.values(this.props.markers);
         return (
             <div className="info-map">
                 <ReactMapGL
@@ -293,12 +291,14 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
                     height="100%"
                     mapStyle="mapbox://styles/mapbox/outdoors-v9"
                     {...viewport}
-                    onViewportChange={(viewport: ViewState): null => null}
+                    onViewportChange={(viewport: IViewport): void => this.setViewportNav(viewport)}
                     mapboxApiAccessToken={TOKEN}
                     onClick={this.onMapClick}
                     // onDragOver={(e) => this.onDragOver()}
                 >
-                    {this.getMarkers()}
+                    {this.getMarkers(markers, "blue", true)}
+                    {this.getMarkers(this.props.gaugeMarkers, "red", false)}
+                    {this.getMarkers(this.props.locationMarker, "red", false)}
                 <div style={{position: "absolute", right: 5}}>
                     <NavigationControl onViewportChange={(): null => null}  onViewStateChange={(): null => null}  />
                 </div>
@@ -308,71 +308,17 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
                 </div>
                 {/* Marker dialog */}
                 <div>
-                    <Dialog
-                        open={this.state.openAddMarkerDialog}
-                        onClose={this.handleClose}
-                        fullWidth
-                        >
-                        <DialogTitle >
-                            <IconButton
-                                aria-label="Close"
-                                style={{position: "absolute", right: 0, top: 0}}
-                                onClick={this.handleClose}
-                            >
-                                <CloseIcon />
-                            </IconButton>
-                            Please provide marker details
-                        </DialogTitle>
-                        <DialogContent>
-                            <TextField
-                                fullWidth
-                                label="Name*"
-                                variant="outlined"
-                                margin="dense"
-                                value={name}
-                                onChange={this.handleChange("name")}
-                                autoFocus
-                            />
-                            <br />
-                            <TextField
-                                select
-                                label="Category*"
-                                value={category}
-                                onChange={this.handleChange("category")}
-                                fullWidth
-                                margin="dense"
-                                variant="outlined"
-                            >
-                                {categoryList.map((category: string) =>
-                                    <MenuItem key={category} value={category}>{category}</MenuItem>,
-                                )}
-                            </TextField>
-                            <TextField
-                                label="Description"
-                                multiline
-                                rows="4"
-                                margin="dense"
-                                variant="outlined"
-                                fullWidth
-                                value={description}
-                                onChange={this.handleChange("description")}
-                            />
-                        </DialogContent>
-                        <DialogActions>
-                            <Button disabled={!name || !category } onClick={this.handleSave} color="secondary">
-                                Save
-                            </Button>
-                            {this.state.deleteMode ?
-                                <Button onClick={this.handleDelete} style={{color: "red"}}>
-                                    Delete
-                                </Button> :
-                                <Button onClick={this.handleClose} color="primary">
-                                    Cancel
-                                </Button>
-                            }
-                        </DialogActions>
-                    </Dialog>
-
+                <MarkerModal
+                    handleClose={this.handleClose}
+                    handleChange={this.handleChange}
+                    handleDelete={this.handleDelete}
+                    handleSave={this.handleSave}
+                    name={name}
+                    description={description}
+                    category={category}
+                    deleteMode={this.state.deleteMode}
+                    isOpen={this.state.openAddMarkerDialog}
+                />
                     {/* Delete confirmation dialog */}
                     <Dialog open={this.state.openDeleteDialog}>
                         <DialogTitle>

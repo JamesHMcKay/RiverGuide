@@ -28,6 +28,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ActivityFilter from "./ActivityFilter";
 import "./Navbar.css";
+import { Typography } from "@material-ui/core";
 
 export interface IMenuItem {
     name: string;
@@ -290,7 +291,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                             flexDirection: "row",
                         }}
                     >
-                        <div style={{margin: "auto"}} >
+                        <div style={{margin: "auto", display: "flex", flexDirection: "row"}} >
                             <Link to="/" onClick={this.handleMapLink}>
                                 <div>
                                     <img
@@ -298,9 +299,15 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                                         alt=""
                                         className="nav-logo"
                                     />
-                                    <ActivityFilter/>
+                                    
                                 </div>
                             </Link>
+                            <div style={{display: "flex", flexDirection: "column"}}>
+                            <Typography color="primary" variant="h1">
+                                RiverGuide
+                            </Typography>
+                            <ActivityFilter/>
+                            </div>
                         </div>
                         <Hidden smDown>
                             {MODALS.map((item: IMenuItem) => (

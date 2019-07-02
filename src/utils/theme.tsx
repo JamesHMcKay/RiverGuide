@@ -46,6 +46,13 @@ const theme: Theme = {
           fontSize: "1.5em",
         },
       },
+      h1: {
+        fontSize: "1.5em",
+        fontWeight: "bold",
+        [breakpoints.down("md")]: {
+          fontSize: "1.5em",
+        },
+      },
     },
   },
 };

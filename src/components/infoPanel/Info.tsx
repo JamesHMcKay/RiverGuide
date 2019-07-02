@@ -180,6 +180,7 @@ class Info extends Component<IInfoProps, IInfoState> {
     }
 
     public getDescription = (): JSX.Element | null => {
+        console.log("item details info page", this.props.infoPage);
         if (this.props.infoPage.itemDetails) {
             return (
                 <Grid
@@ -281,32 +282,16 @@ class Info extends Component<IInfoProps, IInfoState> {
     }
 
     public getMap = (entry: IListEntry): JSX.Element | null => {
-        let markerList: IMarker[] | undefined =
-            this.props.infoPage.itemDetails && this.props.infoPage.itemDetails.markerList;
-        if (!markerList) {
-            const marker: IMarker = {
-                name: "Location",
-                lat: entry.position.lat,
-                lng: entry.position.lon || 0,
-                id: "1",
-                description: "",
-                category: "",
-            };
-            markerList = [marker];
-        }
-        if (markerList && markerList.length > 0) {
-            return (
-                <Grid
-                    item
-                    xs={12}
-                    sm={12}
-                    style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "2%"}}
-                >
-                    <MapCard markers={markerList}/>
-                </Grid>
-            );
-        }
-        return null;
+        const guideId: string | undefined = this.props.infoPage.selectedGuide ? this.props.infoPage.selectedGuide.id : "";
+        return (
+            <Grid
+                item
+                xs={12}
+                sm={12}
+                style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "2%"}}
+            >
+                <MapCard guideId={guideId}/>
+            </Grid>);
     }
 
     public render(): JSX.Element {
@@ -382,6 +367,17 @@ class Info extends Component<IInfoProps, IInfoState> {
                 {!isLogbookInfo && this.getFlowChart(entry)}
                 {!isLogbookInfo && this.getDescription()}
                 {this.getMap(entry)}
+                <Grid
+                    item
+                    md={12}
+                    lg={12}
+                    style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0"}}
+                >
+                    <Button
+                        variant="outlined"
+                        onClick={(): void => {this.props.toggleModal("editModal"); }}
+                    >Edit</Button>
+                </Grid>
             </Grid>
         );
     }

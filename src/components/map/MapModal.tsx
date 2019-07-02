@@ -24,29 +24,31 @@ class MapModal extends Component<IMapModalProps> {
         this.props.toggleModal();
     }
 
-    public getMap = (): JSX.Element | null => {
-        let markerList: IMarker[] | undefined =
-            this.props.infoPage.itemDetails && this.props.infoPage.itemDetails.markerList;
-        if (!markerList && this.props.infoPage.itemDetails) {
-            const marker: IMarker = {
-                name: "Location",
-                lat: this.props.infoPage.itemDetails.position.lat,
-                lng: this.props.infoPage.itemDetails.position.lon || 0,
-                id: "1",
-                description: "",
-                category: "",
-            };
-            markerList = [marker];
-        }
-        if (markerList && markerList.length > 0) {
-            return (
-                    <InfoMapComponent markers={markerList} draggable={true}/>
-            );
-        }
-        return null;
-    }
+    // public getMap = (): JSX.Element | null => {
+    //     const guideId: string | undefined = this.props.infoPage.selectedGuide ? this.props.infoPage.selectedGuide.id : "";
+    //     let markerList: IMarker[] | undefined =
+    //         this.props.infoPage.itemDetails && this.props.infoPage.itemDetails.markerList;
+    //     if (!markerList && this.props.infoPage.itemDetails) {
+    //         const marker: IMarker = {
+    //             name: "Location",
+    //             lat: this.props.infoPage.itemDetails.position.lat,
+    //             lng: this.props.infoPage.itemDetails.position.lon || 0,
+    //             id: "1",
+    //             description: "",
+    //             category: "",
+    //         };
+    //         markerList = [marker];
+    //     }
+    //     if (markerList && markerList.length > 0) {
+    //         return (
+    //                 <InfoMapComponent draggable={true} guideId={guideId}/>
+    //         );
+    //     }
+    //     return null;
+    // }
 
     public render(): JSX.Element {
+        const guideId: string | undefined = this.props.infoPage.selectedGuide ? this.props.infoPage.selectedGuide.id : "";
         const name: string = this.props.infoPage.selectedGuide ?
             this.props.infoPage.selectedGuide.display_name : "";
         return (
@@ -60,7 +62,7 @@ class MapModal extends Component<IMapModalProps> {
                 >
                 <DialogTitle handleClose={this.handleClose} title={name}/>
                 <DialogContent>
-                {this.getMap()}
+                    <InfoMapComponent draggable={true} guideId={guideId} height={"500px"}/>
                    </DialogContent>
                 </Dialog>
             </div>

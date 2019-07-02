@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { toggleModal } from "../../actions/actions";
 import { IState } from "../../reducers/index";
 
 import Login from "../auth/Login";
@@ -47,7 +46,4 @@ function mapStateToProps(state: IState): {openModal: string} {
     });
 }
 
-export default connect(
-    mapStateToProps,
-    { toggleModal },
-)(Modals);
+export default connect(mapStateToProps)(Modals);

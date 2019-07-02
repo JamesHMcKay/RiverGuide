@@ -8,19 +8,27 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { updateGuide } from "../../actions/updateGuide";
-import { IGauge, IInfoPage } from "../../utils/types";
+import { IGauge, IInfoPage, IMarker, IListEntry } from "../../utils/types";
 import GaugeSelect from "./GaugeSelect";
+import EditMapComponent from "../map/EditMapComponent";
+import { IState } from "../../reducers";
+import uuid from "uuidv4";
 
 interface IEditGuideState {
     description: string;
     gaugeId: string | undefined;
     id: string | undefined;
+    markers: {[key: string]: IMarker};
 }
 
-interface IEditGuideProps {
-    updateGuide: (item: IEditGuideState) => void;
+interface IEditGuideProps extends IEditGuideStateProps {
+    updateGuide: (item: IEditGuideState, selectedGuide: IListEntry) => void;
     handleClose: () => void;
     infoPage: IInfoPage;
+}
+
+interface IEditGuideStateProps {
+    gauges: IGauge[];
 }
 
 class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
@@ -36,7 +44,18 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
             gaugeId = this.props.infoPage.selectedGuide.gauge_id;
             id = this.props.infoPage.selectedGuide.id;
         }
+
+
+        const markers: {[key: string]: IMarker } = {};
+        const markerList: IMarker[] = this.getMarkerList();
+        for (const marker of markerList) {
+            const id: string = uuid();
+            marker.id = id;
+            markers[id] = marker;
+        }
+
         this.state = ({
+            markers,
             description,
             gaugeId,
             id,
@@ -59,7 +78,7 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
     public handleSave = (): void => {
         const result: IEditGuideState = this.state;
 
-        this.props.updateGuide(result);
+        this.props.updateGuide(result, this.props.infoPage.selectedGuide);
         this.props.handleClose();
     }
 
@@ -73,6 +92,54 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
     public handleGaugeChange = (selectedGauge: IGauge): void => {
         this.setState({
             gaugeId: selectedGauge.id,
+        });
+    }
+
+    public getGaugeLocation = (): IMarker[] => {
+        const gauges: IGauge[] = this.props.gauges.filter(
+            (item: IGauge) => item.id === this.state.gaugeId,
+        );
+        if (gauges.length > 0) {
+            const gaugeMarkers: IMarker[] = gauges.map((item: IGauge) =>
+                ({
+                    name: item.display_name,
+                    lat: item.position.lat,
+                    lng: item.position.lon || 0,
+                    id: item.display_name,
+                    description: "Gauge",
+                    category: "Gauge",
+                }));
+            return gaugeMarkers;
+        }
+        return [];
+    }
+
+
+    public getLocation = (): IMarker[] => {
+        if (this.props.infoPage.selectedGuide) {
+            const marker: IMarker = {
+                name: "Guide location",
+                lat: this.props.infoPage.selectedGuide.position.lat,
+                lng: this.props.infoPage.selectedGuide.position.lon || 0,
+                id: "1",
+                description: "",
+                category: "",
+            };
+            return [marker];
+        }
+        return [];
+    }
+
+
+    public getMarkerList = (): IMarker[] => {
+        let markerList: IMarker[] | undefined =
+            this.props.infoPage.itemDetails &&  this.props.infoPage.itemDetails.markerList ? this.props.infoPage.itemDetails.markerList : [];
+        return markerList;
+    }
+
+    public updateMarkers = (markers: {[key: string]: IMarker}): void => {
+        this.setState({
+            markers,
         });
     }
 
@@ -103,6 +170,12 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
                             onChange={this.updateDescription}
                             fullWidth={true}
                         />
+                    <EditMapComponent
+                        markers={this.state.markers}
+                        gaugeMarkers={this.getGaugeLocation()}
+                        locationMarker={this.getLocation()}
+                        updateMarkers={this.updateMarkers}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={this.props.handleClose} color="primary">
@@ -116,9 +189,15 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
         );
 
     }
-  }
+}
+
+function mapStateToProps(state: IState): IEditGuideStateProps {
+    return ({
+        gauges: state.gauges,
+    });
+}
 
 export default connect(
-    null,
+    mapStateToProps,
     { updateGuide },
 )(EditGuide);
