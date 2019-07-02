@@ -291,7 +291,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                             flexDirection: "row",
                         }}
                     >
-                        <div style={{marginRight: "auto", marginLeft: "10%", display: "flex", flexDirection: "row"}} >
+                        <div style={{marginRight: "auto", marginLeft: "2%", display: "flex", flexDirection: "row"}} >
                             <Link to="/" onClick={this.handleMapLink}>
                                 <div>
                                     <img

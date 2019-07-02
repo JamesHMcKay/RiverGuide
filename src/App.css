@@ -95,7 +95,7 @@ h1 {
     }
     .right-panel {
         height: 84vh;
-        overflow: auto;
+        overflow-y: scroll;
     }
 }
 
