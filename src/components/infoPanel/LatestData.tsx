@@ -27,6 +27,11 @@ class LatestData extends Component<ILatestDataProps> {
         return gauges[0];
     }
 
+    public dateWrapper = (inputDate: string): string => {
+        const dateParsed: Date = new Date(inputDate);
+        return dateParsed.toLocaleDateString() + "\n " + dateParsed.toLocaleTimeString();
+    }
+
     public getData = (): JSX.Element | null => {
         const gauge: IGauge | undefined = this.getGauge(this.props.infoPage.selectedGuide.gauge_id);
         if (gauge) {
@@ -50,7 +55,7 @@ class LatestData extends Component<ILatestDataProps> {
                     </Grid>
                     <Grid item xs={6} lg={3} justify="center">
                         <ListItem>
-                            <ListItemText primary="Updated" secondary={gauge.lastUpdated} />
+                            <ListItemText primary="Updated" secondary={this.dateWrapper(gauge.lastUpdated)} />
                         </ListItem>
                     </Grid>
                     {gauge.observables.map((item: IObservable) =>

@@ -152,6 +152,8 @@ export const getGaugeHistory = gaugeId => dispatch => {
                         values: {
                             flow: item.flow,
                             stage_height: item.stage_height,
+                            temperature: item.temperature,
+                            rainfall: item.rainfall,
                         }
                     }));
                 dispatch({

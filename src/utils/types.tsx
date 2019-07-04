@@ -34,6 +34,7 @@ export interface IObsValue {
     stage_height: number;
     flow: number;
     temperature: number;
+    rainfall: number;
 }
 
 export interface IHistory {

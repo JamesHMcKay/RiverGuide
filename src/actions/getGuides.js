@@ -41,8 +41,8 @@ export const setCategory = (category, cancelToken) => dispatch => {
                         display_name: item.name,
                         position: {lat: item.location.lat, lon: item.location.lon },
                         observables: item.observables,
-                        region: item.data_source,
-                        river_name: "undefined",
+                        region: item.region,
+                        river_name: item.river_name,
                         activity: "data",
                     }));
                 dispatch({
@@ -117,7 +117,7 @@ export const openInfoPage = guide => dispatch => {
             infoSelected: true,
         },
     });
-    if (guide.type === "gauge") {
+    if (guide.activity === "data") {
 
     } else {
         let guideId = guide.id;
@@ -167,6 +167,8 @@ export const openInfoPage = guide => dispatch => {
                             values: {
                                 flow: item.flow,
                                 stage_height: item.stage_height,
+                                temperature: item.temperature,
+                                rainfall: item.rainfall,
                             }
                         }));
                     dispatch({

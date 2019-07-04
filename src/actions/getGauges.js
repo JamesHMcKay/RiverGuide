@@ -24,10 +24,11 @@ export const makeGaugeRequest = () => dispatch => {
                     display_name: item.name,
                     position: {lat: item.location.lat, lon: item.location.lon },
                     observables: item.observables,
-                    region: item.data_source,
+                    region: item.region,
                     type: "gauge",
                     source: item.data_source,
-                    lastUpdated: "Date to come",
+                    river_name: item.river_name,
+                    lastUpdated: item.last_updated,
                 }));
             dispatch({
                 type: GET_GAUGES,
