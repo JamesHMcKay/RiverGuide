@@ -5,6 +5,7 @@ import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
+import { getGaugeDisclaimer } from "../../actions/getGauges";
 import { IState } from "../../reducers/index";
 import { IExpansionPanels, IGauge, IInfoPage, IObservable } from "../../utils/types";
 import ExpansionHead from "./ExpansionHead";
@@ -17,6 +18,7 @@ interface ILatestDataStateProps {
 
 interface ILatestDataProps extends ILatestDataStateProps {
     toggleModal: (modal: string) => void;
+    getGaugeDisclaimer: (agencyName: string) => void;
 }
 
 class LatestData extends Component<ILatestDataProps> {
@@ -32,6 +34,11 @@ class LatestData extends Component<ILatestDataProps> {
         return dateParsed.toLocaleDateString() + "\n " + dateParsed.toLocaleTimeString();
     }
 
+    public openDataInfo = (agencyName: string): void => {
+        this.props.getGaugeDisclaimer(agencyName);
+        this.props.toggleModal("DataInfoModal");
+    }
+
     public getData = (): JSX.Element | null => {
         const gauge: IGauge | undefined = this.getGauge(this.props.infoPage.selectedGuide.gauge_id);
         if (gauge) {
@@ -45,7 +52,7 @@ class LatestData extends Component<ILatestDataProps> {
                                     Source
                                     <InfoOutlinedIcon
                                         style={{fontSize: "20px", marginLeft: "10px", cursor: "pointer"}}
-                                        onClick={(): void => {this.props.toggleModal("DataInfoModal"); }}
+                                        onClick={(): void => {this.openDataInfo(gauge.source); }}
                                     />
                                 </React.Fragment>
                             }
@@ -93,5 +100,5 @@ function mapStateToProps(state: IState): ILatestDataStateProps {
 
 export default connect(
     mapStateToProps,
-    { toggleModal},
+    { toggleModal, getGaugeDisclaimer},
 )(LatestData);

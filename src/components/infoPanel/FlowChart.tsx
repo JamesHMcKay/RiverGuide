@@ -188,6 +188,13 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
 
     }
 
+    public getGauge = (gaugeId: string | undefined): IGauge | undefined => {
+        const gauges: IGauge[] = this.props.gauges.filter(
+            (item: IGauge) => item.id === gaugeId,
+        );
+        return gauges[0];
+    }
+
     public getButtons = (): JSX.Element[] | null => {
         const observables: IObservable[] | undefined = this.getObservables();
         if (observables) {
@@ -208,7 +215,8 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
                     {this.getFormSelect()}
                 </Hidden>,
             );
-            result.push(<DataDropDown key = "data-drop-down"/>);
+            const gauge: IGauge | undefined = this.getGauge(this.props.gaugeId);
+            result.push(<DataDropDown key = "data-drop-down" agencyName={gauge ? gauge.source : ""}/>);
             return result;
         } else {
             return null;

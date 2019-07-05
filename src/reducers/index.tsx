@@ -20,6 +20,7 @@ import errorReducer from "./errorReducer";
 import expansionPanelsReducer from "./expansionPanelsReducer";
 import filteredLogReducer from "./filteredLogReducer";
 import filterReducer from "./filterReducer";
+import gaugeDisclaimerReducer from "./gaugeDisclaimerReducer";
 import gaugeHistoryReducer from "./gaugeHistoryReducer";
 import gaugeReducer from "./gaugeReducer";
 import infoReducer from "./infoReducer";
@@ -63,6 +64,7 @@ export interface IState {
     userDetails: IUserDetails;
     searchPanel: string;
     expansionPanels: IExpansionPanels;
+    gaugeDisclaimer: string;
 }
 
 export default combineReducers({
@@ -90,4 +92,5 @@ export default combineReducers({
     userDetails: userDetailsReducer,
     searchPanel: searchPanelReducer,
     expansionPanels: expansionPanelsReducer,
+    gaugeDisclaimer: gaugeDisclaimerReducer,
 });

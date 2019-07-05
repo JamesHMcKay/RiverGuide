@@ -42,4 +42,6 @@ export const CLEAR_LOGS: string = "CLEAR_LOGS";
 export const SET_SEARCH_PANEL: string = "SET_SEARCH_PANEL";
 export const SET_SEARCH_STRING_FILTER: string = "SET_SEARCH_STRING_FILTER";
 export const SET_ACTIVITY_FILTER: string = "SET_ACTIVITY_FILTER";
+export const GET_GAUGE_DISCLAIMER: string = "GET_GAUGE_DISCLAIMER";
+export const CLEAR_GAUGE_DISCLAIMER: string = "CLEAR_GAUGE_DISCLAIMER";
 export const SET_EXPANSION_PANELS: string = "SET_EXPANSION_PANELS";

@@ -5,6 +5,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
+import { getGaugeDisclaimer } from "../../actions/getGauges";
 
 const ITEM_HEIGHT: number = 48;
 
@@ -15,6 +16,8 @@ const options: Array<{name: string, id: string}> = [
 
 interface IDataDropDownProps {
     toggleModal: (modal: string) => void;
+    agencyName: string;
+    getGaugeDisclaimer: (agencyName: string) => void;
 }
 
 interface IDataDropDownState {
@@ -39,6 +42,7 @@ class DataDropDown extends Component<IDataDropDownProps, IDataDropDownState> {
 
     public handleSelect = (event: any, category: string): void => {
         this.setState({ anchorEl: null });
+        this.props.getGaugeDisclaimer(this.props.agencyName);
         this.props.toggleModal(category);
     }
 
@@ -84,5 +88,5 @@ class DataDropDown extends Component<IDataDropDownProps, IDataDropDownState> {
 
 export default connect(
     null,
-    { toggleModal},
+    { toggleModal, getGaugeDisclaimer},
 )(DataDropDown);

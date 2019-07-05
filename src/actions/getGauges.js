@@ -1,10 +1,13 @@
 import axios from "axios";
 
 import {
-    GET_GAUGES
+    GET_GAUGES,
+    GET_GAUGE_DISCLAIMER,
+    CLEAR_GAUGE_DISCLAIMER
 } from "./types";
 
 const serverLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
+const strapi_location = "https://rapidsapi.herokuapp.com/graphql";
 
 export const makeGaugeRequest = () => dispatch => {
 
@@ -36,3 +39,21 @@ export const makeGaugeRequest = () => dispatch => {
             });
         });
 };
+
+export const getGaugeDisclaimer = (agencyName) => dispatch => {
+    dispatch({
+        type: CLEAR_GAUGE_DISCLAIMER,
+    });
+    axios
+    .get(`${strapi_location}`,
+        {
+            headers: {'Authorization': ''},
+            params: {query: `{agencydetails(where: {agency_name: "${agencyName}"}){disclaimer}}`},
+        }
+    ).then((res) => {
+        dispatch({
+            type: GET_GAUGE_DISCLAIMER,
+            payload: res.data.data.agencydetails ? res.data.data.agencydetails[0].disclaimer : "No disclaimer available",
+        });
+        });
+}
