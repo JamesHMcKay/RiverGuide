@@ -66,7 +66,6 @@ export default class MarkerModal extends Component<IMarkerModalProps> {
                             </TextField>
                             <TextField
                                 label="Description"
-                                disabled={true}
                                 multiline
                                 rows="4"
                                 margin="dense"

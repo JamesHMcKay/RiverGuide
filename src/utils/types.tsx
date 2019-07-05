@@ -44,7 +44,7 @@ export interface IHistory {
 
 export interface IObservable {
     latest_value: number;
-    type: string;
+    type: keyof IObsValue;
     units: string;
 }
 

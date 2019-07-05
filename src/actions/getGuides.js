@@ -146,6 +146,7 @@ export const openInfoPage = guide => dispatch => {
                 type: GET_ITEM_DETAILS,
                 payload: result,
             });
+            dispatch(openLogInfoPage(guide));
         })
         .catch(err => console.log(err));
     }

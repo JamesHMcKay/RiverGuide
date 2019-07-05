@@ -7,7 +7,7 @@ const initialState: IExpansionPanels = {
     description: true,
     keyFacts: true,
     map: true,
-    logBook: true,
+    logBook: window.innerWidth > 960,
     latestData: true,
     flowHistory: window.innerWidth > 960,
 };

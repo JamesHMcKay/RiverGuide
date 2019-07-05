@@ -1,4 +1,3 @@
-
 import * as Am4charts from "@amcharts/amcharts4/charts";
 import * as Am4core from "@amcharts/amcharts4/core";
 import Am4themes_animated from "@amcharts/amcharts4/themes/animated";
@@ -12,6 +11,7 @@ import Moment from "moment";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
+import { dataTypeParser, unitParser } from "../../utils/dataTypeParser";
 import { IExpansionPanels, IGauge, IHistory, IInfoPage, IObservable, IObsValue } from "../../utils/types";
 import DataDropDown from "./DataDropDown";
 import ExpansionHead from "./ExpansionHead";
@@ -90,18 +90,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
             const selObs: IObservable[] = observables.filter((item: IObservable) => (item.type === type));
             unit = selObs[0].units;
         }
-        if (unit === "cumecs") {
-            unit = "m\u00B3/s";
-        }
-
-        if (unit === "metres") {
-            unit = "m";
-        }
-
-        if (unit === "litres_second") {
-            unit = "l/s";
-        }
-        return unit;
+        return unitParser(unit);
     }
 
     public setChartOptions = (): void => {
@@ -206,7 +195,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
                         color={this.getButtonColor(item.type)} key={item.type}
                         onClick = {(): void => this.selectTypeClick(item.type)}
                     >
-                        {item.type}
+                        {dataTypeParser(item.type)}
                     </Button>
                 </Hidden>,
             );

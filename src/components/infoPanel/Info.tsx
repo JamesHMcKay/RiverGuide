@@ -15,9 +15,18 @@ import {
 import { addToFavourites } from "../../actions/getAuth";
 import title_image from "../../img/riverwiki.jpg";
 import { IState } from "../../reducers/index";
-import { IAuth, IInfoPage, IListEntry, ILogComplete, ILogListItem, IUserDetails } from "../../utils/types";
+import {
+    IAuth,
+    IExpansionPanels,
+    IInfoPage,
+    IListEntry,
+    ILogComplete,
+    ILogListItem,
+    IUserDetails,
+} from "../../utils/types";
 import Logbook from "../profile/Logbook";
 import { CurrentWeather } from "./CurrentWeather";
+import ExpansionHead from "./ExpansionHead";
 import FlowChart from "./FlowChart";
 import "./Info.css";
 import InfoCard from "./InfoCard";
@@ -56,6 +65,7 @@ interface IInfoStateProps {
     log: ILogComplete[];
     userDetails: IUserDetails;
     loadingSpinner: string;
+    expansionPanels: IExpansionPanels;
 }
 
 interface IInfoProps extends IInfoStateProps {
@@ -257,29 +267,27 @@ class Info extends Component<IInfoProps, IInfoState> {
     }
 
     public getLogbook = (): JSX.Element => {
+        const visible: boolean = this.props.expansionPanels.logBook;
         return (
             <Grid
-            container
             item
             md={12}
             lg={12}
             justify="space-between"
             style={{marginRight: "5%", marginLeft: "5%",  marginTop: "2%", marginBottom: "2%"}}
         >
-            <Grid container item md={6} lg={6} justify="flex-start">
-                <Typography variant="h5" gutterBottom>
-                    Logbook
-                </Typography>
-            </Grid>
-            <Grid container item md={6} lg={6} justify="flex-end">
+            <div>
+            <ExpansionHead title={"Log book"} panelName={"logBook"}/>
+            {visible && <div className="flow-chart-buttons">
                     {this.getButtons()}
-            </Grid>
-            <Hidden smDown>
+                </div>}
+                {visible && <div><Hidden smDown>
                 <Logbook log={this.getLogBookEntries()} columnOrder={columnOrder} publicPage={true}/>
             </Hidden>
                 <Hidden mdUp>
                 <Logbook log={this.getLogBookEntries()} columnOrder={columnOrderMobile} publicPage={true}/>
-            </Hidden>
+            </Hidden></div>}
+            </div>
         </Grid>
         );
     }
@@ -300,6 +308,7 @@ class Info extends Component<IInfoProps, IInfoState> {
 
     public render(): JSX.Element {
         const entry: IListEntry = this.props.infoPage.selectedGuide;
+        const isData: boolean = entry.activity === "data";
         const isLogbookInfo: boolean = this.props.isLogbookInfo;
         return (
             <Grid
@@ -354,14 +363,15 @@ class Info extends Component<IInfoProps, IInfoState> {
                             onClick= {this.openModal.bind(this, "weatherModal")}
                             textColor = {"white"}
                         />
-                        {this.props.auth.isAuthenticated && this.getReportButton()}
+                        {(this.props.auth.isAuthenticated && !isData) && this.getReportButton()}
                     </Grid>
                 </Grid>
-                {isLogbookInfo && this.getLogbook()}
+                {/* {isLogbookInfo && this.getLogbook()} */}
                 {!isLogbookInfo && this.getKeyFacts()}
                 {!isLogbookInfo && this.getFlowChart(entry)}
                 {!isLogbookInfo && this.getDescription()}
                 {this.getMap(entry)}
+                {(!isLogbookInfo && !isData) && this.getLogbook()}
                 <Grid
                     item
                     md={12}
@@ -388,6 +398,7 @@ function mapStateToProps(state: IState): IInfoStateProps {
         log: state.log,
         userDetails: state.userDetails,
         loadingSpinner: state.loadingSpinner,
+        expansionPanels: state.expansionPanels,
     });
 }
 

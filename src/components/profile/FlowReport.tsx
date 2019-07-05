@@ -7,6 +7,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getGaugeHistory } from "../../actions/actions";
 import { IState } from "../../reducers/index";
+import { dataTypeParser, unitParser } from "../../utils/dataTypeParser";
 import { IGauge, IGaugeHistory, IHistory, IListEntry, IObservable, IObsValue } from "../../utils/types";
 
 interface IUnitSelection {
@@ -153,14 +154,14 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
             const gauge: IGauge = this.state.gauge;
             return gauge.observables.map((item: IObservable) => (
                 <MenuItem key={item.type} value={item.type}>
-                    {item.type}
+                    {dataTypeParser(item.type)}
                 </MenuItem>
             ));
         }
 
         return [
             <MenuItem value="flow" key={"flow"}>
-                {"flow"}
+                {"Flow"}
             </MenuItem>,
         ];
     }
@@ -237,19 +238,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
                 unit = selObs[0].units;
             }
         }
-
-        if (unit === "cumecs") {
-            unit = "m\u00B3/s";
-        }
-
-        if (unit === "metres") {
-            unit = "m";
-        }
-
-        if (unit === "litres_second") {
-            unit = "l/s";
-        }
-        return unit;
+        return unitParser(unit);
     }
 
     public render(): JSX.Element {

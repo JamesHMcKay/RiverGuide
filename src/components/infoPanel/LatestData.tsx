@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 import { getGaugeDisclaimer } from "../../actions/getGauges";
 import { IState } from "../../reducers/index";
+import { dataTypeParser, unitParser } from "../../utils/dataTypeParser";
 import { IExpansionPanels, IGauge, IInfoPage, IObservable } from "../../utils/types";
 import ExpansionHead from "./ExpansionHead";
 
@@ -69,8 +70,8 @@ class LatestData extends Component<ILatestDataProps> {
                         <Grid item xs={6} lg={3} justify="center">
                         <ListItem>
                             <ListItemText
-                                primary={item.type}
-                                secondary={item.latest_value.toFixed(1) + " " + item.units}
+                                primary={dataTypeParser(item.type)}
+                                secondary={item.latest_value.toFixed(1) + " " + unitParser(item.units)}
                             />
                         </ListItem>
                     </Grid>,
