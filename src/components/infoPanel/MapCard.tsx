@@ -1,4 +1,4 @@
-import { Button, Hidden } from "@material-ui/core";
+import { Hidden } from "@material-ui/core";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
@@ -32,12 +32,6 @@ class MapCard extends Component<IMapCardProps> {
                         />
                     }
                 </Hidden>
-                <Hidden mdUp>
-                    <Button variant="outlined" onClick={(): void => {this.props.toggleModal("mapModal"); }}>
-                    {"Local map"}
-                </Button>
-                </Hidden>
-
             </div>
         );
     }

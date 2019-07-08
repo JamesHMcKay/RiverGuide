@@ -119,7 +119,7 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
         if (forecast && forecast.maxTemp) {
             const temp: number = Math.round(forecast.maxTemp * 10) / 10;
             return (
-                <div className="weather-temp">
+                <div className="weather-temp" style={{fontSize: "20px"}}>
                     <span>
                         {temp} <span>&deg;C</span>
                     </span>
@@ -205,7 +205,7 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
             for (const weatherIcon of WEATHER_ICONS) {
                 if (icon === weatherIcon.icon) {
                     return (
-                        <div className="icon-summary">
+                        <div className="icon-summary" style={{height: "60px"}}>
                             {weatherIcon.element}
                             <span className="summary-text">
                                 {forecast.summary}
@@ -333,6 +333,8 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
                         lon={this.props.lon || 0}
                         weatherStore={this.props.weatherStore}
                         textColor = {"black"}
+                        iconHeight = {"60px"}
+                        tempSize = {"20px"}
                     />
                     {this.getDetails()}
                 </div>

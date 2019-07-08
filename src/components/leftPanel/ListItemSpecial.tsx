@@ -8,10 +8,16 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListIcon from "@material-ui/icons/List";
+import { IState } from "../../reducers";
+import { IAuth } from "../../utils/types";
 
-interface IGuideItemProps {
+interface IGuideItemProps extends IGuideItemStateProps {
     openLogPage: () => void;
     makeLogbookRequest: (userId: string) => void;
+}
+
+interface IGuideItemStateProps {
+    auth: IAuth;
 }
 
 class GuideItem extends Component<IGuideItemProps, {}> {
@@ -22,11 +28,11 @@ class GuideItem extends Component<IGuideItemProps, {}> {
     public render(): JSX.Element {
         return (
             <div>
-                <ListItem button onClick={this.handleClick}>
+                <ListItem button disabled={!this.props.auth.isAuthenticated} onClick={this.handleClick}>
                     <ListItemIcon style = {{marginLeft: "0em"}}>
                         <ListIcon />
                     </ListItemIcon>
-                    <ListItemText primary={"All my log book entries"} />
+                    <ListItemText primary={"My Trips"} />
                 </ListItem>
                 <Divider />
             </div>
@@ -34,7 +40,13 @@ class GuideItem extends Component<IGuideItemProps, {}> {
     }
 }
 
+function mapStateToProps(state: IState): IGuideItemStateProps {
+    return ({
+        auth: state.auth,
+    });
+}
+
 export default connect(
-    null,
+    mapStateToProps,
     { openLogPage, makeLogbookRequest },
 )(GuideItem);

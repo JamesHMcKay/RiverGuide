@@ -1,11 +1,11 @@
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import IconButton from "@material-ui/core/IconButton";
 import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import withMobileDialog from "@material-ui/core/withMobileDialog";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import React, { Component } from "react";
@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 import { registerUser } from "../../actions/getAuth";
 import { IState } from "../../reducers/index";
+import DialogTitle from "../../utils/dialogTitle";
 import loadingButton from "../../utils/loadingButton";
 import { IAuth, IRegisterData } from "../../utils/types";
 import SocialLink from "./SocialLink";
@@ -39,6 +40,7 @@ interface IRegisterPropsState {
 interface IReigsterProps extends IRegisterPropsState {
     toggleModal: (modal?: string) => void;
     registerUser: (userData: IRegisterData) => void;
+    fullScreen: boolean;
 }
 class Register extends Component<IReigsterProps, IRegisterState> {
     constructor(props: IReigsterProps) {
@@ -110,9 +112,14 @@ class Register extends Component<IReigsterProps, IRegisterState> {
 
         return (
             <div>
-                <Dialog onClose={this.closeModal} aria-labelledby="example dialog" open={this.props.isOpen}>
+                <Dialog
+                    onClose={this.closeModal}
+                    aria-labelledby="example dialog"
+                    open={this.props.isOpen}
+                    fullScreen={this.props.fullScreen}
+                >
+                <DialogTitle handleClose={this.closeModal} title={"Sign up"}/>
                 <DialogContent>
-
                 <div className = "provider-button-stack">
                     {providers.map((provider: string) =>
                         <SocialLink pretext = "Sign up with " provider={provider} key={provider} />)}
@@ -192,14 +199,7 @@ class Register extends Component<IReigsterProps, IRegisterState> {
                     </Button>
                     {this.state.loading && loadingButton()}
                 </div>
-
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.closeModal} color="primary">
-                    Cancel
-                    </Button>
-                </DialogActions>
-
                 </Dialog>
             </div>
         );
@@ -217,4 +217,4 @@ function mapStateToProps(state: IState): IRegisterPropsState {
 export default connect(
     mapStateToProps,
     { toggleModal, registerUser },
-)(Register);
+)(withMobileDialog()(Register));

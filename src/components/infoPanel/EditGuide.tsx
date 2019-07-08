@@ -3,8 +3,11 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import TextField from "@material-ui/core/TextField";
+import { ContentState, convertToRaw, EditorState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
 import React from "react";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 import { connect } from "react-redux";
 import uuid from "uuidv4";
@@ -19,6 +22,7 @@ interface IEditGuideState {
     gaugeId: string | undefined;
     id: string | undefined;
     markers: {[key: string]: IMarker};
+    editorState: EditorState;
 }
 
 interface IEditGuideProps extends IEditGuideStateProps {
@@ -58,6 +62,7 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
             description,
             gaugeId,
             id,
+            editorState: EditorState.createWithContent(ContentState.createFromText(description)),
         });
     }
 
@@ -142,6 +147,13 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
         });
     }
 
+    public onEditorStateChange = (editorState: EditorState): void => {
+        this.setState({
+          editorState,
+          description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+        });
+      }
+
     public render(): JSX.Element {
         return (
             <div>
@@ -159,7 +171,7 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
                     <DialogContentText>
                         {"Description"}
                     </DialogContentText>
-                    <TextField
+                    {/* <TextField
                             autoFocus
                             margin="dense"
                             id="comments"
@@ -168,7 +180,16 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
                             value={this.state.description}
                             onChange={this.updateDescription}
                             fullWidth={true}
-                        />
+                        /> */}
+
+                    <Editor
+                        editorState={this.state.editorState}
+                        toolbarClassName="toolbarClassName"
+                        wrapperClassName="wrapperClassName"
+                        editorClassName="editorClassName"
+                        onEditorStateChange={this.onEditorStateChange}
+                    />
+
                     <EditMapComponent
                         markers={this.state.markers}
                         gaugeMarkers={this.getGaugeLocation()}

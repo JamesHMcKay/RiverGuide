@@ -51,22 +51,13 @@ class SearchBox extends Component<ISearchBoxProps, ISearchBoxState> {
             <TextField
                 id="standard-search"
                 className="search-field"
-                color="white"
                 label="Search"
                 type="search"
                 margin="normal"
                 variant="outlined"
+                // inputProps={{ style: {height: "0.2em"} }}
                 onChange={this.handleSearch}
-                inputProps={{ style: {height: "0.2em"} }}
-                style={{
-                    // width: "100%",
-                    paddingBottom: ".5em",
-                    color: "white",
-                    // minWidth: "300px",
-                    // height: "80%",
-                }}
                 value={this.props.filters.searchString}
-                // value={this.state.value}
             />
         );
     }

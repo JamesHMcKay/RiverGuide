@@ -1,3 +1,4 @@
+import { Hidden } from "@material-ui/core";
 import React from "react";
 import cloudy from "../../img/cloudy.svg";
 import fog from "../../img/fog.svg";
@@ -23,6 +24,8 @@ interface ICurrentWeatherProps {
     lon: number;
     onClick?: () => void;
     textColor: string;
+    iconHeight: string;
+    tempSize: string;
 }
 
 const WEATHER_ICONS: Array<{icon: string; element: JSX.Element}> = [
@@ -87,12 +90,14 @@ export class CurrentWeather extends React.Component<ICurrentWeatherProps, ICurre
         }
         return (
             <div className="current-weather-temp">
-                <span className="current-temp">
+                <span className="current-temp" style={{fontSize: this.props.tempSize}}>
                     {temp} <span>&deg;C</span>
                 </span>
-                <span className="summary-text">
-                    {weather && weather.summary}
-                </span>
+                <Hidden smDown>
+                    <span className="summary-text">
+                        {weather && weather.summary}
+                    </span>
+                </Hidden>
             </div>
         );
     }
@@ -104,7 +109,7 @@ export class CurrentWeather extends React.Component<ICurrentWeatherProps, ICurre
             for (const weatherIcon of WEATHER_ICONS) {
                 if (icon === weatherIcon.icon) {
                     return (
-                        <div className="icon-summary">
+                        <div className="icon-summary" style={{height: this.props.iconHeight}}>
                             {weatherIcon.element}
                         </div>
                     );

@@ -1,16 +1,9 @@
 import Typography from "@material-ui/core/Typography";
-import marked from "marked";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { IState } from "../../reducers";
 import { IExpansionPanels } from "../../utils/types";
 import ExpansionHead from "./ExpansionHead";
-
-marked.setOptions({
-    gfm: true,
-    breaks: true,
-    sanitize: true,
-});
 
 interface IInfoCardProps extends IInfoCardStateProps {
     content: string;
@@ -31,7 +24,7 @@ class InfoCard extends Component<IInfoCardProps> {
                     <Typography component="div">
                             <div
                                 dangerouslySetInnerHTML={{
-                                    __html: marked(this.props.content),
+                                    __html: this.props.content,
                                 }}
                             />
                     </Typography>

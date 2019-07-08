@@ -21,7 +21,7 @@ import { categories, ITabCategory, tabIds } from "../ControlBar";
 const ICONS: Array<{id: string, icon: JSX.Element} > = [
     {id: "data", icon: <InsertChartOutlinedRoundedIcon />},
     {id: "activities", icon: <InfoOutlinedIcon />},
-    {id: "logbook", icon: <RateReviewOutlinedIcon />},
+    {id: "trips", icon: <RateReviewOutlinedIcon />},
 ];
 
 interface IBottomNavProps extends IBottomNavStateProps {
@@ -54,7 +54,7 @@ class BottomNav extends Component<IBottomNavProps, IBottomNavState> {
         this.setState({
             cancelToken: newToken,
         });
-        if (categoryId === "logbook") {
+        if (categoryId === "trips") {
             this.props.setCategory("activities", newToken);
             this.props.closeInfoPage();
         } else {

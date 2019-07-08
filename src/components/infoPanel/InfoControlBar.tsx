@@ -1,23 +1,27 @@
 // Material UI
-import { Button, CircularProgress, IconButton, Toolbar, Tooltip } from "@material-ui/core";
-import ArrowBackRounded from "@material-ui/icons/ArrowBackRounded";
+import { Button, CircularProgress, IconButton, Toolbar } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
     closeInfoPage,
     removeFromFavourites,
+    toggleModal,
 } from "../../actions/actions";
 import { addToFavourites } from "../../actions/getAuth";
-import { IAuth, IInfoPage, IUserDetails } from "./../../utils/types";
+import { IAuth, IInfoPage, IListEntry, IUserDetails } from "./../../utils/types";
 
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 import { IState } from "../../reducers/index";
+import { CurrentWeather } from "./CurrentWeather";
+import { WeatherStore } from "./WeatherStore";
 
 interface IInfoControlBarProps extends IInfoControlBarStateToProps {
     closeInfoPage: () => void;
     removeFromFavourites: (guideId: string, email: string) => void;
     addToFavourites: (userDetails: IUserDetails) => void;
+    toggleModal: (modalName: string) => void;
 }
 
 interface IInfoControlBarStateToProps {
@@ -27,6 +31,7 @@ interface IInfoControlBarStateToProps {
     infoPage: IInfoPage;
     userDetails: IUserDetails;
     loadingSpinner: string;
+    weatherStore: WeatherStore;
 }
 
 class InfoControlBar extends Component<IInfoControlBarProps> {
@@ -52,22 +57,34 @@ class InfoControlBar extends Component<IInfoControlBarProps> {
         }
     }
 
+    public openModal(modalName: string): void {
+        this.props.toggleModal(modalName);
+    }
+
     public handleClose = (): void => this.props.closeInfoPage();
 
     public getCloseButton = (): JSX.Element => {
         return (
             <Button
-            onClick={this.handleClose}
-            style={{
-                color: "white",
-                cursor: "pointer",
-                float: "left",
-                width: "30%",
-            }}
+                onClick={this.handleClose}
+                style={{
+                    color: "white",
+                    cursor: "pointer",
+                    float: "right",
+                    width: "20%",
+                }}
             >
-                <ArrowBackRounded />
+                <CloseIcon />
             </Button>
         );
+    }
+
+    public onClick = (isFav: boolean): void => {
+        if (this.props.auth.isAuthenticated) {
+            this.toggleFavourite(isFav);
+        } else {
+            this.props.toggleModal("loginModal");
+        }
     }
 
     public getFavButton = (): JSX.Element => {
@@ -83,34 +100,37 @@ class InfoControlBar extends Component<IInfoControlBarProps> {
         ).length > 0;
 
         return (
-            <Tooltip
-                title={
-                    isFav
-                        ? "Remove from favourites"
-                        : "Add to favourites"
-                }
-                placement="right"
-            >
             <IconButton
-                onClick={(): void => {this.toggleFavourite(isFav); }}
+                onClick={(): void => {this.onClick(isFav); }}
             >
                 {isFav ? (
                     <FavoriteIcon style={{ color: "#fb1" }} />
                 ) : (
                     <FavoriteBorder style={{ color: "#fff" }} />
                 )}
-                </IconButton>
-            </Tooltip>
+            </IconButton>
         );
     }
 
     public render(): JSX.Element {
+        const entry: IListEntry = this.props.infoPage.selectedGuide;
         return (
             <Toolbar style={{display: "flex", flexDirection: "row"}}>
-                {this.getCloseButton()}
-                <div style={{width: "70%", float: "right"}}>
-                {this.props.auth.isAuthenticated && this.props.infoPage.infoSelected && this.getFavButton()}
+                <div style={{width: "60%", float: "left", marginLeft: "20px"}}>
+                <CurrentWeather
+                            lat={entry.position.lat || 0}
+                            lon={entry.position.lon || 0}
+                            weatherStore={this.props.weatherStore}
+                            onClick= {this.openModal.bind(this, "weatherModal")}
+                            textColor = {"white"}
+                            iconHeight={"40px"}
+                            tempSize={"15px"}
+                        />
                 </div>
+                <div style={{width: "20%", float: "right"}}>
+                {this.props.infoPage.infoSelected && this.getFavButton()}
+                </div>
+                {this.getCloseButton()}
             </Toolbar>
         );
     }
@@ -124,10 +144,11 @@ function mapStateToProps(state: IState): IInfoControlBarStateToProps {
         infoPage: state.infoPage,
         userDetails: state.userDetails,
         loadingSpinner: state.loadingSpinner,
+        weatherStore: state.weatherStore,
     });
 }
 
 export default connect(
     mapStateToProps,
-    { closeInfoPage, addToFavourites, removeFromFavourites },
+    { closeInfoPage, addToFavourites, removeFromFavourites, toggleModal },
 )(InfoControlBar);

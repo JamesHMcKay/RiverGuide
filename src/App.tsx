@@ -79,7 +79,7 @@ class App extends Component {
                                     component={Panel}
                                 />
                                 <Route
-                                    path="/logbook"
+                                    path="/trips"
                                     component={ProfileContainer}
                                 />
                                 <Route

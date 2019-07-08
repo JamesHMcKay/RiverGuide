@@ -21,12 +21,6 @@
 }
 
 .reporting-button {
-    /* margin-top: 3%;
-    left: 0%;
-    margin-right: 5%;
-    margin-left: 5%;
-    padding-left: 5%;
-    padding-right: 5%; */
     height: fit-content;
 }
 
@@ -240,7 +234,7 @@ weather-forecast {
 }
 
 .current-temp {
-    font-size: 20px;
+    /* font-size: 20px; */
     display: inline-flex;
     padding: 10px 10px 2px 8px;
 }
@@ -260,7 +254,7 @@ weather-forecast {
 }
 
 .weather-icon {
-    height: 60px;
+    height: inherit;
 }
 
 .current-weather-icon {

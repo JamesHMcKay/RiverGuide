@@ -15,7 +15,7 @@ function DialogTitle(props: IDialogTitleProps): JSX.Element {
 
   return (
     <div style={{padding: `${theme.spacing() * 2}px ${theme.spacing() * 3}px 0`}}>
-      <Typography align="center" variant="h6" style={{maxWidth: "85%", wordWrap: "normal"}}>
+      <Typography align="left" variant="h6" style={{maxWidth: "85%", wordWrap: "normal"}}>
         {title}
       </Typography>
       {handleClose ? (

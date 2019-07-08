@@ -25,7 +25,7 @@ export interface ITabCategory {
 export const categories: ITabCategory[] = [
     {name: "Data", route: "/data", id: "data"},
     {name: "Activities", route: "/activities", id: "activities"},
-    {name: "Log book", route: "/logbook", id: "logbook"},
+    {name: "Trips", route: "/trips", id: "trips"},
 ];
 
 export const tabIds: string[] = categories.map((item: ITabCategory) => item.id);
@@ -105,7 +105,8 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
                 <div
                     style={{
                         width: "73%",
-                        margin: "0 auto",
+                        // margin: "0 auto",
+                        marginLeft: "5%",
                         color: "#fff",
                     }}
                 >

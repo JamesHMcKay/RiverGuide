@@ -2,12 +2,12 @@ import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { green } from "@material-ui/core/colors";
 import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import IconButton from "@material-ui/core/IconButton";
 import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import withMobileDialog from "@material-ui/core/withMobileDialog";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import React, { Component } from "react";
@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 import { loginUser, registerUser } from "../../actions/getAuth";
 import { IState } from "../../reducers/index";
+import DialogTitle from "../../utils/dialogTitle";
 import { IErrors, ILoginDetails, IRegisterData } from "../../utils/types";
 import SocialLink from "./SocialLink";
 
@@ -35,6 +36,7 @@ interface ILoginProps extends ILoginStateProps {
     toggleModal: (modal?: string) => void;
     loginUser: (details: ILoginDetails) => void;
     registerUser: (userData: IRegisterData) => void;
+    fullScreen: boolean;
 }
 
 class Login extends Component<ILoginProps, ILoginState> {
@@ -83,6 +85,10 @@ class Login extends Component<ILoginProps, ILoginState> {
         this.props.toggleModal();
     }
 
+    public onSignUpClick = (): void => {
+        this.props.toggleModal("registerModal");
+    }
+
     public handleClickShowPassword = (): void => {
         this.setState({ showPassword: !this.state.showPassword });
     }
@@ -92,7 +98,13 @@ class Login extends Component<ILoginProps, ILoginState> {
 
         return (
             <div>
-                <Dialog onClose={this.closeModal} aria-labelledby="example dialog" open={this.props.isOpen}>
+                <Dialog
+                    onClose={this.closeModal}
+                    aria-labelledby="example dialog"
+                    open={this.props.isOpen}
+                    fullScreen={this.props.fullScreen}
+                >
+                <DialogTitle handleClose={this.closeModal} title={"Login"}/>
                 <DialogContent>
 
                 <div className = "provider-button-stack">
@@ -102,7 +114,7 @@ class Login extends Component<ILoginProps, ILoginState> {
 
                 <DialogContentText align = "center" variant = "h6">
                         {"- or -"}
-                    </DialogContentText>
+                </DialogContentText>
 
                     <DialogContentText>
                         {"Email"}
@@ -165,14 +177,26 @@ class Login extends Component<ILoginProps, ILoginState> {
                         />
                     }
                 </div>
+                <DialogContentText align = "center" variant = "h6">
+                        {"- or -"}
+                </DialogContentText>
+                <div
+                    style={{
+                        margin: "1em",
+                        position: "relative",
+                    }}
+                >
+                    <Button
+                        variant = "contained"
+                        color="primary"
+                        onClick={this.onSignUpClick}
+                        fullWidth
+                    >
+                                Sign up
+                    </Button>
+                    </div>
 
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.closeModal} color="primary">
-                    Cancel
-                    </Button>
-                </DialogActions>
-
                 </Dialog>
             </div>
         );
@@ -189,4 +213,4 @@ function mapStateToProps(state: IState): ILoginStateProps {
 export default connect(
     mapStateToProps,
     { toggleModal, loginUser, registerUser},
-)(Login);
+)(withMobileDialog()(Login));

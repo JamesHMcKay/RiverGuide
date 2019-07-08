@@ -112,6 +112,14 @@ class Info extends Component<IInfoProps, IInfoState> {
         }
     }
 
+    public onFavClick = (isFav: boolean): void => {
+        if (this.props.auth.isAuthenticated) {
+            this.toggleFavourite(isFav);
+        } else {
+            this.props.toggleModal("loginModal");
+        }
+    }
+
     public getFavButton = (): JSX.Element => {
         if (this.props.loadingSpinner === "favButton") {
             return (
@@ -134,7 +142,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                 placement="right"
             >
             <IconButton
-                onClick={(): void => {this.toggleFavourite(isFav); }}
+                onClick={(): void => {this.onFavClick(isFav); }}
             >
                 {isFav ? (
                     <FavoriteIcon style={{ color: "#fb1" }} />
@@ -146,12 +154,12 @@ class Info extends Component<IInfoProps, IInfoState> {
         );
     }
 
-    public getReportButton = (): JSX.Element => {
+    public getReportButton = (color: string): JSX.Element => {
         return (
             <Button
                 className="reporting-button"
                 variant="outlined"
-                style={{height: "fit-content", color: "white", borderColor: "white", float: "right"}}
+                style={{height: "fit-content", color, borderColor: color, float: "right"}}
                 onClick={this.openModal.bind(this, "addTripInfoPage")}
              >
                 Log a trip
@@ -161,6 +169,10 @@ class Info extends Component<IInfoProps, IInfoState> {
 
     public getCloseButton = (): JSX.Element => {
         return (
+            <Tooltip
+                title={"Close"}
+                placement="top"
+            >
             <Button
             onClick={this.handleClose}
             style={{
@@ -170,6 +182,7 @@ class Info extends Component<IInfoProps, IInfoState> {
             >
                 <CloseIcon />
             </Button>
+            </Tooltip>
         );
     }
 
@@ -306,6 +319,110 @@ class Info extends Component<IInfoProps, IInfoState> {
             </Grid>);
     }
 
+    public getMapButton = (): JSX.Element => {
+        return (
+                <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={(): void => {this.props.toggleModal("mapModal"); }}
+                    style={{
+                        height: "fit-content",
+                        color: "black",
+                        borderColor: "black",
+                        marginRight: "15px",
+                    }}
+                >
+                    {"Site map"}
+               </Button>
+        );
+    }
+
+    public getHeaderMobile = (entry: IListEntry, isData: boolean): JSX.Element => {
+        return (
+            <Grid
+            container
+            xs={12}
+            spacing={1}
+            justify="space-between"
+            style={{
+                // height: "200px",
+                margin: "20px"}}>
+            <Grid container item md={11} lg={11} justify="flex-start">
+                    <div className="toolbar-middle">
+                            <Typography variant="h2" style={{color: "black"}}>
+                            {entry.display_name}
+                            </Typography>
+                            <Typography variant="h6" style={{color: "black"}}>
+                            {/* {`${entry.river_name} river  •  ${entry.region} `} */}
+                            {`${entry.river_name} river`}
+                            </Typography>
+                    </div>
+            </Grid>
+            <Grid
+                container
+                item
+                spacing={0}
+                style={{display: "flex", flexDirection: "row"}}
+            >
+                    {this.getMapButton()}
+                {(this.props.auth.isAuthenticated && !isData) && this.getReportButton("black")}
+            </Grid>
+        </Grid>
+        );
+    }
+
+    public getHeader = (entry: IListEntry, isData: boolean): JSX.Element => {
+        return (
+            <Grid
+            container
+            item
+            xs={12}
+            spacing={3}
+            justify="space-between"
+            style={{
+                height: "200px",
+                margin: "0px",
+                backgroundImage: `url(${title_image})`,
+                backgroundRepeat: "no-repeat"}}>
+            <Grid container item md={11} lg={11} justify="flex-start">
+                    <div className="toolbar-middle">
+                            <Typography variant="h2" style={{color: "white"}}>
+                            {entry.display_name}
+                            </Typography>
+                            <Typography variant="h6" style={{color: "white"}}>
+                            {/* {`${entry.river_name} river  •  ${entry.region} `} */}
+                            {`${entry.river_name} river`}
+                            </Typography>
+                    </div>
+                        {this.getFavButton()}
+            </Grid>
+            <Grid container item md={1} lg={1} justify="flex-end">
+                    <Hidden smDown>
+                        {this.getCloseButton()}
+                    </Hidden>
+                </Grid>
+            <Grid
+                container
+                item
+                spacing={0}
+                justify="space-between"
+                style={{display: "flex", flexDirection: "row"}}
+            >
+                    <CurrentWeather
+                        lat={entry.position.lat || 0}
+                        lon={entry.position.lon || 0}
+                        weatherStore={this.props.weatherStore}
+                        onClick= {this.openModal.bind(this, "weatherModal")}
+                        textColor = {"white"}
+                        iconHeight={"60px"}
+                        tempSize={"20px"}
+                    />
+                {(this.props.auth.isAuthenticated && !isData) && this.getReportButton("white")}
+            </Grid>
+        </Grid>
+        );
+    }
+
     public render(): JSX.Element {
         const entry: IListEntry = this.props.infoPage.selectedGuide;
         const isData: boolean = entry.activity === "data";
@@ -319,53 +436,12 @@ class Info extends Component<IInfoProps, IInfoState> {
                 style={{float: "right"}}
                 className="right-panel"
             >
-                <Grid
-                    container
-                    item
-                    xs={12}
-                    spacing={3}
-                    justify="space-between"
-                    style={{
-                        height: "200px",
-                        margin: "0px",
-                        backgroundImage: `url(${title_image})`,
-                        backgroundRepeat: "no-repeat"}}>
-                    <Grid container item md={11} lg={11} justify="flex-start">
-                            <div className="toolbar-middle">
-                                    <Typography variant="h2" style={{color: "white"}}>
-                                    {entry.display_name}
-                                    </Typography>
-                                    <Typography variant="h6" style={{color: "white"}}>
-                                    {/* {`${entry.river_name} river  •  ${entry.region} `} */}
-                                    {`${entry.river_name} river`}
-                                    </Typography>
-                            </div>
-                            <Hidden smDown>
-                                {this.props.auth.isAuthenticated && this.getFavButton()}
-                            </Hidden>
-                    </Grid>
-                    <Grid container item md={1} lg={1} justify="flex-end">
-                            <Hidden smDown>
-                                {this.getCloseButton()}
-                            </Hidden>
-                        </Grid>
-                    <Grid
-                        container
-                        item
-                        spacing={0}
-                        justify="space-between"
-                        style={{display: "flex", flexDirection: "row"}}
-                    >
-                        <CurrentWeather
-                            lat={entry.position.lat || 0}
-                            lon={entry.position.lon || 0}
-                            weatherStore={this.props.weatherStore}
-                            onClick= {this.openModal.bind(this, "weatherModal")}
-                            textColor = {"white"}
-                        />
-                        {(this.props.auth.isAuthenticated && !isData) && this.getReportButton()}
-                    </Grid>
-                </Grid>
+                <Hidden smDown>
+                    {this.getHeader(entry, isData)}
+                </Hidden>
+                <Hidden mdUp>
+                    {this.getHeaderMobile(entry, isData)}
+                </Hidden>
                 {/* {isLogbookInfo && this.getLogbook()} */}
                 {!isLogbookInfo && this.getKeyFacts()}
                 {!isLogbookInfo && this.getFlowChart(entry)}

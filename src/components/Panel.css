@@ -131,4 +131,5 @@ input.form-control-lg.form-control {
 .provider-button-stack {
     display: flex;
     flex-direction: column;
+    text-align: center;
 }

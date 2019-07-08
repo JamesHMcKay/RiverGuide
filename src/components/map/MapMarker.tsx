@@ -45,7 +45,7 @@ export default class MapMarker extends PureComponent<IMapMarkerProps> {
                 <IoIosLocation
                     size={80}
                     className="map-marker"
-                    style={{color: this.props.color || "blue"}}
+                    style={{color: "#1e87e5"}}
                 />
             </svg>
             </Tooltip>
