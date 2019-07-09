@@ -259,7 +259,7 @@ export default class EditKeyFacts extends Component<IEditKeyFactsProps, IEditKey
     }
 
     public handleArrayChange = (event: any, index: number): void => {
-        const newValue: number[] = this.state.value as number[];
+        const newValue: number[] = this.state.value as number[] || [] as number[];
         newValue[index] = event.target.value;
         this.setState({
             value: newValue,
@@ -281,16 +281,20 @@ export default class EditKeyFacts extends Component<IEditKeyFactsProps, IEditKey
         const selectedKey: keyof IKeyFactsChar | keyof IKeyFactsNum | undefined = this.state.editKey;
         if (selectedKey && this.state.type === "num" && this.state.value) {
             const keyFacts: IKeyFactsNum = this.props.keyFactsNum;
-            keyFacts[selectedKey as keyof IKeyFactsNum].value = this.state.value as number;
-            keyFacts[selectedKey as keyof IKeyFactsNum].unit =
-                this.state.units || keyFacts[selectedKey as keyof IKeyFactsNum].unit;
+            const newObject: any = {
+                value: this.state.value as number,
+                unit: this.state.units || keyFacts[selectedKey as keyof IKeyFactsNum].unit,
+            };
+            keyFacts[selectedKey as keyof IKeyFactsNum] = newObject;
             this.props.onChangeNum(keyFacts);
         }
         if (selectedKey && this.state.type === "numRange" && this.state.value) {
             const keyFacts: IKeyFactsNum = this.props.keyFactsNum;
-            keyFacts[selectedKey as keyof IKeyFactsNum].value = this.state.value as number[];
-            keyFacts[selectedKey as keyof IKeyFactsNum].unit =
-                this.state.units || keyFacts[selectedKey as keyof IKeyFactsNum].unit;
+            const newObject: any = {
+                value: this.state.value as number[],
+                unit: this.state.units || keyFacts[selectedKey as keyof IKeyFactsNum].unit,
+            };
+            keyFacts[selectedKey as keyof IKeyFactsNum] = newObject;
             this.props.onChangeNum(keyFacts);
         }
         if (selectedKey && this.state.type === "char" && this.state.value) {
