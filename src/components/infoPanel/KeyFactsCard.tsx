@@ -11,19 +11,19 @@ import { IState } from "../../reducers";
 import { IExpansionPanels, IItemDetails, IKeyFactsChar, IKeyFactsNum, IKeyFactsNumItem } from "../../utils/types";
 import ExpansionHead from "./ExpansionHead";
 
-interface IKeyFactProps<T> {
+export interface IKeyFactProps<T> {
     key: keyof T;
     name: string;
     icon: JSX.Element;
 }
 
-const KEY_FACTS_NUM_PROPS: Array<IKeyFactProps<IKeyFactsNum>> = [
+export const KEY_FACTS_NUM_PROPS: Array<IKeyFactProps<IKeyFactsNum>> = [
     {key: "gradient", name: "Gradient", icon: <LandscapeRounded fontSize="large" />},
     {key: "time", name: "Time", icon: <QueryBuilder fontSize="large" />},
     {key: "section_length", name: "Length", icon: <Timeline fontSize="large" />},
 ];
 
-const KEY_FACTS_CHAR_PROPS: Array<IKeyFactProps<IKeyFactsChar>> = [
+export const KEY_FACTS_CHAR_PROPS: Array<IKeyFactProps<IKeyFactsChar>> = [
     {key: "grade_overall", name: "Grade", icon: <WarningRounded fontSize="large" />},
     {key: "grade_hardest", name: "Grade (hardest)", icon: <WarningRounded fontSize="large" />},
 ];

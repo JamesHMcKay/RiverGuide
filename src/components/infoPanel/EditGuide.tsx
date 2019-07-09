@@ -2,7 +2,6 @@ import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import React from "react";
@@ -13,8 +12,10 @@ import { connect } from "react-redux";
 import uuid from "uuidv4";
 import { updateGuide } from "../../actions/updateGuide";
 import { IState } from "../../reducers";
-import { IGauge, IInfoPage, IListEntry, IMarker } from "../../utils/types";
+import DialogTitle from "../../utils/dialogTitle";
+import { IGauge, IInfoPage, IKeyFactsChar, IKeyFactsNum, IListEntry, IMarker } from "../../utils/types";
 import EditMapComponent from "../map/EditMapComponent";
+import EditKeyFacts from "./EditKeyFacts";
 import GaugeSelect from "./GaugeSelect";
 
 interface IEditGuideState {
@@ -23,6 +24,8 @@ interface IEditGuideState {
     id: string | undefined;
     markers: {[key: string]: IMarker};
     editorState: EditorState;
+    keyFactsNum: IKeyFactsNum;
+    keyFactsChar: IKeyFactsChar;
 }
 
 interface IEditGuideProps extends IEditGuideStateProps {
@@ -58,6 +61,8 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
         }
 
         this.state = ({
+            keyFactsChar: this.props.infoPage.itemDetails.key_facts_char,
+            keyFactsNum: this.props.infoPage.itemDetails.key_facts_num,
             markers,
             description,
             gaugeId,
@@ -66,16 +71,11 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
         });
     }
 
-    public getSelectedSection = (): JSX.Element => {
+    public getSelectedSection = (): string => {
         if (this.props.infoPage.selectedGuide) {
-            return (
-                <DialogContentText>
-                {this.props.infoPage.selectedGuide.display_name}
-            </DialogContentText>);
+            return this.props.infoPage.selectedGuide.display_name;
         } else {
-            return (<DialogContentText>
-                {"No section selected"}}
-            </DialogContentText>);
+            return "No guide selected";
         }
     }
 
@@ -147,28 +147,45 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
         });
     }
 
+    public onChangeNum = (keyFactsNum: IKeyFactsNum): void => {
+        this.setState({
+            keyFactsNum,
+        });
+    }
+
+    public onChangeChar = (keyFactsChar: IKeyFactsChar): void => {
+        this.setState({
+            keyFactsChar,
+        });
+    }
+
     public onEditorStateChange = (editorState: EditorState): void => {
         this.setState({
           editorState,
           description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
         });
-      }
+    }
 
     public render(): JSX.Element {
         return (
             <div>
-                <DialogTitle>
-                    {this.getSelectedSection()}
-                </DialogTitle >
+                <DialogTitle title={this.getSelectedSection()} handleClose={this.props.handleClose}/>
+                <DialogActions>
+                    <Button onClick={this.handleSave} color="primary">
+                    Submit
+                    </Button>
+                </DialogActions>
                 <DialogContent>
-                <DialogContentText>
-                        {"Gauge"}
-                    </DialogContentText>
-                        <GaugeSelect
-                            handleChange={this.handleGaugeChange}
-                            selectedGaugeId={this.state.gaugeId}
+                <DialogContentText variant = "h5" color="textPrimary">
+                        {"Key Facts"}
+                </DialogContentText>
+                <EditKeyFacts
+                        keyFactsNum={this.state.keyFactsNum}
+                        keyFactsChar={this.state.keyFactsChar}
+                        onChangeNum={this.onChangeNum}
+                        onChangeChar={this.onChangeChar}
                     />
-                    <DialogContentText>
+                    <DialogContentText variant = "h5" color="textPrimary">
                         {"Description"}
                     </DialogContentText>
                     {/* <TextField
@@ -189,7 +206,16 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
                         editorClassName="editorClassName"
                         onEditorStateChange={this.onEditorStateChange}
                     />
-
+                <DialogContentText variant = "h5" color="textPrimary">
+                        {"Gauge"}
+                </DialogContentText>
+                        <GaugeSelect
+                            handleChange={this.handleGaugeChange}
+                            selectedGaugeId={this.state.gaugeId}
+                    />
+                <DialogContentText variant = "h5" color="textPrimary">
+                        {"Local Map"}
+                </DialogContentText>
                     <EditMapComponent
                         markers={this.state.markers}
                         gaugeMarkers={this.getGaugeLocation()}
