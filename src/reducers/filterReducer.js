@@ -18,7 +18,6 @@ export default function(state = initialState, action) {
                 activity: action.payload
             };
         case SET_FILTER:
-                console.log("setting filter", action.payload);
                 return action.payload;
         default:
             return state;

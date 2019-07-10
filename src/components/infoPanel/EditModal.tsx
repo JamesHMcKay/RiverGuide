@@ -2,17 +2,21 @@ import Dialog from "@material-ui/core/Dialog";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
+import { deleteGuide, updateGuide } from "../../actions/updateGuide";
 import { IState } from "../../reducers/index";
-import { IInfoPage } from "../../utils/types";
-import EditGuide from "./EditGuide";
+import { IInfoPage, IListEntry } from "../../utils/types";
+import EditGuide, { IEditGuideState } from "./EditGuide";
 
 interface IEditModalProps extends IEditModalStateProps {
     toggleModal: (modal?: string) => void;
+    updateGuide: (item: IEditGuideState, selectedGuide: IListEntry, listEntries: IListEntry[]) => void;
+    deleteGuide: (selectedGuideId: string, listEntries: IListEntry[]) => void;
 }
 
 interface IEditModalStateProps {
     isOpen: boolean;
     infoPage: IInfoPage;
+    listEntries: IListEntry[];
 }
 
 class EditModal extends Component<IEditModalProps> {
@@ -22,6 +26,28 @@ class EditModal extends Component<IEditModalProps> {
 
     public closeModal(): void {
         this.props.toggleModal();
+    }
+
+    public handleSave = (result: IEditGuideState): void => {
+        const selectedGuide: IListEntry = {
+            ...this.props.infoPage.selectedGuide,
+            display_name: result.displayName,
+            river_name: result.riverName,
+            region: result.region,
+            gauge_id: result.gaugeId,
+            position: result.locationMarker ? {
+                lat: result.locationMarker.lat,
+                lon: result.locationMarker.lng,
+            } : this.props.infoPage.selectedGuide.position,
+            activity: result.activity ? result.activity : this.props.infoPage.selectedGuide.activity,
+        };
+        this.props.updateGuide(result, selectedGuide, this.props.listEntries);
+        this.closeModal();
+    }
+
+    public handleDelete = (): void => {
+        this.props.deleteGuide(this.props.infoPage.selectedGuide.id, this.props.listEntries);
+        this.closeModal();
     }
 
     public render(): JSX.Element {
@@ -36,6 +62,8 @@ class EditModal extends Component<IEditModalProps> {
                 <EditGuide
                     handleClose = {(): void => this.props.toggleModal()}
                     infoPage = {this.props.infoPage}
+                    handleSave = {this.handleSave}
+                    handleDelete = {this.handleDelete}
                 />
             </Dialog>
         );
@@ -46,10 +74,11 @@ function mapStateToProps(state: IState): IEditModalStateProps {
     return ({
         isOpen: state.openModal === "editModal",
         infoPage: state.infoPage,
+        listEntries: state.listEntries,
     });
 }
 
 export default connect(
     mapStateToProps,
-    { toggleModal},
+    { toggleModal, updateGuide, deleteGuide },
 )(EditModal);

@@ -71,7 +71,7 @@ class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
     public getNewKeyFacts = (): JSX.Element => {
         const results: JSX.Element[] = [];
         // const keyFactsNum: IKeyFactsNum = this.props.itemDetails.key_facts_num;
-        const keyFactsChar: IKeyFactsChar = this.props.itemDetails.key_facts_char;
+        const keyFactsChar: IKeyFactsChar = this.props.itemDetails.key_facts_char as IKeyFactsChar;
 
         let keys: string[] = Object.keys(keyFactsChar);
         for (const key of keys) {
@@ -91,7 +91,7 @@ class KeyFactsCard extends Component<IKeyFactsCardProps, IKeyFactsCardState> {
 
         }
 
-        const keyFactsNum: IKeyFactsNum = this.props.itemDetails.key_facts_num;
+        const keyFactsNum: IKeyFactsNum = this.props.itemDetails.key_facts_num as IKeyFactsNum;
 
         keys = Object.keys(keyFactsNum);
         for (const key of keys) {

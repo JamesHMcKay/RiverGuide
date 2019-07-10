@@ -9,9 +9,9 @@ import { IViewport } from "./InfoMapComponent";
 import MapCluster from "./MapCluster";
 import MapMarker from "./MapMarker";
 
-const DEFAULT_LAT: number = -41.838875;
-const DEFAULT_LON: number = 171.7799;
-const DEFAULT_ZOOM: number = 6;
+export const DEFAULT_LAT: number = -41.838875;
+export const DEFAULT_LON: number = 171.7799;
+export const DEFAULT_ZOOM: number = 6;
 
 const TOKEN: string =
     "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqd29oc2hzdjF3YnM0Ym4wa3o4azFhd2MifQ.dqrE-W1cXNGKpV5FGPZFww";

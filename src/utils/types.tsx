@@ -82,8 +82,8 @@ export interface IItemDetails {
     entryDetails: string;
     exitDetails: string;
     markerList: IMarker[];
-    key_facts_num: IKeyFactsNum;
-    key_facts_char: IKeyFactsChar;
+    key_facts_num: Partial<IKeyFactsNum>;
+    key_facts_char: Partial<IKeyFactsChar>;
     position: ILatLon;
 }
 

@@ -11,6 +11,7 @@ import uuid from "uuidv4";
 import WebMercatorViewport from "viewport-mercator-project";
 import { IMarker } from "../../utils/types";
 import { DEFAULT_VIEW_PORT } from "./InfoMapComponent";
+import { DEFAULT_LAT, DEFAULT_LON, DEFAULT_ZOOM } from "./MapComponent";
 import MapMarker from "./MapMarker";
 import MarkerModal from "./MarkerModal";
 
@@ -20,14 +21,22 @@ const TOKEN: string =
 interface IEditMapProps {
     markers: {[key: string]: IMarker};
     gaugeMarkers: IMarker[];
-    locationMarker: IMarker[];
+    locationMarker?: IMarker;
     updateMarkers: (markers: {[key: string]: IMarker}) => void;
+    updateLocationMarker: (marker: IMarker) => void;
 }
 
 export interface IViewport {
     longitude: number;
     latitude: number;
     zoom: number;
+}
+
+interface IGetMarkers {
+    markerList: IMarker[];
+    color: string;
+    canEdit: boolean;
+    isLocation: boolean;
 }
 
 interface IEditMapState {
@@ -50,7 +59,11 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
     constructor(props: IEditMapProps) {
         super(props);
         this.state = {
-            viewport: this.getViewport(this.props.locationMarker),
+            viewport: this.props.locationMarker ? this.getViewport(this.props.locationMarker) : {
+                latitude: DEFAULT_LAT,
+                longitude: DEFAULT_LON,
+                zoom: DEFAULT_ZOOM,
+            },
             deleteMode: false,
             editMode: true,
             openAddMarkerDialog: false,
@@ -84,17 +97,22 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
             }
         }
 
-    public onMarkerDragEnd = (markerId: string, event: any): void => {
-        if (this.state.editMode) {
+    public onMarkerDragEnd = (markerId: string, event: any, isLocation: boolean): void => {
+        if (this.state.editMode && !isLocation) {
             const markers: { [key: string]: IMarker } = {...this.props.markers};
             markers[markerId].lat = event.lngLat[1];
             markers[markerId].lng = event.lngLat[0];
             this.props.updateMarkers(markers);
+        } else if (isLocation && this.props.locationMarker) {
+            const marker: IMarker = this.props.locationMarker;
+            marker.lat = event.lngLat[1];
+            marker.lng =  event.lngLat[0];
+            this.props.updateLocationMarker(marker);
         } else {event.preventDefault(); }
     }
 
-    public getMarkers = (markerList: IMarker[], color: string, canEdit: boolean): Array<(0 | JSX.Element)> => {
-        const list: Array<(0 | JSX.Element)> = markerList.map(
+    public getMarkers = (params: IGetMarkers): Array<(0 | JSX.Element)> => {
+        const list: Array<(0 | JSX.Element)> = params.markerList.map(
             (marker: IMarker) =>
                 marker.lat &&
                 marker.lng && (
@@ -102,15 +120,17 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
                         key={marker.lat}
                         longitude={marker.lng}
                         latitude={marker.lat}
-                        draggable={canEdit}
-                        onDragEnd={(event: any): void => this.onMarkerDragEnd(marker.id, event)}
+                        draggable={params.canEdit || params.isLocation}
+                        onDragEnd={
+                            (event: any): void => this.onMarkerDragEnd(marker.id, event, params.isLocation)
+                        }
                     >
                         <MapMarker
                             size={30}
                             toolTip={marker.name}
                             editMode={this.state.editMode}
-                            onClick={(): void => this.onMarkerClick(marker.id, canEdit)}
-                            color={color}
+                            onClick={(): void => this.onMarkerClick(marker.id, params.canEdit)}
+                            color={params.color}
                         />
                   </Marker>
                 ),
@@ -155,7 +175,7 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
     }
 
     public onMapClick = (event: any): void => {
-        if (this.state.editMode) {
+        if (this.props.locationMarker) {
             const id: string = uuid();
             this.setState({
                 deleteMode: false,
@@ -167,8 +187,17 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
                     long: event.lngLat[0],
                 },
             });
+        } else {
+            const marker: IMarker = {
+                name: "Guide location",
+                lat: event.lngLat[1],
+                lng: event.lngLat[0],
+                id: "1",
+                description: "",
+                category: "",
+            };
+            this.props.updateLocationMarker(marker);
         }
-
     }
 
     public enterEditMode = (): void => {
@@ -268,12 +297,12 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
         this.setState({ viewport });
     }
 
-    public getViewport = (markerList: IMarker[]): IViewport => {
-        const bounds: IMarker[] = markerList;
+    public getViewport = (markerList: IMarker): IViewport => {
+        const bounds: IMarker = markerList;
         let viewport: IViewport = DEFAULT_VIEW_PORT;
         viewport = {
-            latitude: bounds[0].lat,
-            longitude: bounds[0].lng,
+            latitude: bounds.lat,
+            longitude: bounds.lng,
             zoom: 10,
         };
         return viewport;
@@ -281,7 +310,6 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
 
     public render(): JSX.Element {
         const viewport: IViewport = this.state.viewport;
-        // const editColor: PropTypes.Color = !this.state.editMode ? "primary" : "secondary";
         const {newMarker: {name, category, description}} = this.state;
         const markers: IMarker[] = Object.values(this.props.markers);
         return (
@@ -296,9 +324,19 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
                     onClick={this.onMapClick}
                     // onDragOver={(e) => this.onDragOver()}
                 >
-                    {this.getMarkers(markers, "blue", true)}
-                    {this.getMarkers(this.props.gaugeMarkers, "red", false)}
-                    {this.getMarkers(this.props.locationMarker, "red", false)}
+                    {this.getMarkers({markerList: markers, color: "blue", canEdit: true, isLocation: false})}
+                    {this.getMarkers({
+                        markerList: this.props.gaugeMarkers,
+                        color: "red",
+                        canEdit: false,
+                        isLocation: false,
+                    })}
+                    {this.props.locationMarker && this.getMarkers({
+                        markerList: [this.props.locationMarker],
+                        color: "red",
+                        canEdit: false,
+                        isLocation: true,
+                    })}
                 <div style={{position: "absolute", right: 5}}>
                     <NavigationControl onViewportChange={(): null => null}  onViewStateChange={(): null => null}  />
                 </div>
@@ -328,7 +366,7 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
                             <Button onClick={this.handleDeleteClose} color="primary">
                                 Cancel
                             </Button>
-                            <Button onClick={this.deleteMarker} color="secondary">
+                            <Button onClick={this.deleteMarker} color="primary">
                                 Yes
                             </Button>
                         </DialogActions>

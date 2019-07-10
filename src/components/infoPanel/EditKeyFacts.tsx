@@ -43,7 +43,7 @@ interface IEditKeyFactsProps {
 interface IEditKeyFactsState {
     dialogOpen: boolean;
     editKey?: keyof IKeyFactsChar | keyof IKeyFactsNum;
-    type: "char" | "num" | "numRange";
+    type?: "char" | "num" | "numRange";
     value?: string | number | number[];
     units?: string;
     addMode: boolean;
@@ -54,7 +54,6 @@ export default class EditKeyFacts extends Component<IEditKeyFactsProps, IEditKey
         super(props);
         this.state = {
             dialogOpen: false,
-            type: "char",
             addMode: false,
         };
     }
@@ -270,14 +269,11 @@ export default class EditKeyFacts extends Component<IEditKeyFactsProps, IEditKey
         this.setState({
             dialogOpen: false,
             addMode: false,
+            value: undefined,
         });
     }
 
     public handleSave = (): void => {
-        this.setState({
-            dialogOpen: false,
-            addMode: false,
-        });
         const selectedKey: keyof IKeyFactsChar | keyof IKeyFactsNum | undefined = this.state.editKey;
         if (selectedKey && this.state.type === "num" && this.state.value) {
             const keyFacts: IKeyFactsNum = this.props.keyFactsNum;
@@ -302,6 +298,11 @@ export default class EditKeyFacts extends Component<IEditKeyFactsProps, IEditKey
             keyFacts[selectedKey as keyof IKeyFactsChar] = this.state.value as string;
             this.props.onChangeChar(keyFacts);
         }
+        this.setState({
+            dialogOpen: false,
+            addMode: false,
+            value: undefined,
+        });
     }
 
     public handleDelete = (): void => {
@@ -331,7 +332,7 @@ export default class EditKeyFacts extends Component<IEditKeyFactsProps, IEditKey
         this.setState({
             dialogOpen: true,
             addMode: true,
-            type: "char",
+            type: undefined,
         });
     }
 
@@ -375,7 +376,7 @@ export default class EditKeyFacts extends Component<IEditKeyFactsProps, IEditKey
                         placeholder={"Select a type"}
                         onChange={(e: any): void => {this.setState({
                         editKey: e.target.value,
-                        type: KEY_FACTS_CHAR_IDS.indexOf(this.state.editKey as string) ? "char" : "num",
+                        type: KEY_FACTS_CHAR_IDS.indexOf(e.target.value as string) > -1 ? "char" : undefined,
                         }); }}
                         inputProps={{
                             name: "Type",

@@ -6,7 +6,7 @@ import { generateFilteredList } from "../actions/actions";
 import { IState } from "../reducers/index";
 import { IFilter, IListEntry, ILogEntry, IMapBounds } from "../utils/types";
 
-const ACTIVITY_MENU: Array<{name: string, id: string}> = [
+export const ACTIVITY_MENU: Array<{name: string, id: string}> = [
     {name: "White water", id: "kayaking"},
     {name: "Fishing", id: "fishing"},
     {name: "Swimming", id: "swimming"},

@@ -5,6 +5,7 @@ import { IState } from "../../reducers/index";
 import Login from "../auth/Login";
 import Logout from "../auth/Logout";
 import Register from "../auth/Register";
+import AddModal from "../infoPanel/AddModal";
 import DataInfoModal from "../infoPanel/DataInfoModal";
 import DownloadModal from "../infoPanel/DownloadModal";
 import EditModal from "../infoPanel/EditModal";
@@ -28,6 +29,7 @@ class Modals extends Component {
                 <TripDetailsAnyPage />
                 <WeatherModal />
                 <EditModal />
+                <AddModal />
                 <DownloadModal />
                 <DataInfoModal />
                 <TripDetailsEdit />

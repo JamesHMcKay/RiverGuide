@@ -2,36 +2,47 @@ import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import { ContentState, convertToRaw, EditorState } from "draft-js";
+import { ContentState, convertFromHTML, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import React from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
+import Dialog from "@material-ui/core/Dialog";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import TextField from "@material-ui/core/TextField";
 import { connect } from "react-redux";
 import uuid from "uuidv4";
-import { updateGuide } from "../../actions/updateGuide";
 import { IState } from "../../reducers";
 import DialogTitle from "../../utils/dialogTitle";
-import { IGauge, IInfoPage, IKeyFactsChar, IKeyFactsNum, IListEntry, IMarker } from "../../utils/types";
+import { IGauge, IInfoPage, IKeyFactsChar, IKeyFactsNum, IMarker } from "../../utils/types";
+import { ACTIVITY_MENU } from "../ActivityFilter";
 import EditMapComponent from "../map/EditMapComponent";
 import EditKeyFacts from "./EditKeyFacts";
 import GaugeSelect from "./GaugeSelect";
 
-interface IEditGuideState {
+export interface IEditGuideState {
+    displayName: string;
+    riverName?: string;
+    region: string;
+    activity?: string;
     description: string;
     gaugeId: string | undefined;
     id: string | undefined;
     markers: {[key: string]: IMarker};
     editorState: EditorState;
-    keyFactsNum: IKeyFactsNum;
-    keyFactsChar: IKeyFactsChar;
+    keyFactsNum: Partial<IKeyFactsNum>;
+    keyFactsChar: Partial<IKeyFactsChar>;
+    locationMarker?: IMarker;
+    openDeleteDialog: boolean;
 }
 
 interface IEditGuideProps extends IEditGuideStateProps {
-    updateGuide: (item: IEditGuideState, selectedGuide: IListEntry) => void;
     handleClose: () => void;
-    infoPage: IInfoPage;
+    infoPage?: IInfoPage;
+    handleSave: (result: IEditGuideState) => void;
+    handleDelete?: () => void;
 }
 
 interface IEditGuideStateProps {
@@ -41,13 +52,14 @@ interface IEditGuideStateProps {
 class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
     constructor(props: IEditGuideProps) {
         super(props);
-        let description: string = "";
-        if (this.props.infoPage.itemDetails) {
+        let description: string = "Write a description here";
+
+        if (this.props.infoPage && this.props.infoPage.itemDetails) {
             description = this.props.infoPage.itemDetails.description;
         }
         let gaugeId: string | undefined;
         let id: string | undefined;
-        if (this.props.infoPage.selectedGuide) {
+        if (this.props.infoPage && this.props.infoPage.selectedGuide) {
             gaugeId = this.props.infoPage.selectedGuide.gauge_id;
             id = this.props.infoPage.selectedGuide.id;
         }
@@ -61,29 +73,27 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
         }
 
         this.state = ({
-            keyFactsChar: this.props.infoPage.itemDetails.key_facts_char,
-            keyFactsNum: this.props.infoPage.itemDetails.key_facts_num,
+            keyFactsChar: this.props.infoPage ? this.props.infoPage.itemDetails.key_facts_char : {},
+            keyFactsNum: this.props.infoPage ? this.props.infoPage.itemDetails.key_facts_num : {},
+            displayName: this.props.infoPage ? this.props.infoPage.selectedGuide.display_name : "",
+            riverName: this.props.infoPage ? this.props.infoPage.selectedGuide.river_name : undefined,
+            region: this.props.infoPage ? this.props.infoPage.selectedGuide.region : "",
+            activity: this.props.infoPage ? this.props.infoPage.selectedGuide.activity : undefined,
             markers,
             description,
             gaugeId,
             id,
-            editorState: EditorState.createWithContent(ContentState.createFromText(description)),
+            editorState: EditorState.createWithContent(
+                ContentState.createFromBlockArray(convertFromHTML(description).contentBlocks),
+            ),
+            locationMarker: this.getLocation(),
+            openDeleteDialog: false,
         });
-    }
-
-    public getSelectedSection = (): string => {
-        if (this.props.infoPage.selectedGuide) {
-            return this.props.infoPage.selectedGuide.display_name;
-        } else {
-            return "No guide selected";
-        }
     }
 
     public handleSave = (): void => {
         const result: IEditGuideState = this.state;
-
-        this.props.updateGuide(result, this.props.infoPage.selectedGuide);
-        this.props.handleClose();
+        this.props.handleSave(result);
     }
 
     public updateDescription = (input: any): void => {
@@ -118,8 +128,8 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
         return [];
     }
 
-    public getLocation = (): IMarker[] => {
-        if (this.props.infoPage.selectedGuide) {
+    public getLocation = (): IMarker | undefined => {
+        if (this.props.infoPage && this.props.infoPage.selectedGuide) {
             const marker: IMarker = {
                 name: "Guide location",
                 lat: this.props.infoPage.selectedGuide.position.lat,
@@ -128,14 +138,13 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
                 description: "",
                 category: "",
             };
-            return [marker];
+            return marker;
         }
-        return [];
     }
 
     public getMarkerList = (): IMarker[] => {
         const markerList: IMarker[] | undefined =
-            this.props.infoPage.itemDetails &&
+            (this.props.infoPage && this.props.infoPage.itemDetails) &&
                 this.props.infoPage.itemDetails.markerList ?
                     this.props.infoPage.itemDetails.markerList : [];
         return markerList;
@@ -144,6 +153,12 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
     public updateMarkers = (markers: {[key: string]: IMarker}): void => {
         this.setState({
             markers,
+        });
+    }
+
+    public updateLocationMarker = (marker: IMarker): void => {
+        this.setState({
+            locationMarker: marker,
         });
     }
 
@@ -166,39 +181,103 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
         });
     }
 
+    public handleTextChange = (event: any, field: keyof IEditGuideState): void => {
+        this.setState({
+            ...this.state,
+            [field]: event.target.value,
+        });
+    }
+
+    public getWarningLocationText = (): string | undefined => {
+        if (!this.state.locationMarker) {
+            return " (click anywhere on the map to add the location marker)";
+        }
+        return " (click to add additional markers)";
+    }
+
     public render(): JSX.Element {
         return (
             <div>
-                <DialogTitle title={this.getSelectedSection()} handleClose={this.props.handleClose}/>
+                <DialogTitle title={"Add or edit guide"} handleClose={this.props.handleClose}/>
                 <DialogActions>
-                    <Button onClick={this.handleSave} color="primary">
+                    <Button variant="outlined" onClick={this.props.handleClose} color="primary">
+                    Cancel
+                    </Button>
+                    {this.props.handleDelete &&
+                                <Button
+                                variant="outlined"
+                                onClick={(): void => {this.setState({openDeleteDialog: true}); }}
+                            >
+                                Delete guide
+                            </Button>
+                   }
+                    <Button variant="outlined" onClick={this.handleSave} color="primary">
                     Submit
                     </Button>
                 </DialogActions>
                 <DialogContent>
                 <DialogContentText variant = "h5" color="textPrimary">
+                        {"Activity"}
+                </DialogContentText>
+                    <Select
+                        style={{margin: "20px"}}
+                        variant="outlined"
+                        value={this.state.activity || null}
+                        placeholder={"Select a type"}
+                        onChange={(e: any): void => {this.setState({
+                        activity: e.target.value,
+                        }); }}
+                        inputProps={{
+                            name: "Activity",
+                            id: "activity",
+                        }}
+                    >
+                {ACTIVITY_MENU.map((item: {name: string, id: string}) => (
+                    <MenuItem value={item.id}>{item.name}</MenuItem>
+                ))}
+                </Select>
+                <DialogContentText variant = "h5" color="textPrimary">
+                        {"Title and location"}
+                </DialogContentText>
+                <TextField
+                    style={{margin: "20px"}}
+                    id="standard-name"
+                    label="Title"
+                    value={this.state.displayName}
+                    onChange={(e: any): void => {this.handleTextChange(e, "displayName"); }}
+                    margin="normal"
+                    variant="outlined"
+                />
+                <TextField
+                    id="standard-name"
+                    style={{margin: "20px"}}
+                    label="Region"
+                    value={this.state.region}
+                    onChange={(e: any): void => {this.handleTextChange(e, "region"); }}
+                    margin="normal"
+                    variant="outlined"
+                />
+                <TextField
+                    id="standard-name"
+                    style={{margin: "20px"}}
+                    label="River name"
+                    value={this.state.riverName}
+                    onChange={(e: any): void => {this.handleTextChange(e, "riverName"); }}
+                    margin="normal"
+                    variant="outlined"
+                />
+                <DialogContentText variant = "h5" color="textPrimary">
                         {"Key Facts"}
                 </DialogContentText>
                 <EditKeyFacts
-                        keyFactsNum={this.state.keyFactsNum}
-                        keyFactsChar={this.state.keyFactsChar}
+                        keyFactsNum={this.state.keyFactsNum as IKeyFactsNum}
+                        keyFactsChar={this.state.keyFactsChar as IKeyFactsChar}
                         onChangeNum={this.onChangeNum}
                         onChangeChar={this.onChangeChar}
                     />
                     <DialogContentText variant = "h5" color="textPrimary">
                         {"Description"}
                     </DialogContentText>
-                    {/* <TextField
-                            autoFocus
-                            margin="dense"
-                            id="comments"
-                            type="text"
-                            multiline={true}
-                            value={this.state.description}
-                            onChange={this.updateDescription}
-                            fullWidth={true}
-                        /> */}
-
                     <Editor
                         editorState={this.state.editorState}
                         toolbarClassName="toolbarClassName"
@@ -214,23 +293,30 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
                             selectedGaugeId={this.state.gaugeId}
                     />
                 <DialogContentText variant = "h5" color="textPrimary">
-                        {"Local Map"}
+                        {"Local Map" + this.getWarningLocationText()}
                 </DialogContentText>
                     <EditMapComponent
                         markers={this.state.markers}
                         gaugeMarkers={this.getGaugeLocation()}
-                        locationMarker={this.getLocation()}
+                        locationMarker={this.state.locationMarker}
                         updateMarkers={this.updateMarkers}
+                        updateLocationMarker={this.updateLocationMarker}
                     />
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.props.handleClose} color="primary">
-                    Cancel
-                    </Button>
-                    <Button onClick={this.handleSave} color="primary">
-                    Submit
-                    </Button>
-                </DialogActions>
+                <Dialog open={this.state.openDeleteDialog}>
+                    <DialogTitle
+                        title={"Are you sure you want to delete this guide?"}
+                        handleClose={(): void => {this.setState({openDeleteDialog: false}); }}
+                    />
+                    <DialogActions>
+                        <Button onClick={(): void => {this.setState({openDeleteDialog: false}); }} color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={this.props.handleDelete} color="primary">
+                            Yes
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         );
 
@@ -245,5 +331,5 @@ function mapStateToProps(state: IState): IEditGuideStateProps {
 
 export default connect(
     mapStateToProps,
-    { updateGuide },
+    { },
 )(EditGuide);

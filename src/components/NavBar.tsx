@@ -262,6 +262,15 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                     >
                         {"Logout"}
                     </MenuItem>
+                    <MenuItem
+                        key={"addGuide"}
+                        onClick={(event: any): void => {
+                            this.openModal("addGuideModal");
+                            this.setState({ anchorEl: null });
+                        }}
+                    >
+                        {"Add guide"}
+                    </MenuItem>
                 </Menu>
             </div>
         );
