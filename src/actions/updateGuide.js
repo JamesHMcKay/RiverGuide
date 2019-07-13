@@ -7,7 +7,7 @@ import {
 } from "./types";
 import { openInfoPage } from "./getGuides";
 
-const serverLocation = 'https://rapidsapi.herokuapp.com';
+const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
 export const updateGuide = (item, selectedGuide, listEntries) => dispatch => {
     const request = {
@@ -24,7 +24,7 @@ export const updateGuide = (item, selectedGuide, listEntries) => dispatch => {
         longitude: item.locationMarker.lng,
     };
     axios
-        .put(serverLocation + '/guides/' + item.id, request)
+        .put(rapidsApiUrl + 'guides/' + item.id, request)
         .then(res => {
             dispatch({
                 type: CLOSE_MODAL
@@ -53,7 +53,7 @@ export const addGuide = (item, newGuide, listEntries) => dispatch => {
         longitude: item.locationMarker.lng,
     };
     axios
-        .post(serverLocation + '/guides', request)
+        .post(rapidsApiUrl + 'guides', request)
         .then(res => {
             dispatch({
                 type: CLOSE_MODAL
@@ -70,7 +70,7 @@ export const addGuide = (item, newGuide, listEntries) => dispatch => {
 
 export const deleteGuide = (selectGuideId, listEntries) => dispatch => {
     axios
-        .delete(serverLocation + '/guides/' + selectGuideId)
+        .delete(rapidsApiUrl + 'guides/' + selectGuideId)
         .then(res => {
             dispatch({
                 type: CLOSE_MODAL

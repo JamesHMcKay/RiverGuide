@@ -9,7 +9,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
     closeInfoPage,
-    removeFromFavourites,
     toggleModal,
 } from "../../actions/actions";
 import { addToFavourites } from "../../actions/getAuth";
@@ -71,7 +70,6 @@ interface IInfoStateProps {
 interface IInfoProps extends IInfoStateProps {
     toggleModal: (modal?: string) => void;
     closeInfoPage: () => void;
-    removeFromFavourites: (guideId: string, email: string) => void;
     addToFavourites: (userDetails: IUserDetails) => void;
     isLogbookInfo: boolean;
     viewHeight: string;
@@ -480,5 +478,5 @@ function mapStateToProps(state: IState): IInfoStateProps {
 
 export default connect(
     mapStateToProps,
-    { closeInfoPage, addToFavourites, removeFromFavourites, toggleModal },
+    { closeInfoPage, addToFavourites, toggleModal },
 )(Info);

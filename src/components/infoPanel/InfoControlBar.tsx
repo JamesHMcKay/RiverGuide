@@ -5,7 +5,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
     closeInfoPage,
-    removeFromFavourites,
     toggleModal,
 } from "../../actions/actions";
 import { addToFavourites } from "../../actions/getAuth";
@@ -19,7 +18,6 @@ import { WeatherStore } from "./WeatherStore";
 
 interface IInfoControlBarProps extends IInfoControlBarStateToProps {
     closeInfoPage: () => void;
-    removeFromFavourites: (guideId: string, email: string) => void;
     addToFavourites: (userDetails: IUserDetails) => void;
     toggleModal: (modalName: string) => void;
 }
@@ -150,5 +148,5 @@ function mapStateToProps(state: IState): IInfoControlBarStateToProps {
 
 export default connect(
     mapStateToProps,
-    { closeInfoPage, addToFavourites, removeFromFavourites, toggleModal },
+    { closeInfoPage, addToFavourites, toggleModal },
 )(InfoControlBar);

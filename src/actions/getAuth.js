@@ -15,11 +15,11 @@ import {
 } from "./types";
 import parseUserObject from "../utils/parseUserObject";
 
-const serverLocation = 'https://rapidsapi.herokuapp.com/';
+const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
 export const registerUser = (userData) => dispatch => {
     axios
-    .post(serverLocation + 'auth/local/register', {
+    .post(rapidsApiUrl + 'auth/local/register', {
         username: userData.name,
         email: userData.email,
         password: userData.password
@@ -53,7 +53,7 @@ export const registerUser = (userData) => dispatch => {
 // Login - Get User Token
 export const loginUser = userData => dispatch => {
     axios
-    .post(serverLocation + 'auth/local/', {
+    .post(rapidsApiUrl + 'auth/local/', {
         identifier: userData.identifier,
         password: userData.password,
     })
@@ -84,7 +84,7 @@ export const loginUser = userData => dispatch => {
 
 export const createUserDetails = (userid) => dispatch => {
     axios
-     .post(serverLocation + 'userdetails/',
+     .post(rapidsApiUrl + 'userdetails/',
         {user_id: userid,}
      )
      .then(response => {
@@ -108,7 +108,7 @@ export const addToFavourites = (userDetails) => dispatch => {
         payload: "favButton",
     });
     axios
-        .put(`${serverLocation}userdetails/${userDetails.id}`, {
+        .put(`${rapidsApiUrl}userdetails/${userDetails.id}`, {
             user_favourites: userDetails.user_favourites
         })
         .then(res => {
@@ -126,7 +126,7 @@ export const addToFavourites = (userDetails) => dispatch => {
 export const getUserDetails = (userid) => dispatch => {
      // Request API.
      axios
-     .get(serverLocation + 'graphql',
+     .get(rapidsApiUrl + 'graphql',
      {
         headers: {'Authorization': ''},
         params:  {query: `query userQuery{userdetails(where: {user_id_contains: ["${userid}"]}) {user_id, user_favourites, id}} `}
@@ -186,7 +186,7 @@ export const providerLogin = (action, history) => dispatch => {
     // Request API. 
     // Add your own code here to customize or restrict how the public can register new users.
     axios
-    .get(serverLocation + `auth/${action.provider}/callback${action.search}`)
+    .get(rapidsApiUrl + `auth/${action.provider}/callback${action.search}`)
     .then(response => {
         history.push("/");
         localStorage.setItem("jwtToken", response.data.jwt);
@@ -215,7 +215,7 @@ export const providerLogin = (action, history) => dispatch => {
 
 export const changeUserDetails = (userDetails) => dispatch => {
     axios
-    .put(serverLocation + "users/" + userDetails.id, {
+    .put(rapidsApiUrl + "users/" + userDetails.id, {
         username: userDetails.username,
         email: userDetails.email,
     })
@@ -232,7 +232,7 @@ export const deleteUser = (userDetails) => dispatch => {
         payload: "deleteAccount",
     });
     axios
-    .delete(serverLocation + "users/" + userDetails.id)
+    .delete(rapidsApiUrl + "users/" + userDetails.id)
     .then(res => {
         dispatch({
             type: CLEAR_LOADING_SPINNER

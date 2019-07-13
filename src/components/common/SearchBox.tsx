@@ -53,7 +53,7 @@ class SearchBox extends Component<ISearchBoxProps, ISearchBoxState> {
                 className="search-field"
                 label="Search"
                 type="search"
-                margin="normal"
+                margin="dense"
                 variant="outlined"
                 // inputProps={{ style: {height: "0.2em"} }}
                 onChange={this.handleSearch}

@@ -8,7 +8,6 @@ import {
     GENERATE_FILTERED_LIST,
     CLOSE_INFO,
     UPDATE_OPEN_LOG,
-    REMOVE_FROM_FAVOURITES,
     SET_MAP_BOUNDS,
     GET_GAUGE_HISTORY,
     CLEAR_GAUGE_HISTORY,
@@ -26,11 +25,8 @@ import {
     SET_EXPANSION_PANELS,
 } from "./types";
 
-const serverLocation = process.env.REACT_APP_SERVER_URL;
-const riverServiceLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
-const strapi_location = "https://rapidsapi.herokuapp.com/graphql";
-
-const riverapiLocation = 'https://rapidsapi.herokuapp.com/';
+const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
+const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
 export const setTabIndex = index => dispatch => {
     dispatch({
@@ -55,13 +51,13 @@ export const toggleModal = modal => dispatch => {
 // Get logbook logs
 export const makeLogbookRequest = (user_id) => dispatch => {
     let req = [
-        axios.get(`${strapi_location}`,
+        axios.get(`${rapidsApiUrl}graphql`,
         {
             headers: {'Authorization': ''},
             params: {query: `query userLogs{logs(where: {user_id: ["${user_id}"]}){log_id, description, public, guide_id, description, participants, observables, start_date_time, end_date_time, username, rating, id, user_id }}`},
         }),
         axios
-        .get(`${strapi_location}`,
+        .get(`${rapidsApiUrl}graphql`,
             {
                 headers: {'Authorization': ''},
                 params: {query: '{guides(limit:999){id,river_name,section_name,region,latitude,longitude,gauge_id,activity}}'},
@@ -142,7 +138,7 @@ export const getGaugeHistory = gaugeId => dispatch => {
             crossDomain: true,
         }
         axios
-            .post(riverServiceLocation, request)
+            .post(riverServiceUrl, request)
             .then(res => {
                 let data = res.data.flows;
                 let result = data.map(item => (
@@ -190,7 +186,7 @@ export const createLogEntry = logEntry => dispatch => {
         type: SET_LOADING_SPINNER,
         payload: "logTrip",
     });
-    axios.post(riverapiLocation + "logs", logEntry).then(res => {
+    axios.post(rapidsApiUrl + "logs", logEntry).then(res => {
         dispatch({
             type: CLEAR_LOADING_SPINNER,
         });
@@ -217,7 +213,7 @@ export const editLogEntry = updatedLogEntry => dispatch => {
     });
     axios
         .put(
-            riverapiLocation + "logs/" + updatedLogEntry.log_id,
+            rapidsApiUrl + "logs/" + updatedLogEntry.log_id,
             updatedLogEntry,
         )
         .then(res => {
@@ -236,7 +232,7 @@ export const editLogEntry = updatedLogEntry => dispatch => {
 
 // Delete logbook entry
 export const deleteLogEntry = logId => dispatch => {
-    axios.delete(riverapiLocation + "logs/" + logId).then(res => {
+    axios.delete(rapidsApiUrl + "logs/" + logId).then(res => {
         dispatch({
             type: DELETE_LOG,
             payload: logId,
@@ -247,22 +243,6 @@ export const deleteLogEntry = logId => dispatch => {
         });
     });
 };
-
-// remove from favourites
-export const removeFromFavourites = (guideId, email) => dispatch => {
-    axios
-        .delete(`${serverLocation}/users/current/delete-favourite/${guideId}`, {
-            email,
-        })
-        .then(res =>
-            dispatch({
-                type: REMOVE_FROM_FAVOURITES,
-                payload: guideId,
-            }),
-        )
-        .catch(err => console.log(err));
-};
-
 
 export const setSelectedLogId = selectedLogId => dispatch => {
     dispatch({

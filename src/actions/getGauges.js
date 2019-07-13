@@ -6,8 +6,8 @@ import {
     CLEAR_GAUGE_DISCLAIMER
 } from "./types";
 
-const serverLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
-const strapi_location = "https://rapidsapi.herokuapp.com/graphql";
+const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
+const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
 export const makeGaugeRequest = () => dispatch => {
 
@@ -17,7 +17,7 @@ export const makeGaugeRequest = () => dispatch => {
         crossDomain: true,
     }
     axios
-        .post(serverLocation, request)
+        .post(riverServiceUrl, request)
         .then(res => {
             let data = res.data.features;
             let result = data.map(item => (
@@ -45,7 +45,7 @@ export const getGaugeDisclaimer = (agencyName) => dispatch => {
         type: CLEAR_GAUGE_DISCLAIMER,
     });
     axios
-    .get(`${strapi_location}`,
+    .get(`${rapidsApiUrl}graphql`,
         {
             headers: {'Authorization': ''},
             params: {query: `{agencydetails(where: {agency_name: "${agencyName}"}){disclaimer}}`},

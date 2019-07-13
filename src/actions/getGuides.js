@@ -12,10 +12,9 @@ import {
     CLOSE_LOG_PAGE,
 } from "./types";
 
-const strapi_location = "https://rapidsapi.herokuapp.com/graphql";
-const riverServiceLocation = process.env.REACT_APP_RIVER_SERVICE_URL;
+const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
+const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
-// Set category
 export const setCategory = (category, cancelToken) => dispatch => {
     dispatch({
         type: LOADING_ENTRIES,
@@ -31,7 +30,7 @@ export const setCategory = (category, cancelToken) => dispatch => {
             crossDomain: true,
         }
         axios
-            .post(riverServiceLocation, request, {cancelToken: cancelToken.token})
+            .post(riverServiceUrl, request, {cancelToken: cancelToken.token})
             .then(res => {
                 let data = res.data.features;
                 let result = data.map(item => (
@@ -52,7 +51,7 @@ export const setCategory = (category, cancelToken) => dispatch => {
             });
     } else {
         axios
-        .get(`${strapi_location}`,
+        .get(`${rapidsApiUrl}graphql`,
             {
                 headers: {'Authorization': ''},
                 params: {query: '{guides(limit:999){id,river_name,section_name,region,latitude,longitude,gauge_id, activity}}'},
@@ -89,7 +88,7 @@ export const openLogInfoPage = guide => dispatch => {
     });
 
     axios
-    .get(`${strapi_location}`,
+    .get(`${rapidsApiUrl}graphql`,
         {
             headers: {'Authorization': ''},
             params: {query: `query GuideIdPublic{logs(where: {public: true guide_id_contains: ["${guide.id}"]}){log_id, description, public, guide_id, description, participants, observables, start_date_time, end_date_time, username, rating, id }}`},
@@ -123,7 +122,7 @@ export const openInfoPage = guide => dispatch => {
         let guideId = guide.id;
         let query = "{guide(id:\"" + guideId + "\"){description,entry_details,exit_details,marker_list,key_facts_num,key_facts_char, latitude, longitude}}"
         axios
-        .get(`${strapi_location}`,
+        .get(`${rapidsApiUrl}graphql`,
             {
                 headers: {'Authorization': ''},
                 params: {query: query}
@@ -158,7 +157,7 @@ export const openInfoPage = guide => dispatch => {
             crossDomain: true,
         }
         axios
-            .post(riverServiceLocation, request)
+            .post(riverServiceUrl, request)
             .then(res => {
                 let data = res.data.flows;
                 if (data) {
