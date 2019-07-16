@@ -94,6 +94,7 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
                         this.props.filterdGuides ||
                         this.props.listEntries
                     }
+                    listEntries={this.props.listEntries}
                     onClick={this.onClick}
                     setMapBounds={this.updateMapBounds}
                     viewHeight={viewHeight}
