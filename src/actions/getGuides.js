@@ -26,7 +26,7 @@ export const setCategory = (category, cancelToken) => dispatch => {
     if (category === "data") {
         const request = {
             action: "get_features",
-            filters: ["flow"],
+            filters: ["flow", "rainfall"],
             crossDomain: true,
         }
         axios
