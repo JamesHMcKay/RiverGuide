@@ -88,7 +88,9 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         const observables: IObservable[] | undefined = this.getObservables();
         if (observables) {
             const selObs: IObservable[] = observables.filter((item: IObservable) => (item.type === type));
-            unit = selObs[0].units;
+            if (observables.length > 0 && selObs[0]) {
+                unit = selObs[0].units;
+            }
         }
         return unitParser(unit);
     }
