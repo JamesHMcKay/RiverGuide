@@ -13,7 +13,7 @@ export const makeGaugeRequest = () => dispatch => {
 
     const request = {
         action: "get_features",
-        filters: ["flow"],
+        filters: ["flow", "rainfall"],
         crossDomain: true,
     }
     axios
