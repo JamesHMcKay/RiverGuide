@@ -19,6 +19,7 @@ const TOKEN: string =
 interface IMapComponentProps {
     guides: IListEntry[];
     filteredGuides: IListEntry[];
+    listEntries: IListEntry[];
     onClick: (guide: IListEntry) => void;
     setMapBounds: (bounds: IMapBounds) => void;
     viewHeight: string;
@@ -171,7 +172,12 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
     }
 
     public computeCustersKmeans(): void {
+        const numberOfMarkers: number = this.props.listEntries.length;
         let numberOfClusters: number = 10;
+
+        if (numberOfMarkers > 0) {
+            numberOfClusters = Math.ceil(numberOfMarkers / 15);
+        }
 
         const guides: IListEntry[] = this.props.guides;
         const locations: Array<Array<number | undefined>> = [];
