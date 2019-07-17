@@ -127,8 +127,64 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
 
     public componentDidUpdate(nextProps: IFlowChartProps): void {
         if (this.props.expansionPanels.flowHistory) {
+            if (this.props.infoPage.selectedGuide.id !== nextProps.infoPage.selectedGuide.id) {
+                let selectedType: string | undefined;
+                const observables: IObservable[] | undefined = this.getObservables();
+                if (observables) {
+                    const types: string[] = observables.map((item: IObservable): string => item.type);
+                    if (types.indexOf("flow") >= 0) {
+                        selectedType = "flow";
+                    } else if (types.length > 0) {
+                        selectedType = types[0];
+                    }
+                }
+                this.setState({
+                    selectedType,
+                });
+            }
             this.setChartOptions();
         }
+    }
+
+    public compareValues = (valueOne: Partial<IObsValue>, valueTwo: Partial<IObsValue>, keysOne: string[]): boolean => {
+        for (const key of keysOne) {
+            const itemOne: number | undefined = valueOne[key as keyof IObsValue];
+            const itemTwo: number | undefined = valueTwo[key as keyof IObsValue];
+            if (!!itemOne !== !!itemTwo || itemOne !== itemTwo) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public historySame = (listOne: IHistory[], listTwo: IHistory[]): boolean => {
+        if (listOne.length !== listTwo.length) {
+            return false;
+        } else {
+            if (listOne.length > 0 ) {
+                const keysOne: string[] = Object.keys(listOne[0].values);
+                for (let i: number = 0; i < listOne.length; i++) {
+                    if (!this.compareValues(listOne[i].values, listTwo[i].values, keysOne)) {
+                        return false;
+                    }
+                }
+            }
+
+        }
+        return true;
+    }
+
+    public shouldComponentUpdate = (nextProps: IFlowChartProps): boolean => {
+        if (this.props.gaugeId !== nextProps.gaugeId) {
+            return true;
+        }
+        if (!this.historySame(this.props.infoPage.history, nextProps.infoPage.history)) {
+            return true;
+        }
+        if (!!this.props.infoPage.logs !== !!nextProps.infoPage.logs) {
+            return false;
+        }
+        return true;
     }
 
     public handleTypeChange = (event: any): void => {

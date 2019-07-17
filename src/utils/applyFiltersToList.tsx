@@ -35,7 +35,7 @@ function applySearchString(guide: IListEntry, searchString: string): boolean {
 }
 
 function filterActivityType(guide: IListEntry, activity: string): boolean {
-    if (guide.activity === "gauge") {
+    if (guide.activity === "data") {
         return true;
     }
     return guide.activity === activity;
