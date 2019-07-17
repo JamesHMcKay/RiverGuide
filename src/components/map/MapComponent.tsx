@@ -8,6 +8,7 @@ import { ILatLon, IListEntry, IMapBounds } from "../../utils/types";
 import { IViewport } from "./InfoMapComponent";
 import MapCluster from "./MapCluster";
 import MapMarker from "./MapMarker";
+import TileSelector from "./TileSelector";
 
 export const DEFAULT_LAT: number = -41.838875;
 export const DEFAULT_LON: number = 171.7799;
@@ -28,6 +29,7 @@ interface IMapComponentProps {
 interface IMapComponentState {
     viewport: IViewport;
     clusterLocations: ICluster[];
+    tile: string;
 }
 
 interface ICluster {
@@ -82,6 +84,7 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
                 zoom: DEFAULT_ZOOM,
             },
             clusterLocations: [],
+            tile: "mapbox://styles/mapbox/outdoors-v9",
         };
         this.computeCustersKmeans();
     }
@@ -357,6 +360,12 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
     //     };
     // }
 
+    public onTileChange = (tile: string): void => {
+        this.setState({
+            tile,
+        });
+    }
+
     public render(): JSX.Element {
         const viewport: IViewport = {
             // width: this.props.mapDimensions.width,
@@ -372,12 +381,18 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
                     width="100%"
                     height="100%"
                     ref={(map: ReactMapGL | null): InteractiveMap | null => this.mapRef = map}
-                    mapStyle="mapbox://styles/mapbox/outdoors-v9"
+                    mapStyle={this.state.tile}
                     {...viewport}
                     onViewportChange={(viewport: ViewState): void => this.setViewport(viewport)}
                     mapboxApiAccessToken={TOKEN}
                 >
                     {this.getMarkersOrCluster()}
+                    <div style={{position: "absolute", left: 10, top: 10}}>
+                    <TileSelector
+                        tile={this.state.tile}
+                        onTileChange={this.onTileChange}
+                    />
+                    </div>
                 </ReactMapGL>
             </div>
         );

@@ -5,6 +5,7 @@ import uuid from "uuidv4";
 import { IState } from "../../reducers";
 import { IGauge, IInfoPage, IMarker } from "../../utils/types";
 import MapMarker from "./MapMarker";
+import TileSelector from "./TileSelector";
 import ViewMarkerModal from "./ViewMarkerModal";
 
 const TOKEN: string =
@@ -45,6 +46,7 @@ interface IInfoMapState {
     };
     viewModalOpen: boolean;
     selectedMarker?: IMarker;
+    tile: string;
 }
 
 export const DEFAULT_VIEW_PORT: IViewport = {
@@ -80,6 +82,7 @@ class InfoMapComponent extends Component<IInfoMapProps, IInfoMapState> {
                 id: "",
             },
             viewModalOpen: false,
+            tile: "mapbox://styles/mapbox/satellite-v9",
         };
     }
 
@@ -109,6 +112,10 @@ class InfoMapComponent extends Component<IInfoMapProps, IInfoMapState> {
             zoom: 10,
         };
         return viewport;
+    }
+
+    public handleClose = (): void => {
+        this.setState({ viewModalOpen: false, selectedMarker: undefined });
     }
 
     public getGaugeLocation = (): IMarker[] => {
@@ -213,8 +220,10 @@ class InfoMapComponent extends Component<IInfoMapProps, IInfoMapState> {
         }
     }
 
-    public handleClose = (): void => {
-        this.setState({ viewModalOpen: false, selectedMarker: undefined });
+    public onTileChange = (tile: string): void => {
+        this.setState({
+            tile,
+        });
     }
 
     public render(): JSX.Element {
@@ -226,17 +235,23 @@ class InfoMapComponent extends Component<IInfoMapProps, IInfoMapState> {
                     touchAction="pan-y"
                     width="100%"
                     height="100%"
-                    mapStyle="mapbox://styles/mapbox/outdoors-v9"
+                    mapStyle={this.state.tile}
                     {...viewport}
                     mapboxApiAccessToken={TOKEN}
                     onViewportChange={(viewport: IViewport): void => this.setViewportNav(viewport)}
                 >
                     {this.getMarkers()}
-                <div style={{position: "absolute", right: 5}}>
+                <div style={{position: "absolute", right: 10, top: 10}}>
                     <NavigationControl
                         showCompass={false}
                         onViewportChange={(viewport: IViewport): void => this.setViewportNav(viewport)}
                         onViewStateChange={(): null => null}  />
+                </div>
+                <div style={{position: "absolute", left: 10, top: 10}}>
+                    <TileSelector
+                        tile={this.state.tile}
+                        onTileChange={this.onTileChange}
+                    />
                 </div>
                 </ReactMapGL>
                 {this.state.selectedMarker &&
