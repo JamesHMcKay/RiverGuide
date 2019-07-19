@@ -9,8 +9,8 @@ import {
     SET_CURRENT_USER,
     SET_LOADING_SPINNER,
     CLEAR_LOADING_SPINNER,
-    SET_USER_DETAILS,
     CLEAR_USER_DETAILS,
+    ADD_TO_FAVOURITES,
     CLEAR_LOGS,
 } from "./types";
 import parseUserObject from "../utils/parseUserObject";
@@ -83,22 +83,22 @@ export const loginUser = userData => dispatch => {
 };
 
 export const createUserDetails = (userid) => dispatch => {
-    axios
-     .post(rapidsApiUrl + 'userdetails/',
-        {user_id: userid,}
-     )
-     .then(response => {
-         dispatch({
-            type: SET_USER_DETAILS,
-            payload: response.data,
-        });
-     })
-     .catch(error => {
-         dispatch({
-             type: GET_ERRORS,
-             payload: {message: error.response.data.message}
-         });
-     });
+    // axios
+    //  .post(rapidsApiUrl + 'userdetails/',
+    //     {user_id: userid,}
+    //  )
+    //  .then(response => {
+    //      dispatch({
+    //         type: SET_USER_DETAILS,
+    //         payload: response.data,
+    //     });
+    //  })
+    //  .catch(error => {
+    //      dispatch({
+    //          type: GET_ERRORS,
+    //          payload: {message: error.response.data.message}
+    //      });
+    //  });
 }
 
 // add to favourites
@@ -108,48 +108,49 @@ export const addToFavourites = (userDetails) => dispatch => {
         payload: "favButton",
     });
     axios
-        .put(`${rapidsApiUrl}userdetails/${userDetails.id}`, {
+        .put(`${rapidsApiUrl}users/${userDetails.id}`, {
             user_favourites: userDetails.user_favourites
         })
         .then(res => {
             dispatch({
-                type: SET_USER_DETAILS,
+                type: ADD_TO_FAVOURITES,
                 payload: userDetails,
             });
             dispatch({
                 type: CLEAR_LOADING_SPINNER,
             });
+            dispatch(setCurrentUser(userDetails));
         })
         .catch(err => console.log(err));
 };
 
 export const getUserDetails = (userid) => dispatch => {
-     // Request API.
-     axios
-     .get(rapidsApiUrl + 'graphql',
-     {
-        headers: {'Authorization': ''},
-        params:  {query: `query userQuery{userdetails(where: {user_id_contains: ["${userid}"]}) {user_id, user_favourites, id}} `}
-     })
-     .then(response => {
-         if (response.data.data.userdetails.length === 0) {
-            dispatch(createUserDetails(userid));
-         }
-         const userDetails = {
-             ...response.data.data.userdetails[0],
-            user_favourites: response.data.data.userdetails[0].user_favourites || [],
-         }
-         dispatch({
-            type: SET_USER_DETAILS,
-            payload: userDetails,
-        });
-     })
-     .catch(error => {
-         dispatch({
-             type: GET_ERRORS,
-             payload: {message: error.response.data.message}
-         });
-     });
+    //  // Request API.
+    //  axios
+    //  .get(rapidsApiUrl + 'graphql',
+    //  {
+    //     headers: {'Authorization': ''},
+    //     params:  {query: `query userQuery{userdetails(where: {user_id_contains: ["${userid}"]}) {user_id, user_favourites, id}} `}
+    //  })
+    //  .then(response => {
+    //      if (response.data.data.userdetails.length === 0) {
+    //         dispatch(createUserDetails(userid));
+    //      }
+    //      const userDetails = {
+    //          ...response.data.data.userdetails[0],
+    //         user_favourites: response.data.data.userdetails[0].user_favourites || [],
+    //      }
+    //      dispatch({
+    //         type: SET_USER_DETAILS,
+    //         payload: userDetails,
+    //     });
+    //  })
+    //  .catch(error => {
+    //      dispatch({
+    //          type: GET_ERRORS,
+    //          payload: {message: error.response.data.message}
+    //      });
+    //  });
 }
 
 // Set logged in user
@@ -194,7 +195,7 @@ export const providerLogin = (action, history) => dispatch => {
         setAuthToken(response.data.jwt);
         const userObject = parseUserObject(response.data.user);
         dispatch(setCurrentUser(userObject));
-        dispatch(getUserDetails(userObject.id));
+        // dispatch(getUserDetails(userObject.id));
         dispatch({
             type: CLOSE_MODAL,
             payload: "registerModal",

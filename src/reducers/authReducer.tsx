@@ -12,6 +12,7 @@ const initialUser: IUser = {
     id: "",
     createdAt: "",
     provider: "",
+    user_favourites: [],
 };
 
 const initialState: IAuth = {
@@ -30,9 +31,7 @@ export default function(state: IAuth = initialState, action: any): IAuth {
         case ADD_TO_FAVOURITES:
             return {
                 ...state,
-                user: {
-                    ...state.user,
-                },
+                user: action.payload,
             };
         case REMOVE_FROM_FAVOURITES:
             return {

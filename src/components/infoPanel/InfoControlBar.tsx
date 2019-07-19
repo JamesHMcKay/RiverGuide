@@ -8,7 +8,7 @@ import {
     toggleModal,
 } from "../../actions/actions";
 import { addToFavourites } from "../../actions/getAuth";
-import { IAuth, IInfoPage, IListEntry, IUserDetails } from "./../../utils/types";
+import { IAuth, IInfoPage, IListEntry, IUser } from "./../../utils/types";
 
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
@@ -18,7 +18,7 @@ import { WeatherStore } from "./WeatherStore";
 
 interface IInfoControlBarProps extends IInfoControlBarStateToProps {
     closeInfoPage: () => void;
-    addToFavourites: (userDetails: IUserDetails) => void;
+    addToFavourites: (userDetails: IUser) => void;
     toggleModal: (modalName: string) => void;
 }
 
@@ -27,7 +27,6 @@ interface IInfoControlBarStateToProps {
     auth: IAuth;
     index: string;
     infoPage: IInfoPage;
-    userDetails: IUserDetails;
     loadingSpinner: string;
     weatherStore: WeatherStore;
 }
@@ -38,18 +37,18 @@ class InfoControlBar extends Component<IInfoControlBarProps> {
         const guideId: string = this.props.infoPage.selectedGuide.id;
 
         if (isFav) {
-            const newUserDetails: IUserDetails = {
-                ...this.props.userDetails,
-                user_favourites: this.props.userDetails.user_favourites.filter(
+            const newUserDetails: IUser = {
+                ...this.props.auth.user,
+                user_favourites: this.props.auth.user.user_favourites.filter(
                     (item: string) => item !== guideId,
                 ),
             };
 
             this.props.addToFavourites(newUserDetails);
         } else {
-            const newUserDetails: IUserDetails = {
-                ...this.props.userDetails,
-                user_favourites: this.props.userDetails.user_favourites.concat(guideId),
+            const newUserDetails: IUser = {
+                ...this.props.auth.user,
+                user_favourites: this.props.auth.user.user_favourites.concat(guideId),
             };
             this.props.addToFavourites(newUserDetails);
         }
@@ -93,7 +92,7 @@ class InfoControlBar extends Component<IInfoControlBarProps> {
         }
 
         const guideId: string = this.props.infoPage.selectedGuide.id;
-        const isFav: boolean = this.props.userDetails.user_favourites.filter(
+        const isFav: boolean = this.props.auth.user.user_favourites.filter(
             (item: string) => item === guideId,
         ).length > 0;
 
@@ -140,7 +139,6 @@ function mapStateToProps(state: IState): IInfoControlBarStateToProps {
         auth: state.auth,
         index: state.tabIndex,
         infoPage: state.infoPage,
-        userDetails: state.userDetails,
         loadingSpinner: state.loadingSpinner,
         weatherStore: state.weatherStore,
     });

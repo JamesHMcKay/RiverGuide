@@ -28,6 +28,7 @@ interface ILeftPanelStateProps {
     userDetails: IUserDetails;
     listEntries: IListEntry[];
     filters: IFilter;
+    recentItems: string[];
 }
 
 class LeftPanel extends Component<ILeftPanelProps, {}> {
@@ -65,10 +66,16 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
     }
 
     public render(): JSX.Element {
-        const isAuthenticated: boolean = this.props.auth.isAuthenticated;
+        // const isAuthenticated: boolean = this.props.auth.isAuthenticated;
         const isLoading: boolean = this.props.listEntries.length < 1;
         const noResults: boolean = !isLoading && this.props.filteredList.length < 1;
-        const favourites: string[] = this.props.userDetails.user_favourites;
+
+        let favourites: string[] = [];
+        if (this.props.auth.isAuthenticated) {
+            favourites = this.props.auth.user.user_favourites;
+        } else {
+            favourites = this.props.recentItems;
+        }
 
         const favList: IListEntry[] = this.props.filteredList.filter(
             (item: IListEntry) => favourites.indexOf(item.id) > -1,
@@ -76,7 +83,7 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
         const renderedList: JSX.Element = (
             <List>
                 {this.props.specialItem && this.props.specialItem}
-                {(isAuthenticated && !noResults) && <FavGroup listEntries={favList}/>}
+                {(!noResults) && <FavGroup listEntries={favList}/>}
                 {this.props.filteredList
                     .map(this.getRegion)
                     .filter(this.onlyUnique)
@@ -100,6 +107,7 @@ function mapStateToProps(state: IState): ILeftPanelStateProps {
         userDetails: state.userDetails,
         listEntries: state.listEntries,
         filters: state.filters,
+        recentItems: state.recentItems,
     });
 }
 

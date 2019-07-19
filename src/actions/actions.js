@@ -23,6 +23,7 @@ import {
     SET_SEARCH_PANEL,
     SET_FILTER,
     SET_EXPANSION_PANELS,
+    ADD_TO_RECENTS,
 } from "./types";
 
 const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
@@ -268,5 +269,12 @@ export const setExpansionPanels = (expansionPanels) => dispatch => {
     dispatch({
         type: SET_EXPANSION_PANELS,
         payload: expansionPanels,
+    });
+}
+
+export const addToRecents = (recentItems) => dispatch => {
+    dispatch({
+        type: ADD_TO_RECENTS,
+        payload: recentItems,
     });
 }

@@ -7,6 +7,7 @@ function parseUserObject(input: any): IUser {
         provider: input.provider,
         createdAt: input.createdAt,
         id: input._id,
+        user_favourites: input.user_favourites,
     };
     return user;
 }

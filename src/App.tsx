@@ -3,6 +3,7 @@ import jwt_decode from "jwt-decode";
 import React, { Component } from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { addToRecents } from "./actions/actions";
 import { getUserDetails, logoutUser, setCurrentUser } from "./actions/getAuth";
 import "./App.css";
 import configureStore from "./store";
@@ -55,6 +56,10 @@ if (localStorage.jwtToken) {
         // Redirect to login
         window.location.href = "/";
     }
+}
+
+if (localStorage.recentItems) {
+    store.dispatch(addToRecents(JSON.parse(localStorage.recentItems)));
 }
 
 weather.setAPPID("521cea2fce8675d0fe0678216dc01d5c");

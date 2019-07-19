@@ -45,3 +45,4 @@ export const SET_ACTIVITY_FILTER: string = "SET_ACTIVITY_FILTER";
 export const GET_GAUGE_DISCLAIMER: string = "GET_GAUGE_DISCLAIMER";
 export const CLEAR_GAUGE_DISCLAIMER: string = "CLEAR_GAUGE_DISCLAIMER";
 export const SET_EXPANSION_PANELS: string = "SET_EXPANSION_PANELS";
+export const ADD_TO_RECENTS: string = "ADD_TO_RECENTS";

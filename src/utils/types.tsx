@@ -144,6 +144,7 @@ export interface IUser {
     createdAt: string;
     id: string;
     provider: string;
+    user_favourites: string[];
 }
 
 export interface IAuth {

@@ -10,6 +10,7 @@ import {
     GET_ITEM_LOGS,
     LOADING_LOG_ENTRIES,
     CLOSE_LOG_PAGE,
+    ADD_TO_RECENTS,
 } from "./types";
 
 const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
@@ -109,6 +110,11 @@ export const openLogInfoPage = guide => dispatch => {
 
 // open info page
 export const openInfoPage = guide => dispatch => {
+    dispatch({
+        type: ADD_TO_RECENTS,
+        payload: guide.id,
+    });
+
     dispatch({
         type: OPEN_INFO,
         payload: {

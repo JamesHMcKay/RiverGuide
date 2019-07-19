@@ -21,6 +21,7 @@ import {
     IListEntry,
     ILogComplete,
     ILogListItem,
+    IUser,
     IUserDetails,
 } from "../../utils/types";
 import Logbook from "../profile/Logbook";
@@ -70,7 +71,7 @@ interface IInfoStateProps {
 interface IInfoProps extends IInfoStateProps {
     toggleModal: (modal?: string) => void;
     closeInfoPage: () => void;
-    addToFavourites: (userDetails: IUserDetails) => void;
+    addToFavourites: (userDetails: IUser) => void;
     isLogbookInfo: boolean;
     viewHeight: string;
 }
@@ -93,18 +94,18 @@ class Info extends Component<IInfoProps, IInfoState> {
         const guideId: string = this.props.infoPage.selectedGuide.id;
 
         if (isFav) {
-            const newUserDetails: IUserDetails = {
-                ...this.props.userDetails,
-                user_favourites: this.props.userDetails.user_favourites.filter(
+            const newUserDetails: IUser = {
+                ...this.props.auth.user,
+                user_favourites: this.props.auth.user.user_favourites.filter(
                     (item: string) => item !== guideId,
                 ),
             };
 
             this.props.addToFavourites(newUserDetails);
         } else {
-            const newUserDetails: IUserDetails = {
-                ...this.props.userDetails,
-                user_favourites: this.props.userDetails.user_favourites.concat(guideId),
+            const newUserDetails: IUser = {
+                ...this.props.auth.user,
+                user_favourites: this.props.auth.user.user_favourites.concat(guideId),
             };
             this.props.addToFavourites(newUserDetails);
         }
@@ -126,7 +127,7 @@ class Info extends Component<IInfoProps, IInfoState> {
         }
 
         const guideId: string = this.props.infoPage.selectedGuide.id;
-        const isFav: boolean = this.props.userDetails.user_favourites.filter(
+        const isFav: boolean = this.props.auth.user.user_favourites.filter(
             (item: string) => item === guideId,
         ).length > 0;
 

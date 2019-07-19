@@ -33,6 +33,7 @@ import logReducer from "./logReducer";
 import mapBoundsReducer from "./mapBoundsReducer";
 import modalReducer from "./modalReducer";
 import openLogReducer from "./openLogReducer";
+import recentItemsReducer from "./recentItemsReducer";
 import searchPanelReducer from "./searchPanelReducer";
 import selectedLogIdReducer from "./selectedLogIdReducer";
 import sensorDataReducer from "./sensorDataReducer";
@@ -65,6 +66,7 @@ export interface IState {
     searchPanel: string;
     expansionPanels: IExpansionPanels;
     gaugeDisclaimer: string;
+    recentItems: string[];
 }
 
 export default combineReducers({
@@ -93,4 +95,5 @@ export default combineReducers({
     searchPanel: searchPanelReducer,
     expansionPanels: expansionPanelsReducer,
     gaugeDisclaimer: gaugeDisclaimerReducer,
+    recentItems: recentItemsReducer,
 });

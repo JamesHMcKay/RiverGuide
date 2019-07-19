@@ -1,4 +1,3 @@
-import Chip from "@material-ui/core/Chip";
 import Collapse from "@material-ui/core/Collapse";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -30,8 +29,8 @@ class FavGroup extends Component<IFavGroupProps, IFavGroupState> {
     constructor(props: IFavGroupProps) {
         super(props);
         this.state = {
-            // isExpanded: props.listEntries.length > 0 ? true : false,
-            isExpanded: false,
+            isExpanded: props.listEntries.length > 0 ? true : false,
+            // isExpanded: false,
         };
     }
 
@@ -57,21 +56,22 @@ class FavGroup extends Component<IFavGroupProps, IFavGroupState> {
     public render(): JSX.Element {
         const children: IListEntry[] = this.getChildren();
         const isExpanded: boolean = this.props.filters.searchString !== "" || this.state.isExpanded;
-        const isSelected: boolean = this.props.filters.searchString === "" && this.state.isExpanded;
+        // const isSelected: boolean = this.props.filters.searchString === "" && this.state.isExpanded;
+        const title: string = this.props.auth.isAuthenticated ? "Favourites" : "Recently viewed";
         return (
             <div>
                 <ListItem
-                    selected={isSelected}
+                    selected={false}
                     button
                     onClick={this.handleClick}
                 >
-                    <ListItemText primary={"Favourites"} />
-                    <Chip
+                    <ListItemText primary={title} />
+                    {/* <Chip
                         label={children.length}
                         color="primary"
                         variant="outlined"
                         style={{ marginRight: "1em" }}
-                    />
+                    /> */}
                     {isExpanded ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
                 {/* <Divider /> */}
