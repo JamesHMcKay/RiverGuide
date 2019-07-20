@@ -11,12 +11,15 @@ import {
     LOADING_LOG_ENTRIES,
     CLOSE_LOG_PAGE,
     ADD_TO_RECENTS,
+    GET_ERRORS,
+    CLEAR_ERRORS,
 } from "./types";
 
 const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
 const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
 export const setCategory = (category, cancelToken) => dispatch => {
+    dispatch({ type: CLEAR_ERRORS });
     dispatch({
         type: LOADING_ENTRIES,
     });
@@ -49,6 +52,11 @@ export const setCategory = (category, cancelToken) => dispatch => {
                     type: GET_ENTRIES,
                     payload: result,
                 });
+            }).catch(error => {
+                dispatch({
+                    type: GET_ERRORS,
+                    payload: {message: "Request failed"}
+                });
             });
     } else {
         axios
@@ -76,7 +84,12 @@ export const setCategory = (category, cancelToken) => dispatch => {
                 payload: result,
             });
         })
-        .catch(err => console.log(err));
+        .catch(error => {
+            dispatch({
+                type: GET_ERRORS,
+                payload: {message: "Request failed"}
+            });
+        });
     }
 };
 
@@ -114,6 +127,7 @@ export const openInfoPage = guide => dispatch => {
         type: ADD_TO_RECENTS,
         payload: guide.id,
     });
+    dispatch({ type: CLEAR_ERRORS });
 
     dispatch({
         type: OPEN_INFO,
@@ -153,7 +167,12 @@ export const openInfoPage = guide => dispatch => {
             });
             dispatch(openLogInfoPage(guide));
         })
-        .catch(err => console.log(err));
+        .catch(error => {
+            dispatch({
+                type: GET_ERRORS,
+                payload: {message: "Request failed"}
+            });
+        });
     }
 
     if (guide.gauge_id) {

@@ -7,7 +7,7 @@ import { CircularProgress, List } from "@material-ui/core";
 
 // Components
 import { IState } from "../../reducers/index";
-import { IAuth, IFilter, IGauge, IInfoPage, IListEntry, IUserDetails } from "./../../utils/types";
+import { IAuth, IErrors, IFilter, IGauge, IInfoPage, IListEntry, IUserDetails } from "./../../utils/types";
 import FavGroup from "./FavGroup";
 // Styles
 import "./LeftPanel.css";
@@ -29,6 +29,7 @@ interface ILeftPanelStateProps {
     listEntries: IListEntry[];
     filters: IFilter;
     recentItems: string[];
+    errors: IErrors;
 }
 
 class LeftPanel extends Component<ILeftPanelProps, {}> {
@@ -51,6 +52,13 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
     />
 
     public loadingOrEmpty = (noResults: boolean): JSX.Element => {
+        if (this.props.errors.message) {
+            return (
+                <div style={{width: "100%", paddingLeft: "10%", paddingTop: "30%"}}>
+                    {"Request failed, refresh page and check your network connection."}
+                </div>
+            );
+        }
         if (noResults) {
             return (
                 <div className="noresults">
@@ -71,9 +79,9 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
         const noResults: boolean = !isLoading && this.props.filteredList.length < 1;
 
         let favourites: string[] = [];
-        if (this.props.auth.isAuthenticated) {
+        if (this.props.auth.isAuthenticated && this.props.auth.user.user_favourites) {
             favourites = this.props.auth.user.user_favourites;
-        } else {
+        } else if (!this.props.auth.isAuthenticated) {
             favourites = this.props.recentItems;
         }
 
@@ -108,6 +116,7 @@ function mapStateToProps(state: IState): ILeftPanelStateProps {
         listEntries: state.listEntries,
         filters: state.filters,
         recentItems: state.recentItems,
+        errors: state.errors,
     });
 }
 

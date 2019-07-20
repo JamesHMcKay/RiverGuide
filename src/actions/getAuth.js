@@ -120,6 +120,7 @@ export const addToFavourites = (userDetails) => dispatch => {
                 type: CLEAR_LOADING_SPINNER,
             });
             dispatch(setCurrentUser(userDetails));
+            localStorage.setItem("user", JSON.stringify(userDetails));
         })
         .catch(err => console.log(err));
 };

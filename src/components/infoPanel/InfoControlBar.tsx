@@ -114,15 +114,17 @@ class InfoControlBar extends Component<IInfoControlBarProps> {
         return (
             <Toolbar style={{display: "flex", flexDirection: "row"}}>
                 <div style={{width: "60%", float: "left", marginLeft: "20px"}}>
-                <CurrentWeather
-                            lat={entry.position.lat || 0}
-                            lon={entry.position.lon || 0}
-                            weatherStore={this.props.weatherStore}
-                            onClick= {this.openModal.bind(this, "weatherModal")}
-                            textColor = {"white"}
-                            iconHeight={"40px"}
-                            tempSize={"15px"}
-                        />
+                {entry && entry.position &&
+                                <CurrentWeather
+                                lat={entry.position.lat || 0}
+                                lon={entry.position.lon || 0}
+                                weatherStore={this.props.weatherStore}
+                                onClick= {this.openModal.bind(this, "weatherModal")}
+                                textColor = {"white"}
+                                iconHeight={"40px"}
+                                tempSize={"15px"}
+                            />
+                }
                 </div>
                 <div style={{width: "20%", float: "right"}}>
                 {this.props.infoPage.infoSelected && this.getFavButton()}

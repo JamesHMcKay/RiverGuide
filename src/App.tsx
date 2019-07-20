@@ -23,6 +23,7 @@ import TabBar from "./components/TabBar";
 import theme from "./utils/theme";
 
 import Hidden from "@material-ui/core/Hidden";
+import axios from "axios";
 import * as darksky from "dark-sky-api";
 import * as weather from "openweather-apis";
 import BottomNav from "./components/leftPanel/BottomNav";
@@ -32,6 +33,8 @@ import { IUser } from "./utils/types";
 // Create redux store with history
 const history: any = createHistory();
 const store: any = configureStore({}, history);
+
+axios.defaults.timeout = 10000;
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -94,7 +97,6 @@ class App extends Component {
                                 <Route exact path="/connect/:provider" component={ConnectPage} />
                             </Switch>
                             <Hidden mdUp>
-                                <ToggleList/>
                                 <Route component={BottomNav} />
                             </Hidden>
                             <Modals />

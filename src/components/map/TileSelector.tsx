@@ -1,4 +1,4 @@
-import CollectionsRounded from "@material-ui/icons/CollectionsRounded";
+import LayersRounded from "@material-ui/icons/LayersRounded";
 import SatelliteRounded from "@material-ui/icons/SatelliteRounded";
 import TerrainRounded from "@material-ui/icons/TerrainRounded";
 import SpeedDial from "@material-ui/lab/SpeedDial";
@@ -54,7 +54,7 @@ export default class TileSelector extends Component<ITileSelectorProps, ITileSel
         return (
             <SpeedDial
                 ariaLabel="speedDial"
-                icon={<CollectionsRounded fontSize={"small"}/>}
+                icon={<LayersRounded fontSize={"large"}/>}
                 onBlur={this.handleDialClose}
                 onClick={this.handleDialClick}
                 onClose={this.handleDialClose}

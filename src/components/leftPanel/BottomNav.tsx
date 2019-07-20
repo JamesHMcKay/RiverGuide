@@ -17,6 +17,7 @@ import { setCategory } from "../../actions/getGuides";
 
 import { IState } from "../../reducers";
 import { categories, ITabCategory, tabIds } from "../ControlBar";
+import ToggleList from "./ToggleList";
 
 const ICONS: Array<{id: string, icon: JSX.Element} > = [
     {id: "data", icon: <InsertChartOutlinedRoundedIcon />},
@@ -64,6 +65,8 @@ class BottomNav extends Component<IBottomNavProps, IBottomNavState> {
 
     public render(): JSX.Element {
         return (
+            <div style={{width: "100%", marginTop: "auto"}}>
+            <ToggleList/>
             <BottomNavigation
                 value={tabIds.indexOf(this.props.index)}
                 showLabels
@@ -81,6 +84,7 @@ class BottomNav extends Component<IBottomNavProps, IBottomNavState> {
                     />
                  ))}
           </BottomNavigation>
+          </div>
         );
     }
 }
