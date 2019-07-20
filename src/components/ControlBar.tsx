@@ -11,7 +11,7 @@ import {
     setTabIndex,
 } from "../actions/actions";
 import { setCategory } from "../actions/getGuides";
-import { IAuth } from "./../utils/types";
+import { IAuth, IFilter, IMapBounds } from "./../utils/types";
 
 import { IState } from "../reducers/index";
 import SearchBox from "./common/SearchBox";
@@ -31,7 +31,11 @@ export const categories: ITabCategory[] = [
 export const tabIds: string[] = categories.map((item: ITabCategory) => item.id);
 
 interface IControlBarProps extends IControlBarStateToProps {
-    setCategory: (value: string, token: CancelTokenSource) => void;
+    setCategory: (
+        value: string,
+        filter: IFilter,
+        mapBounds: IMapBounds,
+        token: CancelTokenSource) => void;
     location: any;
     closeInfoPage: () => void;
     setTabIndex: (index: string) => void;
@@ -41,6 +45,8 @@ interface IControlBarStateToProps {
     openModal: string;
     auth: IAuth;
     index: string;
+    mapBounds: IMapBounds;
+    filters: IFilter;
 }
 
 interface IControlBarState {
@@ -59,7 +65,7 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
         }
         this.props.setTabIndex(categories[defaultIndex].id);
         const cancelToken: CancelTokenSource = axios.CancelToken.source();
-        this.props.setCategory(categories[defaultIndex].id, cancelToken);
+        this.props.setCategory(categories[defaultIndex].id, this.props.filters, this.props.mapBounds, cancelToken);
         this.state = {
             anchorEl: null,
             cancelToken,
@@ -79,11 +85,11 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
         this.setState({
             cancelToken: newToken,
         });
-        if (categoryId === "logbook") {
-            this.props.setCategory("activities", newToken);
+        if (categoryId === "trips") {
+            this.props.setCategory("activities", this.props.filters, this.props.mapBounds, newToken);
             this.props.closeInfoPage();
         } else {
-            this.props.setCategory(categoryId, newToken);
+            this.props.setCategory(categoryId, this.props.filters, this.props.mapBounds, newToken);
         }
 
         this.handleClose();
@@ -138,6 +144,8 @@ const mapStateToProps: (state: IState) => IControlBarStateToProps = (state: ISta
     openModal: state.openModal,
     auth: state.auth,
     index: state.tabIndex,
+    mapBounds: state.mapBounds,
+    filters: state.filters,
 });
 
 export default connect(

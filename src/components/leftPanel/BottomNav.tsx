@@ -16,6 +16,7 @@ import {
 import { setCategory } from "../../actions/getGuides";
 
 import { IState } from "../../reducers";
+import { IFilter, IMapBounds } from "../../utils/types";
 import { categories, ITabCategory, tabIds } from "../ControlBar";
 import ToggleList from "./ToggleList";
 
@@ -26,7 +27,11 @@ const ICONS: Array<{id: string, icon: JSX.Element} > = [
 ];
 
 interface IBottomNavProps extends IBottomNavStateProps {
-    setCategory: (value: string, token: CancelTokenSource) => void;
+    setCategory: (
+        value: string,
+        filter: IFilter,
+        mapBounds: IMapBounds,
+        token: CancelTokenSource) => void;
     location: any;
     closeInfoPage: () => void;
     setTabIndex: (index: string) => void;
@@ -34,6 +39,8 @@ interface IBottomNavProps extends IBottomNavStateProps {
 
 interface IBottomNavStateProps {
     index: string;
+    mapBounds: IMapBounds;
+    filters: IFilter;
 }
 
 interface IBottomNavState {
@@ -56,10 +63,10 @@ class BottomNav extends Component<IBottomNavProps, IBottomNavState> {
             cancelToken: newToken,
         });
         if (categoryId === "trips") {
-            this.props.setCategory("activities", newToken);
+            this.props.setCategory("activities", this.props.filters, this.props.mapBounds, newToken);
             this.props.closeInfoPage();
         } else {
-            this.props.setCategory(categoryId, newToken);
+            this.props.setCategory(categoryId, this.props.filters, this.props.mapBounds, newToken);
         }
     }
 
@@ -92,6 +99,8 @@ class BottomNav extends Component<IBottomNavProps, IBottomNavState> {
 function mapStateToProps(state: IState): IBottomNavStateProps {
     return ({
         index: state.tabIndex,
+        mapBounds: state.mapBounds,
+        filters: state.filters,
     });
 }
 

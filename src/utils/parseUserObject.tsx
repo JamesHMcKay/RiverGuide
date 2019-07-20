@@ -8,6 +8,7 @@ function parseUserObject(input: any): IUser {
         createdAt: input.createdAt,
         id: input._id,
         user_favourites: input.user_favourites ? input.user_favourites : [],
+        role: input.role.type,
     };
     return user;
 }

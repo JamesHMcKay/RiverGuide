@@ -4,25 +4,41 @@ import { connect } from "react-redux";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import {
+    generateFilteredList,
+    setMapBounds,
     setSearchPanel,
 } from "../../actions/actions";
 
 import { IState } from "../../reducers";
-import { IInfoPage } from "../../utils/types";
+import { IFilter, IInfoPage, IListEntry, IMapBounds } from "../../utils/types";
 
 interface IToggleListProps extends IToggleListStateProps {
     setSearchPanel: (value: string) => void;
+    setMapBounds: (bounds: IMapBounds | null) => void;
+    generateFilteredList: (
+        guides: IListEntry[],
+        filters: IFilter,
+        mapBounds: IMapBounds | null,
+    ) => void;
 }
 
 interface IToggleListStateProps {
     searchPanel: string;
     infoPage: IInfoPage;
     logPageOpen: boolean;
+    filters: IFilter;
+    listEntries: IListEntry[];
 }
 
 class ToggleList extends Component<IToggleListProps> {
     public handleToggle = (event: any, value: string): void => {
         this.props.setSearchPanel(value);
+        this.props.setMapBounds(null);
+        this.props.generateFilteredList(
+            this.props.listEntries,
+            this.props.filters,
+            null,
+        );
     }
 
     public render(): JSX.Element {
@@ -53,10 +69,12 @@ function mapStateToProps(state: IState): IToggleListStateProps {
         searchPanel: state.searchPanel,
         infoPage: state.infoPage,
         logPageOpen: state.logPageOpen,
+        filters: state.filters,
+        listEntries: state.listEntries,
     });
 }
 
 export default connect(
     mapStateToProps,
-    { setSearchPanel },
+    { setSearchPanel, setMapBounds, generateFilteredList },
 )(ToggleList);

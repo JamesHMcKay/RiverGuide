@@ -13,6 +13,7 @@ const initialUser: IUser = {
     createdAt: "",
     provider: "",
     user_favourites: [],
+    role: "",
 };
 
 const initialState: IAuth = {

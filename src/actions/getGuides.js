@@ -13,12 +13,13 @@ import {
     ADD_TO_RECENTS,
     GET_ERRORS,
     CLEAR_ERRORS,
+    GENERATE_FILTERED_LIST,
 } from "./types";
 
 const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
 const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
-export const setCategory = (category, cancelToken) => dispatch => {
+export const setCategory = (category, filters, mapBounds, cancelToken) => dispatch => {
     dispatch({ type: CLEAR_ERRORS });
     dispatch({
         type: LOADING_ENTRIES,
@@ -52,6 +53,16 @@ export const setCategory = (category, cancelToken) => dispatch => {
                     type: GET_ENTRIES,
                     payload: result,
                 });
+                dispatch({
+                    type: GENERATE_FILTERED_LIST,
+                    payload: {
+                        entries: result,
+                        filters,
+                        mapBounds,
+                    },
+                });
+
+
             }).catch(error => {
                 dispatch({
                     type: GET_ERRORS,
@@ -82,6 +93,14 @@ export const setCategory = (category, cancelToken) => dispatch => {
             dispatch({
                 type: GET_ENTRIES,
                 payload: result,
+            });
+            dispatch({
+                type: GENERATE_FILTERED_LIST,
+                payload: {
+                    entries: result,
+                    filters,
+                    mapBounds,
+                },
             });
         })
         .catch(error => {

@@ -127,7 +127,9 @@ class Info extends Component<IInfoProps, IInfoState> {
         }
 
         const guideId: string = this.props.infoPage.selectedGuide.id;
-        const isFav: boolean = this.props.auth.user.user_favourites.filter(
+        const isFav: boolean = this.props.auth.isAuthenticated &&
+            this.props.auth.user.user_favourites &&
+            this.props.auth.user.user_favourites.filter(
             (item: string) => item === guideId,
         ).length > 0;
 
@@ -155,14 +157,25 @@ class Info extends Component<IInfoProps, IInfoState> {
 
     public getReportButton = (color: string): JSX.Element => {
         return (
-            <Button
-                className="reporting-button"
-                variant="outlined"
-                style={{height: "fit-content", color, borderColor: color, float: "right"}}
-                onClick={this.openModal.bind(this, "addTripInfoPage")}
-             >
-                Log a trip
-            </Button>
+            <div style={{float: "right", display: "flex"}}>
+                {this.props.auth.user.role === "riverguide_editor" &&
+                    <Button
+                    variant="outlined"
+                    style={{height: "fit-content", color, borderColor: color, marginRight: "10px"}}
+                    onClick={(): void => {this.props.toggleModal("editModal"); }}
+                    >
+                        Edit
+                    </Button>
+                }
+                <Button
+                    className="reporting-button"
+                    variant="outlined"
+                    style={{height: "fit-content", color, borderColor: color, marginRight: "10px"}}
+                    onClick={this.openModal.bind(this, "addTripInfoPage")}
+                >
+                    Log a trip
+                </Button>
+            </div>
         );
     }
 
@@ -370,6 +383,18 @@ class Info extends Component<IInfoProps, IInfoState> {
         );
     }
 
+    public getEditButton = (color: string): JSX.Element => {
+        return (
+            <Button
+                variant="outlined"
+                style={{height: "fit-content", color, borderColor: color, float: "right"}}
+                onClick={(): void => {this.props.toggleModal("editModal"); }}
+            >
+               Edit
+            </Button>
+        );
+    }
+
     public getHeader = (entry: IListEntry, isData: boolean): JSX.Element => {
         return (
             <Grid
@@ -416,7 +441,8 @@ class Info extends Component<IInfoProps, IInfoState> {
                         iconHeight={"60px"}
                         tempSize={"20px"}
                     />
-                {(this.props.auth.isAuthenticated && !isData) && this.getReportButton("white")}
+                    {/* {(this.props.auth.isAuthenticated && !isData) && this.getEditButton("white")} */}
+                    {(this.props.auth.isAuthenticated && !isData) && this.getReportButton("white")}
             </Grid>
         </Grid>
         );
@@ -445,20 +471,14 @@ class Info extends Component<IInfoProps, IInfoState> {
                 {!isLogbookInfo && this.getKeyFacts()}
                 {!isLogbookInfo && this.getFlowChart(entry)}
                 {!isLogbookInfo && this.getDescription()}
-                {this.getMap(entry)}
-                {(!isLogbookInfo && !isData) && this.getLogbook()}
+                {!isLogbookInfo && this.getMap(entry)}
+                {!isData && this.getLogbook()}
                 <Grid
                     item
                     md={12}
                     lg={12}
                     style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0"}}
                 >
-                    <Button
-                        variant="outlined"
-                        onClick={(): void => {this.props.toggleModal("editModal"); }}
-                    >
-                        Edit
-                    </Button>
                 </Grid>
             </Grid>
         );

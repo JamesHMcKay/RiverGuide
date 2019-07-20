@@ -145,6 +145,7 @@ export interface IUser {
     id: string;
     provider: string;
     user_favourites: string[];
+    role: string;
 }
 
 export interface IAuth {

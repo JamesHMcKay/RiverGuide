@@ -41,12 +41,12 @@ function filterActivityType(guide: IListEntry, activity: string): boolean {
     return guide.activity === activity;
 }
 
-function applyFiltersToList(guideList: IListEntry[], filters: IFilter, mapBounds: IMapBounds): IListEntry[] {
+function applyFiltersToList(guideList: IListEntry[], filters: IFilter, mapBounds: IMapBounds | null): IListEntry[] {
     let filteredList: IListEntry[] = guideList;
     if (filters.activity !== "all") {
         guideList = guideList.filter((item: IListEntry) => filterActivityType(item, filters.activity));
     }
-    if (filters.searchString === "") {
+    if (filters.searchString === "" && mapBounds) {
         filteredList = guideList.filter(applyMapBounds(mapBounds));
     } else {
         filteredList = guideList.filter((guide: IListEntry): boolean => {
