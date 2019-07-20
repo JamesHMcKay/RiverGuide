@@ -27,7 +27,6 @@ import axios from "axios";
 import * as darksky from "dark-sky-api";
 import * as weather from "openweather-apis";
 import BottomNav from "./components/leftPanel/BottomNav";
-import ToggleList from "./components/leftPanel/ToggleList";
 import { IUser } from "./utils/types";
 
 // Create redux store with history
