@@ -92,8 +92,11 @@ class InfoControlBar extends Component<IInfoControlBarProps> {
         }
 
         const guideId: string = this.props.infoPage.selectedGuide.id;
-        const isFav: boolean = this.props.auth.user.user_favourites.filter(
-            (item: string) => item === guideId,
+
+        const isFav: boolean = this.props.auth.isAuthenticated &&
+        this.props.auth.user.user_favourites &&
+        this.props.auth.user.user_favourites.filter(
+        (item: string) => item === guideId,
         ).length > 0;
 
         return (
