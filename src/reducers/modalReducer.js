@@ -5,6 +5,7 @@ import { OPEN_MODAL, CLOSE_MODAL } from "../actions/types";
 // };
 
 const initialState = "protectedModal";
+//const initialState = false;
 
 export default (state = initialState, action) => {
     switch (action.type) {

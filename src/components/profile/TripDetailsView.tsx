@@ -49,7 +49,7 @@ function computeDuration(logEntry: ILogComplete): string {
     const startDate: Date = new Date(logEntry.start_date_time);
     const endDate: Date = new Date(logEntry.end_date_time);
 
-    const duration: number = Math.floor((endDate.getTime() - startDate.getTime()) / _MS_PER_HOUR);
+    const duration: number = (endDate.getTime() - startDate.getTime()) / _MS_PER_HOUR;
     return duration.toFixed(1) + " hours";
 }
 
@@ -82,10 +82,11 @@ class TripDetailsView extends Component<ITripDetailsViewProps> {
 
     public render(): JSX.Element {
         const logEntry: ILogComplete | undefined = this.getLogEntry();
+        let titleTime: string = "";
         if (logEntry) {
-            logEntry.start_date_time = dateConvert(logEntry.start_date_time);
+            titleTime = dateConvert(logEntry.start_date_time);
         }
-        const title: string = logEntry ? logEntry.start_date_time : "Invalid log entry";
+        const title: string = logEntry ? titleTime : "Invalid log entry";
         return (
             <Dialog
                 onClose={this.closeModal}

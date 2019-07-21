@@ -1,5 +1,6 @@
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
+import withMobileDialog from "@material-ui/core/withMobileDialog";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { editLogEntry, toggleModal } from "../../actions/actions";
@@ -12,6 +13,7 @@ import { WeatherStore } from "./WeatherStore";
 interface IWeatherModalProps extends IWeatherStateProps {
     toggleModal: (modal?: string) => void;
     editLogEntry: (entry: ILogEntry) => void;
+    fullScreen: boolean;
 }
 
 interface IWeatherStateProps {
@@ -41,6 +43,9 @@ class WeatherModal extends Component<IWeatherModalProps> {
             <Dialog
                 onClose={(): void => this.props.toggleModal()}
                 open={this.props.isOpen}
+                fullScreen={this.props.fullScreen}
+                fullWidth={true}
+                maxWidth={"sm"}
             >
                 <DialogTitle handleClose={(): void => this.props.toggleModal()} title={"Weather"}/>
                 <DialogContent>
@@ -67,4 +72,4 @@ function mapStateToProps(state: IState): IWeatherStateProps {
 export default connect(
     mapStateToProps,
     { editLogEntry, toggleModal },
-)(WeatherModal);
+)(withMobileDialog()(WeatherModal));

@@ -126,8 +126,8 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         logEntry = {
             ...logEntry,
             participants: this.state.peopleCount,
-            start_date_time: this.state.date ? this.state.date.toISOString() : "",
-            end_date_time: this.state.date ? this.state.date.toISOString() : "",
+            start_date_time: this.state.start_date ? this.state.start_date.toISOString() : "",
+            end_date_time: this.state.end_date ? this.state.end_date.toISOString() : "",
             rating: this.state.rating,
             username: this.state.logEntry.username,
         };

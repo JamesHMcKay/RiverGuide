@@ -95,6 +95,12 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         return unitParser(unit);
     }
 
+    public getColumnSeries = (chart: Am4charts.XYChart): Am4charts.ColumnSeries => {
+        const series: Am4charts.ColumnSeries = chart.series.push(new Am4charts.ColumnSeries());
+        series.columns.template.width = Am4core.percent(100);
+        return series;
+    }
+
     public setChartOptions = (): void => {
         const chart: Am4charts.XYChart = Am4core.create("chartdiv", Am4charts.XYChart);
 
@@ -113,7 +119,9 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         }
         valueAxis.title.text = this.getUnit();
 
-        const series: Am4charts.LineSeries = chart.series.push(new Am4charts.LineSeries());
+        const series: Am4charts.ColumnSeries | Am4charts.LineSeries = this.state.selectedType === "rainfall" ?
+            this.getColumnSeries(chart) :
+            chart.series.push(new Am4charts.LineSeries());
         series.dataFields.dateX = "date";
         series.dataFields.valueY = "value";
         series.strokeWidth = 3;
@@ -123,6 +131,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         series.tooltipText = "{valueY.value}";
         chart.scrollbarX = new Am4core.Scrollbar();
         chart.scrollbarX.parent = chart.bottomAxesContainer;
+        chart.cursor = new Am4charts.XYCursor();
     }
 
     public componentDidUpdate(nextProps: IFlowChartProps): void {

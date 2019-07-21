@@ -137,6 +137,7 @@ class ProfilePage extends Component<IProfilePageProps, IProfilePageState> {
     }
 
     public render(): JSX.Element {
+        const dateParsed: Date = new Date(this.props.auth.user.createdAt);
         return (
             <Grid container spacing={0} justify={"center"} style={{height: "82vh"}}>
                 <List style={{ width: "100%", maxWidth: 360}}>
@@ -171,7 +172,9 @@ class ProfilePage extends Component<IProfilePageProps, IProfilePageState> {
                     </Typography>
                 </li>
                 <ListItem>
-                    <ListItemText primary={this.props.auth.user.createdAt}/>
+                    <ListItemText
+                        primary={this.props.auth.isAuthenticated ? dateParsed.toDateString() : ""}
+                    />
                 </ListItem>
                 <Divider component="li" />
                 <ListItem>

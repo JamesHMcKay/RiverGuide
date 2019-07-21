@@ -277,7 +277,7 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
     //     };
     // }
 
-    public getMarkers(): Array<(0 | JSX.Element | undefined)> {
+    public getMarkers = (): Array<(0 | JSX.Element | undefined)> => {
         const list: Array<(0 | JSX.Element | undefined)>  = this.props.filteredGuides.map(
             (guide: IListEntry) =>
                 guide.position.lat &&
@@ -291,6 +291,7 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
                             size={30}
                             onClick={(): void => {this.props.onClick(guide); }}
                             toolTip={guide.display_name}
+                            observables={guide.observables}
                             editMode={false}
                         />
                   </Marker>

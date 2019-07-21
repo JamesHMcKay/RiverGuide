@@ -1,6 +1,8 @@
 import Tooltip from "@material-ui/core/Tooltip";
 import React, { PureComponent } from "react";
 import IoIosLocation from "react-icons/lib/io/ios-location";
+import { IObservable } from "../../utils/types";
+import FlowBadge from "../common/FlowBadge";
 
 const pinStyle: {fill: string; stroke: string} = {
   fill: "#d00",
@@ -14,6 +16,7 @@ interface IMapMarkerProps {
     toolTip: string;
     color?: string;
     subtext?: string;
+    observables?: IObservable[];
 }
 
 export default class MapMarker extends PureComponent<IMapMarkerProps> {
@@ -32,6 +35,7 @@ export default class MapMarker extends PureComponent<IMapMarkerProps> {
             <div style={{height: "fit-content"}}>
                 <p><strong>{this.props.toolTip}</strong></p>
                 {this.props.subtext && <p>{this.props.subtext}</p> }
+                <FlowBadge observables={this.props.observables} />
             </div>);
 
         return (
