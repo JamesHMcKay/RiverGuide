@@ -10,7 +10,7 @@ import { toggleModal } from "../../actions/actions";
 import { IState } from "../../reducers";
 import DialogTitle from "../../utils/dialogTitle";
 
-const password: string = "123";
+const password: string = "riverguidepreview";
 
 interface IProtectedModalState {
     password: string;
