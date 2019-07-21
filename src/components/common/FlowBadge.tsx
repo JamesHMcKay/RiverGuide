@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
 import { IState } from "../../reducers/index";
+import { unitParser } from "../../utils/dataTypeParser";
 import { IGauge, IObservable } from "./../../utils/types";
 
 interface IFlowBadgeProps extends IFlowBadgeStateProps {
@@ -48,22 +48,11 @@ class FlowBadge extends Component<IFlowBadgeProps> {
             flow = observables[0].latest_value.toFixed(1);
             units = observables[0].units;
         }
-        if (units === "cumecs") {
-            units = "m\u00B3/s";
-        }
-
-        if (units === "metres") {
-            units = "m";
-        }
-
-        if (units === "litres_second") {
-            units = "l/s";
-        }
 
         if (flow) {
             return (
                 <div>
-                    {flow + " " + units}
+                    {flow + " " + unitParser(units)}
                 </div>
             );
         } else {

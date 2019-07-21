@@ -204,7 +204,7 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
                     Cancel
                     </Button>
                     {this.props.handleDelete &&
-                                <Button
+                            <Button
                                 variant="outlined"
                                 onClick={(): void => {this.setState({openDeleteDialog: true}); }}
                             >

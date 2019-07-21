@@ -13,6 +13,7 @@ import WeatherModal from "../infoPanel/WeatherModal";
 import MapModal from "../map/MapModal";
 import AboutModal from "../modals/AboutModal";
 import ContactModal from "../modals/ContactModal";
+import ProtectedModal from "../modals/ProtectedModal";
 import TripDetailsAnyPage from "../profile/TripDetailsAnyPage";
 import TripDetailsEdit from "../profile/TripDetailsEdit";
 import TripDetailsInfoPage from "../profile/TripDetailsInfoPage";
@@ -37,6 +38,7 @@ class Modals extends Component {
                 <ContactModal />
                 <AboutModal />
                 <MapModal />
+                <ProtectedModal />
             </div>
         );
     }

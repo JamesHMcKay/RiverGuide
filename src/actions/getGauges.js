@@ -10,7 +10,6 @@ const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
 const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
 export const makeGaugeRequest = () => dispatch => {
-
     const request = {
         action: "get_features",
         filters: ["flow", "rainfall"],

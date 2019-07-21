@@ -45,10 +45,10 @@ class EditModal extends Component<IEditModalProps> {
         this.closeModal();
     }
 
-    public handleDelete = (): void => {
-        this.props.deleteGuide(this.props.infoPage.selectedGuide.id, this.props.listEntries);
-        this.closeModal();
-    }
+    // public handleDelete = (): void => {
+    //     this.props.deleteGuide(this.props.infoPage.selectedGuide.id, this.props.listEntries);
+    //     this.closeModal();
+    // }
 
     public render(): JSX.Element {
         return (
@@ -63,7 +63,7 @@ class EditModal extends Component<IEditModalProps> {
                     handleClose = {(): void => this.props.toggleModal()}
                     infoPage = {this.props.infoPage}
                     handleSave = {this.handleSave}
-                    handleDelete = {this.handleDelete}
+                    // handleDelete = {this.handleDelete}
                 />
             </Dialog>
         );

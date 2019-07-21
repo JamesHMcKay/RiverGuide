@@ -220,12 +220,13 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
             return (
                 <FormControl variant="outlined" style={{minWidth: "120px"}}>
                     <Select
-                    value={this.state.selectedType}
-                    onChange={this.handleTypeChange}
-                    input={<OutlinedInput labelWidth={0} name="age" id="outlined-age-simple" />}
+                        style={{height: "45px"}}
+                        value={this.state.selectedType}
+                        onChange={this.handleTypeChange}
+                        input={<OutlinedInput labelWidth={0} name="age" id="outlined-age-simple" />}
                     >
                         {observables.map((item: IObservable) =>
-                        <MenuItem value={item.type}>{item.type.toUpperCase()}</MenuItem>)
+                        <MenuItem value={item.type}>{dataTypeParser(item.type)}</MenuItem>)
                         }
                     </Select>
         </FormControl>

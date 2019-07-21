@@ -23,6 +23,7 @@ import filterReducer from "./filterReducer";
 import gaugeDisclaimerReducer from "./gaugeDisclaimerReducer";
 import gaugeHistoryReducer from "./gaugeHistoryReducer";
 import gaugeReducer from "./gaugeReducer";
+import guideReducer from "./guideReducer";
 import infoReducer from "./infoReducer";
 import listEntryReducer from "./listEntryReducer";
 import listItemDetailsReducer from "./listItemDetailsReducer";
@@ -67,6 +68,7 @@ export interface IState {
     expansionPanels: IExpansionPanels;
     gaugeDisclaimer: string;
     recentItems: string[];
+    guides: IListEntry[];
 }
 
 export default combineReducers({
@@ -96,4 +98,5 @@ export default combineReducers({
     expansionPanels: expansionPanelsReducer,
     gaugeDisclaimer: gaugeDisclaimerReducer,
     recentItems: recentItemsReducer,
+    guides: guideReducer,
 });

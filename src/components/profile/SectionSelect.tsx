@@ -65,7 +65,7 @@ class SectionSelect extends Component<ISectionSelectProps> {
 
 function mapStateToProps(state: IState): ISectionSelectStateProps {
     return ({
-        guides: state.listEntries,
+        guides: state.guides,
     });
 }
 

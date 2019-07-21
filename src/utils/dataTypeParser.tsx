@@ -18,14 +18,18 @@ export function dataTypeParser(type: keyof IObsValue): string {
     return result;
 }
 
-export function unitParser(unit: string): string {
+export function unitParser(unit: string | undefined): string {
     let result: string = "";
     switch (unit) {
         case "cumecs":
             result = "m\u00B3/s";
             break;
         case "metres":
-                result = "m";
+            result = "m";
+            break;
+        case "millimetres":
+           result = "mm";
+           break;
     }
     return result;
 }

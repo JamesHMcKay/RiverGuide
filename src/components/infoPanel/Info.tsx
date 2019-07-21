@@ -205,7 +205,13 @@ class Info extends Component<IInfoProps, IInfoState> {
                         item
                         md={12}
                         lg={12}
-                        style={{marginRight: "5%", marginLeft: "5%",  marginTop: "2%", marginBottom: "2%"}}
+                        style={{
+                            marginRight: "5%",
+                            marginLeft: "5%",
+                            marginTop: "2%",
+                            marginBottom: "2%",
+                            width: "100%",
+                        }}
                     >
                         <LatestData />
                         <FlowChart gaugeId={entry.gauge_id} />
@@ -241,7 +247,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                     item
                     md={12}
                     lg={12}
-                    style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0"}}
+                    style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0", width: "100%"}}
                 >
                     <KeyFactsCard itemDetails={this.props.infoPage.itemDetails} />
                 </Grid>
@@ -299,7 +305,7 @@ class Info extends Component<IInfoProps, IInfoState> {
             md={12}
             lg={12}
             justify="space-between"
-            style={{marginRight: "5%", marginLeft: "5%",  marginTop: "2%", marginBottom: "2%"}}
+            style={{marginRight: "5%", marginLeft: "5%",  marginTop: "2%", marginBottom: "2%", width: "100%"}}
         >
             <div>
             <ExpansionHead title={"Log book"} panelName={"logBook"}/>
@@ -473,13 +479,13 @@ class Info extends Component<IInfoProps, IInfoState> {
                 {!isLogbookInfo && this.getDescription()}
                 {!isLogbookInfo && this.getMap(entry)}
                 {!isData && this.getLogbook()}
-                <Grid
+                {/* <Grid
                     item
                     md={12}
                     lg={12}
                     style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0"}}
                 >
-                </Grid>
+                </Grid> */}
             </Grid>
         );
     }

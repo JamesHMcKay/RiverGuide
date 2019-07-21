@@ -14,10 +14,46 @@ import {
     GET_ERRORS,
     CLEAR_ERRORS,
     GENERATE_FILTERED_LIST,
+    GET_GUIDES,
 } from "./types";
 
 const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
 const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
+
+export const makeGuideRequest = () => dispatch => {
+    axios
+    .get(`${rapidsApiUrl}graphql`,
+        {
+            headers: {'Authorization': ''},
+            params: {query: '{guides(limit:999){id,river_name,section_name,region,latitude,longitude,gauge_id, activity}}'},
+        }
+    )
+    .then(res => {
+        let data = res.data.data.guides;
+        let result = data.map(item => (
+            {
+                id: item.id,
+                display_name: item.section_name,
+                river_name: item.river_name,
+                position: {lat: item.latitude < 90 ? item.latitude : -45, lon: item.longitude },
+                region: item.region,
+                gauge_id: item.gauge_id,
+                activity: item.activity,
+            }));
+        dispatch({
+            type: GET_GUIDES,
+            payload: result,
+        });
+    })
+    .catch(error => {
+        dispatch({
+            type: GET_ERRORS,
+            payload: {message: "Request failed"}
+        });
+    });
+};
+
+
 
 export const setCategory = (category, filters, mapBounds, cancelToken) => dispatch => {
     dispatch({ type: CLEAR_ERRORS });
@@ -29,6 +65,7 @@ export const setCategory = (category, filters, mapBounds, cancelToken) => dispat
     });
 
     if (category === "data") {
+        dispatch(makeGuideRequest());
         const request = {
             action: "get_features",
             filters: ["flow", "rainfall"],
@@ -92,6 +129,10 @@ export const setCategory = (category, filters, mapBounds, cancelToken) => dispat
                 }));
             dispatch({
                 type: GET_ENTRIES,
+                payload: result,
+            });
+            dispatch({
+                type: GET_GUIDES,
                 payload: result,
             });
             dispatch({
