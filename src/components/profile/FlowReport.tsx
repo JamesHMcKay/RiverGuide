@@ -1,4 +1,4 @@
-import Button from "@material-ui/core/Button";
+import Chip from "@material-ui/core/Chip";
 import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -206,14 +206,21 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
 
     public warningText = (): JSX.Element => {
         if (this.state.gauge && this.isFlowComputed()) {
-            return (<div>{"Flow computed based on your trip date"}</div>);
+            return (<Chip
+                        label="Flow computed based on your trip date"
+                        style={{margin: "10px"}}
+                        onClick={(): void => {
+                            this.setState({manualySet: true}); }}
+                    />);
         } else if (this.state.gauge && this.state.flowTimeDiff < 8.64e7) {
             return (
-                <Button onClick = {(): void => {
+                <Chip
+                label="Click here to compute flow"
+                style={{margin: "10px"}}
+                onClick={(): void => {
                     this.setState({manualySet: false});
-                    this.updateFlow(); }}>
-            {"Click here to compute flow"}
-                </Button>
+                    this.updateFlow(); }}
+            />
             );
         } else if (this.state.gauge) {
             return (<div>{"No automatic flow calculations available for this date"}</div>);
@@ -243,7 +250,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
 
     public render(): JSX.Element {
         return (
-            <div className = "flow-report-section">
+            <div className = "flow-report-section" style={{justifyContent: "center"}}>
                 <div className = "flow-details-section">
                 <Select
                 value={this.state.type}
@@ -256,10 +263,6 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
               {!this.state.manualySet &&
                <div>
                    {this.displayFlow() + this.getUnit()}
-                   <Button onClick = {(): void => {
-                    this.setState({manualySet: true}); }}>
-                    {"Click to edit"}
-                </Button>
                 </div>
             }
             {this.state.manualySet &&

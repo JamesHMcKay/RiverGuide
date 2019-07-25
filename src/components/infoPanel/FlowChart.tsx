@@ -112,6 +112,8 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
             timeUnit: "minute",
             count: 1,
         };
+        // dateAxis.renderer.cellStartLocation = 0.0;
+        // dateAxis.renderer.cellEndLocation = 1.0;
 
         const valueAxis: Am4charts.ValueAxis = chart.yAxes.push(new Am4charts.ValueAxis());
         if (valueAxis.tooltip) {
@@ -131,7 +133,9 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         series.tooltipText = "{valueY.value}";
         chart.scrollbarX = new Am4core.Scrollbar();
         chart.scrollbarX.parent = chart.bottomAxesContainer;
-        chart.cursor = new Am4charts.XYCursor();
+        if (window.innerWidth > 960) {
+            chart.cursor = new Am4charts.XYCursor();
+        }
     }
 
     public componentDidUpdate(nextProps: IFlowChartProps): void {
@@ -258,9 +262,10 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
             const result: JSX.Element[] = observables.map((item: IObservable) =>
                 <Hidden smDown>
                     <Button
-                        style = {{marginLeft: "10px"}}
+                        style = {{marginLeft: "10px", height: "40px"}}
                         variant={this.getButtonVariant(item.type)}
-                        color={this.getButtonColor(item.type)} key={item.type}
+                        // color={this.getButtonColor(item.type)}
+                        key={item.type}
                         onClick = {(): void => this.selectTypeClick(item.type)}
                     >
                         {dataTypeParser(item.type)}
@@ -284,7 +289,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         const visible: boolean = this.props.expansionPanels.flowHistory;
         return (
             <div>
-                <ExpansionHead title={"History"} panelName={"flowHistory"}/>
+                <ExpansionHead title={"Chart"} panelName={"flowHistory"}/>
                 {visible && <div className="flow-chart-buttons">
                     {this.getButtons()}
                 </div>}

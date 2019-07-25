@@ -1,3 +1,5 @@
+import Avatar from "@material-ui/core/Avatar";
+import Chip from "@material-ui/core/Chip";
 import Grid from "@material-ui/core/Grid";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -9,7 +11,6 @@ import { getGaugeDisclaimer } from "../../actions/getGauges";
 import { IState } from "../../reducers/index";
 import { dataTypeParser, unitParser } from "../../utils/dataTypeParser";
 import { IExpansionPanels, IGauge, IInfoPage, IObservable } from "../../utils/types";
-import ExpansionHead from "./ExpansionHead";
 
 interface ILatestDataStateProps {
     infoPage: IInfoPage;
@@ -44,38 +45,59 @@ class LatestData extends Component<ILatestDataProps> {
         const gauge: IGauge | undefined = this.getGauge(this.props.infoPage.selectedGuide.gauge_id);
         if (gauge) {
             return (
-                <Grid container item spacing={0} justify="center">
-                    <Grid item xs={6} lg={3} justify="center">
-                    <ListItem>
-                        <ListItemText
-                            primary={
-                                <React.Fragment>
-                                    Source
-                                    <InfoOutlinedIcon
-                                        style={{fontSize: "20px", marginLeft: "10px", cursor: "pointer"}}
-                                        onClick={(): void => {this.openDataInfo(gauge.source); }}
-                                    />
-                                </React.Fragment>
-                            }
-                            secondary={gauge.source}
-                        />
-                        </ListItem>
-                    </Grid>
-                    <Grid item xs={6} lg={3} justify="center">
-                        <ListItem>
-                            <ListItemText primary="Updated" secondary={this.dateWrapper(gauge.lastUpdated)} />
-                        </ListItem>
-                    </Grid>
+                <Grid container spacing={0} justify="flex-start">
                     {gauge.observables.map((item: IObservable) =>
                         <Grid item xs={6} lg={3} justify="center">
-                        <ListItem>
+                        <ListItem style = {{paddingTop: 0, paddingBottom: 0}}>
                             <ListItemText
+                                style = {{padding: 0}}
                                 primary={dataTypeParser(item.type)}
-                                secondary={item.latest_value.toFixed(1) + " " + unitParser(item.units)}
+                                secondary={
+                                    <React.Fragment>
+                                        <Chip
+                                            style={{margin: "5px"}}
+                                            color="primary"
+                                            label={
+                                                item.latest_value.toFixed(1) + " " + unitParser(item.units)
+                                            }
+                                        />
+                                    </React.Fragment>
+                                }
                             />
                         </ListItem>
                     </Grid>,
                     )}
+                    <Grid item xs={12} lg={3} justify="center">
+                        <ListItem style = {{paddingTop: 0, paddingBottom: 0}}>
+                            <ListItemText primary="Updated" secondary={
+                                <React.Fragment>
+                                    <Chip
+                                        color="primary"
+                                        label={this.dateWrapper(gauge.lastUpdated)}
+                                        style={{margin: "5px"}}
+                                    />
+                                </React.Fragment>
+                                } />
+                        </ListItem>
+                    </Grid>
+                    <Grid item xs={12} lg={3} justify="center">
+                    <ListItem style = {{paddingTop: 0, paddingBottom: 0}}>
+                        <ListItemText
+                            primary={
+                                    "Source"
+                            }
+                            secondary={
+                                <React.Fragment>
+                                    <Chip clickable
+                                    avatar={<Avatar><InfoOutlinedIcon style={{fontSize: "20px"}}/></Avatar>}
+                                    onClick={(): void => {this.openDataInfo(gauge.source); }}
+                                     label={gauge.source} style={{margin: "5px"}}/>
+                                </React.Fragment>
+                                }
+                        />
+                        </ListItem>
+                    </Grid>
+
                 </Grid>
             );
         }
@@ -84,7 +106,7 @@ class LatestData extends Component<ILatestDataProps> {
     public render(): JSX.Element {
         return (
             <div>
-                <ExpansionHead title={"Latest Data"} panelName={"latestData"}/>
+                {/* <ExpansionHead title={""} panelName={"latestData"}/> */}
                     {this.props.expansionPanels.latestData && this.getData()}
             </div>
         );

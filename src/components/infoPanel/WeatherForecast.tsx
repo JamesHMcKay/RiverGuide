@@ -119,7 +119,7 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
         if (forecast && forecast.maxTemp) {
             const temp: number = Math.round(forecast.maxTemp * 10) / 10;
             return (
-                <div className="weather-temp" style={{fontSize: "20px"}}>
+                <div className="weather-temp">
                     <span>
                         {temp} <span>&deg;C</span>
                     </span>
@@ -304,7 +304,7 @@ export class WeatherForecast extends React.Component<IWeatherForecastProps, IWea
     public getDetails = (): JSX.Element => {
         const sunRiseAndSet: ISunTimes = this.getSunRiseAndSet();
         return (
-            <div className="weather-details" style = {{right: 0}}>
+            <div className="weather-details" style = {{right: 0, marginLeft: "20px"}}>
                 <div className="sun-time">
                     <img src={sunrise} alt="" className="sunrise-icon"/>
                     {"Sunrise: " + sunRiseAndSet.sunrise}

@@ -1,4 +1,3 @@
-import { Typography } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -20,7 +19,7 @@ const _MS_PER_HOUR: number = 1000 * 60 * 60;
 const SHOW_ITEMS: IViewLogItem[] = [
     {key: "guide_name", title: "Section"},
     {key: "river_name", title: "River"},
-    {key: "description", title: "Description"},
+    {key: "description", title: "Comments"},
     // {key: "start_date_time", title: "Date"},
     {key: "participants", title: "Participants"},
     {key: "flow", title: "Flow"},
@@ -99,20 +98,20 @@ class TripDetailsView extends Component<ITripDetailsViewProps> {
                 <DialogContent>
                     {SHOW_ITEMS.map((item: IViewLogItem) => (
                         <div key={item.key}>
-                            <Typography variant="body1">
+                            <DialogContentText>
                                 {item.title}
-                            </Typography>
-                            <DialogContentText align = "center">
+                             </DialogContentText>
+                            <DialogContentText align = "left" color="textPrimary">
                                 {logEntry ? logEntry[item.key] : ""}
                             </DialogContentText>
                         </div>
                     ))
                     }
                         <div>
-                            <Typography variant="body1">
+                            <DialogContentText>
                                 {"Duration"}
-                            </Typography>
-                            <DialogContentText align = "center">
+                             </DialogContentText>
+                            <DialogContentText align = "left" color="textPrimary">
                                 {logEntry ? computeDuration(logEntry) : ""}
                             </DialogContentText>
                         </div>

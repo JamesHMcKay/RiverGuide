@@ -4,8 +4,8 @@ import { OPEN_MODAL, CLOSE_MODAL } from "../actions/types";
 //     openModal: false,
 // };
 
-const initialState = "protectedModal";
-//const initialState = false;
+//const initialState = "protectedModal";
+const initialState = false;
 
 export default (state = initialState, action) => {
     switch (action.type) {

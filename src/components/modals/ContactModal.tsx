@@ -1,6 +1,5 @@
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import withMobileDialog from "@material-ui/core/withMobileDialog";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -30,17 +29,16 @@ class ContactModal extends Component<IContactModalProps> {
                     open={this.props.isOpen}
                     fullScreen={this.props.fullScreen}
                     fullWidth={true}
-                    maxWidth={"sm"}
+                    maxWidth={"md"}
                 >
-                <DialogTitle handleClose={this.handleClose} title={"Contact Us"}/>
+                <DialogTitle handleClose={this.handleClose} title={"Feedback"}/>
                 <DialogContent>
-                    <DialogContentText>
-                    <p>
-                        {/* RiverGuide is developed and mainted by Environmental Insights New Zealand. */}
-                        If you have suggestions, feedback or would like to get in touch
-                        please send us a message and we will respond as soon as we can.
-                    </p>
-                    </DialogContentText>
+                    <div
+                        dangerouslySetInnerHTML={{
+// tslint:disable-next-line
+                            __html: '<iframe src="https://docs.google.com/forms/d/e/1FAIpQLScjBWEdKvHhQrHyMKk1mj1wiij9bwXuDvePTcYUmhETaW5vVA/viewform?embedded=true" width="100%" height="1570" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>',
+                        }}
+                    />
                    </DialogContent>
                 </Dialog>
             </div>

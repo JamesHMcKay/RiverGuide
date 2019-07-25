@@ -1,3 +1,4 @@
+import Chip from "@material-ui/core/Chip";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
@@ -51,9 +52,7 @@ class FlowBadge extends Component<IFlowBadgeProps> {
 
         if (flow) {
             return (
-                <div>
-                    {flow + " " + unitParser(units)}
-                </div>
+                <Chip label = {flow + " " + unitParser(units)}/>
             );
         } else {
             return null;

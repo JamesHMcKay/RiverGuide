@@ -2,10 +2,10 @@ import Button from "@material-ui/core/Button";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import TextField from "@material-ui/core/TextField";
+import Person from "@material-ui/icons/Person";
+import PersonAdd from "@material-ui/icons/PersonAdd";
+import Star from "@material-ui/icons/Star";
 import React, { Component } from "react";
-import IoAndroidAdd from "react-icons/lib/io/android-add";
-import IoAndroidPerson from "react-icons/lib/io/android-person";
-import IoAndroidStar from "react-icons/lib/io/android-star";
 import { connect } from "react-redux";
 import { createLogEntry, editLogEntry } from "../../actions/actions";
 import { IState } from "../../reducers/index";
@@ -181,7 +181,8 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
     }
 
     public getPersonList(): JSX.Element {
-        const keys: number[] = [0, 1, 2, 3, 4];
+        const size: number = window.innerWidth > 960 ? 40 : 30;
+        const keys: number[] = [0, 1, 2, 3];
         const listItems: JSX.Element[] = keys.map((key: number) =>
         <li key={key}
             style={{float: "left"}}>
@@ -192,8 +193,8 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                 onMouseDown={this.onSelectPeopleCount.bind(this, key)}
             >
             {key < this.state.peopleCount ?
-                <IoAndroidPerson size={40} className="person-button-hover"/> :
-                <IoAndroidPerson size={40} className="person-button"/>}
+                <Person style={{fontSize: size}} className="person-button-hover"/> :
+                <Person style={{fontSize: size}} className="person-button"/>}
             </span>
             </div>
         </li>,
@@ -208,8 +209,8 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                 onClick={this.addPerson.bind(this)}
             >
                 {this.state.peopleCount > keys.length ?
-                <IoAndroidAdd size={40} className="person-button-hover"/> :
-                <IoAndroidAdd size={40} className="person-button"/>}
+                <PersonAdd style={{fontSize: size}} className="person-button-hover"/> :
+                <PersonAdd style={{fontSize: size}} className="person-button"/>}
             </span>
             </div>
         </li>,
@@ -241,6 +242,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
     }
 
     public getRatingList(): JSX.Element {
+        const size: number = window.innerWidth > 960 ? 40 : 30;
         const keys: number[] = [0, 1, 2, 3, 4];
         const listItems: JSX.Element[] = keys.map((key: number) =>
         <li key={key}
@@ -252,8 +254,8 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                 onMouseDown={this.onSelectRating.bind(this, key)}
             >
             {key < this.state.rating ?
-                <IoAndroidStar size={40} className="person-button-hover"/> :
-                <IoAndroidStar size={40} className="person-button"/>}
+                <Star style={{fontSize: size}} className="person-button-hover"/> :
+                <Star style={{fontSize: size}} className="person-button"/>}
             </span>
             </div>
         </li>,
@@ -364,13 +366,13 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                 <DialogTitle handleClose={this.props.handleClose} title={"Add Trip to Logbook"}/>
                 <DialogContent>
                     {this.getSelectedSection()}
-                    <DialogContentText>
+                    <DialogContentText style={{paddingTop: "20px"}}>
                         {"Number of participants"}
                     </DialogContentText>
                     <div className="person-count" style={{justifyContent: "center"}}>
                         {this.getPersonList()}
                     </div>
-                    {this.state.peopleCount > 5 &&
+                    {this.state.peopleCount > 4 &&
                         <TextField
                             autoFocus
                             margin="dense"
@@ -378,6 +380,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                             type="number"
                             value={this.state.peopleCount}
                             onChange={(value: any): void => this.setState({peopleCount: value.target.value})}
+                            fullWidth
                         />
                         }
                     <div className="date-picker-container">
@@ -398,27 +401,17 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                     </MuiPickersUtilsProvider>
                     </div>
                     <DialogContentText>
-                        {"Rating"}
+                        {"Flow"}
                     </DialogContentText>
-                    <div className="person-count">
-                        {this.getRatingList()}
-                    </div>
-                    <DialogContentText>
-                        {"Comments"}
-                    </DialogContentText>
-                    <TextField
-                            autoFocus
-                            multiline
-                            variant="outlined"
-                            rowsMax="8"
-                            margin="dense"
-                            id="comments"
-                            type="text"
-                            value={this.state.logEntry.description}
-                            onChange={this.updateDescription}
-                            fullWidth={true}
-                    />
                     {(selectedGuide && this.state.date) &&
+                    <div
+                        style={{
+                            textAlign: "center",
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "center",
+                        }}
+                    >
                         <FlowReport
                             selectedGuide={selectedGuide}
                             handleChange={this.handleFlowChange}
@@ -427,8 +420,36 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                             gaugeHistoryFromInfoPage={this.props.gaugeHistory}
                             observables={this.state.logEntry.observables || {flow: 0}}
                         />
+                        </div>
                     }
-                    <div>
+                    <DialogContentText>
+                        {"Rating"}
+                    </DialogContentText>
+                    <div className="person-count" style={{justifyContent: "center"}}>
+                        {this.getRatingList()}
+                    </div>
+                    <DialogContentText>
+                        {"Comments"}
+                    </DialogContentText>
+                    <TextField
+                            multiline
+                            variant="outlined"
+                            rowsMax="8"
+                            rows="3"
+                            margin="dense"
+                            id="comments"
+                            type="text"
+                            value={this.state.logEntry.description}
+                            onChange={this.updateDescription}
+                            fullWidth={true}
+                    />
+                    <div style={{
+                            marginTop: "10px",
+                            textAlign: "center",
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "center",
+                        }}>
                         <ToggleButtonGroup value={this.getPublicValue()} exclusive onChange={this.handlePublicChange}>
                             <ToggleButton value="public">
                                 {"Public"}

@@ -41,11 +41,11 @@ const logTypes: string[] = [
 ];
 
 const columnOrder: Array<keyof ILogListItem> = [
-    "start_date_time",
     "username",
     "rating",
     "participants",
     "flow",
+    "start_date_time",
 ];
 
 const columnOrderMobile: Array<keyof ILogListItem> = [
@@ -364,7 +364,7 @@ class Info extends Component<IInfoProps, IInfoState> {
             justify="space-between"
             style={{
                 // height: "200px",
-                margin: "20px"}}>
+                margin: "20px 20px 0px 20px"}}>
             <Grid container item md={11} lg={11} justify="flex-start">
                     <div className="toolbar-middle">
                             <Typography variant="h2" style={{color: "black"}}>
@@ -376,15 +376,18 @@ class Info extends Component<IInfoProps, IInfoState> {
                             </Typography>
                     </div>
             </Grid>
-            <Grid
-                container
-                item
-                spacing={0}
-                style={{display: "flex", flexDirection: "row"}}
-            >
-                    {this.getMapButton()}
-                {(this.props.auth.isAuthenticated && !isData) && this.getReportButton("black")}
-            </Grid>
+            {!isData &&
+                        <Grid
+                        container
+                        item
+                        spacing={0}
+                        style={{display: "flex", flexDirection: "row"}}
+                    >
+                            {this.getMapButton()}
+                        {(this.props.auth.isAuthenticated) && this.getReportButton("black")}
+                    </Grid>
+            }
+
         </Grid>
         );
     }
@@ -474,8 +477,8 @@ class Info extends Component<IInfoProps, IInfoState> {
                     {this.getHeaderMobile(entry, isData)}
                 </Hidden>
                 {/* {isLogbookInfo && this.getLogbook()} */}
-                {!isLogbookInfo && this.getKeyFacts()}
                 {!isLogbookInfo && this.getFlowChart(entry)}
+                {!isLogbookInfo && this.getKeyFacts()}
                 {!isLogbookInfo && this.getDescription()}
                 {!isLogbookInfo && this.getMap(entry)}
                 {!isData && this.getLogbook()}

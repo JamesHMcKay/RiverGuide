@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 
 // Components
 import { IState } from "../../reducers/index";
+import FlowBadge from "../common/FlowBadge";
 import { IAuth, IFilter, IListEntry, IRiverRegion } from "./../../utils/types";
 import GuideItem from "./ListItem";
 
@@ -48,6 +49,22 @@ class ListGroup extends Component<IRiverGroupProps, IListGroupState> {
         ).filter((guide: IListEntry) => guide.river_name === riverRegion.river);
     }
 
+    public getFlow = (listEntries: IListEntry[]): JSX.Element | null => {
+        if (listEntries.length === 1) {
+            const guide: IListEntry = listEntries[0];
+            return (
+                <FlowBadge gaugeId={guide.gauge_id} observables={guide.observables} />
+            );
+        }
+        return (
+                    <Chip
+                        label={listEntries.length}
+                        variant="outlined"
+                        style={{ marginRight: "1em" }}
+                    />
+        );
+    }
+
     public renderListItem = (guide: IListEntry, idx: number): JSX.Element => <GuideItem key={idx} guide={guide} />;
 
     public sortAlphbetically = (a: IListEntry, b: IListEntry): number => {
@@ -70,12 +87,13 @@ class ListGroup extends Component<IRiverGroupProps, IListGroupState> {
                     <ListItemText
                         primary={this.props.riverRegion.river}
                         style={{ marginLeft: "2em" }}/>
-                    <Chip
+                    {this.getFlow(children)}
+                    {/* <Chip
                         label={children.length}
                         color="primary"
                         variant="outlined"
                         style={{ marginRight: "1em" }}
-                    />
+                    /> */}
                     {isExpanded ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
                 {/* <Divider /> */}

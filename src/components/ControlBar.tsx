@@ -23,9 +23,9 @@ export interface ITabCategory {
 }
 
 export const categories: ITabCategory[] = [
-    {name: "Data", route: "/data", id: "data"},
-    {name: "Activities", route: "/activities", id: "activities"},
-    {name: "Trips", route: "/trips", id: "trips"},
+    {name: "Guides", route: "/activities", id: "activities"},
+    {name: "River Flows", route: "/data", id: "data"},
+    {name: "My Trips", route: "/trips", id: "trips"},
 ];
 
 export const tabIds: string[] = categories.map((item: ITabCategory) => item.id);

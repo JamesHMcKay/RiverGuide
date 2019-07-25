@@ -32,7 +32,7 @@ export default class TimeSlider extends Component<ITimeSliderProps> {
     public render(): JSX.Element {
         const values: number[] = this.props.range;
         return (
-            <div style={{ height: 120, width: "100%" }}>
+            <div style={{ height: 40, width: "100%" }}>
               <Slider
                 mode={1}
                 step={1}

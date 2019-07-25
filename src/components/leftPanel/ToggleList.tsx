@@ -51,10 +51,10 @@ class ToggleList extends Component<IToggleListProps> {
                         onChange={this.handleToggle}
                         style = {{width: "100%"}}
                     >
-                        <ToggleButton value="list" style = {{width: "50%", minHeight: "25px"}}>
+                        <ToggleButton value="list" style = {{width: "50%", maxHeight: "35px"}}>
                         List view
                         </ToggleButton>
-                        <ToggleButton value="map" style = {{width: "50%", minHeight: "25px"}}>
+                        <ToggleButton value="map" style = {{width: "50%", maxHeight: "35px"}}>
                         Map view
                         </ToggleButton>
                     </ToggleButtonGroup>

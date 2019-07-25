@@ -36,12 +36,12 @@ class SectionSelect extends Component<ISectionSelectProps> {
 
     public render(): JSX.Element {
         return (
-            <FormGroup>
+            <FormGroup style={{paddingTop: "20px"}}>
                 <Select
                     menuPortalTarget={document.body}
                     styles={{ menuPortal: (base: any): void => ({ ...base, zIndex: 9999 }) }}
                     name="section"
-                    placeholder="Select a section"
+                    placeholder="Search for a location"
                     onChange={this.handleSelectionChange}
                     options={
                         this.props.guides.map((guide: IListEntry) => ({

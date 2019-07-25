@@ -43,12 +43,12 @@ function renderElement(input: any, key: keyof ILogListItem): React.ReactNode  {
 }
 
 const headRows: IHeadRow[] = [
-    { id: "start_date_time", numeric: false, disablePadding: false, label: "Date"},
-    { id: "guide_name", numeric: false, disablePadding: true, label: "Guide name" },
-    { id: "rating", numeric: true, disablePadding: false, label: "Rating" },
-    { id: "participants", numeric: true, disablePadding: false, label: "Participants" },
-    { id: "flow", numeric: true, disablePadding: false, label: "Flow"},
-    { id: "username", numeric: true, disablePadding: false, label: "User name"},
+    { id: "start_date_time", numeric: false, disablePadding: false, label: "Date", align: "right"},
+    { id: "guide_name", numeric: false, disablePadding: true, label: "Guide name", align: "left"},
+    { id: "rating", numeric: true, disablePadding: false, label: "Rating", align: "right"},
+    { id: "participants", numeric: true, disablePadding: false, label: "Participants", align: "right"},
+    { id: "flow", numeric: true, disablePadding: false, label: "Flow", align: "right"},
+    { id: "username", numeric: false, disablePadding: true, label: "User name", align: "left"},
 ];
 
 function EnhancedTableHead(props: IEnhancedTableProps): JSX.Element {
@@ -67,9 +67,9 @@ function EnhancedTableHead(props: IEnhancedTableProps): JSX.Element {
     );
 
     return (
-      <TableHead>
+      <TableHead style={{backgroundColor: "#1e87e5", color: "white"}}>
           <TableRow>
-              <TableCell padding="checkbox">
+              <TableCell padding="checkbox" style={{color: "white"}}>
                 {!props.publicPage &&
                   <Checkbox
                       indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -79,15 +79,17 @@ function EnhancedTableHead(props: IEnhancedTableProps): JSX.Element {
               </TableCell>
               {headerRowsOrdered.map((row: IHeadRow) => (
               <TableCell
+                  style={{color: "white"}}
                   key={row.id}
-                  align={row.numeric ? "right" : "left"}
+                  align={row.align}
                   padding={row.disablePadding ? "none" : "default"}
                   sortDirection={orderBy === row.id ? order : false}
               >
                   <TableSortLabel
-                  active={orderBy === row.id}
-                  direction={order}
-                  onClick={createSortHandler(row.id)}
+                    style={{color: "white"}}
+                    active={orderBy === row.id}
+                    direction={order}
+                    onClick={createSortHandler(row.id)}
                   >
                   {row.label}
                   </TableSortLabel>
@@ -136,6 +138,7 @@ interface IHeadRow {
     id: keyof ILogListItem;
     label: string;
     numeric: boolean;
+    align: "left" | "right";
   }
 
 interface ILogBookProps extends ILogBookStateProps {

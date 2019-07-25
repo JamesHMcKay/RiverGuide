@@ -52,7 +52,7 @@ const NO_AUTH_MODALS: IMenuItem[] = [
 
 const MODALS: IMenuItem[] = [
     {name: "Data for good", route: "", modal: "aboutModal"},
-    {name: "Contact", route: "", modal: "contactModal"},
+    {name: "Feedback", route: "", modal: "contactModal"},
 ];
 
 interface INavBarProps {
@@ -262,15 +262,17 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                     >
                         {"Logout"}
                     </MenuItem>
-                    <MenuItem
-                        key={"addGuide"}
-                        onClick={(event: any): void => {
-                            this.openModal("addGuideModal");
-                            this.setState({ anchorEl: null });
-                        }}
-                    >
-                        {"Add guide"}
-                    </MenuItem>
+                    {this.props.auth.user.role === "riverguide_editor" &&
+                        <MenuItem
+                            key={"addGuide"}
+                            onClick={(event: any): void => {
+                                this.openModal("addGuideModal");
+                                this.setState({ anchorEl: null });
+                            }}
+                        >
+                            {"Add guide"}
+                        </MenuItem>
+                    }
                 </Menu>
             </div>
         );

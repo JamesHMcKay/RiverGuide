@@ -79,7 +79,6 @@ class ListGroup extends Component<IListGroupProps, IListGroupState> {
                     <ListItemText primary={this.props.region} />
                     <Chip
                         label={children.length}
-                        color="primary"
                         variant="outlined"
                         style={{ marginRight: "1em" }}
                     />

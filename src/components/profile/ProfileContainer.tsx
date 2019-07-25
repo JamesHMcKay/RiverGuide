@@ -57,6 +57,16 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
         };
     }
 
+    public getFilteredList = (): IListEntry[] => {
+        const guideIdWithEntry: string[] = this.props.log.map(
+            (item: ILogComplete) => item.guide_id,
+        ).filter(this.onlyUnique);
+        const hasLogEntry: IListEntry[] = this.props.filterdGuides.filter(
+            (item: IListEntry) => guideIdWithEntry.indexOf(item.id) >= 0,
+        );
+        return hasLogEntry;
+    }
+
     public componentDidMount(): void {
         this.props.makeLogbookRequest(this.props.auth.user.id);
     }
@@ -85,16 +95,16 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
         );
     }
 
-    public getMapPage = (viewHeight: string): JSX.Element => {
+    public getMapPage = (viewHeight: string, filteredListEntries: IListEntry[]): JSX.Element => {
         return (
                 <MapComponent
                     ref={this.state.mapRef}
-                    guides={this.props.listEntries}
+                    guides={filteredListEntries}
                     filteredGuides={
-                        this.props.filterdGuides ||
+                        filteredListEntries ||
                         this.props.listEntries
                     }
-                    listEntries={this.props.listEntries}
+                    listEntries={filteredListEntries}
                     onClick={this.onClick}
                     setMapBounds={this.updateMapBounds}
                     viewHeight={viewHeight}
@@ -106,14 +116,14 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
         return self.indexOf(value) === index;
     }
 
-    public getleftPanel = (): JSX.Element => {
+    public getleftPanel = (filteredListEntries: IListEntry[]): JSX.Element => {
         return (
             <div className="left-panel">
                 <LeftPanel
                     gaugeList={this.props.gauges}
                     gauges={this.props.gauges}
                     onClick={this.onClick}
-                    filteredList={this.props.filterdGuides}
+                    filteredList={filteredListEntries}
                     specialItem={<ListItemSpecial/>}
                 />
             </div>
@@ -121,23 +131,25 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
     }
 
     public render(): JSX.Element {
+        const filteredListEntries: IListEntry[] = this.getFilteredList();
         const infoOpen: boolean = this.props.infoPage.infoSelected || this.props.logPageOpen;
         return (
             <Grid container spacing={0} className="panel-container">
-            <Hidden smDown>
-                <Grid item sm={4}>
-                    {this.getleftPanel()}
-                </Grid>
-                <Grid item sm={8}>
-                    {infoOpen ?
-                        this.getInfoPage(CONTENT_HEIGHT) : this.getMapPage(CONTENT_HEIGHT)}
-                </Grid>
-            </Hidden>
-            <Hidden mdUp>
-                {infoOpen ? this.getInfoPage("72vh") :
-                    this.props.searchPanel === "list" ?
-                    this.getleftPanel() : this.getMapPage(CONTENT_HEIGHT_MOBILE)}
-            </Hidden>
+                <Hidden smDown>
+                    <Grid item sm={4}>
+                        {this.getleftPanel(filteredListEntries)}
+                    </Grid>
+                    <Grid item sm={8}>
+                        {infoOpen ?
+                            this.getInfoPage(CONTENT_HEIGHT) : this.getMapPage(CONTENT_HEIGHT, filteredListEntries)}
+                    </Grid>
+                </Hidden>
+                <Hidden mdUp>
+                    {infoOpen ? this.getInfoPage("72vh") :
+                        this.props.searchPanel === "list" ?
+                        this.getleftPanel(filteredListEntries) :
+                            this.getMapPage(CONTENT_HEIGHT_MOBILE, filteredListEntries)}
+                </Hidden>
             </Grid>
         );
     }

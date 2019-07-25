@@ -26,13 +26,14 @@ class GuideItem extends Component<IGuideItemProps, {}> {
     }
 
     public render(): JSX.Element {
+        const title: string = this.props.auth.isAuthenticated ? "My Trips" : "Log in to see your trips here";
         return (
             <div>
                 <ListItem button disabled={!this.props.auth.isAuthenticated} onClick={this.handleClick}>
                     <ListItemIcon style = {{marginLeft: "0em"}}>
                         <ListIcon />
                     </ListItemIcon>
-                    <ListItemText primary={"My Trips"} />
+                    <ListItemText primary={title} />
                 </ListItem>
                 <Divider />
             </div>

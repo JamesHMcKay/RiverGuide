@@ -102,7 +102,7 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
 
         return (
             <div className="list-container">
-                {isLoading || noResults ? this.loadingOrEmpty(noResults) : renderedList}
+                {isLoading || (noResults && !this.props.specialItem) ? this.loadingOrEmpty(noResults) : renderedList}
             </div>
         );
     }
