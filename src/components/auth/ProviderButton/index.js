@@ -26,6 +26,7 @@ function ProviderButton(props) {
   const { classes } = props;
   return (
     <Button
+      disabled
       style = {{height: "40px"}}
       className = {classes[props.social]}
       type={props.type || "button"}
