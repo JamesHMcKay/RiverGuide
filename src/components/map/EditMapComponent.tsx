@@ -14,6 +14,7 @@ import { DEFAULT_VIEW_PORT } from "./InfoMapComponent";
 import { DEFAULT_LAT, DEFAULT_LON, DEFAULT_ZOOM } from "./MapComponent";
 import MapMarker from "./MapMarker";
 import MarkerModal from "./MarkerModal";
+import TileSelector from "./TileSelector";
 
 const TOKEN: string =
     "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqd29oc2hzdjF3YnM0Ym4wa3o4azFhd2MifQ.dqrE-W1cXNGKpV5FGPZFww";
@@ -53,6 +54,7 @@ interface IEditMapState {
         long: number,
         id: string;
     };
+    tile: string;
 }
 
 export default class EditMapComponent extends Component<IEditMapProps, IEditMapState> {
@@ -76,6 +78,7 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
                 long: 0,
                 id: "",
             },
+            tile: "mapbox://styles/mapbox/satellite-v9",
         };
     }
 
@@ -308,6 +311,12 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
         return viewport;
     }
 
+    public onTileChange = (tile: string): void => {
+        this.setState({
+            tile,
+        });
+    }
+
     public render(): JSX.Element {
         const viewport: IViewport = this.state.viewport;
         const {newMarker: {name, category, description}} = this.state;
@@ -317,7 +326,7 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
                 <ReactMapGL
                     width="100%"
                     height="100%"
-                    mapStyle="mapbox://styles/mapbox/outdoors-v9"
+                    mapStyle={this.state.tile}
                     {...viewport}
                     onViewportChange={(viewport: IViewport): void => this.setViewportNav(viewport)}
                     mapboxApiAccessToken={TOKEN}
@@ -340,11 +349,13 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
                 <div style={{position: "absolute", right: 5}}>
                     <NavigationControl onViewportChange={(): null => null}  onViewStateChange={(): null => null}  />
                 </div>
+                <div style={{position: "absolute", left: 10, top: 10}}>
+                    <TileSelector
+                        tile={this.state.tile}
+                        onTileChange={this.onTileChange}
+                    />
+                </div>
                 </ReactMapGL>
-                {/* <div className="info-map-buttons">
-                     {this.editButton(editColor)}
-                </div> */}
-                {/* Marker dialog */}
                 <div>
                 <MarkerModal
                     handleClose={this.handleClose}

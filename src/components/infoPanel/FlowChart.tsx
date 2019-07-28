@@ -108,12 +108,10 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         const dateAxis: Am4charts.DateAxis = chart.xAxes.push(new Am4charts.DateAxis());
         // dateAxis.renderer.grid.template.location = 0.5;
         // dateAxis.renderer.minGridDistance = 50;
-        dateAxis.baseInterval = {
-            timeUnit: "minute",
-            count: 1,
-        };
-        // dateAxis.renderer.cellStartLocation = 0.0;
-        // dateAxis.renderer.cellEndLocation = 1.0;
+        // dateAxis.baseInterval = {
+        //     timeUnit: "hour",
+        //     count: 1,
+        // };
 
         const valueAxis: Am4charts.ValueAxis = chart.yAxes.push(new Am4charts.ValueAxis());
         if (valueAxis.tooltip) {
@@ -128,6 +126,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         series.dataFields.valueY = "value";
         series.strokeWidth = 3;
         series.fillOpacity = 0.0;
+        series.showOnInit = false;
 
         dateAxis.tooltipDateFormat = "dd MMM yyyy hh:mma";
         series.tooltipText = "{valueY.value}";
@@ -239,7 +238,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
                         input={<OutlinedInput labelWidth={0} name="age" id="outlined-age-simple" />}
                     >
                         {observables.map((item: IObservable) =>
-                        <MenuItem value={item.type}>{dataTypeParser(item.type)}</MenuItem>)
+                        <MenuItem key={item.type} value={item.type}>{dataTypeParser(item.type)}</MenuItem>)
                         }
                     </Select>
         </FormControl>
@@ -260,12 +259,11 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         const observables: IObservable[] | undefined = this.getObservables();
         if (observables) {
             const result: JSX.Element[] = observables.map((item: IObservable) =>
-                <Hidden smDown>
+                <Hidden smDown key={item.type}>
                     <Button
                         style = {{marginLeft: "10px", height: "40px"}}
                         variant={this.getButtonVariant(item.type)}
                         // color={this.getButtonColor(item.type)}
-                        key={item.type}
                         onClick = {(): void => this.selectTypeClick(item.type)}
                     >
                         {dataTypeParser(item.type)}
@@ -273,7 +271,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
                 </Hidden>,
             );
             result.push(
-                <Hidden mdUp>
+                <Hidden mdUp key={"formSelect"}>
                     {this.getFormSelect()}
                 </Hidden>,
             );

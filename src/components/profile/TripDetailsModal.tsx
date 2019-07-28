@@ -435,7 +435,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                             multiline
                             variant="outlined"
                             rowsMax="8"
-                            rows="3"
+                            rows="2"
                             margin="dense"
                             id="comments"
                             type="text"

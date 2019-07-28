@@ -1,5 +1,6 @@
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
+import ReactGA from 'react-ga';
 
 import {
     CLEAR_ERRORS,
@@ -31,7 +32,7 @@ export const registerUser = (userData) => dispatch => {
         const userObject = parseUserObject(response.data.user);
         dispatch(setCurrentUser(userObject));
         dispatch(getUserDetails(userObject.id));
-
+        ReactGA.set({userId: userObject.id});
         dispatch({
             type: CLOSE_MODAL,
             payload: "registerModal",
@@ -63,7 +64,7 @@ export const loginUser = userData => dispatch => {
         setAuthToken(response.data.jwt);
         const userObject = parseUserObject(response.data.user);
         dispatch(setCurrentUser(userObject));
-        dispatch(getUserDetails(userObject.id));
+        ReactGA.set({userId: userObject.id});
         dispatch({
             type: CLOSE_MODAL,
             payload: "loginModal",
@@ -196,6 +197,7 @@ export const providerLogin = (action, history) => dispatch => {
         setAuthToken(response.data.jwt);
         const userObject = parseUserObject(response.data.user);
         dispatch(setCurrentUser(userObject));
+        ReactGA.set({userId: userObject.id});
         // dispatch(getUserDetails(userObject.id));
         dispatch({
             type: CLOSE_MODAL,

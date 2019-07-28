@@ -1,20 +1,18 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import InsertChartOutlinedRoundedIcon from "@material-ui/icons/InsertChartOutlinedRounded";
 import RateReviewOutlinedIcon from "@material-ui/icons/RateReviewOutlined";
-import { CancelTokenSource } from "axios";
 import axios from "axios";
+import { CancelTokenSource } from "axios";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import {
     closeInfoPage,
     setTabIndex,
 } from "../../actions/actions";
 import { setCategory } from "../../actions/getGuides";
-
 import { IState } from "../../reducers";
 import { IFilter, IMapBounds } from "../../utils/types";
 import { categories, ITabCategory, tabIds } from "../ControlBar";
@@ -73,25 +71,26 @@ class BottomNav extends Component<IBottomNavProps, IBottomNavState> {
     public render(): JSX.Element {
         return (
             <div style={{width: "100%", marginTop: "auto"}}>
-            <ToggleList/>
-            <BottomNavigation
-                value={tabIds.indexOf(this.props.index)}
-                showLabels
-                style={{width: "100%", minHeight: "60px", marginTop: "auto"}}
-             >
-                 {categories.map((item: ITabCategory) => (
-                     <BottomNavigationAction
-                        component={Link}
-                        label={item.name}
-                        icon={ICONS.filter(
-                            (icon: {id: string, icon: JSX.Element}) => icon.id === item.id,
-                            )[0].icon}
-                        to={item.route}
-                        onClick={(event: any): void => this.handleSelect(event, item.id)}
-                    />
-                 ))}
-          </BottomNavigation>
-          </div>
+                <ToggleList/>
+                <BottomNavigation
+                    value={tabIds.indexOf(this.props.index)}
+                    showLabels
+                    style={{width: "100%", minHeight: "60px", marginTop: "auto"}}
+                >
+                    {categories.map((item: ITabCategory) => (
+                        <BottomNavigationAction
+                            key={item.name}
+                            component={Link}
+                            label={item.name}
+                            icon={ICONS.filter(
+                                (icon: {id: string, icon: JSX.Element}) => icon.id === item.id,
+                                )[0].icon}
+                            to={item.route}
+                            onClick={(event: any): void => this.handleSelect(event, item.id)}
+                        />
+                    ))}
+                </BottomNavigation>
+            </div>
         );
     }
 }

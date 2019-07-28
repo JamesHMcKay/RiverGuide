@@ -53,8 +53,6 @@ export const makeGuideRequest = () => dispatch => {
     });
 };
 
-
-
 export const setCategory = (category, filters, mapBounds, cancelToken) => dispatch => {
     dispatch({ type: CLEAR_ERRORS });
     dispatch({
@@ -98,8 +96,6 @@ export const setCategory = (category, filters, mapBounds, cancelToken) => dispat
                         mapBounds,
                     },
                 });
-
-
             }).catch(error => {
                 dispatch({
                     type: GET_ERRORS,

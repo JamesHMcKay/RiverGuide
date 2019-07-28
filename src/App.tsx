@@ -1,10 +1,11 @@
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import jwt_decode from "jwt-decode";
 import React, { Component } from "react";
+import ReactGA from "react-ga";
 import { Provider } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { addToRecents } from "./actions/actions";
-import { getUserDetails, logoutUser, setCurrentUser } from "./actions/getAuth";
+import { logoutUser, setCurrentUser } from "./actions/getAuth";
 import "./App.css";
 import configureStore from "./store";
 import setAuthToken from "./utils/setAuthToken";
@@ -35,6 +36,8 @@ const store: any = configureStore({}, history);
 
 axios.defaults.timeout = 10000;
 
+ReactGA.initialize("UA-144174370-1");
+
 // Check for token
 if (localStorage.jwtToken) {
     // Set auth token header auth
@@ -44,7 +47,7 @@ if (localStorage.jwtToken) {
     if (localStorage.user) {
         const user: IUser = JSON.parse(localStorage.user);
         store.dispatch(setCurrentUser(user));
-        store.dispatch(getUserDetails(user.id));
+        ReactGA.set({userId: user.id});
         setAuthToken(localStorage.jwtToken);
     }
 
@@ -63,6 +66,8 @@ if (localStorage.jwtToken) {
 if (localStorage.recentItems) {
     store.dispatch(addToRecents(JSON.parse(localStorage.recentItems)));
 }
+
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 weather.setAPPID("521cea2fce8675d0fe0678216dc01d5c");
 weather.setLang("en");

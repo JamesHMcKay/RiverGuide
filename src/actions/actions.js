@@ -1,4 +1,5 @@
 import axios from "axios";
+import ReactGA from 'react-ga';
 
 import {
     CLEAR_ERRORS,
@@ -39,6 +40,11 @@ export const setTabIndex = index => dispatch => {
 // Toggle Modals
 export const toggleModal = modal => dispatch => {
     if (modal) {
+        ReactGA.event({
+            category: 'Navigation',
+            action: 'Modal',
+            label: modal
+        });
         dispatch({
             type: OPEN_MODAL,
             payload: modal,

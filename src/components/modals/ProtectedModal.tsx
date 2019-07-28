@@ -52,10 +52,8 @@ class ContactModal extends Component<IProtectedModalProps, IProtectedModalState>
                 <DialogTitle handleClose={this.handleClose} title={"Welcome to the RiverGuide"}/>
                 <DialogContent>
                     <DialogContentText>
-                    <p>
                         The RiverGuide is under development.
                         If you have been given a password enter it below.
-                    </p>
                     </DialogContentText>
                     <TextField
                             fullWidth

@@ -4,6 +4,7 @@ import Hidden from "@material-ui/core/Hidden";
 import { CancelTokenSource } from "axios";
 import axios from "axios";
 import React, { Component } from "react";
+import ReactGA from "react-ga";
 import { connect } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
 import {
@@ -57,7 +58,6 @@ interface IControlBarState {
 class ControlBar extends Component<IControlBarProps, IControlBarState> {
     constructor(props: IControlBarProps) {
         super(props);
-
         const index: number = categories.map((item: ITabCategory) => item.route).indexOf(this.props.location.pathname);
         let defaultIndex: number = 1;
         if (index >= 0) {
@@ -72,13 +72,12 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
         };
     }
 
-    // public componentDidMount(): void {
-    //     if (this.props.index) {
-    //         this.props.setCategory(this.props.index, this.state.cancelToken);
-    //     }
-    // }
-
     public handleSelect = (event: any, categoryId: string): void => {
+        ReactGA.event({
+            category: "Navigation",
+            action: "Tab",
+            label: categoryId,
+        });
         this.props.setTabIndex(categoryId);
         this.state.cancelToken.cancel();
         const newToken: CancelTokenSource = axios.CancelToken.source();

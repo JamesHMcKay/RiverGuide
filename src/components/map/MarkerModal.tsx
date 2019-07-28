@@ -6,7 +6,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import React, { Component } from "react";
 
 const categoryList: string[] = ["Put In", "Take out", "Carpark", "Track",
-    "Rapid", "Play", "Feature", "Waterfall", "Hazard", "Portage"].sort();
+    "Rapid", "Play", "Feature", "Waterfall", "Hazard", "Portage", "Other"].sort();
 
 interface IMarkerModalProps {
     handleClose: () => void;
@@ -41,17 +41,7 @@ export default class MarkerModal extends Component<IMarkerModalProps> {
                             Please provide marker details
                         </DialogTitle>
                         <DialogContent>
-                            <TextField
-                                fullWidth
-                                label="Name*"
-                                variant="outlined"
-                                margin="dense"
-                                value={this.props.name}
-                                onChange={this.props.handleChange("name")}
-                                autoFocus
-                            />
-                            <br />
-                            <TextField
+                        <TextField
                                 select
                                 label="Category*"
                                 value={this.props.category}
@@ -64,6 +54,16 @@ export default class MarkerModal extends Component<IMarkerModalProps> {
                                     <MenuItem key={category} value={category}>{category}</MenuItem>,
                                 )}
                             </TextField>
+                            <br />
+                            <TextField
+                                fullWidth
+                                label="Name"
+                                variant="outlined"
+                                margin="dense"
+                                value={this.props.name}
+                                onChange={this.props.handleChange("name")}
+                                autoFocus
+                            />
                             <TextField
                                 label="Description"
                                 multiline
@@ -77,9 +77,8 @@ export default class MarkerModal extends Component<IMarkerModalProps> {
                         </DialogContent>
                         <DialogActions>
                             <Button
-                                disabled={!this.props.name || !this.props.category }
+                                disabled={!this.props.category }
                                 onClick={this.props.handleSave}
-                                color="secondary"
                             >
                                 Save
                             </Button>

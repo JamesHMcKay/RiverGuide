@@ -301,25 +301,24 @@ class Info extends Component<IInfoProps, IInfoState> {
         const visible: boolean = this.props.expansionPanels.logBook;
         return (
             <Grid
-            item
-            md={12}
-            lg={12}
-            justify="space-between"
-            style={{marginRight: "5%", marginLeft: "5%",  marginTop: "2%", marginBottom: "2%", width: "100%"}}
-        >
-            <div>
-            <ExpansionHead title={"Log book"} panelName={"logBook"}/>
-            {visible && <div className="flow-chart-buttons">
-                    {this.getButtons()}
-                </div>}
-                {visible && <div><Hidden smDown>
-                <Logbook log={this.getLogBookEntries()} columnOrder={columnOrder} publicPage={true}/>
-            </Hidden>
-                <Hidden mdUp>
-                <Logbook log={this.getLogBookEntries()} columnOrder={columnOrderMobile} publicPage={true}/>
-            </Hidden></div>}
-            </div>
-        </Grid>
+                item
+                md={12}
+                lg={12}
+                style={{marginRight: "5%", marginLeft: "5%",  marginTop: "2%", marginBottom: "2%", width: "100%"}}
+            >
+                <div>
+                <ExpansionHead title={"Log book"} panelName={"logBook"}/>
+                {visible && <div className="flow-chart-buttons">
+                        {this.getButtons()}
+                    </div>}
+                    {visible && <div><Hidden smDown>
+                    <Logbook log={this.getLogBookEntries()} columnOrder={columnOrder} publicPage={true}/>
+                </Hidden>
+                    <Hidden mdUp>
+                    <Logbook log={this.getLogBookEntries()} columnOrder={columnOrderMobile} publicPage={true}/>
+                </Hidden></div>}
+                </div>
+            </Grid>
         );
     }
 
@@ -358,13 +357,13 @@ class Info extends Component<IInfoProps, IInfoState> {
     public getHeaderMobile = (entry: IListEntry, isData: boolean): JSX.Element => {
         return (
             <Grid
-            container
-            xs={12}
-            spacing={1}
-            justify="space-between"
-            style={{
-                // height: "200px",
-                margin: "20px 20px 0px 20px"}}>
+                container
+                spacing={1}
+                justify="space-between"
+                style={{
+                    margin: "20px 20px 0px 20px",
+                }}
+            >
             <Grid container item md={11} lg={11} justify="flex-start">
                     <div className="toolbar-middle">
                             <Typography variant="h2" style={{color: "black"}}>

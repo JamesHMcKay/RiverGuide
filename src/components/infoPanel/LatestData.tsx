@@ -47,57 +47,54 @@ class LatestData extends Component<ILatestDataProps> {
             return (
                 <Grid container spacing={0} justify="flex-start">
                     {gauge.observables.map((item: IObservable) =>
-                        <Grid item xs={6} lg={3} justify="center">
-                        <ListItem style = {{paddingTop: 0, paddingBottom: 0}}>
-                            <ListItemText
-                                style = {{padding: 0}}
-                                primary={dataTypeParser(item.type)}
-                                secondary={
-                                    <React.Fragment>
-                                        <Chip
-                                            style={{margin: "5px"}}
-                                            color="primary"
-                                            label={
-                                                item.latest_value.toFixed(1) + " " + unitParser(item.units)
-                                            }
-                                        />
-                                    </React.Fragment>
-                                }
-                            />
-                        </ListItem>
-                    </Grid>,
+                        <Grid item xs={6} lg={3} key={item.type}>
+                            <ListItem style = {{
+                                    paddingTop: 0,
+                                    paddingBottom: "20px",
+                                    flexDirection: "column",
+                                    display: "block",
+                                }}>
+                                <ListItemText
+                                    style = {{padding: 0}}
+                                    primary={dataTypeParser(item.type)}
+                                />
+                                <Chip
+                                    style={{margin: "5px"}}
+                                    color="primary"
+                                    label={
+                                        item.latest_value.toFixed(1) + " " + unitParser(item.units)
+                                    }/>
+                            </ListItem>
+                        </Grid>,
                     )}
-                    <Grid item xs={12} lg={3} justify="center">
-                        <ListItem style = {{paddingTop: 0, paddingBottom: 0}}>
-                            <ListItemText primary="Updated" secondary={
-                                <React.Fragment>
-                                    <Chip
+                    <Grid item xs={12} lg={3}>
+                        <ListItem style = {{
+                            paddingTop: 0,
+                            paddingBottom: "20px",
+                            flexDirection: "column",
+                            display: "block",
+                        }}>
+                            <ListItemText primary="Updated"/>
+                            <Chip
                                         color="primary"
                                         label={this.dateWrapper(gauge.lastUpdated)}
                                         style={{margin: "5px"}}
                                     />
-                                </React.Fragment>
-                                } />
                         </ListItem>
                     </Grid>
-                    <Grid item xs={12} lg={3} justify="center">
-                    <ListItem style = {{paddingTop: 0, paddingBottom: 0}}>
+                    <Grid item xs={12} lg={3}>
+                    <ListItem style={{paddingTop: 0, paddingBottom: "20px", flexDirection: "column", display: "block"}}>
                         <ListItemText
                             primary={
                                     "Source"
                             }
-                            secondary={
-                                <React.Fragment>
-                                    <Chip clickable
+                        />
+                        <Chip clickable
                                     avatar={<Avatar><InfoOutlinedIcon style={{fontSize: "20px"}}/></Avatar>}
                                     onClick={(): void => {this.openDataInfo(gauge.source); }}
                                      label={gauge.source} style={{margin: "5px"}}/>
-                                </React.Fragment>
-                                }
-                        />
                         </ListItem>
                     </Grid>
-
                 </Grid>
             );
         }
