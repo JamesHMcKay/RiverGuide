@@ -19,8 +19,8 @@ import { categories, ITabCategory, tabIds } from "../ControlBar";
 import ToggleList from "./ToggleList";
 
 const ICONS: Array<{id: string, icon: JSX.Element} > = [
-    {id: "data", icon: <InsertChartOutlinedRoundedIcon />},
-    {id: "activities", icon: <InfoOutlinedIcon />},
+    {id: "riverflow", icon: <InsertChartOutlinedRoundedIcon />},
+    {id: "guides", icon: <InfoOutlinedIcon />},
     {id: "trips", icon: <RateReviewOutlinedIcon />},
 ];
 

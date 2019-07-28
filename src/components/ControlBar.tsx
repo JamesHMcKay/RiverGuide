@@ -11,8 +11,8 @@ import {
     closeInfoPage,
     setTabIndex,
 } from "../actions/actions";
-import { setCategory } from "../actions/getGuides";
-import { IAuth, IFilter, IMapBounds } from "./../utils/types";
+import { openInfoPage, setCategory } from "../actions/getGuides";
+import { IAuth, IFilter, IListEntry, IMapBounds } from "./../utils/types";
 
 import { IState } from "../reducers/index";
 import SearchBox from "./common/SearchBox";
@@ -24,8 +24,8 @@ export interface ITabCategory {
 }
 
 export const categories: ITabCategory[] = [
-    {name: "Guides", route: "/activities", id: "activities"},
-    {name: "River Flows", route: "/data", id: "data"},
+    {name: "Guides", route: "/guides", id: "guides"},
+    {name: "River Flows", route: "/riverflow", id: "riverflow"},
     {name: "My Trips", route: "/trips", id: "trips"},
 ];
 
@@ -35,18 +35,19 @@ interface IControlBarProps extends IControlBarStateToProps {
     setCategory: (
         value: string,
         filter: IFilter,
-        mapBounds: IMapBounds,
-        token: CancelTokenSource) => void;
+        mapBounds: IMapBounds | null,
+        token: CancelTokenSource,
+        guideId?: string) => void;
     location: any;
     closeInfoPage: () => void;
     setTabIndex: (index: string) => void;
+    openInfoPage: (guide: IListEntry) => void;
 }
 
 interface IControlBarStateToProps {
     openModal: string;
     auth: IAuth;
     index: string;
-    mapBounds: IMapBounds;
     filters: IFilter;
 }
 
@@ -58,14 +59,28 @@ interface IControlBarState {
 class ControlBar extends Component<IControlBarProps, IControlBarState> {
     constructor(props: IControlBarProps) {
         super(props);
-        const index: number = categories.map((item: ITabCategory) => item.route).indexOf(this.props.location.pathname);
+        const path: string[] = this.props.location.pathname.split("/");
+        const tabIndex: string = path.length > 1 ? path[1] : "";
+        const index: number = categories.map((item: ITabCategory) => item.id).indexOf(tabIndex);
+        let guideId: string | undefined;
+        if (path.length > 4) {
+            // this.props.openInfoPage({
+            //     id: path[4],
+            //     display_name: path[3],
+            //     region: "",
+            //     position: {lat: 0, lon: 0},
+            //     activity: path[2]
+            // });
+            guideId = path[4];
+        }
+
         let defaultIndex: number = 1;
         if (index >= 0) {
             defaultIndex = index;
         }
         this.props.setTabIndex(categories[defaultIndex].id);
         const cancelToken: CancelTokenSource = axios.CancelToken.source();
-        this.props.setCategory(categories[defaultIndex].id, this.props.filters, this.props.mapBounds, cancelToken);
+        this.props.setCategory(categories[defaultIndex].id, this.props.filters, null, cancelToken, guideId);
         this.state = {
             anchorEl: null,
             cancelToken,
@@ -85,10 +100,10 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
             cancelToken: newToken,
         });
         if (categoryId === "trips") {
-            this.props.setCategory("activities", this.props.filters, this.props.mapBounds, newToken);
+            this.props.setCategory("activities", this.props.filters, null, newToken);
             this.props.closeInfoPage();
         } else {
-            this.props.setCategory(categoryId, this.props.filters, this.props.mapBounds, newToken);
+            this.props.setCategory(categoryId, this.props.filters, null, newToken);
         }
 
         this.handleClose();
@@ -143,11 +158,10 @@ const mapStateToProps: (state: IState) => IControlBarStateToProps = (state: ISta
     openModal: state.openModal,
     auth: state.auth,
     index: state.tabIndex,
-    mapBounds: state.mapBounds,
     filters: state.filters,
 });
 
 export default connect(
     mapStateToProps,
-    { setCategory, closeInfoPage, setTabIndex },
+    { setCategory, closeInfoPage, setTabIndex, openInfoPage },
 )(ControlBar);

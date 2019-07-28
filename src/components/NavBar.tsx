@@ -37,7 +37,7 @@ export interface IMenuItem {
 }
 
 const userMenuItems: IMenuItem[] = [
-    { name: "My profile", route: "profile" },
+    { name: "My profile", route: "/profile" },
 ];
 
 const AUTH_MODALS: IMenuItem[] = [

@@ -53,7 +53,7 @@ export const makeGuideRequest = () => dispatch => {
     });
 };
 
-export const setCategory = (category, filters, mapBounds, cancelToken) => dispatch => {
+export const setCategory = (category, filters, mapBounds, cancelToken, guideId) => dispatch => {
     dispatch({ type: CLEAR_ERRORS });
     dispatch({
         type: LOADING_ENTRIES,
@@ -62,7 +62,7 @@ export const setCategory = (category, filters, mapBounds, cancelToken) => dispat
         type: CLOSE_INFO,
     });
 
-    if (category === "data") {
+    if (category === "riverflow") {
         dispatch(makeGuideRequest());
         const request = {
             action: "get_features",
@@ -84,6 +84,10 @@ export const setCategory = (category, filters, mapBounds, cancelToken) => dispat
                         river_name: item.river_name,
                         activity: "data",
                     }));
+                if (guideId) {
+                    const selectedGuide = result.filter(item => item.id === guideId);
+                    selectedGuide.length > 0 && dispatch(openInfoPage(selectedGuide[0]));
+                }
                 dispatch({
                     type: GET_ENTRIES,
                     payload: result,
@@ -123,6 +127,11 @@ export const setCategory = (category, filters, mapBounds, cancelToken) => dispat
                     gauge_id: item.gauge_id,
                     activity: item.activity,
                 }));
+
+            if (guideId) {
+                const selectedGuide = result.filter(item => item.id === guideId);
+                selectedGuide.length > 0 && dispatch(openInfoPage(selectedGuide[0]));
+            }
             dispatch({
                 type: GET_ENTRIES,
                 payload: result,
@@ -192,11 +201,11 @@ export const openInfoPage = guide => dispatch => {
             infoSelected: true,
         },
     });
-    if (guide.activity === "data") {
+    if (guide.activity === "riverflow") {
 
     } else {
         let guideId = guide.id;
-        let query = "{guide(id:\"" + guideId + "\"){description,entry_details,exit_details,marker_list,key_facts_num,key_facts_char, latitude, longitude}}"
+        let query = "{guide(id:\"" + guideId + "\"){id, description,entry_details,exit_details,marker_list,key_facts_num,key_facts_char, latitude, longitude}}"
         axios
         .get(`${rapidsApiUrl}graphql`,
             {

@@ -53,7 +53,7 @@ class ListGroup extends Component<IListGroupProps, IListGroupState> {
     }
 
     public renderListItem = (riverRegion: IRiverRegion, idx: number): JSX.Element =>
-        <RiverGroup listEntries = {this.props.listEntries} key={idx} riverRegion={riverRegion} />
+        <RiverGroup listEntries = {this.props.listEntries} key={idx} riverRegion={riverRegion}/>
 
     public sortAlphbetically = (a: IRiverRegion, b: IRiverRegion): number => {
         if (a.river < b.river) { return -1; }

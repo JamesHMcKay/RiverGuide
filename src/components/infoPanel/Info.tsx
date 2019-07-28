@@ -262,12 +262,12 @@ class Info extends Component<IInfoProps, IInfoState> {
         });
     }
 
-    public getButtonColor(type: string): "inherit" | "primary" | "secondary" | "default" | undefined {
-        if (type === this.state.selectedType) {
-            return "primary";
-        }
-        return "default";
-    }
+    // public getButtonColor(type: string): "inherit" | "primary" | "secondary" | "default" | undefined {
+    //     if (type === this.state.selectedType) {
+    //         return "primary";
+    //     }
+    //     return "default";
+    // }
 
     public getButtonVariant(type: string):
         "text" | "outlined" | "contained" | undefined {
@@ -280,9 +280,10 @@ class Info extends Component<IInfoProps, IInfoState> {
     public getButtons = (): JSX.Element[] => {
             const result: JSX.Element[] = logTypes.map((item: string) =>
                 <Button
+                    key={item}
                     style = {{marginLeft: "10px"}}
                     variant={this.getButtonVariant(item)}
-                    color={this.getButtonColor(item)} key={item}
+                    // color={this.getButtonColor(item)}
                     onClick = {(): void => this.selectTypeClick(item)}
                 >
                     {item}

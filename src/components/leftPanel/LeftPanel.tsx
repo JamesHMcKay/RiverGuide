@@ -47,9 +47,12 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
         this.props.toggleModal(modalName);
     }
 
-    public renderListGroup = (region: string, idx: number): JSX.Element => <ListGroup
-        listEntries = {this.props.filteredList} key={idx} region={region}
-    />
+    public renderListGroup = (region: string, idx: number): JSX.Element =>
+        <ListGroup
+            listEntries = {this.props.filteredList}
+            key={idx}
+            region={region}
+        />
 
     public loadingOrEmpty = (noResults: boolean): JSX.Element => {
         if (this.props.errors.message) {
