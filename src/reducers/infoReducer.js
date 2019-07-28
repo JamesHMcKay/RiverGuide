@@ -6,7 +6,6 @@ const initialState = {};
 export default function(state = initialState, action) {
     switch (action.type) {
         case OPEN_INFO:
-            console.log("INFO OPEN", action.payload);
             return { ...action.payload, history: [] };
         case CLOSE_INFO:
             return {};
