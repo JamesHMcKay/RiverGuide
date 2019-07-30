@@ -49,17 +49,17 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
         };
     }
 
-    public onClusterClick(): void {
+    public onClusterClick = (): void => {
         // const boundingBox: IBoundingBox = cluster.boundingBox;
         // const {longitude, latitude} = new WebMercatorViewport(this.state.viewport)
         // .fitBounds([[boundingBox.minLon, boundingBox.minLat], [boundingBox.maxLon, boundingBox.maxLat]]);
 
-        const viewport: IViewport = {
-            longitude: this.state.viewport.longitude,
-            latitude: this.state.viewport.latitude,
-            zoom: this.state.viewport.zoom - 2,
-        };
-        this.setState({viewport});
+        // const viewport: IViewport = {
+        //     longitude: this.state.viewport.longitude,
+        //     latitude: this.state.viewport.latitude,
+        //     zoom: this.state.viewport.zoom + 2,
+        // };
+        // this.setState({viewport});
     }
 
     public componentDidMount(): void {
