@@ -12,6 +12,7 @@ import { IAuth, IInfoPage, IListEntry, IUser } from "./../../utils/types";
 
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
+import { Link as RouterLink } from "react-router-dom";
 import { IState } from "../../reducers/index";
 import { CurrentWeather } from "./CurrentWeather";
 import { WeatherStore } from "./WeatherStore";
@@ -29,6 +30,7 @@ interface IInfoControlBarStateToProps {
     infoPage: IInfoPage;
     loadingSpinner: string;
     weatherStore: WeatherStore;
+    tabIndex: string;
 }
 
 class InfoControlBar extends Component<IInfoControlBarProps> {
@@ -70,6 +72,8 @@ class InfoControlBar extends Component<IInfoControlBarProps> {
                     float: "right",
                     width: "20%",
                 }}
+                component={RouterLink}
+                to={`/${this.props.tabIndex}/`}
             >
                 <CloseIcon />
             </Button>
@@ -146,6 +150,7 @@ function mapStateToProps(state: IState): IInfoControlBarStateToProps {
         infoPage: state.infoPage,
         loadingSpinner: state.loadingSpinner,
         weatherStore: state.weatherStore,
+        tabIndex: state.tabIndex,
     });
 }
 

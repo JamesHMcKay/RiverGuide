@@ -43,6 +43,7 @@ export interface IPanelMapStateToProps {
     listEntries: IListEntry[];
     searchPanel: string;
     filters: IFilter;
+    tabIndex: string;
 }
 
 export interface IPanelProps extends IPanelMapStateToProps {
@@ -54,6 +55,7 @@ export interface IPanelProps extends IPanelMapStateToProps {
         mapBounds: IMapBounds,
     ) => void;
     openInfoPage: (guide: IListEntry) => void;
+    history: any;
 }
 
 class Panel extends Component<IPanelProps, IPanelState> {
@@ -70,6 +72,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
     }
 
     public onClick = (guide: IListEntry): void => {
+        this.props.history.push(`/${this.props.tabIndex}/${guide.activity}/${guide.display_name}/${guide.id}`);
         this.props.openInfoPage(guide);
     }
 
@@ -147,6 +150,7 @@ const mapStateToProps: (state: IState) => IPanelMapStateToProps = (state: IState
     listEntries: state.listEntries,
     searchPanel: state.searchPanel,
     filters: state.filters,
+    tabIndex: state.tabIndex,
 });
 
 export default connect(

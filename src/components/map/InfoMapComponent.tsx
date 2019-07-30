@@ -109,7 +109,7 @@ class InfoMapComponent extends Component<IInfoMapProps, IInfoMapState> {
         viewport = {
             latitude: bounds[0].lat,
             longitude: bounds[0].lng,
-            zoom: 10,
+            zoom: 12,
         };
         return viewport;
     }

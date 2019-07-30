@@ -7,6 +7,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link as RouterLink } from "react-router-dom";
 import {
     closeInfoPage,
     toggleModal,
@@ -66,6 +67,7 @@ interface IInfoStateProps {
     userDetails: IUserDetails;
     loadingSpinner: string;
     expansionPanels: IExpansionPanels;
+    tabIndex: string;
 }
 
 interface IInfoProps extends IInfoStateProps {
@@ -186,11 +188,13 @@ class Info extends Component<IInfoProps, IInfoState> {
                 placement="top"
             >
             <Button
-            onClick={this.handleClose}
-            style={{
-                color: "white",
-                cursor: "pointer",
-            }}
+                onClick={this.handleClose}
+                style={{
+                    color: "white",
+                    cursor: "pointer",
+                }}
+                component={RouterLink}
+                to={`/${this.props.tabIndex}/`}
             >
                 <CloseIcon />
             </Button>
@@ -503,6 +507,7 @@ function mapStateToProps(state: IState): IInfoStateProps {
         userDetails: state.userDetails,
         loadingSpinner: state.loadingSpinner,
         expansionPanels: state.expansionPanels,
+        tabIndex: state.tabIndex,
     });
 }
 

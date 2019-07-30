@@ -39,7 +39,11 @@ export default class MapMarker extends PureComponent<IMapMarkerProps> {
             </div>);
 
         return (
-            <Tooltip title={toolTipContent} onClick={onClick} style={{maxWidth: 300}}>
+            <Tooltip
+                title={toolTipContent}
+                onClick={onClick}
+                style={{maxWidth: 300}}
+            >
             <svg
                 height={size}
                 viewBox="0 0 80 80"
