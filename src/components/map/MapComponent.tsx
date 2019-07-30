@@ -1,8 +1,11 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import React, { Component } from "react";
 import ReactMapGL, { InteractiveMap, Marker, ViewState } from "react-map-gl";
+import { connect } from "react-redux";
 import uuidv1 from "uuid";
+import { IState } from "../../reducers";
 import { IListEntry, IMapBounds } from "../../utils/types";
+import { setViewport } from "./../../actions/actions";
 import Cluster from "./ClusterMapBox";
 import { IViewport } from "./InfoMapComponent";
 import MapCluster from "./MapCluster";
@@ -16,22 +19,26 @@ export const DEFAULT_ZOOM: number = 5;
 const TOKEN: string =
     "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqd29oc2hzdjF3YnM0Ym4wa3o4azFhd2MifQ.dqrE-W1cXNGKpV5FGPZFww";
 
-interface IMapComponentProps {
+interface IMapComponentStateProps {
+    viewport: IViewport;
+}
+
+interface IMapComponentProps extends IMapComponentStateProps {
     guides: IListEntry[];
     filteredGuides: IListEntry[];
     listEntries: IListEntry[];
     onClick: (guide: IListEntry) => void;
     setMapBounds: (bounds: IMapBounds) => void;
     viewHeight: string;
+    setViewport: (viewport: IViewport) => void;
 }
 
 interface IMapComponentState {
-    viewport: IViewport;
     tile: string;
     map: any;
 }
 
-export class MapComponent extends Component<IMapComponentProps, IMapComponentState> {
+class MapComponent extends Component<IMapComponentProps, IMapComponentState> {
     public prevZoom: number = 0;
     public prevMarkerSize: number = 0;
     public mapRef?: any = undefined;
@@ -39,11 +46,6 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
     constructor(props: IMapComponentProps) {
         super(props);
         this.state = {
-            viewport: {
-                latitude: DEFAULT_LAT,
-                longitude: DEFAULT_LON,
-                zoom: DEFAULT_ZOOM,
-            },
             map: null,
             tile: "mapbox://styles/mapbox/outdoors-v9",
         };
@@ -83,7 +85,7 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
     }
 
     public componentDidUpdate(prevProps: IMapComponentProps, prevState: IMapComponentState): void {
-        if (prevState.viewport.latitude !== this.state.viewport.latitude) {
+        if (prevProps.viewport.latitude !== this.props.viewport.latitude) {
             this.handleViewChange();
         }
     }
@@ -94,7 +96,7 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
             longitude: newViewport.longitude,
             zoom: newViewport.zoom,
         };
-        this.setState({ viewport });
+        this.props.setViewport(viewport);
     }
 
     public onTileChange = (tile: string): void => {
@@ -105,9 +107,9 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
 
     public render(): JSX.Element {
         const viewport: IViewport = {
-            latitude: this.state.viewport.latitude,
-            longitude: this.state.viewport.longitude,
-            zoom: this.state.viewport.zoom,
+            latitude: this.props.viewport.latitude,
+            longitude: this.props.viewport.longitude,
+            zoom: this.props.viewport.zoom,
         };
 
         return (
@@ -164,3 +166,14 @@ export class MapComponent extends Component<IMapComponentProps, IMapComponentSta
         );
     }
 }
+
+function mapStateToProps(state: IState): IMapComponentStateProps {
+    return ({
+        viewport: state.mapViewport,
+    });
+}
+
+export default connect(
+    mapStateToProps,
+    { setViewport },
+)(MapComponent);

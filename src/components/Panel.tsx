@@ -16,7 +16,7 @@ import Grid from "@material-ui/core/Grid";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Info from "./infoPanel/Info";
 import LeftPanel from "./leftPanel/LeftPanel";
-import { MapComponent } from "./map/MapComponent";
+import MapComponent from "./map/MapComponent";
 
 import {
     IFilter,
@@ -33,7 +33,7 @@ export const CONTENT_HEIGHT: string = "82vh";
 
 export interface IPanelState {
     infoSelected: boolean;
-    mapRef: React.RefObject<MapComponent>;
+    mapRef: any;
 }
 
 export interface IPanelMapStateToProps {

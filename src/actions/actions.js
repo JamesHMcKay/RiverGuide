@@ -25,6 +25,7 @@ import {
     SET_FILTER,
     SET_EXPANSION_PANELS,
     ADD_TO_RECENTS,
+    SET_VIEWPORT,
 } from "./types";
 
 const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
@@ -282,5 +283,12 @@ export const addToRecents = (recentItems) => dispatch => {
     dispatch({
         type: ADD_TO_RECENTS,
         payload: recentItems,
+    });
+}
+
+export const setViewport = (viewport) => dispatch => {
+    dispatch({
+        type: SET_VIEWPORT,
+        payload: viewport,
     });
 }

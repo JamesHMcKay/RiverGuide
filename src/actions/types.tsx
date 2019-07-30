@@ -47,3 +47,4 @@ export const CLEAR_GAUGE_DISCLAIMER: string = "CLEAR_GAUGE_DISCLAIMER";
 export const SET_EXPANSION_PANELS: string = "SET_EXPANSION_PANELS";
 export const ADD_TO_RECENTS: string = "ADD_TO_RECENTS";
 export const GET_GUIDES: string = "GET_GUIDES";
+export const SET_VIEWPORT: string = "SET_VIEWPORT";

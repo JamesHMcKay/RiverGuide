@@ -15,14 +15,14 @@ import { IAuth, IFilter, IGauge, IInfoPage, IListEntry, ILogComplete, IMapBounds
 import Info from "../infoPanel/Info";
 import LeftPanel from "../leftPanel/LeftPanel";
 import ListItemSpecial from "../leftPanel/ListItemSpecial";
-import { MapComponent } from "../map/MapComponent";
+import MapComponent from "../map/MapComponent";
 import { CONTENT_HEIGHT, CONTENT_HEIGHT_MOBILE } from "../Panel";
 import LogPage from "./LogPage";
 import "./profile.css";
 
 interface IProfileContainerState {
     infoSelected: boolean;
-    mapRef: React.RefObject<MapComponent>;
+    mapRef: any;
 }
 
 interface IProfileContainerProps extends IProfileContainerStateProps {

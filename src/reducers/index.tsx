@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 import { WeatherStore } from "../components/infoPanel/WeatherStore";
+import { IViewport } from "../components/map/InfoMapComponent";
 import {
     IAuth,
     IErrors,
@@ -32,6 +33,7 @@ import loadingSpinnerReducer from "./loadingSpinnerReducer";
 import logPageOpenReducer from "./logPageOpenReducer";
 import logReducer from "./logReducer";
 import mapBoundsReducer from "./mapBoundsReducer";
+import mapViewportReducer from "./mapViewportReducer";
 import modalReducer from "./modalReducer";
 import openLogReducer from "./openLogReducer";
 import recentItemsReducer from "./recentItemsReducer";
@@ -69,6 +71,7 @@ export interface IState {
     gaugeDisclaimer: string;
     recentItems: string[];
     guides: IListEntry[];
+    mapViewport: IViewport;
 }
 
 export default combineReducers({
@@ -99,4 +102,5 @@ export default combineReducers({
     gaugeDisclaimer: gaugeDisclaimerReducer,
     recentItems: recentItemsReducer,
     guides: guideReducer,
+    mapViewport: mapViewportReducer,
 });
