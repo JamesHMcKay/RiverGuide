@@ -42,6 +42,9 @@ const theme: Theme = {
       },
       h2: {
         fontSize: "3em",
+        [breakpoints.down(1500)]: {
+          fontSize: "2em",
+        },
         [breakpoints.down("md")]: {
           fontSize: "1.5em",
         },

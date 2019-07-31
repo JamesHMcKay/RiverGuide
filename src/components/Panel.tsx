@@ -1,8 +1,8 @@
 import Hidden from "@material-ui/core/Hidden";
 import React, { Component } from "react";
-// Components
 import { connect } from "react-redux";
 import {
+    closeInfoPage,
     generateFilteredList,
     setMapBounds,
 } from "../actions/actions";
@@ -25,7 +25,6 @@ import {
     IListEntry,
     IMapBounds } from "./../utils/types";
 
-// Styles
 import "./Panel.css";
 
 export const CONTENT_HEIGHT_MOBILE: string = "67vh";
@@ -47,6 +46,7 @@ export interface IPanelMapStateToProps {
 }
 
 export interface IPanelProps extends IPanelMapStateToProps {
+    closeInfoPage: () => void;
     makeGaugeRequest: () => void;
     setMapBounds: (mapBounds: IMapBounds) => void;
     generateFilteredList: (
@@ -159,5 +159,6 @@ export default connect(
         generateFilteredList,
         makeGaugeRequest,
         setMapBounds,
-        openInfoPage}),
+        openInfoPage,
+        closeInfoPage}),
 )(Panel);

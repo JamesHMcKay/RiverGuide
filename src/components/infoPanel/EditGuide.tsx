@@ -55,7 +55,9 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
         let description: string = "Write a description here";
 
         if (this.props.infoPage && this.props.infoPage.itemDetails) {
-            description = this.props.infoPage.itemDetails.description;
+            if (this.props.infoPage.itemDetails.description) {
+                description = this.props.infoPage.itemDetails.description;
+            }
         }
         let gaugeId: string | undefined;
         let id: string | undefined;
@@ -233,7 +235,7 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
                         }}
                     >
                 {ACTIVITY_MENU.map((item: {name: string, id: string}) => (
-                    <MenuItem value={item.id}>{item.name}</MenuItem>
+                    <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
                 ))}
                 </Select>
                 <DialogContentText variant = "h5" color="textPrimary">

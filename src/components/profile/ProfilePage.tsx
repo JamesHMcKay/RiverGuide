@@ -147,17 +147,17 @@ class ProfilePage extends Component<IProfilePageProps, IProfilePageState> {
                     </ListItem>
                 }
                 {listItems.map((item: IProfileListItem) => (
-                    <div>
-                    <li>
-                        <Typography
-                        style={{ margin: `5px 0 0 2px`}}
-                        color="textSecondary"
-                        display="block"
-                        variant="caption"
-                        >
-                        {item.name}
-                        </Typography>
-                    </li>
+                    <div key={item.name}>
+                        <li>
+                            <Typography
+                                style={{ margin: `5px 0 0 2px`}}
+                                color="textSecondary"
+                                display="block"
+                                variant="caption"
+                            >
+                            {item.name}
+                            </Typography>
+                        </li>
                         {this.getDetailsBox(item)}
                     <Divider component="li" />
                     </div>))}

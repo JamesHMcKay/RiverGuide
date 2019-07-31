@@ -146,7 +146,6 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                 </IconButton>
                 </div>
             <Divider />
-
                 <ListItem button key={"profile"}>
                 <Link
                 to={"/profile"}
@@ -248,7 +247,6 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                         <Link
                             to={item.route}
                             key={item.name}
-                            onClick={(event: any): void => {this.props.setTabIndex(-1); }}
                         >
                             <MenuItem key={item.name} onClick={this.handleClose}>{item.name}</MenuItem>
                         </Link>
