@@ -9,7 +9,7 @@ function SocialLink({ pretext, provider }) {
     icon = "facebook-square";
   }
   return (
-    // <a href={`https://rapidsapi.herokuapp.com/connect/${provider}`} className="link">
+    <a href={`https://rapidsapi.herokuapp.com/connect/${provider}`} className="link">
       <ProviderButton
         type="button"
         social={provider}
@@ -18,7 +18,7 @@ function SocialLink({ pretext, provider }) {
         <i className={`fa fa-${icon}`} style = {{fontSize: "30px", position: "absolute", left: "10px"}}/>
         {pretext + capitalize(provider)}
       </ProviderButton>
-    // </a>
+    </a>
   );
 }
 
