@@ -139,7 +139,7 @@ class ProfilePage extends Component<IProfilePageProps, IProfilePageState> {
     public render(): JSX.Element {
         const dateParsed: Date = new Date(this.props.auth.user.createdAt);
         return (
-            <Grid container spacing={0} justify={"center"} style={{height: "82vh"}}>
+            <Grid container spacing={0} justify={"center"} style={{height: "82vh", borderTop: "1px solid #e6e6eb"}}>
                 <List style={{ width: "100%", maxWidth: 360}}>
                 {!this.props.auth.isAuthenticated &&
                     <ListItem>

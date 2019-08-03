@@ -46,6 +46,7 @@ export const toggleModal = modal => dispatch => {
             action: 'Modal',
             label: modal
         });
+        dispatch({ type: CLEAR_ERRORS });
         dispatch({
             type: OPEN_MODAL,
             payload: modal,

@@ -12,6 +12,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 import { registerUser } from "../../actions/getAuth";
+import content from "../../content/sign_up_content.json";
 import { IState } from "../../reducers/index";
 import DialogTitle from "../../utils/dialogTitle";
 import loadingButton from "../../utils/loadingButton";
@@ -117,8 +118,22 @@ class Register extends Component<IReigsterProps, IRegisterState> {
                     aria-labelledby="example dialog"
                     open={this.props.isOpen}
                     fullScreen={this.props.fullScreen}
+                    // fullWidth
+                    maxWidth={"xs"}
                 >
                 <DialogTitle handleClose={this.closeModal} title={"Sign up"}/>
+                <DialogContentText style = {{
+                    width: "90%",
+                    margin: "auto",
+                    textAlign: "justify",
+                    paddingTop: "20px",
+                }}>
+                <div
+                    dangerouslySetInnerHTML={{
+                        __html: content.sign_up_terms,
+                    }}
+                />
+                </DialogContentText>
                 <DialogContent>
                 <div className = "provider-button-stack">
                     {providers.map((provider: string) =>

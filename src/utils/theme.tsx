@@ -40,7 +40,7 @@ const theme: Theme = {
           fontSize: "16px",
         },
       },
-      h2: {
+      h1: {
         fontSize: "3em",
         [breakpoints.down(1500)]: {
           fontSize: "2em",
@@ -49,7 +49,17 @@ const theme: Theme = {
           fontSize: "1.5em",
         },
       },
-      h1: {
+      h2: {
+        fontSize: "1.5em",
+        fontWeight: 600,
+        [breakpoints.down(1500)]: {
+          fontSize: "1.3em",
+        },
+        [breakpoints.down("md")]: {
+          fontSize: "1em",
+        },
+      },
+      h3: {
         fontSize: "1.5em",
         fontWeight: "bold",
         [breakpoints.down("md")]: {

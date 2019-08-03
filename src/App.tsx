@@ -29,6 +29,7 @@ import * as darksky from "dark-sky-api";
 import * as weather from "openweather-apis";
 import { ACTIVITY_MENU } from "./components/ActivityFilter";
 import { categories, ITabCategory } from "./components/ControlBar";
+import Help, { helpPages, IHelpPages } from "./components/Help";
 import BottomNav from "./components/leftPanel/BottomNav";
 import { IUser } from "./utils/types";
 
@@ -93,7 +94,13 @@ class App extends Component {
                     <MuiThemeProvider theme={theme}>
                     <div className="App">
                             <NavBar/>
-                            <Route component={TabBar} />
+                            <Switch>
+                                <Route
+                                    exact
+                                    path={routes.concat(["/", "/trips"])}
+                                    component={TabBar}
+                                />
+                            </Switch>
                             <Switch>
                                 <Route
                                     exact
@@ -109,6 +116,12 @@ class App extends Component {
                                     component={ProfilePage}
                                 />
                                 <Route exact path="/connect/:provider" component={ConnectPage} />
+                                <Route
+                                    exact
+                                    path={helpPages.map((item: IHelpPages) => item.route)}
+                                    component={Help}
+
+                                />
                             </Switch>
                             <Hidden mdUp>
                                 <Route component={BottomNav} />

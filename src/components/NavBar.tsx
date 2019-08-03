@@ -1,24 +1,6 @@
-import MenuIcon from "@material-ui/icons/Menu";
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { setTabIndex, toggleModal } from "../actions/actions";
-
-// Material UI
+import { Typography } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Toolbar from "@material-ui/core/Toolbar";
-
-import { IState } from "../reducers/index";
-import { IAuth } from "../utils/types";
-
-// Components
-import logo from "../img/RiverWikiLogo.png";
-
-// Styles
-import { Typography } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
@@ -26,7 +8,18 @@ import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Toolbar from "@material-ui/core/Toolbar";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import MenuIcon from "@material-ui/icons/Menu";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { setTabIndex, toggleModal } from "../actions/actions";
+import logo from "../img/RiverWikiLogo.png";
+import { IState } from "../reducers/index";
+import { IAuth } from "../utils/types";
 import ActivityFilter from "./ActivityFilter";
 import "./Navbar.css";
 
@@ -36,23 +29,33 @@ export interface IMenuItem {
     modal?: string;
 }
 
+export interface IMenuItemModal {
+    name: string;
+    modal: string;
+}
+
 const userMenuItems: IMenuItem[] = [
     { name: "My profile", route: "/profile" },
 ];
 
-const AUTH_MODALS: IMenuItem[] = [
-    {name: "Log a trip", route: "", modal: "addTripAnyPage"},
-    {name: "Log out", route: "", modal: "logoutModal"},
+const aboutMenuItems: IMenuItem[] = [
+    { name: "Terms of Service", route: "/legal/terms" },
+    { name: "Privacy", route: "/legal/privacy" },
 ];
 
-const NO_AUTH_MODALS: IMenuItem[] = [
-    {name: "Sign up", route: "", modal: "registerModal"},
-    {name: "Log in", route: "", modal: "loginModal"},
+const AUTH_MODALS: IMenuItemModal[] = [
+    {name: "Log a trip", modal: "addTripAnyPage"},
+    {name: "Log out", modal: "logoutModal"},
 ];
 
-const MODALS: IMenuItem[] = [
-    {name: "Data for good", route: "", modal: "aboutModal"},
-    {name: "Feedback", route: "", modal: "contactModal"},
+const NO_AUTH_MODALS: IMenuItemModal[] = [
+    {name: "Sign up", modal: "registerModal"},
+    {name: "Log in", modal: "loginModal"},
+];
+
+const MODALS: IMenuItemModal[] = [
+    {name: "Data for good", modal: "aboutModal"},
+    {name: "Feedback", modal: "contactModal"},
 ];
 
 interface INavBarProps {
@@ -63,6 +66,7 @@ interface INavBarProps {
 
 interface INavBarState {
     anchorEl: any;
+    anchorElAbout: any;
     mapView: boolean;
     drawOpen: boolean;
 }
@@ -72,6 +76,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
         super(props);
         this.state = {
             anchorEl: null,
+            anchorElAbout: null,
             mapView: true,
             drawOpen: false,
         };
@@ -93,8 +98,16 @@ class NavBar extends Component<INavBarProps, INavBarState> {
         this.setState({ anchorEl: event.currentTarget });
     }
 
+    public handleAboutMenu = (event: any): void => {
+        this.setState({ anchorElAbout: event.currentTarget });
+    }
+
     public handleClose = (): void => {
         this.setState({ anchorEl: null });
+    }
+
+    public handleAboutClose = (): void => {
+        this.setState({ anchorElAbout: null });
     }
 
     public openModal = (modalName: string): void => {
@@ -158,7 +171,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
           </List>
           <Divider />
           <List>
-            {AUTH_MODALS.concat(MODALS).map((item: IMenuItem) => (
+            {AUTH_MODALS.concat(MODALS).map((item: IMenuItemModal) => (
               <ListItem button key={item.name} onClick={(): void => {this.openModal(item.modal || ""); }}>
                 <ListItemText primary={item.name} />
               </ListItem>
@@ -185,7 +198,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
           <Divider />
           </List>
         <List>
-          {NO_AUTH_MODALS.concat(MODALS).map((item: IMenuItem) => (
+          {NO_AUTH_MODALS.concat(MODALS).map((item: IMenuItemModal) => (
             <ListItem button key={item.name} onClick={(): void => {this.openModal(item.modal || ""); }}>
               <ListItemText primary={item.name} />
             </ListItem>
@@ -196,31 +209,72 @@ class NavBar extends Component<INavBarProps, INavBarState> {
   }
 
     public render(): JSX.Element {
-        const { anchorEl } = this.state;
+        const { anchorEl, anchorElAbout } = this.state;
         const {isAuthenticated} = this.props.auth;
 
-        // user is not authenticated
         const noAuthButtons: JSX.Element = (
             <div className="no-auth-buttons">
                 <Button
                     onClick={this.openModal.bind(this, "registerModal")}
                     color="primary"
+                    variant="contained"
                     style={{
-                        marginRight: "1em",
+                        marginRight: "2em",
+                        color: "white",
                     }}
                 >
                     Sign up
                 </Button>
                 <Button
                     color="primary"
+                    variant="outlined"
                     onClick={this.openModal.bind(this, "loginModal")}
+                    style={{
+                        marginRight: "2em",
+                    }}
                 >
                     Log in
                 </Button>
+                <Button
+                    color="primary"
+                    variant="outlined"
+                    onClick={this.handleAboutMenu}
+                    style={{
+                        marginRight: "2em",
+                    }}
+                >
+                    About
+                </Button>
+                <Menu
+                    id="simple-menu"
+                    anchorEl={anchorElAbout}
+                    keepMounted
+                    open={Boolean(anchorElAbout)}
+                    onClose={this.handleAboutClose}
+                >
+                    {aboutMenuItems.map((item: IMenuItem) => (
+                        <Link
+                            to={item.route}
+                            key={item.name}
+                        >
+                            <MenuItem key={item.name} onClick={this.handleAboutClose}>{item.name}</MenuItem>
+                        </Link>
+                    ))}
+                    {MODALS.map((item: IMenuItemModal) => (
+                            <MenuItem
+                            key={item.name}
+                            onClick={(event: any): void => {
+                                this.openModal(item.modal);
+                                this.setState({ anchorElAbout: null });
+                            }}
+                        >
+                            {item.name}
+                        </MenuItem>
+                    ))}
+                </Menu>
             </div>
         );
 
-        // user is authenticated
         const authButtons: JSX.Element = (
             <div className="auth-buttons">
                 <Button
@@ -289,7 +343,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
 
         return (
             <div>
-                <AppBar position="static">
+                <AppBar position="static" style = {{boxShadow: "none"}}>
                     <Toolbar
                         style={{
                             background: "#fff",
@@ -312,14 +366,14 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                                 </div>
                             </Link>
                             <div style={{display: "flex", flexDirection: "column"}}>
-                            <Typography color="primary" variant="h1">
+                            <Typography color="primary" variant="h3">
                                 RiverGuide
                             </Typography>
                             <ActivityFilter/>
                             </div>
                         </div>
                         <Hidden smDown>
-                            {MODALS.map((item: IMenuItem) => (
+                            {/* {MODALS.map((item: IMenuItemModal) => (
                                  <Button
                                     key={item.name}
                                     color="primary"
@@ -331,7 +385,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                                 >
                                     {item.name}
                                 </Button>
-                            ))}
+                            ))} */}
                             {isAuthenticated ? authButtons : noAuthButtons}
                         </Hidden>
                         <Hidden mdUp>

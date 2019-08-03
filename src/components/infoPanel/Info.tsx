@@ -423,7 +423,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                 backgroundRepeat: "no-repeat"}}>
             <Grid container item md={11} lg={11} justify="flex-start">
                     <div className="toolbar-middle">
-                            <Typography variant="h2" style={{color: "white"}}>
+                            <Typography variant="h1" style={{color: "white"}}>
                             {entry.display_name}
                             </Typography>
                             <Typography variant="h6" style={{color: "white"}}>

@@ -4,6 +4,7 @@ import withMobileDialog from "@material-ui/core/withMobileDialog";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
+import content from "../../content/contact_modal_content.json";
 import { IState } from "../../reducers";
 import DialogTitle from "../../utils/dialogTitle";
 
@@ -28,18 +29,17 @@ class ContactModal extends Component<IContactModalProps> {
                     onClose={(): void => this.props.toggleModal()}
                     open={this.props.isOpen}
                     fullScreen={this.props.fullScreen}
-                    fullWidth={true}
-                    maxWidth={"md"}
+                    fullWidth
+                    maxWidth={"xs"}
                 >
                 <DialogTitle handleClose={this.handleClose} title={"Feedback"}/>
-                <DialogContent>
+                <DialogContent style={{padding: "30px"}}>
                     <div
                         dangerouslySetInnerHTML={{
-// tslint:disable-next-line
-                            __html: '<iframe src="https://docs.google.com/forms/d/e/1FAIpQLScjBWEdKvHhQrHyMKk1mj1wiij9bwXuDvePTcYUmhETaW5vVA/viewform?embedded=true" width="100%" height="1570" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>',
+                            __html: content.contact_modal_content,
                         }}
                     />
-                   </DialogContent>
+                </DialogContent>
                 </Dialog>
             </div>
         );
