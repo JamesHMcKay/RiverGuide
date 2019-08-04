@@ -123,9 +123,15 @@ class App extends Component {
 
                                 />
                             </Switch>
-                            <Hidden mdUp>
-                                <Route component={BottomNav} />
-                            </Hidden>
+                            <Switch>
+                                <Hidden mdUp>
+                                    <Route
+                                        exact
+                                        path={routes.concat(["/", "/trips"])}
+                                        component={BottomNav}
+                                    />
+                                </Hidden>
+                            </Switch>
                             <Modals />
                         </div>
                     </MuiThemeProvider>

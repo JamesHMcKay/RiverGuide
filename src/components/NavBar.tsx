@@ -39,6 +39,7 @@ const userMenuItems: IMenuItem[] = [
 ];
 
 const aboutMenuItems: IMenuItem[] = [
+    { name: "Data for good", route: "/about" },
     { name: "Terms of Service", route: "/legal/terms" },
     { name: "Privacy", route: "/legal/privacy" },
 ];
@@ -54,7 +55,7 @@ const NO_AUTH_MODALS: IMenuItemModal[] = [
 ];
 
 const MODALS: IMenuItemModal[] = [
-    {name: "Data for good", modal: "aboutModal"},
+    // {name: "Data for good", modal: "aboutModal"},
     {name: "Feedback", modal: "contactModal"},
 ];
 
@@ -153,27 +154,39 @@ class NavBar extends Component<INavBarProps, INavBarState> {
           onKeyDown={this.toggleDrawer(false)}
         >
           <List>
-          <div onKeyDown={this.toggleDrawer(false)}>
-                <IconButton onClick={this.handleDrawClose}>
-                {<ChevronRightIcon />}
-                </IconButton>
+                <div onKeyDown={this.toggleDrawer(false)}>
+                    <IconButton onClick={this.handleDrawClose}>
+                        <ChevronRightIcon />
+                    </IconButton>
                 </div>
             <Divider />
                 <ListItem button key={"profile"}>
-                <Link
-                to={"/profile"}
-                key={"profile"}
-            >
-                <ListItemText primary={"My profile"} />
-                </Link>
+                    <Link
+                        to={"/profile"}
+                        key={"profile"}
+                    >
+                        <ListItemText primary={"My profile"} />
+                    </Link>
                 </ListItem>
-
           </List>
           <Divider />
           <List>
             {AUTH_MODALS.concat(MODALS).map((item: IMenuItemModal) => (
               <ListItem button key={item.name} onClick={(): void => {this.openModal(item.modal || ""); }}>
                 <ListItemText primary={item.name} />
+              </ListItem>
+            ))}
+          </List>
+          <Divider />
+          <List>
+            {aboutMenuItems.map((item: IMenuItem) => (
+              <ListItem button key={item.name}>
+                    <Link
+                        to={item.route}
+                        key={item.name}
+                    >
+                        <ListItemText primary={item.name} />
+                    </Link>
               </ListItem>
             ))}
           </List>
@@ -204,6 +217,19 @@ class NavBar extends Component<INavBarProps, INavBarState> {
             </ListItem>
           ))}
         </List>
+        <Divider />
+          <List>
+            {aboutMenuItems.map((item: IMenuItem) => (
+              <ListItem button key={item.name}>
+                    <Link
+                        to={item.route}
+                        key={item.name}
+                    >
+                        <ListItemText primary={item.name} />
+                    </Link>
+              </ListItem>
+            ))}
+          </List>
       </div>
     );
   }
@@ -245,33 +271,6 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                 >
                     About
                 </Button>
-                <Menu
-                    id="simple-menu"
-                    anchorEl={anchorElAbout}
-                    keepMounted
-                    open={Boolean(anchorElAbout)}
-                    onClose={this.handleAboutClose}
-                >
-                    {aboutMenuItems.map((item: IMenuItem) => (
-                        <Link
-                            to={item.route}
-                            key={item.name}
-                        >
-                            <MenuItem key={item.name} onClick={this.handleAboutClose}>{item.name}</MenuItem>
-                        </Link>
-                    ))}
-                    {MODALS.map((item: IMenuItemModal) => (
-                            <MenuItem
-                            key={item.name}
-                            onClick={(event: any): void => {
-                                this.openModal(item.modal);
-                                this.setState({ anchorElAbout: null });
-                            }}
-                        >
-                            {item.name}
-                        </MenuItem>
-                    ))}
-                </Menu>
             </div>
         );
 
@@ -279,16 +278,34 @@ class NavBar extends Component<INavBarProps, INavBarState> {
             <div className="auth-buttons">
                 <Button
                     color="primary"
+                    variant="contained"
                     size="large"
                     onClick={this.openModal.bind(this, "addTripAnyPage")}
                     style={{
-                        marginRight: "1em",
+                        marginRight: "2em",
                     }}
                 >
                     Log a trip
                 </Button>
-                <Button aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleMenu}>
+                <Button
+                    color="primary"
+                    variant="outlined"
+                    onClick={this.handleMenu}
+                    style={{
+                        marginRight: "2em",
+                    }}
+                >
                     Profile
+                </Button>
+                <Button
+                    color="primary"
+                    variant="outlined"
+                    onClick={this.handleAboutMenu}
+                    style={{
+                        marginRight: "2em",
+                    }}
+                >
+                    About
                 </Button>
                 <Menu
                     id="simple-menu"
@@ -400,6 +417,33 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                 >
                 {isAuthenticated ? this.getListAuthenticated() : this.getListNotAuthenticated()}
                 </Drawer>
+                <Menu
+                    id="simple-menu"
+                    anchorEl={anchorElAbout}
+                    keepMounted
+                    open={Boolean(anchorElAbout)}
+                    onClose={this.handleAboutClose}
+                >
+                    {aboutMenuItems.map((item: IMenuItem) => (
+                        <Link
+                            to={item.route}
+                            key={item.name}
+                        >
+                            <MenuItem key={item.name} onClick={this.handleAboutClose}>{item.name}</MenuItem>
+                        </Link>
+                    ))}
+                    {MODALS.map((item: IMenuItemModal) => (
+                            <MenuItem
+                            key={item.name}
+                            onClick={(event: any): void => {
+                                this.openModal(item.modal);
+                                this.setState({ anchorElAbout: null });
+                            }}
+                        >
+                            {item.name}
+                        </MenuItem>
+                    ))}
+                </Menu>
             </div>
         );
     }

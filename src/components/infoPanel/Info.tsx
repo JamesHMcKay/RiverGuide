@@ -428,7 +428,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                             </Typography>
                             <Typography variant="h6" style={{color: "white"}}>
                             {/* {`${entry.river_name} river  •  ${entry.region} `} */}
-                            {`${entry.river_name} river`}
+                            {`${entry.river_name}`}
                             </Typography>
                     </div>
                         {this.getFavButton()}
