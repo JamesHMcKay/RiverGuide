@@ -2,6 +2,8 @@ import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import ReactGA from 'react-ga';
 
+import { makeLogbookRequest } from "./actions";
+
 import {
     CLEAR_ERRORS,
     CLOSE_MODAL,
@@ -65,6 +67,7 @@ export const loginUser = userData => dispatch => {
         const userObject = parseUserObject(response.data.user);
         dispatch(setCurrentUser(userObject));
         ReactGA.set({userId: userObject.id});
+        dispatch(makeLogbookRequest(userObject.id));
         dispatch({
             type: CLOSE_MODAL,
             payload: "loginModal",
@@ -199,6 +202,7 @@ export const providerLogin = (action, history) => dispatch => {
         dispatch(setCurrentUser(userObject));
         ReactGA.set({userId: userObject.id});
         // dispatch(getUserDetails(userObject.id));
+        dispatch(makeLogbookRequest(userObject.id));
         dispatch({
             type: CLOSE_MODAL,
             payload: "registerModal",

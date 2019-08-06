@@ -97,7 +97,7 @@ class App extends Component {
                             <Switch>
                                 <Route
                                     exact
-                                    path={routes.concat(["/", "/trips"])}
+                                    path={routes.concat(["/", "/trips*"])}
                                     component={TabBar}
                                 />
                             </Switch>
