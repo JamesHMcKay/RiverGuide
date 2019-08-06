@@ -73,7 +73,10 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
     public mapHistory = (history: IHistory[]): IChartData[] => {
         const type: string = this.state.selectedType || "flow";
         const key: keyof IObsValue = type as keyof IObsValue;
-        const result: IChartData[] = history.map((reading: IHistory): IChartData => {
+        const filteredHistory: IHistory[] = history.filter(
+            (reading: IHistory) => !!reading.values[key] || reading.values[key] === 0,
+        );
+        const result: IChartData[] = filteredHistory.map((reading: IHistory): IChartData => {
             return {
                 value: reading.values[key] || 0,
                 date: Moment.utc(Moment(reading.time)).valueOf(),
@@ -98,6 +101,15 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
     public getColumnSeries = (chart: Am4charts.XYChart): Am4charts.ColumnSeries => {
         const series: Am4charts.ColumnSeries = chart.series.push(new Am4charts.ColumnSeries());
         series.columns.template.width = Am4core.percent(100);
+        series.fillOpacity = 1.0;
+        series.columns.template.width = Am4core.percent(70);
+        return series;
+    }
+
+    public getLineSeries = (chart: Am4charts.XYChart): Am4charts.LineSeries => {
+        const series: Am4charts.LineSeries = chart.series.push(new Am4charts.LineSeries());
+        series.fillOpacity = 0.0;
+        series.width = 0.9;
         return series;
     }
 
@@ -121,11 +133,11 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
 
         const series: Am4charts.ColumnSeries | Am4charts.LineSeries = this.state.selectedType === "rainfall" ?
             this.getColumnSeries(chart) :
-            chart.series.push(new Am4charts.LineSeries());
+            this.getLineSeries(chart);
         series.dataFields.dateX = "date";
         series.dataFields.valueY = "value";
         series.strokeWidth = 3;
-        series.fillOpacity = 0.0;
+        // series.fillOpacity = 0;
         series.showOnInit = false;
 
         dateAxis.tooltipDateFormat = "dd MMM yyyy hh:mma";
