@@ -375,8 +375,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                             {entry.display_name}
                             </Typography>
                             <Typography variant="h6" style={{color: "black"}}>
-                            {/* {`${entry.river_name} river  •  ${entry.region} `} */}
-                            {`${entry.river_name} river`}
+                            {`${entry.river_name}`}
                             </Typography>
                     </div>
             </Grid>
@@ -427,7 +426,6 @@ class Info extends Component<IInfoProps, IInfoState> {
                             {entry.display_name}
                             </Typography>
                             <Typography variant="h6" style={{color: "white"}}>
-                            {/* {`${entry.river_name} river  •  ${entry.region} `} */}
                             {`${entry.river_name}`}
                             </Typography>
                     </div>

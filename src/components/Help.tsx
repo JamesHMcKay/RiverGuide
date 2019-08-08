@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link, Route, Switch } from "react-router-dom";
+import uuidv1 from "uuid";
 import about from "../content/about.json";
 import code_of_conduct from "../content/code_of_conduct.json";
 import privacy_statement from "../content/privacy_statement.json";
@@ -148,7 +149,8 @@ class Help extends Component<IHelpProps, IHelpState> {
                     </nav>
                     <Switch>
                     {helpPages.map((item: IHelpPages) =>
-                                    <Route
+                                <Route
+                                    key={uuidv1()}
                                     exact
                                     path={item.route}
                                  >
@@ -168,7 +170,7 @@ class Help extends Component<IHelpProps, IHelpState> {
 
                                     <Divider/>
                                     {item.content.map((item: string) =>
-                                        <div>
+                                        <div key={uuidv1()}>
                                             <Typography
                                                 component="div"
                                                 style={{

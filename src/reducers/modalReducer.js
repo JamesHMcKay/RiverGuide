@@ -4,7 +4,7 @@ import { OPEN_MODAL, CLOSE_MODAL } from "../actions/types";
 //     openModal: false,
 // };
 
-const initialState = "protectedModal";
+const initialState = localStorage.previewAccess ? false : "protectedModal";
 //const initialState = false;
 
 export default (state = initialState, action) => {

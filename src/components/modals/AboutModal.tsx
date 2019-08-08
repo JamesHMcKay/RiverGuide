@@ -42,11 +42,6 @@ class AboutModal extends Component<IAboutModalProps> {
                         <p>We aim to provide all freshwater users with the best tools to discover, plan, record
                             and share their experiences, while being provided with up-to-date
                             environmental conditions for planning a safe and enjoyable trip.</p>
-                        {/* <p>The <strong>RiverGuide</strong> database will be kept up-to-date by users just
-                        like yourself, so it is forever growing. Descriptions and rich content will be updated by
-                        engaged users with the latest information.</p> */}
-                        {/* <p>Don't see your favourite activity on the site, or want to update one that is already
-                            there? Go ahead, sign up and get started!</p> */}
                     </DialogContentText>
                    </DialogContent>
                 </Dialog>

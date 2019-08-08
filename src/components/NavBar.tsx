@@ -42,6 +42,7 @@ const aboutMenuItems: IMenuItem[] = [
     { name: "Data for good", route: "/about" },
     { name: "Terms of Service", route: "/legal/terms" },
     { name: "Privacy", route: "/legal/privacy" },
+    { name: "Code of Conduct", route: "/legal/conduct" },
 ];
 
 const AUTH_MODALS: IMenuItemModal[] = [

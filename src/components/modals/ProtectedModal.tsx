@@ -35,6 +35,7 @@ class ContactModal extends Component<IProtectedModalProps, IProtectedModalState>
 
     public handleClose = (): void => {
         if (this.state.password === password) {
+            localStorage.setItem("previewAccess", "true");
             this.props.toggleModal();
         }
     }
@@ -52,10 +53,12 @@ class ContactModal extends Component<IProtectedModalProps, IProtectedModalState>
                 <DialogTitle handleClose={this.handleClose} title={"Welcome to the RiverGuide"}/>
                 <DialogContent>
                     <DialogContentText>
-                        The RiverGuide is under development.
-                        If you have been given a password enter it below.
+                        Thanks for trying the RiverGuide.  Please click the feedback link
+                        at the top of the page (under "About") or in the side menu on a mobile and
+                        let us know what you did and didn't like.
                     </DialogContentText>
                     <TextField
+                            placeholder={"Enter the password you were given here"}
                             fullWidth
                             autoFocus
                             margin="dense"

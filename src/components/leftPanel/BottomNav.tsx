@@ -30,7 +30,6 @@ interface IBottomNavProps extends IBottomNavStateProps {
         filter: IFilter,
         mapBounds: IMapBounds,
         token: CancelTokenSource) => void;
-    location: any;
     closeInfoPage: () => void;
     setTabIndex: (index: string) => void;
 }

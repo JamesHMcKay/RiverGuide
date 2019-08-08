@@ -54,8 +54,8 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
             region={region}
         />
 
-    public loadingOrEmpty = (noResults: boolean): JSX.Element => {
-        if (this.props.errors.message) {
+    public loadingOrEmpty = (noResults: boolean, isLoading: boolean): JSX.Element => {
+        if (this.props.errors.message === "Request failed" && isLoading) {
             return (
                 <div style={{width: "100%", paddingLeft: "10%", paddingTop: "30%"}}>
                     {"Request failed, refresh page and check your network connection."}
@@ -105,7 +105,9 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
 
         return (
             <div className="list-container">
-                {isLoading || (noResults && !this.props.specialItem) ? this.loadingOrEmpty(noResults) : renderedList}
+                {isLoading || (noResults && !this.props.specialItem) ?
+                    this.loadingOrEmpty(noResults, isLoading) :
+                    renderedList}
             </div>
         );
     }

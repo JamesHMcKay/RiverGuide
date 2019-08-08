@@ -37,7 +37,7 @@ import { IUser } from "./utils/types";
 const history: any = createHistory();
 const store: any = configureStore({}, history);
 
-axios.defaults.timeout = 10000;
+axios.defaults.timeout = 30000;
 
 ReactGA.initialize("UA-144174370-1");
 
@@ -123,15 +123,15 @@ class App extends Component {
 
                                 />
                             </Switch>
-                            <Switch>
-                                <Hidden mdUp>
-                                    <Route
-                                        exact
-                                        path={routes.concat(["/", "/trips"])}
-                                        component={BottomNav}
-                                    />
-                                </Hidden>
-                            </Switch>
+                            <Hidden mdUp>
+                                <Switch>
+                                        <Route
+                                            exact
+                                            path={routes.concat(["/", "/trips"])}
+                                            component={BottomNav}
+                                        />
+                                </Switch>
+                            </Hidden>
                             <Modals />
                         </div>
                     </MuiThemeProvider>
