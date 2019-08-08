@@ -30,6 +30,9 @@ export function unitParser(unit: string | undefined): string {
         case "millimetres":
            result = "mm";
            break;
+        case "celcius":
+            result = "\u00B0C";
+            break;
     }
     return result;
 }
