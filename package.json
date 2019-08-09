@@ -50,6 +50,7 @@
     "marked": "^0.6.2",
     "material-ui-next-pickers": "^0.0.21",
     "moment": "^2.22.2",
+    "openweather-apis": "^3.3.5",
     "path-to-regexp": "^1.7.0",
     "react": "^16.8.0",
     "react-compound-slider": "^2.0.0",
