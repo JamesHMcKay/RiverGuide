@@ -17,7 +17,6 @@ interface ILeftPanelProps extends ILeftPanelStateProps {
     gaugeList: IGauge[];
     gauges: IGauge[];
     toggleModal: (name: string) => void;
-    onClick: (guide: IListEntry) => void;
     filteredList: IListEntry[];
     specialItem?: JSX.Element;
 }

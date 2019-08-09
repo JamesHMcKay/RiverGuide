@@ -8,8 +8,7 @@ import MapMarker from "./MapMarker";
 import TileSelector from "./TileSelector";
 import ViewMarkerModal from "./ViewMarkerModal";
 
-const TOKEN: string =
-    "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqd29oc2hzdjF3YnM0Ym4wa3o4azFhd2MifQ.dqrE-W1cXNGKpV5FGPZFww";
+const TOKEN: string = process.env.REACT_APP_MAPBOX_TOKEN || "";
 
 interface IInfoMapStateProps {
     infoPage: IInfoPage;

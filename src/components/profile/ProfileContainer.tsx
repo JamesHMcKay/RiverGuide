@@ -122,7 +122,6 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
                 <LeftPanel
                     gaugeList={this.props.gauges}
                     gauges={this.props.gauges}
-                    onClick={this.onClick}
                     filteredList={filteredListEntries}
                     specialItem={<ListItemSpecial/>}
                 />

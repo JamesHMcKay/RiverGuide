@@ -4,6 +4,7 @@ import TerrainRounded from "@material-ui/icons/TerrainRounded";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import React, { Component } from "react";
+import ReactGA from 'react-ga';
 
 interface ITileOptions {
     icon: JSX.Element;
@@ -46,7 +47,12 @@ export default class TileSelector extends Component<ITileSelectorProps, ITileSel
         this.setState({ speedDialOpen: true });
     }
 
-    public handleTileChange = (tile: string): void => {
+    public handleTileChange = (tile: string, name: string): void => {
+        ReactGA.event({
+            category: "Map",
+            action: "TileChange",
+            label: name,
+        });
         this.props.onTileChange(tile);
     }
 
@@ -70,7 +76,9 @@ export default class TileSelector extends Component<ITileSelectorProps, ITileSel
                 icon={action.icon}
                 tooltipTitle={action.name}
                 tooltipPlacement="right"
-                onClick={(e: any): void => {this.handleTileChange(action.tile); }}
+                onClick={
+                    (e: any): void => {this.handleTileChange(action.tile, action.name); }
+                }
               />
             ))}
           </SpeedDial>

@@ -8,7 +8,6 @@ import EditIcon from "@material-ui/icons/Edit";
 import React, { Component } from "react";
 import ReactMapGL, { Marker, NavigationControl } from "react-map-gl";
 import uuid from "uuidv4";
-import WebMercatorViewport from "viewport-mercator-project";
 import { IMarker } from "../../utils/types";
 import { DEFAULT_VIEW_PORT } from "./InfoMapComponent";
 import { DEFAULT_LAT, DEFAULT_LON, DEFAULT_ZOOM } from "./MapComponent";
@@ -16,8 +15,7 @@ import MapMarker from "./MapMarker";
 import MarkerModal from "./MarkerModal";
 import TileSelector from "./TileSelector";
 
-const TOKEN: string =
-    "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqd29oc2hzdjF3YnM0Ym4wa3o4azFhd2MifQ.dqrE-W1cXNGKpV5FGPZFww";
+const TOKEN: string = process.env.REACT_APP_MAPBOX_TOKEN || "";
 
 interface IEditMapProps {
     markers: {[key: string]: IMarker};
@@ -139,42 +137,6 @@ export default class EditMapComponent extends Component<IEditMapProps, IEditMapS
                 ),
         );
         return list;
-    }
-
-    public setViewport(): IViewport {
-        const bounds: IMarker[] = Object.values(this.props.markers);
-        let viewport: IViewport = {
-            ...this.state.viewport,
-        };
-        if (bounds.length >= 2) {
-            const putInLat: number = bounds[0].lat;
-            const putInLon: number = bounds[0].lng;
-
-            const takeOutLat: number = bounds[bounds.length - 1].lat;
-            const takeOutLon: number = bounds[bounds.length - 1].lng;
-
-            const { longitude, latitude, zoom } = new WebMercatorViewport(
-                this.state.viewport,
-            ).fitBounds([[putInLon, putInLat], [takeOutLon, takeOutLat]], {
-                padding: 20,
-                offset: [0, 0],
-            });
-
-            viewport = {
-                ...this.state.viewport,
-                longitude,
-                latitude,
-                zoom,
-            };
-        } else if (bounds.length === 1) {
-            viewport = {
-                ...this.state.viewport,
-                latitude: bounds[0].lat,
-                longitude: bounds[0].lng,
-                zoom: 10,
-            };
-        }
-        return viewport;
     }
 
     public onMapClick = (event: any): void => {

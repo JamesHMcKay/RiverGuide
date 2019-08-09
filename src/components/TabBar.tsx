@@ -4,7 +4,6 @@ import Hidden from "@material-ui/core/Hidden";
 import { CancelTokenSource } from "axios";
 import axios from "axios";
 import React, { Component } from "react";
-import ReactGA from "react-ga";
 import { connect } from "react-redux";
 import {
     closeInfoPage,
@@ -67,11 +66,6 @@ class TabBar extends Component<ITabBarProps, ITabBarState> {
     }
 
     public handleSelect = (event: any, categoryId: string): void => {
-        ReactGA.event({
-            category: "Navigation",
-            action: "Tab",
-            label: categoryId,
-        });
         this.props.setTabIndex(categoryId);
         this.state.cancelToken.cancel();
         const newToken: CancelTokenSource = axios.CancelToken.source();

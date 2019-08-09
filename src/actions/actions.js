@@ -32,6 +32,11 @@ const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
 const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
 export const setTabIndex = index => dispatch => {
+    ReactGA.event({
+        category: "Navigation",
+        action: "Tab",
+        label: index,
+    });
     dispatch({
         type: SET_TAB_INDEX,
         payload: index,
@@ -41,11 +46,12 @@ export const setTabIndex = index => dispatch => {
 // Toggle Modals
 export const toggleModal = modal => dispatch => {
     if (modal) {
-        ReactGA.event({
-            category: 'Navigation',
-            action: 'Modal',
-            label: modal
-        });
+        // ReactGA.event({
+        //     category: 'Navigation',
+        //     action: 'Modal',
+        //     label: modal
+        // });
+        ReactGA.modalview(modal);
         dispatch({ type: CLEAR_ERRORS });
         dispatch({
             type: OPEN_MODAL,

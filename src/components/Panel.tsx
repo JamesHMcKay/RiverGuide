@@ -17,6 +17,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import Info from "./infoPanel/Info";
 import LeftPanel from "./leftPanel/LeftPanel";
 import MapComponent from "./map/MapComponent";
+import ReactGA from 'react-ga';
 
 import {
     IFilter,
@@ -72,6 +73,11 @@ class Panel extends Component<IPanelProps, IPanelState> {
     }
 
     public onClick = (guide: IListEntry): void => {
+        ReactGA.event({
+            category: "Navigation",
+            action: "MarkerClick",
+            label: guide.display_name,
+        });
         this.props.history.push(`/${this.props.tabIndex}/${guide.activity}/${guide.display_name}/${guide.id}`);
         this.props.openInfoPage(guide);
     }
@@ -114,7 +120,6 @@ class Panel extends Component<IPanelProps, IPanelState> {
                 <LeftPanel
                     gaugeList={this.props.gauges}
                     gauges={this.props.gauges}
-                    onClick={this.onClick}
                     filteredList={this.props.filterdGuides}
                 />
             </div>

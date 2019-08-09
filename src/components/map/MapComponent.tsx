@@ -11,13 +11,13 @@ import { IViewport } from "./InfoMapComponent";
 import MapCluster from "./MapCluster";
 import MapMarker from "./MapMarker";
 import TileSelector from "./TileSelector";
+import ReactGA from 'react-ga';
 
 export const DEFAULT_LAT: number = -40.838875;
 export const DEFAULT_LON: number = 171.7799;
 export const DEFAULT_ZOOM: number = 5;
 
-const TOKEN: string =
-    "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqd29oc2hzdjF3YnM0Ym4wa3o4azFhd2MifQ.dqrE-W1cXNGKpV5FGPZFww";
+const TOKEN: string = process.env.REACT_APP_MAPBOX_TOKEN || "";
 
 interface IMapComponentStateProps {
     viewport: IViewport;
@@ -52,6 +52,11 @@ class MapComponent extends Component<IMapComponentProps, IMapComponentState> {
     }
 
     public onClusterClick = (): void => {
+        ReactGA.event({
+            category: "Map",
+            action: "ClusterClick",
+            label: this.props.viewport.zoom.toString(),
+        });
         // const boundingBox: IBoundingBox = cluster.boundingBox;
         // const {longitude, latitude} = new WebMercatorViewport(this.state.viewport)
         // .fitBounds([[boundingBox.minLon, boundingBox.minLat], [boundingBox.maxLon, boundingBox.maxLat]]);

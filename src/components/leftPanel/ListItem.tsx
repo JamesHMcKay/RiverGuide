@@ -10,6 +10,7 @@ import { openInfoPage, openLogInfoPage } from "../../actions/getGuides";
 import { IState } from "../../reducers";
 import { IListEntry } from "../../utils/types";
 import FlowBadge from "../common/FlowBadge";
+import ReactGA from 'react-ga';
 
 const ACTIVITY_ICONS: Array<{id: string; icon: JSX.Element}> = [
     {id: "kayaking", icon: <PlaceIcon />},
@@ -28,6 +29,11 @@ interface IGuideItemStateProps {
 
 class GuideItem extends Component<IGuideItemProps, {}> {
     public handleClick = (): void => {
+        ReactGA.event({
+            category: "Navigation",
+            action: "ListItemClick",
+            label: this.props.guide.display_name,
+        });
         this.props.openInfoPage(this.props.guide);
         this.props.openLogInfoPage(this.props.guide);
     }

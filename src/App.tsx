@@ -26,7 +26,7 @@ import theme from "./utils/theme";
 import Hidden from "@material-ui/core/Hidden";
 import axios from "axios";
 import * as darksky from "dark-sky-api";
-import * as weather from "openweather-apis";
+// import * as weather from "openweather-apis";
 import { ACTIVITY_MENU } from "./components/ActivityFilter";
 import { categories, ITabCategory } from "./components/ControlBar";
 import Help, { helpPages, IHelpPages } from "./components/Help";
@@ -72,11 +72,11 @@ if (localStorage.recentItems) {
 
 ReactGA.pageview(window.location.pathname + window.location.search);
 
-weather.setAPPID("521cea2fce8675d0fe0678216dc01d5c");
-weather.setLang("en");
+// weather.setAPPID("521cea2fce8675d0fe0678216dc01d5c");
+// weather.setLang("en");
 
 darksky.units = "si";
-darksky.apiKey = "ab0e334c507c7f0de8fde5e61f27d6df";
+darksky.apiKey = "52f217f1efd90551483180fc9203dc56";
 
 const tabIds: string[] = categories.filter(
     (item: ITabCategory) => item.id !== "trips").map((item: ITabCategory) => `${item.route}*`,
@@ -120,7 +120,6 @@ class App extends Component {
                                     exact
                                     path={helpPages.map((item: IHelpPages) => item.route)}
                                     component={Help}
-
                                 />
                             </Switch>
                             <Hidden mdUp>

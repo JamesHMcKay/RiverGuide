@@ -1,5 +1,5 @@
 import * as darksky from "dark-sky-api";
-import * as openweather from "openweather-apis";
+// import * as openweather from "openweather-apis";
 
 import { ILatLon } from "./../../utils/types";
 
@@ -148,31 +148,28 @@ export class WeatherStore {
             });
         }
 
-        openweather.setCoordinate(lat, lon);
+        // openweather.setCoordinate(lat, lon);
         return new Promise((resolve: any): void => {
-            openweather.getAllWeather((err: any, JSONObj: IOpenWeather) => {
-                localState.weatherLocations[localState.makeKey(lat, lon)] = {
-                    position: {
-                        lat,
-                        lon,
-                    },
-                    openweather: localState.openWeatherConverter(JSONObj),
-                };
                 const position: {latitude: number, longitude: number} = {
                     latitude: lat,
                     longitude: lon,
                   };
 
                 darksky.loadCurrent(position).then((result: IDarkSkyWeather) => {
-                    localState.weatherLocations[localState.makeKey(lat, lon)].darksky
-                        = localState.darkskyWeatherConverter(result);
+                    localState.weatherLocations[localState.makeKey(lat, lon)] = {
+                        position: {
+                            lat,
+                            lon,
+                        },
+                        darksky: localState.darkskyWeatherConverter(result),
+                    };
                     darksky.loadForecast(position)
                         .then((result: IDarkSkyForecastList) => {
                             localState.weatherLocations[localState.makeKey(lat, lon)].forecast =
                                 localState.createForecast(result);
                             resolve(localState.weatherLocations[localState.makeKey(lat, lon)]);
                     });
-                    });
-        }); });
+                });
+            });
     }
 }

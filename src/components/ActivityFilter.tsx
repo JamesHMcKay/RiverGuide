@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { generateFilteredList } from "../actions/actions";
 import { IState } from "../reducers/index";
 import { IFilter, IListEntry, ILogEntry, IMapBounds } from "../utils/types";
+import ReactGA from 'react-ga';
 
 export const ACTIVITY_MENU: Array<{name: string, id: string}> = [
     {name: "White water", id: "kayaking"},
@@ -29,6 +30,11 @@ interface IActivityFilterProps extends IActivityFilterStateProps {
 class ActivityFilter extends Component<IActivityFilterProps> {
 
     public handleTypeChange = (event: any): void => {
+        ReactGA.event({
+            category: "Navigation",
+            action: "ActivityFilter",
+            label: event.target.value,
+        });
         const filter: IFilter = {
             ...this.props.filters,
             activity: event.target.value,
