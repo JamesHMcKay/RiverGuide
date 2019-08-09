@@ -4,13 +4,13 @@ import ListItemText from "@material-ui/core/ListItemText";
 import PlaceIcon from "@material-ui/icons/PlaceOutlined";
 import Pool from "@material-ui/icons/Pool";
 import React, { Component } from "react";
+import ReactGA from "react-ga";
 import { connect } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
 import { openInfoPage, openLogInfoPage } from "../../actions/getGuides";
 import { IState } from "../../reducers";
 import { IListEntry } from "../../utils/types";
 import FlowBadge from "../common/FlowBadge";
-import ReactGA from 'react-ga';
 
 const ACTIVITY_ICONS: Array<{id: string; icon: JSX.Element}> = [
     {id: "kayaking", icon: <PlaceIcon />},

@@ -14,10 +14,10 @@ import { IState } from "../reducers/index";
 
 import Grid from "@material-ui/core/Grid";
 import "mapbox-gl/dist/mapbox-gl.css";
+import ReactGA from "react-ga";
 import Info from "./infoPanel/Info";
 import LeftPanel from "./leftPanel/LeftPanel";
 import MapComponent from "./map/MapComponent";
-import ReactGA from 'react-ga';
 
 import {
     IFilter,

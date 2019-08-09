@@ -1,5 +1,6 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import React, { Component } from "react";
+import ReactGA from "react-ga";
 import ReactMapGL, { InteractiveMap, Marker, ViewState } from "react-map-gl";
 import { connect } from "react-redux";
 import uuidv1 from "uuid";
@@ -11,7 +12,6 @@ import { IViewport } from "./InfoMapComponent";
 import MapCluster from "./MapCluster";
 import MapMarker from "./MapMarker";
 import TileSelector from "./TileSelector";
-import ReactGA from 'react-ga';
 
 export const DEFAULT_LAT: number = -40.838875;
 export const DEFAULT_LON: number = 171.7799;

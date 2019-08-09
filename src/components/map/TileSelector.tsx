@@ -4,7 +4,7 @@ import TerrainRounded from "@material-ui/icons/TerrainRounded";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import React, { Component } from "react";
-import ReactGA from 'react-ga';
+import ReactGA from "react-ga";
 
 interface ITileOptions {
     icon: JSX.Element;

@@ -1,11 +1,11 @@
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import React, { Component } from "react";
+import ReactGA from "react-ga";
 import { connect } from "react-redux";
 import { generateFilteredList } from "../actions/actions";
 import { IState } from "../reducers/index";
 import { IFilter, IListEntry, ILogEntry, IMapBounds } from "../utils/types";
-import ReactGA from 'react-ga';
 
 export const ACTIVITY_MENU: Array<{name: string, id: string}> = [
     {name: "White water", id: "kayaking"},
