@@ -12,7 +12,7 @@ const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 export const makeGaugeRequest = () => dispatch => {
     const request = {
         action: "get_features",
-        filters: ["flow", "rainfall"],
+        filters: ["flow", "rainfall", "stage_height"],
         crossDomain: true,
     }
     axios

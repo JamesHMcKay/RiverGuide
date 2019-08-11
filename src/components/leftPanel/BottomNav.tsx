@@ -12,9 +12,9 @@ import {
     closeInfoPage,
     setTabIndex,
 } from "../../actions/actions";
-import { setCategory } from "../../actions/getGuides";
+import { setCategory, updateCategory } from "../../actions/getGuides";
 import { IState } from "../../reducers";
-import { IFilter, IMapBounds } from "../../utils/types";
+import { IFilter, IGauge, IListEntry, IMapBounds } from "../../utils/types";
 import { categories, ITabCategory, tabIds } from "../ControlBar";
 import ToggleList from "./ToggleList";
 
@@ -30,6 +30,12 @@ interface IBottomNavProps extends IBottomNavStateProps {
         filter: IFilter,
         mapBounds: IMapBounds,
         token: CancelTokenSource) => void;
+    updateCategory: (
+        value: string,
+        filter: IFilter,
+        mapBounds: IMapBounds | null,
+        guides: IListEntry[],
+        gauges: IGauge[]) => void;
     closeInfoPage: () => void;
     setTabIndex: (index: string) => void;
 }
@@ -38,6 +44,8 @@ interface IBottomNavStateProps {
     index: string;
     mapBounds: IMapBounds;
     filters: IFilter;
+    guides: IListEntry[];
+    gauges: IGauge[];
 }
 
 interface IBottomNavState {
@@ -60,10 +68,12 @@ class BottomNav extends Component<IBottomNavProps, IBottomNavState> {
             cancelToken: newToken,
         });
         if (categoryId === "trips") {
-            this.props.setCategory("activities", this.props.filters, this.props.mapBounds, newToken);
+            // this.props.setCategory("activities", this.props.filters, null, newToken);
+            this.props.updateCategory("guides", this.props.filters, null, this.props.guides, this.props.gauges);
             this.props.closeInfoPage();
         } else {
-            this.props.setCategory(categoryId, this.props.filters, this.props.mapBounds, newToken);
+            // this.props.setCategory(categoryId, this.props.filters, null, newToken);
+            this.props.updateCategory(categoryId, this.props.filters, null, this.props.guides, this.props.gauges);
         }
     }
 
@@ -99,10 +109,12 @@ function mapStateToProps(state: IState): IBottomNavStateProps {
         index: state.tabIndex,
         mapBounds: state.mapBounds,
         filters: state.filters,
+        guides: state.guides,
+        gauges: state.gauges,
     });
 }
 
 export default connect(
     mapStateToProps,
-    { closeInfoPage, setTabIndex, setCategory },
+    { closeInfoPage, setTabIndex, setCategory, updateCategory },
 )(BottomNav);

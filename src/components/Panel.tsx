@@ -69,7 +69,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
     }
 
     public componentDidMount(): void {
-        this.props.makeGaugeRequest();
+        // this.props.makeGaugeRequest();
     }
 
     public onClick = (guide: IListEntry): void => {

@@ -118,7 +118,7 @@ class MapComponent extends Component<IMapComponentProps, IMapComponentState> {
         };
 
         return (
-            <div style={{width: "100%", height: "84vh"}}>
+            <div style={{width: "100%", height: "86vh"}}>
                 <ReactMapGL
                     width="100%"
                     height="100%"
@@ -130,10 +130,10 @@ class MapComponent extends Component<IMapComponentProps, IMapComponentState> {
                     mapboxApiAccessToken={TOKEN}
                 >
                     <div style={{position: "absolute", left: 10, top: 10}}>
-                    <TileSelector
-                        tile={this.state.tile}
-                        onTileChange={this.onTileChange}
-                    />
+                        <TileSelector
+                            tile={this.state.tile}
+                            onTileChange={this.onTileChange}
+                        />
                     </div>
                     {this.state.map && (
                         <Cluster

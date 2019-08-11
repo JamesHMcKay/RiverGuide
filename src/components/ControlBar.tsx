@@ -39,7 +39,7 @@ interface IControlBarState {
 class ControlBar extends Component<IControlBarProps, IControlBarState> {
     public render(): JSX.Element {
         return (
-            <Toolbar>
+            <Toolbar style = {{minHeight: "55px"}}>
                 <SearchBox/>
                 <Hidden smDown>
                 <div

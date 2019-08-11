@@ -9,8 +9,8 @@ import {
     closeInfoPage,
     setTabIndex,
 } from "../actions/actions";
-import { openInfoPage, setCategory } from "../actions/getGuides";
-import { IFilter, IInfoPage, IListEntry, IMapBounds } from "./../utils/types";
+import { openInfoPage, setCategory, updateCategory } from "../actions/getGuides";
+import { IFilter, IGauge, IInfoPage, IListEntry, IMapBounds } from "./../utils/types";
 
 import { IState } from "../reducers/index";
 import ControlBar from "./ControlBar";
@@ -24,6 +24,12 @@ interface ITabBarProps extends ITabBarStateToProps {
         mapBounds: IMapBounds | null,
         token: CancelTokenSource,
         guideId?: string) => void;
+    updateCategory: (
+        value: string,
+        filter: IFilter,
+        mapBounds: IMapBounds | null,
+        guides: IListEntry[],
+        gauges: IGauge[]) => void;
     location: any;
     closeInfoPage: () => void;
     setTabIndex: (index: string) => void;
@@ -39,6 +45,8 @@ interface ITabBarStateToProps {
     infoPage: IInfoPage;
     logPageOpen: boolean;
     filters: IFilter;
+    guides: IListEntry[];
+    gauges: IGauge[];
 }
 
 class TabBar extends Component<ITabBarProps, ITabBarState> {
@@ -73,10 +81,12 @@ class TabBar extends Component<ITabBarProps, ITabBarState> {
             cancelToken: newToken,
         });
         if (categoryId === "trips") {
-            this.props.setCategory("activities", this.props.filters, null, newToken);
+            // this.props.setCategory("activities", this.props.filters, null, newToken);
+            this.props.updateCategory("guides", this.props.filters, null, this.props.guides, this.props.gauges);
             this.props.closeInfoPage();
         } else {
-            this.props.setCategory(categoryId, this.props.filters, null, newToken);
+            // this.props.setCategory(categoryId, this.props.filters, null, newToken);
+            this.props.updateCategory(categoryId, this.props.filters, null, this.props.guides, this.props.gauges);
         }
 
         this.handleClose();
@@ -92,7 +102,7 @@ class TabBar extends Component<ITabBarProps, ITabBarState> {
 
     public render(): JSX.Element {
         return (
-            <AppBar position="static" style={{ zIndex: 2, minHeight: "55px", maxHeight: "8vh"}}>
+            <AppBar position="static" style={{ zIndex: 2, minHeight: "55px", height: "6vh"}}>
                 <Hidden smDown>
                     <ControlBar location={this.props.location} handleSelect={this.handleSelect}/>
                 </Hidden>
@@ -111,9 +121,11 @@ const mapStateToProps: (state: IState) => ITabBarStateToProps = (state: IState):
     infoPage: state.infoPage,
     logPageOpen: state.logPageOpen,
     filters: state.filters,
+    guides: state.guides,
+    gauges: state.gauges,
 });
 
 export default connect(
     mapStateToProps,
-    { setCategory, closeInfoPage, setTabIndex, openInfoPage },
+    { setCategory, closeInfoPage, setTabIndex, openInfoPage, updateCategory },
 )(TabBar);

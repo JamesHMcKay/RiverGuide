@@ -1,4 +1,5 @@
 import axios from "axios";
+import { makeGaugeRequest } from "./getGauges";
 
 import {
     ADD_HISTORIC_FLOW,
@@ -52,6 +53,36 @@ export const makeGuideRequest = () => dispatch => {
         });
     });
 };
+
+export const updateCategory = (category, filters, mapBounds, guides, gauges) => dispatch => {
+    dispatch({ type: CLEAR_ERRORS });
+    dispatch({
+        type: LOADING_ENTRIES,
+    });
+    dispatch({
+        type: CLOSE_INFO,
+    });
+
+    let result = [];
+    if (category === "riverflow") {
+        result = gauges;
+    } else {
+        result = guides;
+    }
+
+    dispatch({
+        type: GET_ENTRIES,
+        payload: result,
+    });
+    dispatch({
+        type: GENERATE_FILTERED_LIST,
+        payload: {
+            entries: result,
+            filters,
+            mapBounds,
+        },
+    });
+}
 
 export const setCategory = (category, filters, mapBounds, cancelToken, guideId) => dispatch => {
     dispatch({ type: CLEAR_ERRORS });
@@ -107,6 +138,7 @@ export const setCategory = (category, filters, mapBounds, cancelToken, guideId) 
                 });
             });
     } else {
+        dispatch(makeGaugeRequest());
         axios
         .get(`${rapidsApiUrl}graphql`,
             {

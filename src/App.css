@@ -91,10 +91,10 @@ h1 {
         width: 33%;
     }
     .list-container {
-        height: 84vh;
+        height: 86vh;
     }
     .right-panel {
-        height: 84vh;
+        height: 86vh;
         overflow-y: scroll;
     }
 }
