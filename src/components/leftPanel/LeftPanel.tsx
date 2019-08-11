@@ -79,7 +79,6 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
         // const isAuthenticated: boolean = this.props.auth.isAuthenticated;
         const isLoading: boolean = this.props.listEntries.length < 1;
         const noResults: boolean = !isLoading && this.props.filteredList.length < 1;
-
         let favourites: string[] = [];
         if (this.props.auth.isAuthenticated && this.props.auth.user.user_favourites) {
             favourites = this.props.auth.user.user_favourites;

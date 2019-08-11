@@ -16,6 +16,7 @@ import {
     CLEAR_ERRORS,
     GENERATE_FILTERED_LIST,
     GET_GUIDES,
+    GET_GAUGES,
 } from "./types";
 
 const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
@@ -56,9 +57,9 @@ export const makeGuideRequest = () => dispatch => {
 
 export const updateCategory = (category, filters, mapBounds, guides, gauges) => dispatch => {
     dispatch({ type: CLEAR_ERRORS });
-    dispatch({
-        type: LOADING_ENTRIES,
-    });
+    // dispatch({
+    //     type: LOADING_ENTRIES,
+    // });
     dispatch({
         type: CLOSE_INFO,
     });
@@ -121,6 +122,10 @@ export const setCategory = (category, filters, mapBounds, cancelToken, guideId) 
                 }
                 dispatch({
                     type: GET_ENTRIES,
+                    payload: result,
+                });
+                dispatch({
+                    type: GET_GAUGES,
                     payload: result,
                 });
                 dispatch({
