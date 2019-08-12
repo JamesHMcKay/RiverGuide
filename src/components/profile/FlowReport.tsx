@@ -7,7 +7,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getGaugeHistory } from "../../actions/actions";
 import { IState } from "../../reducers/index";
-import { dataTypeParser, unitParser } from "../../utils/dataTypeParser";
+import { dataTypeParser, dataTypeToUnit, unitParser } from "../../utils/dataTypeParser";
 import { IGauge, IGaugeHistory, IHistory, IListEntry, IObservable, IObsValue } from "../../utils/types";
 
 interface IUnitSelection {
@@ -135,7 +135,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         const newGaugeHistory: boolean = prevProps.gaugeHistory.gaugeHistory !== this.props.gaugeHistory.gaugeHistory;
         const newStartDate: boolean = prevProps.start_date !== this.props.start_date;
         const newEndDate: boolean = prevProps.end_date !== this.props.end_date;
-        if (shouldUpdate) {
+        if (shouldUpdate && !!selectedGuide) {
             const gauge: IGauge = this.props.gauges.filter(
                 (item: IGauge): boolean => (item.id === selectedGuide))[0];
             this.props.getGaugeHistory(selectedGuide);
@@ -144,6 +144,13 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
             });
             this.updateFlow();
         }
+        if (shouldUpdate && !selectedGuide) {
+            this.setState({
+                manualySet: true,
+                gauge: undefined,
+            });
+        }
+
         if (newGaugeHistory || newEndDate || newStartDate) {
             this.updateFlow();
         }
@@ -162,6 +169,9 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         return [
             <MenuItem value="flow" key={"flow"}>
                 {"Flow"}
+            </MenuItem>,
+            <MenuItem value="stage_height" key={"stage_height"}>
+                {"Stage height"}
             </MenuItem>,
         ];
     }
@@ -225,7 +235,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         } else if (this.state.gauge) {
             return (<div>{"No automatic flow calculations available for this date"}</div>);
         }
-        return (<div>{"Enter flow value"}</div>);
+        return (<div></div>);
     }
 
     public timeWarningText = (): JSX.Element | null => {
@@ -244,42 +254,48 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
                 const selObs: IObservable[] = observables.filter((item: IObservable) => (item.type === type));
                 unit = selObs[0].units;
             }
+            return unitParser(unit);
         }
-        return unitParser(unit);
+        return dataTypeToUnit(type);
     }
 
     public render(): JSX.Element {
         return (
             <div className = "flow-report-section" style={{justifyContent: "center"}}>
                 <div className = "flow-details-section">
-                <Select
-                value={this.state.type}
-                onChange={this.handleTypeChange}
-                input={<Input id="data-type" />}
-                style={{marginRight: "3em"}}
-                >
-                 {this.getAvailableTypes()}
-              </Select>
-              {!this.state.manualySet &&
-               <div>
-                   {this.displayFlow() + this.getUnit()}
+                    <Select
+                        value={this.state.type}
+                        onChange={this.handleTypeChange}
+                        input={<Input id="data-type" />}
+                        style={{marginRight: "3em"}}
+                    >
+                        {this.getAvailableTypes()}
+                    </Select>
+                    {!this.state.manualySet &&
+                        <div>
+                            {this.displayFlow() + " " + this.getUnit()}
+                        </div>
+                    }
+                    {this.state.manualySet &&
+                        <Input
+                            id="adornment-weight"
+                            value={this.displayFlow()}
+                            onChange={this.handleChange}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    {this.getUnit()}
+                                </InputAdornment>
+                            }
+                            aria-describedby="weight-helper-text"
+                            inputProps={{
+                                "aria-label": "Weight",
+                            }}
+                        />
+                    }
                 </div>
-            }
-            {this.state.manualySet &&
-                <Input
-                    id="adornment-weight"
-                    value={this.displayFlow()}
-                    onChange={this.handleChange}
-                    endAdornment={<InputAdornment position="end">{this.getUnit()}</InputAdornment>}
-                    aria-describedby="weight-helper-text"
-                    inputProps={{
-                        "aria-label": "Weight",
-                    }}
-                />}
-                </div>
-                    {this.warningText()}
-                    {this.timeWarningText()}
-                </div>
+                {this.warningText()}
+                {this.timeWarningText()}
+            </div>
         );
     }
 }

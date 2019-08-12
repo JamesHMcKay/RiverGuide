@@ -2,10 +2,11 @@ import { Button, Dialog, DialogActions, DialogTitle, IconButton, Tooltip, Typogr
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import React, { Component } from "react";
+import { CSVLink } from "react-csv";
 import { connect } from "react-redux";
 import { deleteLogEntry, toggleModal } from "../../actions/actions";
 import { IState } from "../../reducers";
-import { ILogComplete } from "../../utils/types";
+import { ILogComplete, IObsValue } from "../../utils/types";
 
 interface ILogbookHeadProps extends ILogbookHeadStateProps {
     deleteLogEntry: (logId: string) => void;
@@ -19,6 +20,14 @@ interface ILogbookHeadStateProps {
 
 interface ILogbookHeadState {
     confirmDeleteDialogOpen: boolean;
+}
+
+interface ILogDownloadItem {
+    guideName: string;
+    rating: number;
+    participants: number;
+    startDateTime: string;
+    endDateTime: string;
 }
 
 class LogbookHead extends Component<ILogbookHeadProps, ILogbookHeadState> {
@@ -44,6 +53,42 @@ class LogbookHead extends Component<ILogbookHeadProps, ILogbookHeadState> {
         this.setState({
             confirmDeleteDialogOpen: false,
         });
+    }
+
+    public getData = (numSelected: number): Array<ILogDownloadItem | Partial<IObsValue>> => {
+        const filteredLogs: ILogComplete[] = numSelected > 0 ?
+            this.props.log.filter((item: ILogComplete) => this.props.selectedLogIds.indexOf(item.id) > -1) :
+            this.props.log;
+        const output: Array<ILogDownloadItem | Partial<IObsValue>> = filteredLogs.map((item: ILogComplete) => ({
+            guideName: item.guide_name,
+            rating: item.rating,
+            participants: item.participants,
+            startDateTime: item.start_date_time,
+            endDateTime: item.end_date_time,
+            ...item.observables,
+        }));
+        return output;
+    }
+
+    public getDownloadButton = (numSelected: number): JSX.Element => {
+        const buttonText: string = numSelected > 0 ? "Download selection" : "Download log entries";
+        return (
+            <Button
+                style={{
+                    marginLeft: "auto",
+                    height: "fit-content",
+                    marginTop: "10px",
+                    marginRight: "10px",
+                    textTransform: "none",
+                }}
+                variant="outlined"
+                size="small"
+            >
+            <CSVLink data={this.getData(numSelected)}>
+                {buttonText}
+            </CSVLink>
+        </Button>
+        );
     }
 
     public render(): JSX.Element {
@@ -73,6 +118,7 @@ class LogbookHead extends Component<ILogbookHeadProps, ILogbookHeadState> {
                         {numSelected} selected
                     </Typography>
                 }
+                {this.getDownloadButton(numSelected)}
                 <Dialog
                     open={this.state.confirmDeleteDialogOpen}
                     onClose={this.handleClose}

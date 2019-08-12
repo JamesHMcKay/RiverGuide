@@ -10,7 +10,7 @@ import { IState } from "../../reducers/index";
 import { IAuth, ILogComplete, ILogListItem } from "../../utils/types";
 
 // Material UI
-import { Button, Hidden } from "@material-ui/core";
+import { Button, Hidden, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
 // Components
@@ -68,6 +68,7 @@ class LogPage extends Component<ILogPageProps> {
             style={{
                 color: "black",
                 cursor: "pointer",
+                marginTop: "30px",
             }}
             >
                 <CloseIcon />
@@ -79,7 +80,7 @@ class LogPage extends Component<ILogPageProps> {
         return (
             <Grid
                 container
-                style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0"}}
+                style={{marginRight: "5%", marginLeft: "5%", marginTop: "0", marginBottom: "0"}}
         >
             <LogbookStats/>
         </Grid>
@@ -92,7 +93,7 @@ class LogPage extends Component<ILogPageProps> {
             item
             md={12}
             lg={12}
-            style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0"}}
+            style={{marginRight: "5%", marginLeft: "5%", marginTop: "0", marginBottom: "0"}}
         >
             <Logbook columnOrder={columns} publicPage={false} log={this.props.log}/>
         </Grid>
@@ -101,9 +102,14 @@ class LogPage extends Component<ILogPageProps> {
 
     public render(): JSX.Element {
         return (
-            <Grid container item xs={12} spacing={0} justify="space-between" className="right-panel" >
+            <Grid container xs={12} spacing={0} justify="space-between" className="right-panel" >
                 <Hidden smDown>
-                    <Grid container item md={12} lg={12} justify="flex-end">
+                    <Grid item md={11} lg={11} justify="flex-start">
+                            <Typography variant="h4" style={{marginTop: "30px", marginLeft: "6%"}}>
+                                {"Trip logbook"}
+                            </Typography>
+                    </Grid>
+                    <Grid item md={1} lg={1} justify="flex-end">
                         {this.getCloseButton()}
                     </Grid>
                 </Hidden>

@@ -1,5 +1,8 @@
 import { Grid, ListItem, ListItemText } from "@material-ui/core";
+import CalendarToday from "@material-ui/icons/CalendarToday";
+import LocationOn from "@material-ui/icons/LocationOn";
 import QueryBuilder from "@material-ui/icons/QueryBuilder";
+import ShowChart from "@material-ui/icons/ShowChart";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
@@ -33,14 +36,32 @@ class LogbookStats extends Component<ILogBookStatsProps> {
         const dateYear: number[] = timeDiff.filter((item: number) => item < 3.154e10);
 
         return (
-            <Grid container item spacing={0} justify="space-between">
+            <Grid container spacing={0} justify="space-between">
                 <Grid item xs={6} lg={3}>
                     <ListItem>
-                        <QueryBuilder fontSize="large" />
+                        <ShowChart fontSize="large" />
                         <ListItemText
                             style={{marginLeft: "10px"}}
-                            primary="Number of sections"
-                            secondary={sectionId.length} />
+                            secondary="Total trips"
+                            primary={logs.length} />
+                    </ListItem>
+                </Grid>
+                <Grid item xs={6} lg={3}>
+                    <ListItem>
+                        <LocationOn fontSize="large" />
+                        <ListItemText
+                            style={{marginLeft: "10px"}}
+                            secondary="Different locations"
+                            primary={sectionId.length} />
+                    </ListItem>
+                </Grid>
+                <Grid item xs={6} lg={3}>
+                    <ListItem>
+                        <CalendarToday fontSize="large" />
+                        <ListItemText
+                            style={{marginLeft: "10px"}}
+                            secondary="Last 30 days"
+                            primary={dateThirtyDays.length} />
                     </ListItem>
                 </Grid>
                 <Grid item xs={6} lg={3}>
@@ -48,26 +69,8 @@ class LogbookStats extends Component<ILogBookStatsProps> {
                         <QueryBuilder fontSize="large" />
                         <ListItemText
                             style={{marginLeft: "10px"}}
-                            primary="Last 30 days"
-                            secondary={dateThirtyDays.length} />
-                    </ListItem>
-                </Grid>
-                <Grid item xs={6} lg={3}>
-                    <ListItem>
-                        <QueryBuilder fontSize="large" />
-                        <ListItemText
-                            style={{marginLeft: "10px"}}
-                            primary="Last year"
-                            secondary={dateYear.length} />
-                    </ListItem>
-                </Grid>
-                <Grid item xs={6} lg={3}>
-                    <ListItem>
-                        <QueryBuilder fontSize="large" />
-                        <ListItemText
-                            style={{marginLeft: "10px"}}
-                            primary="All time"
-                            secondary={logs.length} />
+                            secondary="Last year"
+                            primary={dateYear.length} />
                     </ListItem>
                 </Grid>
             </Grid>

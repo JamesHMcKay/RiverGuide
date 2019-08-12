@@ -156,21 +156,23 @@ export const getGaugeHistory = gaugeId => dispatch => {
             .post(riverServiceUrl, request)
             .then(res => {
                 let data = res.data.flows;
-                let result = data.map(item => (
-                    {
-                        flow: item.flow,
-                        time: item.time,
-                        values: {
+                if (data) {
+                    let result = data.map(item => (
+                        {
                             flow: item.flow,
-                            stage_height: item.stage_height,
-                            temperature: item.temperature,
-                            rainfall: item.rainfall,
-                        }
-                    }));
-                dispatch({
-                    type: GET_GAUGE_HISTORY,
-                    payload: result.reverse(),
-                });
+                            time: item.time,
+                            values: {
+                                flow: item.flow,
+                                stage_height: item.stage_height,
+                                temperature: item.temperature,
+                                rainfall: item.rainfall,
+                            }
+                        }));
+                    dispatch({
+                        type: GET_GAUGE_HISTORY,
+                        payload: result.reverse(),
+                    });
+                }
             });
     } else {
         dispatch({

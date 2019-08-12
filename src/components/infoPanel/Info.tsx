@@ -82,7 +82,7 @@ class Info extends Component<IInfoProps, IInfoState> {
     constructor(props: IInfoProps) {
         super(props);
         this.state = {
-            selectedType: "Public",
+            selectedType: this.props.isLogbookInfo ? "My logs" : "Public",
         };
     }
 
@@ -291,7 +291,8 @@ class Info extends Component<IInfoProps, IInfoState> {
                     onClick = {(): void => this.selectTypeClick(item)}
                 >
                     {item}
-                </Button>);
+                </Button>,
+            );
             return result;
     }
 
@@ -408,6 +409,8 @@ class Info extends Component<IInfoProps, IInfoState> {
     }
 
     public getHeader = (entry: IListEntry, isData: boolean): JSX.Element => {
+        const titleLength: number = entry.display_name.length;
+        const titleSize: string = titleLength > 40 ? "h4" : "h1";
         return (
             <Grid
             container
@@ -422,7 +425,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                 backgroundRepeat: "no-repeat"}}>
             <Grid container item md={11} lg={11} justify="flex-start">
                     <div className="toolbar-middle">
-                            <Typography variant="h1" style={{color: "white"}}>
+                            <Typography variant={titleSize as "h1" | "h3"} style={{color: "white"}}>
                             {entry.display_name}
                             </Typography>
                             <Typography variant="h6" style={{color: "white"}}>
@@ -435,7 +438,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                     <Hidden smDown>
                         {this.getCloseButton()}
                     </Hidden>
-                </Grid>
+            </Grid>
             <Grid
                 container
                 item

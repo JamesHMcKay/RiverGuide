@@ -66,6 +66,15 @@ const theme: Theme = {
           fontSize: "1.5em",
         },
       },
+      h4: {
+        fontSize: "2em",
+        [breakpoints.down(1500)]: {
+          fontSize: "1.5em",
+        },
+        [breakpoints.down("md")]: {
+          fontSize: "1.5em",
+        },
+      },
     },
   },
 };
