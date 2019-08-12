@@ -115,6 +115,8 @@ export const setCategory = (category, filters, mapBounds, cancelToken, guideId) 
                         region: item.region,
                         river_name: item.river_name,
                         activity: "data",
+                        lastUpdated: item.last_updated,
+                        source: item.data_source,
                     }));
                 if (guideId) {
                     const selectedGuide = result.filter(item => item.id === guideId);
