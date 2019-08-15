@@ -26,7 +26,9 @@ class GuideItem extends Component<IGuideItemProps, {}> {
     }
 
     public render(): JSX.Element {
-        const title: string = this.props.auth.isAuthenticated ? "My Trips" : "Log in to see your trips here";
+        const title: string = this.props.auth.isAuthenticated ?
+            "Click here to view and edit logbook" :
+                "Log in to see your trips here";
         return (
             <div>
                 <ListItem button disabled={!this.props.auth.isAuthenticated} onClick={this.handleClick}>

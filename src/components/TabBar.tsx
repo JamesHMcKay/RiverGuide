@@ -7,6 +7,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
     closeInfoPage,
+    openLogPage,
     setTabIndex,
 } from "../actions/actions";
 import { openInfoPage, setCategory, updateCategory } from "../actions/getGuides";
@@ -32,6 +33,7 @@ interface ITabBarProps extends ITabBarStateToProps {
         gauges: IGauge[]) => void;
     location: any;
     closeInfoPage: () => void;
+    openLogPage: () => void;
     setTabIndex: (index: string) => void;
     openInfoPage: (guide: IListEntry) => void;
 }
@@ -84,6 +86,7 @@ class TabBar extends Component<ITabBarProps, ITabBarState> {
             // this.props.setCategory("activities", this.props.filters, null, newToken);
             this.props.updateCategory("guides", this.props.filters, null, this.props.guides, this.props.gauges);
             this.props.closeInfoPage();
+            this.props.openLogPage();
         } else {
             // this.props.setCategory(categoryId, this.props.filters, null, newToken);
             this.props.updateCategory(categoryId, this.props.filters, null, this.props.guides, this.props.gauges);
@@ -127,5 +130,5 @@ const mapStateToProps: (state: IState) => ITabBarStateToProps = (state: IState):
 
 export default connect(
     mapStateToProps,
-    { setCategory, closeInfoPage, setTabIndex, openInfoPage, updateCategory },
+    { setCategory, closeInfoPage, setTabIndex, openInfoPage, updateCategory, openLogPage },
 )(TabBar);
