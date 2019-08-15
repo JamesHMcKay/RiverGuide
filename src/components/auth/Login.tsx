@@ -5,8 +5,8 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import TextField from "@material-ui/core/TextField";
 import withMobileDialog from "@material-ui/core/withMobileDialog";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
@@ -103,6 +103,7 @@ class Login extends Component<ILoginProps, ILoginState> {
                     aria-labelledby="example dialog"
                     open={this.props.isOpen}
                     fullScreen={this.props.fullScreen}
+                    maxWidth={"xs"}
                 >
                 <DialogTitle handleClose={this.closeModal} title={"Login"}/>
                 <DialogContent>
@@ -115,36 +116,40 @@ class Login extends Component<ILoginProps, ILoginState> {
                 <DialogContentText align = "center" variant = "h6">
                         {"- or -"}
                 </DialogContentText>
-
-                    <DialogContentText>
-                        {"Email"}
-                    </DialogContentText>
-                    <Input
-                    id="username"
-                    type={"text"}
-                    value={this.state.identifier}
-                    onChange={this.onChangeEmail}
-                    fullWidth
+                <div style={{justifyContent: "center", width: "90%", margin: "auto"}} >
+                    <TextField
+                            id="email"
+                            style={{width: "100%"}}
+                            label="Email"
+                            margin="dense"
+                            variant="outlined"
+                            onChange={this.onChangeEmail}
+                            value={this.state.identifier}
+                        />
+                    <TextField
+                                id="password"
+                                margin="dense"
+                                variant="outlined"
+                                style={{width: "100%"}}
+                                type={this.state.showPassword ? "text" : "password"}
+                                label="Password"
+                                value={this.state.password}
+                                onChange={this.onChangePassword}
+                                InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                    <IconButton
+                                        edge="end"
+                                        aria-label="toggle password visibility"
+                                        onClick={this.handleClickShowPassword}
+                                    >
+                                        {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                    </InputAdornment>
+                                ),
+                                }}
                     />
-
-                    <DialogContentText>
-                        {"Password"}
-                    </DialogContentText>
-
-                    <Input
-                    id="adornment-password"
-                    type={this.state.showPassword ? "text" : "password"}
-                    value={this.state.password}
-                    onChange={this.onChangePassword}
-                    fullWidth
-                    endAdornment={
-                    <InputAdornment position="end">
-                    <IconButton aria-label="Toggle password visibility" onClick={this.handleClickShowPassword}>
-                    {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                    </InputAdornment>
-                    }
-                    />
+                </div>
                 {this.state.errors &&
                 <div>
                     {this.state.errors.message}

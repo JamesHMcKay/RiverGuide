@@ -13,7 +13,7 @@ function SocialLink({ pretext, provider }) {
       <ProviderButton
         type="button"
         social={provider}
-        style={{ width: "250px", marginTop: "10px",  marginBottom: "10px" }}
+        style={{ width: "90%", marginTop: "10px",  marginBottom: "10px" }}
       >
         <i className={`fa fa-${icon}`} style = {{fontSize: "30px", position: "absolute", left: "10px"}}/>
         {pretext + capitalize(provider)}

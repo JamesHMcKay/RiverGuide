@@ -266,13 +266,6 @@ class Info extends Component<IInfoProps, IInfoState> {
         });
     }
 
-    // public getButtonColor(type: string): "inherit" | "primary" | "secondary" | "default" | undefined {
-    //     if (type === this.state.selectedType) {
-    //         return "primary";
-    //     }
-    //     return "default";
-    // }
-
     public getButtonVariant(type: string):
         "text" | "outlined" | "contained" | undefined {
         if (type === this.state.selectedType) {

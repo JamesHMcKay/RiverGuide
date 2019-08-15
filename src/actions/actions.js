@@ -1,5 +1,6 @@
 import axios from "axios";
 import ReactGA from 'react-ga';
+import { openLogInfoPage } from "./getGuides";
 
 import {
     CLEAR_ERRORS,
@@ -196,9 +197,8 @@ export const updateOpenLog = openLog => dispatch => {
     });
 };
 
-
 // Create logbook entry
-export const createLogEntry = logEntry => dispatch => {
+export const createLogEntry = (logEntry, guide) => dispatch => {
     dispatch({
         type: SET_LOADING_SPINNER,
         payload: "logTrip",
@@ -211,6 +211,9 @@ export const createLogEntry = logEntry => dispatch => {
             type: CLOSE_MODAL,
         });
         dispatch(makeLogbookRequest(logEntry.user_id));
+        if (guide) {
+            dispatch(openLogInfoPage(guide));
+        }
     }).catch(err => {
         dispatch({
             type: GET_ERRORS,

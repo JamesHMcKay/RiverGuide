@@ -8,9 +8,10 @@ import Star from "@material-ui/icons/Star";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { createLogEntry, editLogEntry } from "../../actions/actions";
+import { openLogInfoPage } from "../../actions/getGuides";
 import { IState } from "../../reducers/index";
 import DialogTitle from "../../utils/dialogTitle";
-import { IAuth, IHistory, IListEntry, ILogComplete, ILogEntry, IObsValue } from "../../utils/types";
+import { IAuth, IHistory, IInfoPage, IListEntry, ILogComplete, ILogEntry, IObsValue } from "../../utils/types";
 
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -27,9 +28,10 @@ import SectionSelect from "./SectionSelect";
 import TimeSlider from "./TimeSlider";
 
 interface ITripDetailsModelProps extends ITripDetailsModalStateProps {
-    createLogEntry: (item: ILogEntry) => void;
+    createLogEntry: (item: ILogEntry, guide: IListEntry | undefined) => void;
     editLogEntry: (item: ILogEntry) => void;
     handleClose: () => void;
+    openLogInfoPage: (guide: IListEntry) => void;
     selectedGuide?: IListEntry;
     gaugeHistory?: IHistory[];
     initialLogEntry?: ILogComplete;
@@ -53,6 +55,7 @@ interface ITripDetailsModelState {
 interface ITripDetailsModalStateProps {
     auth: IAuth;
     loadingSpinner: string;
+    infoPage: IInfoPage;
 }
 
 class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsModelState> {
@@ -140,9 +143,8 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         if (this.props.isUpdate) {
             this.props.editLogEntry(logEntry as ILogEntry);
         } else {
-            this.props.createLogEntry(logEntry as ILogEntry);
+            this.props.createLogEntry(logEntry as ILogEntry, this.props.infoPage.selectedGuide);
         }
-        // this.props.handleClose();
     }
 
     public getValue = (key: string): string => {
@@ -489,10 +491,11 @@ function mapStateToProps(state: IState): ITripDetailsModalStateProps {
     return ({
         auth: state.auth,
         loadingSpinner: state.loadingSpinner,
+        infoPage: state.infoPage,
     });
 }
 
 export default connect(
     mapStateToProps,
-    { createLogEntry, editLogEntry },
+    { createLogEntry, editLogEntry, openLogInfoPage },
 )(TripDetailsModal);

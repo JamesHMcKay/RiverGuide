@@ -3,8 +3,8 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import TextField from "@material-ui/core/TextField";
 import withMobileDialog from "@material-ui/core/withMobileDialog";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
@@ -21,7 +21,6 @@ import SocialLink from "./SocialLink";
 
 interface IRegisterState {
     firstName: string;
-    lastName: string;
     email: string;
     password: string;
     password2: string;
@@ -30,6 +29,7 @@ interface IRegisterState {
     passwordColor: string;
     errors: any;
     loading: boolean;
+    preError: string;
 }
 
 interface IRegisterPropsState {
@@ -48,7 +48,6 @@ class Register extends Component<IReigsterProps, IRegisterState> {
         super(props);
         this.state = {
             firstName: "",
-            lastName: "",
             email: "",
             password: "",
             password2: "",
@@ -57,6 +56,7 @@ class Register extends Component<IReigsterProps, IRegisterState> {
             passwordColor: "",
             errors: {},
             loading: false,
+            preError: "",
         };
     }
 
@@ -77,13 +77,44 @@ class Register extends Component<IReigsterProps, IRegisterState> {
         this.setState({ password: e.target.value });
     }
 
+    public checkValid = (): boolean => {
+        const allFields: boolean = this.state.password !== "" &&
+            this.state.password2 !== "" &&
+            this.state.firstName !== "" &&
+            this.state.email !== "";
+        if (!allFields) {
+            this.setState({
+                preError: "Complete all fields",
+            });
+            return false;
+        }
+
+        const passwordsMatch: boolean = this.state.password === this.state.password2;
+        if (!passwordsMatch) {
+            this.setState({
+                preError: "Passwords don't match",
+            });
+            return false;
+        }
+
+        this.setState({
+            preError: "",
+        });
+        return allFields && passwordsMatch;
+    }
+
     public onRegister = (e: any): void => {
             e.preventDefault();
+
+            if (!this.checkValid()) {
+                return;
+            }
+
             this.setState({
                 loading: true,
             });
             const newUser: IRegisterData = {
-                name: this.state.firstName + this.state.lastName,
+                name: this.state.firstName,
                 email: this.state.email,
                 password: this.state.password,
                 password2: this.state.password,
@@ -110,7 +141,6 @@ class Register extends Component<IReigsterProps, IRegisterState> {
 
     public render(): JSX.Element {
         const providers: string[] = ["facebook", "google"];
-
         return (
             <div>
                 <Dialog
@@ -118,7 +148,6 @@ class Register extends Component<IReigsterProps, IRegisterState> {
                     aria-labelledby="example dialog"
                     open={this.props.isOpen}
                     fullScreen={this.props.fullScreen}
-                    // fullWidth
                     maxWidth={"xs"}
                 >
                 <DialogTitle handleClose={this.closeModal} title={"Sign up"}/>
@@ -139,68 +168,91 @@ class Register extends Component<IReigsterProps, IRegisterState> {
                     {providers.map((provider: string) =>
                         <SocialLink pretext = "Sign up with " provider={provider} key={provider} />)}
                 </div>
-
                 <DialogContentText align = "center" variant = "h6">
                         {"- or -"}
-                    </DialogContentText>
-
-                    <DialogContentText>
-                        {"First name"}
-                    </DialogContentText>
-                    <Input
-                    id="firstName"
-                    type={"text"}
-                    value={this.state.firstName}
-                    onChange={this.changeEntry}
-                    fullWidth
+                </DialogContentText>
+                <div style={{justifyContent: "center", width: "90%", margin: "auto"}} >
+                    <TextField
+                        id="firstName"
+                        style={{width: "100%", justifyContent: "center"}}
+                        label="Name"
+                        // type="search"
+                        margin="dense"
+                        variant="outlined"
+                        onChange={this.changeEntry}
+                        value={this.state.firstName}
                     />
-                    <DialogContentText>
-                    {"Last name"}
-                    </DialogContentText>
-                    <Input
-                    id="lastName"
-                    type={"text"}
-                    value={this.state.lastName}
-                    onChange={this.changeEntry}
-                    fullWidth
+                    <TextField
+                        id="email"
+                        style={{width: "100%"}}
+                        label="Email"
+                        margin="dense"
+                        variant="outlined"
+                        onChange={this.changeEntry}
+                        value={this.state.email}
                     />
-
-                    <DialogContentText>
-                    {"Email"}
-                    </DialogContentText>
-                    <Input
-                    id="email"
-                    type={"text"}
-                    value={this.state.email}
-                    onChange={this.changeEntry}
-                    fullWidth
+                    <TextField
+                            id="password"
+                            margin="dense"
+                            variant="outlined"
+                            style={{width: "100%"}}
+                            type={this.state.showPassword ? "text" : "password"}
+                            label="Password"
+                            value={this.state.password}
+                            onChange={this.changeEntry}
+                            InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                <IconButton
+                                    edge="end"
+                                    aria-label="toggle password visibility"
+                                    onClick={this.handleClickShowPassword}
+                                >
+                                    {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                                </InputAdornment>
+                            ),
+                            }}
                     />
-
-                    <DialogContentText>
-                        {"Password"}
-                    </DialogContentText>
-
-                    <Input
-                    id="password"
-                    type={this.state.showPassword ? "text" : "password"}
-                    value={this.state.password}
-                    onChange={this.changeEntry}
-                    fullWidth
-                    endAdornment={
-                    <InputAdornment position="end">
-                    <IconButton aria-label="Toggle password visibility" onClick={this.handleClickShowPassword}>
-                    {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                    </InputAdornment>
-                    }
+                    <TextField
+                            id="password2"
+                            margin="dense"
+                            variant="outlined"
+                            style={{width: "100%"}}
+                            type={this.state.showPassword ? "text" : "password"}
+                            label="Confirm password"
+                            value={this.state.password2}
+                            onChange={this.changeEntry}
+                            InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                <IconButton
+                                    edge="end"
+                                    aria-label="toggle password visibility"
+                                    onClick={this.handleClickShowPassword}
+                                >
+                                    {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                                </InputAdornment>
+                            ),
+                            }}
                     />
+                </div>
                 {this.state.errors &&
                 <div>
                     {this.state.errors.message}
                 </div>}
+                {this.state.preError !== "" &&
+                <div>
+                    {this.state.preError}
+                </div>}
                 <div
                     style={{
-                        margin: "1em",
+                        marginTop: "1em",
+                        marginBottom: "1em",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        width: "90%",
                         position: "relative",
                     }}
                 >
