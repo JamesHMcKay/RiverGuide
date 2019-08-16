@@ -7,9 +7,20 @@ import { IState } from "../../reducers/index";
 import { IInfoPage } from "../../utils/types";
 import TripDetailsModal from "./TripDetailsModal";
 
+import { createStyles, Theme } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+
+const styles: any = (theme: Theme): any => createStyles({
+    dialogPaper: {
+        minHeight: '80vh',
+        maxHeight: '95vh',
+    },
+});
+
 interface ITripDetailsInfoPageProps extends ITripDetailsInfoPageStateProps {
     toggleModal: (modal?: string) => void;
     fullScreen: boolean;
+    classes: any;
 }
 
 interface ITripDetailsInfoPageStateProps {
@@ -27,6 +38,7 @@ class TripDetailsInfoPage extends Component<ITripDetailsInfoPageProps> {
     }
 
     public render(): JSX.Element {
+        const { classes } = this.props;
         return (
             <div>
                 <Dialog
@@ -35,6 +47,7 @@ class TripDetailsInfoPage extends Component<ITripDetailsInfoPageProps> {
                     fullScreen={this.props.fullScreen}
                     fullWidth={true}
                     maxWidth={"sm"}
+                    classes={{ paper: classes.dialogPaper }}
                 >
                     <TripDetailsModal
                         handleClose = {this.handleClose}
@@ -57,4 +70,4 @@ function mapStateToProps(state: IState): ITripDetailsInfoPageStateProps {
 export default connect(
     mapStateToProps,
     { toggleModal},
-)(withMobileDialog()(TripDetailsInfoPage));
+)(withMobileDialog()(withStyles(styles)(TripDetailsInfoPage)));

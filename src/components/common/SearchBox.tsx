@@ -35,7 +35,7 @@ const styles: any = (theme: Theme): any => createStyles({
       borderColor: "black !important",
     },
 
-  });
+});
 
 interface ISearchBoxProps extends ISearchBoxStateToProps {
     classes: any;

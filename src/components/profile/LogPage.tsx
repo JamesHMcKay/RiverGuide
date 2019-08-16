@@ -1,19 +1,14 @@
 import Grid from "@material-ui/core/Grid";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
 import {
     closeInfoPage,
     toggleModal,
 } from "../../actions/actions";
 import { IState } from "../../reducers/index";
 import { IAuth, ILogComplete, ILogListItem } from "../../utils/types";
-
-// Material UI
 import { Button, Hidden, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-
-// Components
 import Logbook from "./Logbook";
 import LogbookStats from "./LogbookStats";
 
@@ -51,11 +46,11 @@ class LogPage extends Component<ILogPageProps> {
     public getReportButton = (): JSX.Element => {
         return (
             <Button
-            className="reporting-button"
-            variant="outlined"
-            style={{height: "fit-content", color: "white", borderColor: "white"}}
-            onClick={this.openModal.bind(this, "addTripAnyPage")}
-             >
+                className="reporting-button"
+                variant="outlined"
+                style={{height: "fit-content", color: "white", borderColor: "white"}}
+                onClick={this.openModal.bind(this, "addTripAnyPage")}
+            >
                 Log a trip here
             </Button>
         );

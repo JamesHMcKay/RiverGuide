@@ -18,6 +18,15 @@ import DialogTitle from "../../utils/dialogTitle";
 import loadingButton from "../../utils/loadingButton";
 import { IAuth, IRegisterData } from "../../utils/types";
 import SocialLink from "./SocialLink";
+import { createStyles, Theme } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+
+const styles: any = (theme: Theme): any => createStyles({
+    dialogPaper: {
+        minHeight: '80vh',
+        maxHeight: '95vh',
+    },
+});
 
 interface IRegisterState {
     firstName: string;
@@ -42,6 +51,7 @@ interface IReigsterProps extends IRegisterPropsState {
     toggleModal: (modal?: string) => void;
     registerUser: (userData: IRegisterData) => void;
     fullScreen: boolean;
+    classes: any;
 }
 class Register extends Component<IReigsterProps, IRegisterState> {
     constructor(props: IReigsterProps) {
@@ -140,10 +150,12 @@ class Register extends Component<IReigsterProps, IRegisterState> {
     }
 
     public render(): JSX.Element {
+        const { classes } = this.props;
         const providers: string[] = ["facebook", "google"];
         return (
             <div>
                 <Dialog
+                    classes={{ paper: classes.dialogPaper }}
                     onClose={this.closeModal}
                     aria-labelledby="example dialog"
                     open={this.props.isOpen}
@@ -153,9 +165,11 @@ class Register extends Component<IReigsterProps, IRegisterState> {
                 <DialogTitle handleClose={this.closeModal} title={"Sign up"}/>
                 <DialogContentText style = {{
                     width: "90%",
-                    margin: "auto",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    marginBottom: "0px",
                     textAlign: "justify",
-                    paddingTop: "20px",
+                    paddingTop: "10px",
                 }}>
                 <div
                     dangerouslySetInnerHTML={{
@@ -168,7 +182,7 @@ class Register extends Component<IReigsterProps, IRegisterState> {
                     {providers.map((provider: string) =>
                         <SocialLink pretext = "Sign up with " provider={provider} key={provider} />)}
                 </div>
-                <DialogContentText align = "center" variant = "h6">
+                <DialogContentText align = "center" variant = "h6" style={{marginBottom: "3px"}}>
                         {"- or -"}
                 </DialogContentText>
                 <div style={{justifyContent: "center", width: "90%", margin: "auto"}} >
@@ -284,4 +298,4 @@ function mapStateToProps(state: IState): IRegisterPropsState {
 export default connect(
     mapStateToProps,
     { toggleModal, registerUser },
-)(withMobileDialog()(Register));
+)(withMobileDialog()(withStyles(styles)(Register)));

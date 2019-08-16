@@ -45,7 +45,7 @@ class LatestData extends Component<ILatestDataProps> {
         const gauge: IGauge | undefined = this.getGauge(this.props.infoPage.selectedGuide.gauge_id);
         if (gauge) {
             return (
-                <Grid container spacing={0} justify="flex-start">
+                <Grid container spacing={2} justify="flex-start">
                     {gauge.observables.map((item: IObservable) =>
                         <Grid item xs={6} lg={3} key={item.type}>
                             <ListItem style = {{
@@ -82,7 +82,7 @@ class LatestData extends Component<ILatestDataProps> {
                                     />
                         </ListItem>
                     </Grid>
-                    <Grid item xs={12} lg={3}>
+                    <Grid item xs={12} lg={4}>
                     <ListItem style={{paddingTop: 0, paddingBottom: "20px", flexDirection: "column", display: "block"}}>
                         <ListItemText
                             primary={

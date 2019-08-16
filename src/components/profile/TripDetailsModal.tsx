@@ -81,6 +81,12 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
             };
         } else {
             const guideId: string | undefined = this.props.selectedGuide ? this.props.selectedGuide.id : "";
+
+            const startDate: Date = new Date();
+            const endDate: Date = new Date();
+            startDate.setHours(9);
+            endDate.setHours(15);
+
             const initialLogEntry: ILogEntry = {
                 log_id: "",
                 guide_id: guideId || "",
@@ -99,8 +105,8 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                 logEntry: initialLogEntry,
                 peopleCount: 1,
                 date: new Date(),
-                start_date: new Date(),
-                end_date: new Date(),
+                start_date: startDate,
+                end_date: endDate,
                 preventHoverChangePeople: false,
                 preventHoverChangeRating: false,
                 rating: 1,
