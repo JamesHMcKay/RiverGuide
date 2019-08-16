@@ -118,7 +118,7 @@ class MapComponent extends Component<IMapComponentProps, IMapComponentState> {
         };
 
         return (
-            <div style={{width: "100%", height: "86vh"}}>
+            <div style={{width: "100%", height: this.props.viewHeight}}>
                 <ReactMapGL
                     width="100%"
                     height="100%"

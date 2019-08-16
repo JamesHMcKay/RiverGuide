@@ -465,7 +465,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                 item xs={12}
                 spacing={0}
                 justify="space-between"
-                style={{float: "right"}}
+                style={{float: "right", height: this.props.viewHeight}}
                 className="right-panel"
             >
                 <Hidden smDown>

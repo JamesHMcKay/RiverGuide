@@ -29,11 +29,12 @@ import {
 import "./Panel.css";
 
 export const CONTENT_HEIGHT_MOBILE: string = "67vh";
-export const CONTENT_HEIGHT: string = "82vh";
+export const CONTENT_HEIGHT: string = "86vh";
 
 export interface IPanelState {
     infoSelected: boolean;
     mapRef: any;
+    windowHeight: any;
 }
 
 export interface IPanelMapStateToProps {
@@ -65,12 +66,22 @@ class Panel extends Component<IPanelProps, IPanelState> {
         this.state = {
             infoSelected: false,
             mapRef: React.createRef(),
+            windowHeight: 0,
         };
     }
 
     public componentDidMount(): void {
-        // this.props.makeGaugeRequest();
+        this.handleResize();
+        window.addEventListener("resize", this.handleResize);
     }
+
+    public componentWillUnmount(): void {
+        window.removeEventListener("resize", this.handleResize);
+      }
+
+    public handleResize = (): void => this.setState({
+        windowHeight: window.innerHeight,
+    })
 
     public onClick = (guide: IListEntry): void => {
         ReactGA.event({
@@ -127,6 +138,9 @@ class Panel extends Component<IPanelProps, IPanelState> {
     }
 
     public render(): JSX.Element {
+        const height: string = this.state.windowHeight > 821 ?
+            CONTENT_HEIGHT : (this.state.windowHeight - 115).toString() + "px";
+
         return (
             <Grid container spacing={0} className="panel-container">
             <Hidden smDown>
@@ -135,7 +149,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
                 </Grid>
                 <Grid item sm={8}>
                     {this.props.infoPage.infoSelected ?
-                        this.getInfoPage(CONTENT_HEIGHT) : this.getMapPage(CONTENT_HEIGHT)}
+                        this.getInfoPage(height) : this.getMapPage(height)}
                 </Grid>
             </Hidden>
             <Hidden mdUp>

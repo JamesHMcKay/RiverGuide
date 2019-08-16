@@ -23,6 +23,7 @@ import "./profile.css";
 interface IProfileContainerState {
     infoSelected: boolean;
     mapRef: any;
+    windowHeight: any;
 }
 
 interface IProfileContainerProps extends IProfileContainerStateProps {
@@ -54,6 +55,7 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
         this.state = {
             infoSelected: false,
             mapRef: React.createRef(),
+            windowHeight: 0,
         };
     }
 
@@ -69,7 +71,17 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
 
     public componentDidMount(): void {
         this.props.makeLogbookRequest(this.props.auth.user.id);
+        this.handleResize();
+        window.addEventListener("resize", this.handleResize);
     }
+
+    public componentWillUnmount(): void {
+        window.removeEventListener("resize", this.handleResize);
+      }
+
+    public handleResize = (): void => this.setState({
+        windowHeight: window.innerHeight,
+    })
 
     public onClick = (guide: IListEntry): void => {
         this.props.openLogInfoPage(guide);
@@ -87,7 +99,7 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
     public getInfoPage = (viewHeight: string): JSX.Element => {
         if (this.props.logPageOpen) {
             return (
-                <LogPage/>
+                <LogPage viewHeight={viewHeight}/>
             );
         }
         return (
@@ -130,6 +142,8 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
     }
 
     public render(): JSX.Element {
+        const height: string = this.state.windowHeight > 821 ?
+            CONTENT_HEIGHT : (this.state.windowHeight - 115).toString() + "px";
         const filteredListEntries: IListEntry[] = this.getFilteredList();
         const infoOpen: boolean = this.props.infoPage.infoSelected || this.props.logPageOpen;
         return (
@@ -140,7 +154,7 @@ class ProfileContainer extends Component<IProfileContainerProps, IProfileContain
                     </Grid>
                     <Grid item sm={8}>
                         {infoOpen ?
-                            this.getInfoPage(CONTENT_HEIGHT) : this.getMapPage(CONTENT_HEIGHT, filteredListEntries)}
+                            this.getInfoPage(height) : this.getMapPage(height, filteredListEntries)}
                     </Grid>
                 </Hidden>
                 <Hidden mdUp>

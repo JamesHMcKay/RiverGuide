@@ -23,7 +23,6 @@ import SocialLink from "./SocialLink";
 
 const styles: any = (theme: Theme): any => createStyles({
     dialogPaper: {
-        minHeight: "80vh",
         maxHeight: "95vh",
     },
 });

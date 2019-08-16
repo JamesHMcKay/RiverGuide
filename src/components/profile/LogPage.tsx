@@ -33,6 +33,7 @@ interface ILogPageStateProps {
 interface ILogPageProps extends ILogPageStateProps {
     toggleModal: (modal?: string) => void;
     closeInfoPage: () => void;
+    viewHeight: string;
 }
 
 class LogPage extends Component<ILogPageProps> {
@@ -97,14 +98,20 @@ class LogPage extends Component<ILogPageProps> {
 
     public render(): JSX.Element {
         return (
-            <Grid container xs={12} spacing={0} justify="space-between" className="right-panel" >
+            <Grid
+                container
+                spacing={0}
+                justify="space-between"
+                className="right-panel"
+                style={{height: this.props.viewHeight}}
+            >
                 <Hidden smDown>
-                    <Grid item md={11} lg={11} justify="flex-start">
+                    <Grid item md={11} lg={11}>
                             <Typography variant="h4" style={{marginTop: "30px", marginLeft: "6%"}}>
                                 {"Trip logbook"}
                             </Typography>
                     </Grid>
-                    <Grid item md={1} lg={1} justify="flex-end">
+                    <Grid item md={1} lg={1}>
                         {this.getCloseButton()}
                     </Grid>
                 </Hidden>
