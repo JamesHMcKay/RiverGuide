@@ -1,6 +1,4 @@
 [![Build Status](https://travis-ci.com/JamesHMcKay/RiverGuide.svg?token=wyLJyy2MD7L7enqAG4LC&branch=master)](https://travis-ci.com/JamesHMcKay/RiverGuide)
-
-
 [![CircleCI](https://circleci.com/gh/JamesHMcKay/RiverGuide.svg?style=svg&circle-token=e899ab26f2c1a9e84f967b1a278f2c1c6a5f8a24)](https://circleci.com/gh/JamesHMcKay/RiverGuide)
 
 # RiverGuide
