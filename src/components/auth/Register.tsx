@@ -1,9 +1,11 @@
+import { createStyles, Theme } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import IconButton from "@material-ui/core/IconButton";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import withMobileDialog from "@material-ui/core/withMobileDialog";
 import Visibility from "@material-ui/icons/Visibility";
@@ -18,13 +20,11 @@ import DialogTitle from "../../utils/dialogTitle";
 import loadingButton from "../../utils/loadingButton";
 import { IAuth, IRegisterData } from "../../utils/types";
 import SocialLink from "./SocialLink";
-import { createStyles, Theme } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
 
 const styles: any = (theme: Theme): any => createStyles({
     dialogPaper: {
-        minHeight: '80vh',
-        maxHeight: '95vh',
+        minHeight: "80vh",
+        maxHeight: "95vh",
     },
 });
 

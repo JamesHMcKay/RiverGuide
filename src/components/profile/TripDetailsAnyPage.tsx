@@ -11,8 +11,8 @@ import { withStyles } from "@material-ui/core/styles";
 
 const styles: any = (theme: Theme): any => createStyles({
     dialogPaper: {
-        minHeight: '80vh',
-        maxHeight: '95vh',
+        minHeight: "80vh",
+        maxHeight: "95vh",
     },
 });
 

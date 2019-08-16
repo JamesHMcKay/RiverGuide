@@ -1,4 +1,6 @@
+import { Button, Hidden, Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
+import CloseIcon from "@material-ui/icons/Close";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
@@ -7,8 +9,6 @@ import {
 } from "../../actions/actions";
 import { IState } from "../../reducers/index";
 import { IAuth, ILogComplete, ILogListItem } from "../../utils/types";
-import { Button, Hidden, Typography } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
 import Logbook from "./Logbook";
 import LogbookStats from "./LogbookStats";
 
