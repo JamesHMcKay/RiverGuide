@@ -89,6 +89,7 @@ class Cluster extends PureComponent {
     });
 
     cluster.load(points);
+
     this.cluster = cluster;
     if (innerRef) { innerRef(this.cluster); }
   }
@@ -106,14 +107,18 @@ class Cluster extends PureComponent {
     const clusters = this.state.clusters.map(cluster => {
       if (cluster.properties.cluster) {
         const [longitude, latitude] = cluster.geometry.coordinates;
+        //console.log(this.cluster.getClusterExpansionZoom(cluster.id));
         return createElement(Marker, {
           longitude,
           latitude,
           offsetLeft: -28 / 2,
           offsetTop: -28,
           children: createElement(this.props.element, {
+            longitude: longitude,
+            latitude: latitude,
             count: cluster.properties.point_count,
             size: Math.pow(10 * cluster.properties.point_count, 0.5),
+            zoomLevel: this.cluster.getClusterExpansionZoom(cluster.id),
             // superCluster: this.cluster,
           }),
           key: `cluster-${cluster.properties.cluster_id}`,

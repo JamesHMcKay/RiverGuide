@@ -18,6 +18,7 @@ export interface IMarker {
     id: string;
     description: string;
     category: string;
+    icon?: JSX.Element;
 }
 
 export interface IGradeRange {

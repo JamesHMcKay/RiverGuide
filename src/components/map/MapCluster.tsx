@@ -2,8 +2,11 @@ import React, { PureComponent } from "react";
 
 export interface IMapClusterProps {
     size: number;
-    onClick: () => void;
+    onClick: (zoomLevel: number, latitude: number, longitude: number) => void;
     count: number;
+    zoomLevel: number;
+    longitude: number;
+    latitude: number;
 }
 
 export default class MapCluster extends PureComponent<IMapClusterProps> {
@@ -18,7 +21,11 @@ export default class MapCluster extends PureComponent<IMapClusterProps> {
         return (
             <div
                 className="map-cluster"
-                onClick={(): void => this.props.onClick()}
+                onClick={(): void => this.props.onClick(
+                    this.props.zoomLevel,
+                    this.props.latitude,
+                    this.props.longitude,
+                )}
                 style={{
                     transform: `translate(${-size / 2}px,${-size}px)`,
                     color: "white",
@@ -26,6 +33,7 @@ export default class MapCluster extends PureComponent<IMapClusterProps> {
                     height: `${width}px`,
                     borderRadius: `${borderRadius}px`,
                     paddingTop: padding,
+                    cursor: "pointer",
                 }}
             >
                 {this.props.count}

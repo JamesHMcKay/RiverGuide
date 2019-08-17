@@ -1,7 +1,7 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import React, { Component } from "react";
 import ReactGA from "react-ga";
-import ReactMapGL, { InteractiveMap, Marker, ViewState } from "react-map-gl";
+import ReactMapGL, { FlyToInterpolator, InteractiveMap, Marker, NavigationControl, ViewState } from "react-map-gl";
 import { connect } from "react-redux";
 import uuidv1 from "uuid";
 import { IState } from "../../reducers";
@@ -18,6 +18,13 @@ export const DEFAULT_LON: number = 171.7799;
 export const DEFAULT_ZOOM: number = 5;
 
 const TOKEN: string = process.env.REACT_APP_MAPBOX_TOKEN || "";
+
+interface IMapClusterProps {
+    count: number; size: number;
+    zoomLevel: number;
+    longitude: number;
+    latitude: number;
+}
 
 interface IMapComponentStateProps {
     viewport: IViewport;
@@ -51,26 +58,21 @@ class MapComponent extends Component<IMapComponentProps, IMapComponentState> {
         };
     }
 
-    public onClusterClick = (): void => {
+    public onClusterClick = (zoomLevel: number, latitude: number, longitude: number): void => {
         ReactGA.event({
             category: "Map",
             action: "ClusterClick",
             label: this.props.viewport.zoom.toString(),
         });
-        // const boundingBox: IBoundingBox = cluster.boundingBox;
-        // const {longitude, latitude} = new WebMercatorViewport(this.state.viewport)
-        // .fitBounds([[boundingBox.minLon, boundingBox.minLat], [boundingBox.maxLon, boundingBox.maxLat]]);
-
-        // const viewport: IViewport = {
-        //     longitude: this.state.viewport.longitude,
-        //     latitude: this.state.viewport.latitude,
-        //     zoom: this.state.viewport.zoom + 2,
-        // };
-        // this.setState({viewport});
-    }
-
-    public componentDidMount(): void {
-        // this.element = ReactDOM.findDOMNode(this);
+        const viewport: IViewport = {
+            ...this.props.viewport,
+            longitude,
+            latitude,
+            zoom: zoomLevel,
+            transitionDuration: 300,
+            transitionInterpolator: new FlyToInterpolator(),
+        };
+        this.props.setViewport(viewport);
     }
 
     public handleViewChange(): void {
@@ -110,13 +112,16 @@ class MapComponent extends Component<IMapComponentProps, IMapComponentState> {
         });
     }
 
-    public render(): JSX.Element {
+    public setViewportNav(newViewport: IViewport): void {
         const viewport: IViewport = {
-            latitude: this.props.viewport.latitude,
-            longitude: this.props.viewport.longitude,
-            zoom: this.props.viewport.zoom,
+            latitude: newViewport.latitude,
+            longitude: newViewport.longitude,
+            zoom: newViewport.zoom,
         };
+        this.props.setViewport(viewport);
+    }
 
+    public render(): JSX.Element {
         return (
             <div style={{width: "100%", height: this.props.viewHeight}}>
                 <ReactMapGL
@@ -124,11 +129,18 @@ class MapComponent extends Component<IMapComponentProps, IMapComponentState> {
                     height="100%"
                     ref={(map: ReactMapGL | null): InteractiveMap | null => this.mapRef = map}
                     mapStyle={this.state.tile}
-                    {...viewport}
+                    {...this.props.viewport}
                     onLoad={(): void => this.setState({ map: this.mapRef.getMap() })}
                     onViewportChange={(viewport: ViewState): void => this.setViewport(viewport)}
                     mapboxApiAccessToken={TOKEN}
                 >
+                    <div style={{position: "absolute", right: 10, top: 10}}>
+                        <NavigationControl
+                            showCompass={false}
+                            onViewportChange={(viewport: IViewport): void => this.setViewportNav(viewport)}
+                            onViewStateChange={(): null => null}
+                        />
+                     </div>
                     <div style={{position: "absolute", left: 10, top: 10}}>
                         <TileSelector
                             tile={this.state.tile}
@@ -141,11 +153,14 @@ class MapComponent extends Component<IMapComponentProps, IMapComponentState> {
                             radius={100}
                             extent={512}
                             nodeSize={40}
-                            element={(clusterProps: {count: number; size: number; }): JSX.Element => (
+                            element={(clusterProps: IMapClusterProps): JSX.Element => (
                                 <MapCluster
                                     size = {clusterProps.size}
                                     onClick={this.onClusterClick}
                                     count = {clusterProps.count}
+                                    zoomLevel = {clusterProps.zoomLevel}
+                                    latitude = {clusterProps.latitude}
+                                    longitude = {clusterProps.longitude}
                                 />
                             )}
                         >

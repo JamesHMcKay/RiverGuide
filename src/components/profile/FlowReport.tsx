@@ -195,6 +195,11 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         return result ? result.toString() : undefined;
     }
 
+    public displayFlowNumber = (): number | undefined => {
+        const result: number | undefined = this.props.observables[this.state.type];
+        return result;
+    }
+
     public handleChange = (event: any): void => {
         this.setState({
             manualySet: true,
@@ -279,7 +284,8 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
                     {this.state.manualySet &&
                         <Input
                             id="adornment-weight"
-                            value={this.displayFlow()}
+                            type="number"
+                            value={this.displayFlowNumber()}
                             onChange={this.handleChange}
                             endAdornment={
                                 <InputAdornment position="end">

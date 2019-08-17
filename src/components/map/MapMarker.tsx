@@ -17,6 +17,7 @@ interface IMapMarkerProps {
     color?: string;
     subtext?: string;
     observables?: IObservable[];
+    icon?: JSX.Element;
 }
 
 export default class MapMarker extends PureComponent<IMapMarkerProps> {
@@ -48,13 +49,14 @@ export default class MapMarker extends PureComponent<IMapMarkerProps> {
                 height={size}
                 viewBox="0 0 80 80"
                 style={{...pinStyle, transform: `translate(${-size / 2}px,${-size}px)`}}
-                // onClick={onClick}
             >
-                <IoIosLocation
-                    size={80}
-                    className="map-marker"
-                    style={{color: "#1e87e5"}}
-                />
+                {this.props.icon ? this.props.icon :
+                    <IoIosLocation
+                        size={80}
+                        className="map-marker"
+                        style={{color: "#1e87e5"}}
+                    />
+                }
             </svg>
             </Tooltip>
         );

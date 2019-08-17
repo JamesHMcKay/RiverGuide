@@ -20,8 +20,6 @@ import {
 } from "@material-ui/pickers";
 
 import { Grid } from "@material-ui/core";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import loadingButton from "../../utils/loadingButton";
 import FlowReport from "./FlowReport";
 import SectionSelect from "./SectionSelect";
@@ -367,6 +365,27 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
         return "private";
     }
 
+    public getButtonColor(type: string): "inherit" | "primary" | "secondary" | "default" | undefined {
+        if (type === "public" && this.state.logEntry.public) {
+            return "primary";
+        }
+        if (type === "private" && !this.state.logEntry.public) {
+            return "primary";
+        }
+        return "default";
+    }
+
+    public getButtonVariant(type: string):
+        "text" | "outlined" | "contained" | undefined {
+        if (type === "public" && this.state.logEntry.public) {
+            return "contained";
+        }
+        if (type === "private" && !this.state.logEntry.public) {
+            return "contained";
+        }
+        return "outlined";
+    }
+
     public render(): JSX.Element {
         const selectedGuide: IListEntry | undefined = this.getSelectedGuide();
         return (
@@ -458,14 +477,22 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                             flexDirection: "row",
                             justifyContent: "center",
                         }}>
-                        <ToggleButtonGroup value={this.getPublicValue()} exclusive onChange={this.handlePublicChange}>
-                            <ToggleButton value="public">
-                                {"Public"}
-                            </ToggleButton>
-                            <ToggleButton value="private">
-                                {"Private"}
-                            </ToggleButton>
-                        </ToggleButtonGroup>
+                        <Button
+                        style = {{marginLeft: "10px", height: "40px"}}
+                        variant={this.getButtonVariant("public")}
+                        color={this.getButtonColor("public")}
+                        onClick = {(event: any): void => this.handlePublicChange(event, "public")}
+                        >
+                        {"Public"}
+                        </Button>
+                        <Button
+                            style = {{marginLeft: "10px", height: "40px"}}
+                            variant={this.getButtonVariant("private")}
+                            color={this.getButtonColor("private")}
+                            onClick = {(event: any): void => this.handlePublicChange(event, "private")}
+                        >
+                            {"Private"}
+                        </Button>
                     </div>
                 </DialogContent>
                 {this.state.error &&

@@ -103,3 +103,11 @@ h1 {
         overflow-y: auto
     }
 }
+
+.map-cluster {
+    background-color: #1e87e5;
+    text-align: center;
+    align-content: center;
+    color: "white";
+    cursor: "zoom-in";
+}

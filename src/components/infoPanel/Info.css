@@ -285,13 +285,6 @@ weather-forecast {
     display: inline-flex;
 }
 
-.map-cluster {
-    background-color: #1e87e5;
-    text-align: center;
-    align-content: center;
-    color: "white";
-}
-
 .toolbar {
     flex-grow: 1;
 }

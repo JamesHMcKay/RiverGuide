@@ -1,3 +1,4 @@
+import Warning from "@material-ui/icons/Warning";
 import React, { Component } from "react";
 import ReactMapGL, { Marker, NavigationControl } from "react-map-gl";
 import { connect } from "react-redux";
@@ -25,6 +26,8 @@ export interface IViewport {
     longitude: number;
     latitude: number;
     zoom: number;
+    transitionDuration?: number;
+    transitionInterpolator?: any;
 }
 
 interface IInfoMapState {
@@ -53,6 +56,12 @@ export const DEFAULT_VIEW_PORT: IViewport = {
     latitude: 37.78,
     zoom: 14,
 };
+
+const warningIcon: JSX.Element = (
+    <Warning
+        className="map-marker"
+        style={{color: "red"}}
+    />);
 
 class InfoMapComponent extends Component<IInfoMapProps, IInfoMapState> {
     constructor(props: IInfoMapProps) {
@@ -190,6 +199,7 @@ class InfoMapComponent extends Component<IInfoMapProps, IInfoMapState> {
                             subtext={marker.category}
                             editMode={this.state.editMode}
                             onClick={(): void => {this.handleOpen(marker); }}
+                            icon={marker.category === "Hazard" ? warningIcon : undefined}
                         />
                   </Marker>
                 ),

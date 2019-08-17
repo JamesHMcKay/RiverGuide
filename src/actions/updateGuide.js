@@ -10,7 +10,7 @@ import { openInfoPage } from "./getGuides";
 const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
 export const updateGuide = (item, selectedGuide, listEntries, userRole) => dispatch => {
-    let address = rapidsApiUrl + 'guides_draft';
+    let address = rapidsApiUrl + 'guides';
     if (userRole === "riverguide_editor") {
         address = rapidsApiUrl + 'guides';
     }
@@ -29,7 +29,7 @@ export const updateGuide = (item, selectedGuide, listEntries, userRole) => dispa
         longitude: item.locationMarker.lng,
     };
     axios
-        .put(address, request)
+        .put(address + "/" + item.id, request)
         .then(res => {
             dispatch({
                 type: CLOSE_MODAL
