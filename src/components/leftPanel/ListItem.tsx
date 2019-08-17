@@ -2,6 +2,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import PlaceIcon from "@material-ui/icons/PlaceOutlined";
+import kayakerIcon from "../../img/kayakerIcon.svg";
 import Pool from "@material-ui/icons/Pool";
 import React, { Component } from "react";
 import ReactGA from "react-ga";
@@ -13,7 +14,7 @@ import { IListEntry } from "../../utils/types";
 import FlowBadge from "../common/FlowBadge";
 
 const ACTIVITY_ICONS: Array<{id: string; icon: JSX.Element}> = [
-    {id: "kayaking", icon: <PlaceIcon />},
+    {id: "kayaking", icon: <img src={kayakerIcon} alt="" className="kayaker-icon"/>},
     {id: "swimming", icon: <Pool />},
 ];
 

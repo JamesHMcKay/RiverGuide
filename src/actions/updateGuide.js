@@ -10,11 +10,6 @@ import { openInfoPage } from "./getGuides";
 const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
 export const updateGuide = (item, selectedGuide, listEntries, userRole) => dispatch => {
-    let address = rapidsApiUrl + 'guides_draft';
-    if (userRole === "riverguide_editor") {
-        address = rapidsApiUrl + 'guides';
-    }
-
     const request = {
         gauge_id: item.gaugeId,
         description: item.description,
@@ -28,8 +23,9 @@ export const updateGuide = (item, selectedGuide, listEntries, userRole) => dispa
         latitude: item.locationMarker.lat,
         longitude: item.locationMarker.lng,
     };
-    axios
-        .put(address + "/" + item.id, request)
+    if (userRole === "riverguide_editor") {
+        axios
+        .put(rapidsApiUrl + 'guides/' + item.id, request)
         .then(res => {
             dispatch({
                 type: CLOSE_MODAL
@@ -40,10 +36,18 @@ export const updateGuide = (item, selectedGuide, listEntries, userRole) => dispa
                 payload: listEntries.filter(entry => entry.id !== item.id).concat(selectedGuide),
             });
         });
+    } else {
+        axios
+        .post(rapidsApiUrl + 'guidedrafts', request)
+        .then(res => {
+        });
+    }
+
+
 };
 
 export const addGuide = (item, newGuide, listEntries, userRole) => dispatch => {
-    let address = rapidsApiUrl + 'guides_draft';
+    let address = rapidsApiUrl + 'guidedrafts';
     if (userRole === "riverguide_editor") {
         address = rapidsApiUrl + 'guides';
     }
@@ -65,16 +69,11 @@ export const addGuide = (item, newGuide, listEntries, userRole) => dispatch => {
     axios
         .post(address, request)
         .then(res => {
-            dispatch({
-                type: CLOSE_MODAL
-            });
-            console.log(res);
             newGuide.id = res.data.id;
             dispatch({
                 type: GET_ENTRIES,
                 payload: listEntries.concat(newGuide)
             });
-            // dispatch(openInfoPage(selectedGuide));
         });
 };
 
