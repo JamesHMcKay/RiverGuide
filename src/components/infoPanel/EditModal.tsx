@@ -1,15 +1,21 @@
+import { Button, DialogActions, DialogContentText } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 import { deleteGuide, updateGuide } from "../../actions/updateGuide";
 import { IState } from "../../reducers/index";
-import { IInfoPage, IListEntry } from "../../utils/types";
+import { IAuth, IInfoPage, IListEntry } from "../../utils/types";
 import EditGuide, { IEditGuideState } from "./EditGuide";
 
 interface IEditModalProps extends IEditModalStateProps {
     toggleModal: (modal?: string) => void;
-    updateGuide: (item: IEditGuideState, selectedGuide: IListEntry, listEntries: IListEntry[]) => void;
+    updateGuide: (
+        item: IEditGuideState,
+        selectedGuide: IListEntry,
+        listEntries: IListEntry[],
+        userRole: string,
+    ) => void;
     deleteGuide: (selectedGuideId: string, listEntries: IListEntry[]) => void;
 }
 
@@ -17,14 +23,27 @@ interface IEditModalStateProps {
     isOpen: boolean;
     infoPage: IInfoPage;
     listEntries: IListEntry[];
+    auth: IAuth;
 }
 
-class EditModal extends Component<IEditModalProps> {
+interface IEditModalState {
+    thanksOpen: boolean;
+}
+
+class EditModal extends Component<IEditModalProps, IEditModalState> {
+    constructor(props: IEditModalProps) {
+        super(props);
+        this.state = {
+            thanksOpen: false,
+        };
+    }
+
     public handleClose = (): void => {
         this.props.toggleModal();
     }
 
     public closeModal(): void {
+        this.setState({thanksOpen: false});
         this.props.toggleModal();
     }
 
@@ -41,14 +60,17 @@ class EditModal extends Component<IEditModalProps> {
             } : this.props.infoPage.selectedGuide.position,
             activity: result.activity ? result.activity : this.props.infoPage.selectedGuide.activity,
         };
-        this.props.updateGuide(result, selectedGuide, this.props.listEntries);
-        this.closeModal();
+        const userRole: string = this.props.auth.user.role;
+        this.props.updateGuide(result, selectedGuide, this.props.listEntries, userRole);
+        this.setState({
+            thanksOpen: true,
+        });
     }
 
-    // public handleDelete = (): void => {
-    //     this.props.deleteGuide(this.props.infoPage.selectedGuide.id, this.props.listEntries);
-    //     this.closeModal();
-    // }
+    public handleDelete = (): void => {
+        this.props.deleteGuide(this.props.infoPage.selectedGuide.id, this.props.listEntries);
+        this.closeModal();
+    }
 
     public render(): JSX.Element {
         return (
@@ -63,8 +85,28 @@ class EditModal extends Component<IEditModalProps> {
                     handleClose = {(): void => this.props.toggleModal()}
                     infoPage = {this.props.infoPage}
                     handleSave = {this.handleSave}
-                    // handleDelete = {this.handleDelete}
+                    handleDelete = {this.handleDelete}
                 />
+                    <Dialog
+                        onClose={(): void => this.closeModal()}
+                        open={this.state.thanksOpen}
+                    >
+                        <DialogContentText
+                            color="textPrimary"
+                            style={{width: "90%", margin: "auto", padding: "40px"}}
+                        >
+                            {"Thanks for submitting a guide, we will review it and get it up as soon as possible."}
+                        </DialogContentText>
+                        <DialogActions>
+                        <Button
+                                style={{width: "90%", margin: "auto"}}
+                                variant="outlined"
+                                onClick={(): void => {this.closeModal(); }}
+                            >
+                                Okay
+                        </Button>
+                        </DialogActions>
+                    </Dialog>
             </Dialog>
         );
     }
@@ -75,6 +117,7 @@ function mapStateToProps(state: IState): IEditModalStateProps {
         isOpen: state.openModal === "editModal",
         infoPage: state.infoPage,
         listEntries: state.listEntries,
+        auth: state.auth,
     });
 }
 

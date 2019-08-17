@@ -6,7 +6,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import React, { Component } from "react";
+import ReactGA from "react-ga";
 import { connect } from "react-redux";
+import { openInfoPage, openLogInfoPage } from "../../actions/getGuides";
 
 // Components
 import { IState } from "../../reducers/index";
@@ -17,6 +19,8 @@ import GuideItem from "./ListItem";
 interface IRiverGroupProps extends IRiverGroupStateProps {
     riverRegion: IRiverRegion;
     listEntries: IListEntry[];
+    openInfoPage: (guide: IListEntry) => void;
+    openLogInfoPage: (guide: IListEntry) => void;
 }
 
 interface IRiverGroupStateProps {
@@ -49,11 +53,25 @@ class ListGroup extends Component<IRiverGroupProps, IListGroupState> {
         ).filter((guide: IListEntry) => guide.river_name === riverRegion.river);
     }
 
+    public handleBadgeClick = (guide: IListEntry): void => {
+        ReactGA.event({
+            category: "Navigation",
+            action: "FlowBadgeClickRiverItem",
+            label: guide.display_name,
+        });
+        this.props.openInfoPage(guide);
+        this.props.openLogInfoPage(guide);
+    }
+
     public getFlow = (listEntries: IListEntry[]): JSX.Element | null => {
         if (listEntries.length === 1) {
             const guide: IListEntry = listEntries[0];
             return (
-                <FlowBadge gaugeId={guide.gauge_id} observables={guide.observables} />
+                <FlowBadge
+                    gaugeId={guide.gauge_id}
+                    observables={guide.observables}
+                    onClick={(): void => {this.handleBadgeClick(guide); }}
+                />
             );
         }
         return (
@@ -88,12 +106,6 @@ class ListGroup extends Component<IRiverGroupProps, IListGroupState> {
                         primary={this.props.riverRegion.river}
                         style={{ marginLeft: "2em" }}/>
                     {this.getFlow(children)}
-                    {/* <Chip
-                        label={children.length}
-                        color="primary"
-                        variant="outlined"
-                        style={{ marginRight: "1em" }}
-                    /> */}
                     {isExpanded ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
                 {/* <Divider /> */}
@@ -120,4 +132,4 @@ function mapStateToProps(state: IState): IRiverGroupStateProps {
     });
 }
 
-export default connect(mapStateToProps)(ListGroup);
+export default connect(mapStateToProps, { openInfoPage, openLogInfoPage })(ListGroup);

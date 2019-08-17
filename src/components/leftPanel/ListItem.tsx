@@ -55,7 +55,7 @@ class GuideItem extends Component<IGuideItemProps, {}> {
                         {icon}
                     </ListItemIcon>
                     <ListItemText  primary={guide.display_name} />
-                    <FlowBadge gaugeId={guide.gauge_id} observables={guide.observables} />
+                    <FlowBadge gaugeId={guide.gauge_id} observables={guide.observables} onClick={this.handleClick} />
                 </ListItem>
                 {/* <Divider /> */}
             </div>

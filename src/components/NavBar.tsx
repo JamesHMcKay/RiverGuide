@@ -16,10 +16,11 @@ import MenuIcon from "@material-ui/icons/Menu";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { setTabIndex, toggleModal } from "../actions/actions";
+import { closeInfoPage, setTabIndex, toggleModal } from "../actions/actions";
+import { updateCategory } from "../actions/getGuides";
 import logo from "../img/RiverWikiLogo.png";
 import { IState } from "../reducers/index";
-import { IAuth } from "../utils/types";
+import { IAuth, IFilter, IGauge, IListEntry, IMapBounds } from "../utils/types";
 import ActivityFilter from "./ActivityFilter";
 import "./Navbar.css";
 
@@ -60,10 +61,23 @@ const MODALS: IMenuItemModal[] = [
     {name: "Feedback", modal: "contactModal"},
 ];
 
-interface INavBarProps {
+interface INavBarProps extends INavBarStateProps {
     toggleModal: (modal: string) => void;
+    setTabIndex: (index: string) => void;
+    closeInfoPage: () => void;
+    updateCategory: (
+        value: string,
+        filter: IFilter,
+        mapBounds: IMapBounds | null,
+        guides: IListEntry[],
+        gauges: IGauge[]) => void;
+}
+
+interface INavBarStateProps {
     auth: IAuth;
-    setTabIndex: (index: number) => void;
+    filters: IFilter;
+    guides: IListEntry[];
+    gauges: IGauge[];
 }
 
 interface INavBarState {
@@ -126,7 +140,9 @@ class NavBar extends Component<INavBarProps, INavBarState> {
     }
 
     public handleMapLink = (): void => {
-        // this.setState({ mapView: true });
+        this.props.closeInfoPage();
+        this.props.setTabIndex("riverflow");
+        this.props.updateCategory("riverflow", this.props.filters, null, this.props.guides, this.props.gauges);
     }
 
     public handleProfileLink = (): void => {
@@ -331,7 +347,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                     >
                         {"Logout"}
                     </MenuItem>
-                    {this.props.auth.user.role === "riverguide_editor" &&
+                    {/* {this.props.auth.user.role === "riverguide_editor" && */}
                         <MenuItem
                             key={"addGuide"}
                             onClick={(event: any): void => {
@@ -341,7 +357,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                         >
                             {"Add guide"}
                         </MenuItem>
-                    }
+                    {/* } */}
                 </Menu>
             </div>
         );
@@ -383,26 +399,15 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                                 </div>
                             </Link>
                             <div style={{display: "flex", flexDirection: "column"}}>
+                            <Link to="/" onClick={this.handleMapLink}>
                             <Typography color="primary" variant="h3">
                                 RiverGuide
                             </Typography>
+                            </Link>
                             <ActivityFilter/>
                             </div>
                         </div>
                         <Hidden smDown>
-                            {/* {MODALS.map((item: IMenuItemModal) => (
-                                 <Button
-                                    key={item.name}
-                                    color="primary"
-                                    size="large"
-                                    onClick={this.openModal.bind(this, item.modal || "")}
-                                    style={{
-                                        marginRight: "1em",
-                                    }}
-                                >
-                                    {item.name}
-                                </Button>
-                            ))} */}
                             {isAuthenticated ? authButtons : noAuthButtons}
                         </Hidden>
                         <Hidden mdUp>
@@ -449,11 +454,16 @@ class NavBar extends Component<INavBarProps, INavBarState> {
     }
 }
 
-const mapStateToProps: (state: IState) => {auth: IAuth} = (state: IState): {auth: IAuth} => ({
-    auth: state.auth,
-});
+function mapStateToProps(state: IState): INavBarStateProps {
+    return ({
+        auth: state.auth,
+        filters: state.filters,
+        guides: state.guides,
+        gauges: state.gauges,
+    });
+}
 
 export default connect(
     mapStateToProps,
-    { toggleModal, setTabIndex },
+    { toggleModal, setTabIndex, closeInfoPage, updateCategory },
 )(NavBar);

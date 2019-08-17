@@ -160,7 +160,7 @@ class Info extends Component<IInfoProps, IInfoState> {
     public getReportButton = (color: string): JSX.Element => {
         return (
             <div style={{float: "right", display: "flex"}}>
-                {this.props.auth.user.role === "riverguide_editor" &&
+                {/* {this.props.auth.user.role === "riverguide_editor" && */}
                     <Button
                     variant="outlined"
                     style={{height: "fit-content", color, borderColor: color, marginRight: "10px"}}
@@ -168,7 +168,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                     >
                         Edit
                     </Button>
-                }
+                {/* } */}
                 <Button
                     className="reporting-button"
                     variant="outlined"
@@ -475,9 +475,9 @@ class Info extends Component<IInfoProps, IInfoState> {
                     {this.getHeaderMobile(entry, isData)}
                 </Hidden>
                 {/* {isLogbookInfo && this.getLogbook()} */}
-                {!isLogbookInfo && this.getFlowChart(entry)}
                 {!isLogbookInfo && this.getKeyFacts()}
                 {!isLogbookInfo && this.getDescription()}
+                {!isLogbookInfo && this.getFlowChart(entry)}
                 {!isLogbookInfo && this.getMap(entry)}
                 {!isData && this.getLogbook()}
                 {/* <Grid

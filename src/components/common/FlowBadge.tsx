@@ -1,13 +1,15 @@
+import { Tooltip } from "@material-ui/core";
 import Chip from "@material-ui/core/Chip";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
-import { unitParser } from "../../utils/dataTypeParser";
-import { IGauge, IObservable } from "./../../utils/types";
+import { dataTypeParser, unitParser } from "../../utils/dataTypeParser";
+import { IGauge, IObservable, IObsValue } from "./../../utils/types";
 
 interface IFlowBadgeProps extends IFlowBadgeStateProps {
     gaugeId?: string;
     observables?: IObservable[];
+    onClick?: () => void;
 }
 
 interface IFlowBadgeStateProps {
@@ -43,14 +45,22 @@ class FlowBadge extends Component<IFlowBadgeProps> {
     public render(): JSX.Element | null {
         let flow: string | undefined;
         let units: string | undefined;
+        let type: keyof IObsValue = "flow";
         const observables: IObservable[] | undefined = this.getObservables(this.props.gaugeId);
 
         if (observables && observables.length > 0) {
             flow = observables[0].latest_value.toFixed(1);
             units = observables[0].units;
+            type = observables[0].type;
         }
 
-        if (flow) {
+        if (flow && this.props.onClick) {
+            return (
+                <Tooltip title={dataTypeParser(type)}>
+                    <Chip onClick={this.props.onClick} label = {flow + " " + unitParser(units)}/>
+                </Tooltip>
+            );
+        } else if (flow) {
             return (
                 <Chip label = {flow + " " + unitParser(units)}/>
             );

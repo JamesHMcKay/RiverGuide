@@ -16,7 +16,7 @@ import { connect } from "react-redux";
 import uuid from "uuidv4";
 import { IState } from "../../reducers";
 import DialogTitle from "../../utils/dialogTitle";
-import { IGauge, IInfoPage, IKeyFactsChar, IKeyFactsNum, IMarker } from "../../utils/types";
+import { IAuth, IGauge, IInfoPage, IKeyFactsChar, IKeyFactsNum, IMarker } from "../../utils/types";
 import { ACTIVITY_MENU } from "../ActivityFilter";
 import EditMapComponent from "../map/EditMapComponent";
 import EditKeyFacts from "./EditKeyFacts";
@@ -47,6 +47,7 @@ interface IEditGuideProps extends IEditGuideStateProps {
 
 interface IEditGuideStateProps {
     gauges: IGauge[];
+    auth: IAuth;
 }
 
 class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
@@ -205,7 +206,7 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
                     <Button variant="outlined" onClick={this.props.handleClose} color="primary">
                     Cancel
                     </Button>
-                    {this.props.handleDelete &&
+                    {this.props.handleDelete && this.props.auth.user.role === "riverguide_editor" &&
                             <Button
                                 variant="outlined"
                                 onClick={(): void => {this.setState({openDeleteDialog: true}); }}
@@ -328,6 +329,7 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
 function mapStateToProps(state: IState): IEditGuideStateProps {
     return ({
         gauges: state.gauges,
+        auth: state.auth,
     });
 }
 

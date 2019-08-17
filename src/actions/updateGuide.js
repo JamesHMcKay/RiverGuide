@@ -9,7 +9,12 @@ import { openInfoPage } from "./getGuides";
 
 const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
-export const updateGuide = (item, selectedGuide, listEntries) => dispatch => {
+export const updateGuide = (item, selectedGuide, listEntries, userRole) => dispatch => {
+    let address = rapidsApiUrl + 'guides_draft';
+    if (userRole === "riverguide_editor") {
+        address = rapidsApiUrl + 'guides';
+    }
+
     const request = {
         gauge_id: item.gaugeId,
         description: item.description,
@@ -24,7 +29,7 @@ export const updateGuide = (item, selectedGuide, listEntries) => dispatch => {
         longitude: item.locationMarker.lng,
     };
     axios
-        .put(rapidsApiUrl + 'guides/' + item.id, request)
+        .put(address, request)
         .then(res => {
             dispatch({
                 type: CLOSE_MODAL
@@ -37,7 +42,12 @@ export const updateGuide = (item, selectedGuide, listEntries) => dispatch => {
         });
 };
 
-export const addGuide = (item, newGuide, listEntries) => dispatch => {
+export const addGuide = (item, newGuide, listEntries, userRole) => dispatch => {
+    let address = rapidsApiUrl + 'guides_draft';
+    if (userRole === "riverguide_editor") {
+        address = rapidsApiUrl + 'guides';
+    }
+
     const request = {
         app_id: newGuide.id,
         gauge_id: item.gaugeId,
@@ -53,7 +63,7 @@ export const addGuide = (item, newGuide, listEntries) => dispatch => {
         longitude: item.locationMarker.lng,
     };
     axios
-        .post(rapidsApiUrl + 'guides', request)
+        .post(address, request)
         .then(res => {
             dispatch({
                 type: CLOSE_MODAL
