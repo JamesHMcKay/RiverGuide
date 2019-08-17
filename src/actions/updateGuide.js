@@ -10,7 +10,7 @@ import { openInfoPage } from "./getGuides";
 const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
 export const updateGuide = (item, selectedGuide, listEntries, userRole) => dispatch => {
-    let address = rapidsApiUrl + 'guides';
+    let address = rapidsApiUrl + 'guides_draft';
     if (userRole === "riverguide_editor") {
         address = rapidsApiUrl + 'guides';
     }
