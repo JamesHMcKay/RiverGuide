@@ -28,6 +28,7 @@ export interface IEditGuideState {
     region: string;
     activity?: string;
     description: string;
+    attribution: string;
     gaugeId: string | undefined;
     id: string | undefined;
     markers: {[key: string]: IMarker};
@@ -84,6 +85,7 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
             activity: this.props.infoPage ? this.props.infoPage.selectedGuide.activity : undefined,
             markers,
             description,
+            attribution:  this.props.infoPage ? this.props.infoPage.itemDetails.attribution : "",
             gaugeId,
             id,
             editorState: EditorState.createWithContent(
@@ -287,6 +289,15 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
                         wrapperClassName="wrapperClassName"
                         editorClassName="editorClassName"
                         onEditorStateChange={this.onEditorStateChange}
+                    />
+                    <TextField
+                        id="standard-name"
+                        label="Attribution (add your name if you want it displayed with this guide)"
+                        value={this.state.attribution}
+                        onChange={(e: any): void => {this.handleTextChange(e, "attribution"); }}
+                        margin="normal"
+                        variant="outlined"
+                        fullWidth
                     />
                 <DialogContentText variant = "h5" color="textPrimary">
                         {"Gauge"}

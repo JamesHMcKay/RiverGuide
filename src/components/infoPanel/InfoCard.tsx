@@ -8,6 +8,7 @@ import ExpansionHead from "./ExpansionHead";
 interface IInfoCardProps extends IInfoCardStateProps {
     content: string;
     title: string;
+    attribution: string;
 }
 
 interface IInfoCardStateProps {
@@ -27,6 +28,7 @@ class InfoCard extends Component<IInfoCardProps> {
                                     __html: this.props.content,
                                 }}
                             />
+                            {this.props.attribution}
                     </Typography>
                 }
             </div>

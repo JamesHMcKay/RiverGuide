@@ -22,6 +22,7 @@ export const updateGuide = (item, selectedGuide, listEntries, userRole) => dispa
         activity: item.activity,
         latitude: item.locationMarker.lat,
         longitude: item.locationMarker.lng,
+        attribution: item.attribution,
     };
     if (userRole === "riverguide_editor") {
         axios
@@ -65,6 +66,7 @@ export const addGuide = (item, newGuide, listEntries, userRole) => dispatch => {
         activity: item.activity,
         latitude: item.locationMarker.lat,
         longitude: item.locationMarker.lng,
+        attribution: item.attribution,
     };
     axios
         .post(address, request)

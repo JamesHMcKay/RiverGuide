@@ -86,6 +86,7 @@ export interface IItemDetails {
     key_facts_num: Partial<IKeyFactsNum>;
     key_facts_char: Partial<IKeyFactsChar>;
     position: ILatLon;
+    attribution: string;
 }
 
 export interface IGauge extends IListEntry {

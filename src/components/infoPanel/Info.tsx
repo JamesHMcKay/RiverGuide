@@ -237,6 +237,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                     <InfoCard
                         title="Description"
                         content={this.props.infoPage.itemDetails.description}
+                        attribution={this.props.infoPage.itemDetails.attribution}
                     />
                 </Grid>
             );
