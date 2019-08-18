@@ -303,7 +303,7 @@ class Info extends Component<IInfoProps, IInfoState> {
             return (
                 <Logbook log={logs} columnOrder={columnOrder} publicPage={true}/>
             );
-        } else {
+        } else if (this.props.auth.isAuthenticated) {
             return (
                     <Button
                         // className="reporting-button"
@@ -315,6 +315,18 @@ class Info extends Component<IInfoProps, IInfoState> {
                         {"There are no reported trips here yet, log yours now!"}
                     </Button>
             );
+        } else {
+            return (
+                <Button
+                    // className="reporting-button"
+                    variant="contained"
+                    color="primary"
+                    style={{margin: "auto"}}
+                    onClick={this.openModal.bind(this, "loginModal")}
+                >
+                    {"There are no reported trips here yet, sign in to log yours now!"}
+                </Button>
+        );
         }
 
     }
