@@ -312,7 +312,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                         style={{margin: "auto"}}
                         onClick={this.openModal.bind(this, "addTripInfoPage")}
                     >
-                        {"There are no reported trips here yet, logs yours now!"}
+                        {"There are no reported trips here yet, log yours now!"}
                     </Button>
             );
         }
