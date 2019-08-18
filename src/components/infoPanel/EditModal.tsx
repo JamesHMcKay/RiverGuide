@@ -97,7 +97,9 @@ class EditModal extends Component<IEditModalProps, IEditModalState> {
                             color="textPrimary"
                             style={{width: "90%", margin: "auto", padding: "40px"}}
                         >
-                            {"Thanks for submitting a guide, we will review it and get it up as soon as possible."}
+                            {"Thanks for submitting a guide, we will review it and publish it as soon as possible."}
+                            {" We reserve the right to edit the material if necessary. If it is innappropriate, "}
+                            {"we may reject or modify the content. In this case, we will contact you to clarify."}
                         </DialogContentText>
                         <DialogActions>
                         <Button
