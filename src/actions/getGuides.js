@@ -244,7 +244,7 @@ export const openInfoPage = guide => dispatch => {
 
     } else {
         let guideId = guide.id;
-        let query = "{guide(id:\"" + guideId + "\"){id, description,entry_details,exit_details,marker_list,key_facts_num,key_facts_char, latitude, longitude, attribution}}"
+        let query = "{guide(id:\"" + guideId + "\"){id, description,entry_details,exit_details,marker_list,key_facts_num,key_facts_char, latitude, longitude, attribution, entry_details}}"
         axios
         .get(`${rapidsApiUrl}graphql`,
             {
@@ -265,6 +265,7 @@ export const openInfoPage = guide => dispatch => {
                     markerList: item.marker_list !== "" ? item.marker_list : [],
                     position: {lat: item.latitude < 90 ? item.latitude : -45, lon: item.longitude },
                     attribution: item.attribution,
+                    directions: item.entry_details,
                 };
             dispatch({
                 type: GET_ITEM_DETAILS,

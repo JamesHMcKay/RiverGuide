@@ -1,4 +1,5 @@
 import { IWeather } from "../components/infoPanel/WeatherStore";
+import { IKeyFactsChar, IKeyFactsNum } from "./keyFacts";
 
 export interface ILatLon {
     lat: number;
@@ -61,20 +62,15 @@ export interface IListEntry {
     activity: string;
 }
 
-export interface IKeyFactsNum {
-    gradient: IKeyFactsNumItem;
-    time: IKeyFactsNumItem;
-    section_length: IKeyFactsNumItem;
-}
-
-export interface IKeyFactsChar {
-    grade_overall: string;
-    grade_hardest: string;
-}
-
 export interface IKeyFactsNumItem {
     value: number | number[];
     unit: string;
+}
+
+export interface IKeyFactProps<T> {
+    key: keyof T;
+    name: string;
+    icon: JSX.Element;
 }
 
 export interface IItemDetails {
@@ -87,6 +83,7 @@ export interface IItemDetails {
     key_facts_char: Partial<IKeyFactsChar>;
     position: ILatLon;
     attribution: string;
+    directions: string;
 }
 
 export interface IGauge extends IListEntry {

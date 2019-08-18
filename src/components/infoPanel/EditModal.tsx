@@ -79,13 +79,15 @@ class EditModal extends Component<IEditModalProps, IEditModalState> {
                 aria-labelledby="example dialog"
                 open={this.props.isOpen}
                 fullWidth={true}
-                fullScreen={true}
+                fullScreen={false}
+                maxWidth={"xl"}
             >
                 <EditGuide
                     handleClose = {(): void => this.props.toggleModal()}
                     infoPage = {this.props.infoPage}
                     handleSave = {this.handleSave}
                     handleDelete = {this.handleDelete}
+                    title={"Edit guide"}
                 />
                     <Dialog
                         onClose={(): void => this.closeModal()}

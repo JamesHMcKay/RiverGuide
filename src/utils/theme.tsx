@@ -40,6 +40,10 @@ const theme: Theme = {
           fontSize: "16px",
         },
       },
+      subtitle2: {
+        fontSize: "1.3em",
+        fontWeight: 400,
+      },
       h1: {
         fontSize: "3em",
         [breakpoints.down(1500)]: {

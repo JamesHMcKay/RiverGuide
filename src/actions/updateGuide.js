@@ -23,14 +23,12 @@ export const updateGuide = (item, selectedGuide, listEntries, userRole) => dispa
         latitude: item.locationMarker.lat,
         longitude: item.locationMarker.lng,
         attribution: item.attribution,
+        entry_details: item.directions,
     };
     if (userRole === "riverguide_editor") {
         axios
         .put(rapidsApiUrl + 'guides/' + item.id, request)
         .then(res => {
-            dispatch({
-                type: CLOSE_MODAL
-            });
             dispatch(openInfoPage(selectedGuide));
             dispatch({
                 type: GET_ENTRIES,
@@ -67,6 +65,7 @@ export const addGuide = (item, newGuide, listEntries, userRole) => dispatch => {
         latitude: item.locationMarker.lat,
         longitude: item.locationMarker.lng,
         attribution: item.attribution,
+        entry_details: item.directions,
     };
     axios
         .post(address, request)

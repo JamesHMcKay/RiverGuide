@@ -162,7 +162,9 @@ class Register extends Component<IReigsterProps, IRegisterState> {
                     maxWidth={"xs"}
                 >
                 <DialogTitle handleClose={this.closeModal} title={"Sign up"}/>
-                <DialogContentText style = {{
+                <DialogContentText
+                    component="div"
+                    style = {{
                     width: "90%",
                     marginLeft: "auto",
                     marginRight: "auto",

@@ -9,6 +9,7 @@ interface IInfoCardProps extends IInfoCardStateProps {
     content: string;
     title: string;
     attribution: string;
+    directions: string;
 }
 
 interface IInfoCardStateProps {
@@ -22,14 +23,39 @@ class InfoCard extends Component<IInfoCardProps> {
                 <ExpansionHead title={this.props.title} panelName={"description"}/>
                 <br />
                 {this.props.expansionPanels.description &&
-                    <Typography component="div">
+                    <div>
+                        <Typography component="div">
                             <div
                                 dangerouslySetInnerHTML={{
                                     __html: this.props.content,
                                 }}
                             />
+                        </Typography>
+                        <Typography variant="subtitle2" gutterBottom style={{marginBottom: "10px", marginTop: "10px"}}>
+                            {"Attribution"}
+                        </Typography>
+                        <Typography variant="body1">
                             {this.props.attribution}
-                    </Typography>
+                        </Typography>
+                        {this.props.directions && this.props.directions !== "" &&
+                        <div>
+                            <Typography
+                                variant="subtitle2"
+                                gutterBottom
+                                style={{marginBottom: "10px", marginTop: "10px"}}
+                            >
+                            {"Directions"}
+                            </Typography>
+                            <Typography component="div">
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: this.props.directions,
+                                    }}
+                                />
+                            </Typography>
+                        </div>
+                        }
+                    </div>
                 }
             </div>
         );

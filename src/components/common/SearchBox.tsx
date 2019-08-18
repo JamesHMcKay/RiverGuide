@@ -16,23 +16,25 @@ const styles: any = (theme: Theme): any => createStyles({
     },
 
     cssLabel: {
-      color : "black",
+      color : "rgba(255, 255, 255, 0.6)",
     },
 
     cssOutlinedInput: {
       "&$cssFocused $notchedOutline": {
         borderColor: "black !important",
-        borderWidth: "1px",
+        borderWidth: "0px",
       },
     },
 
     cssFocused: {
-        borderColor: "black !important",
+        borderColor: "white !important",
+        color : "white",
     },
 
     notchedOutline: {
-      borderWidth: "1px",
+      borderWidth: "0px",
       borderColor: "black !important",
+      backgroundColor: "rgba(255, 255, 255, 0.15)",
     },
 
 });
@@ -100,7 +102,7 @@ class SearchBox extends Component<ISearchBoxProps, ISearchBoxState> {
                 <TextField
                     id="standard-search"
                     style={{width: "100%"}}
-                    label="Search"
+                    label="Search..."
                     // type="search"
                     margin="dense"
                     variant="outlined"
@@ -118,7 +120,7 @@ class SearchBox extends Component<ISearchBoxProps, ISearchBoxState> {
                           focused: classes.cssFocused,
                           notchedOutline: classes.notchedOutline,
                         },
-                        inputMode: "numeric",
+                        // inputMode: "numeric",
                       }}
                 />
                 {this.props.filters.searchString !== "" &&
@@ -127,7 +129,7 @@ class SearchBox extends Component<ISearchBoxProps, ISearchBoxState> {
                     style={{position: "absolute", right: 0, top: "3px"}}
                     aria-label="Cancel"
                 >
-                    <CloseIcon fontSize="default" style={{color: "black"}} />
+                    <CloseIcon fontSize="default" style={{color: "white"}} />
                 </IconButton>
                 }
             </div>

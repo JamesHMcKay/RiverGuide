@@ -157,10 +157,10 @@ class Info extends Component<IInfoProps, IInfoState> {
         );
     }
 
-    public getReportButton = (color: string): JSX.Element => {
+    public getReportButton = (color: string, isMobile: boolean): JSX.Element => {
         return (
             <div style={{float: "right", display: "flex"}}>
-                {/* {this.props.auth.user.role === "riverguide_editor" && */}
+                {!isMobile &&
                     <Button
                     variant="outlined"
                     style={{height: "fit-content", color, borderColor: color, marginRight: "10px"}}
@@ -168,7 +168,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                     >
                         Edit
                     </Button>
-                {/* } */}
+                }
                 <Button
                     className="reporting-button"
                     variant="outlined"
@@ -238,6 +238,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                         title="Description"
                         content={this.props.infoPage.itemDetails.description}
                         attribution={this.props.infoPage.itemDetails.attribution}
+                        directions={this.props.infoPage.itemDetails.directions}
                     />
                 </Grid>
             );
@@ -297,7 +298,29 @@ class Info extends Component<IInfoProps, IInfoState> {
         return this.props.log.filter((item: ILogComplete) => item.guide_id === this.props.infoPage.selectedGuide.id);
     }
 
+    public getLogBookOrMessage = (columnOrder: Array<keyof ILogListItem>, logs: ILogComplete[]): JSX.Element => {
+        if (logs.length > 0) {
+            return (
+                <Logbook log={logs} columnOrder={columnOrder} publicPage={true}/>
+            );
+        } else {
+            return (
+                    <Button
+                        // className="reporting-button"
+                        variant="contained"
+                        color="primary"
+                        style={{margin: "auto"}}
+                        onClick={this.openModal.bind(this, "addTripInfoPage")}
+                    >
+                        {"There are no reported trips here yet, logs yours now!"}
+                    </Button>
+            );
+        }
+
+    }
+
     public getLogbook = (): JSX.Element => {
+        const logs: ILogComplete[] = this.getLogBookEntries();
         const visible: boolean = this.props.expansionPanels.logBook;
         return (
             <Grid
@@ -307,16 +330,22 @@ class Info extends Component<IInfoProps, IInfoState> {
                 style={{marginRight: "5%", marginLeft: "5%",  marginTop: "2%", marginBottom: "2%", width: "100%"}}
             >
                 <div>
-                <ExpansionHead title={"Log book"} panelName={"logBook"}/>
-                {visible && <div className="flow-chart-buttons">
-                        {this.getButtons()}
-                    </div>}
-                    {visible && <div><Hidden smDown>
-                    <Logbook log={this.getLogBookEntries()} columnOrder={columnOrder} publicPage={true}/>
-                </Hidden>
-                    <Hidden mdUp>
-                    <Logbook log={this.getLogBookEntries()} columnOrder={columnOrderMobile} publicPage={true}/>
-                </Hidden></div>}
+                    <ExpansionHead title={"Log book"} panelName={"logBook"}/>
+                    {(visible && logs.length > 0) &&
+                        <div className="flow-chart-buttons">
+                            {this.getButtons()}
+                        </div>
+                    }
+                    {visible &&
+                        <div>
+                            <Hidden smDown>
+                                {this.getLogBookOrMessage(columnOrder, logs)}
+                            </Hidden>
+                            <Hidden mdUp>
+                                {this.getLogBookOrMessage(columnOrderMobile, logs)}
+                            </Hidden>
+                        </div>
+                    }
                 </div>
             </Grid>
         );
@@ -382,7 +411,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                         style={{display: "flex", flexDirection: "row"}}
                     >
                             {this.getMapButton()}
-                        {(this.props.auth.isAuthenticated) && this.getReportButton("black")}
+                        {(this.props.auth.isAuthenticated) && this.getReportButton("black", true)}
                     </Grid>
             }
 
@@ -450,7 +479,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                         tempSize={"20px"}
                     />
                     {/* {(this.props.auth.isAuthenticated && !isData) && this.getEditButton("white")} */}
-                    {(this.props.auth.isAuthenticated && !isData) && this.getReportButton("white")}
+                    {(this.props.auth.isAuthenticated && !isData) && this.getReportButton("white", false)}
             </Grid>
         </Grid>
         );

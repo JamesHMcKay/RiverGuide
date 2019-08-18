@@ -12,17 +12,14 @@ import Tooltip from "@material-ui/core/Tooltip";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@material-ui/icons/Edit";
 import React, { Component } from "react";
-import { IKeyFactsChar, IKeyFactsNum, IKeyFactsNumItem } from "../../utils/types";
-import { IKeyFactProps, KEY_FACTS_CHAR_PROPS, KEY_FACTS_NUM_PROPS } from "./KeyFactsCard";
-
-const unitOptions: string[] = [
-    "km",
-    "m",
-    "hours",
-    "minutes",
-    "days",
-    "m/km",
-];
+import { IKeyFactProps, IKeyFactsNumItem } from "../../utils/types";
+import {
+    IKeyFactsChar,
+    IKeyFactsNum,
+    KEY_FACTS_CHAR_PROPS,
+    KEY_FACTS_NUM_PROPS,
+    unitOptions,
+} from "./../../utils/keyFacts";
 
 const KEY_FACTS_CHAR_IDS: string[] = KEY_FACTS_CHAR_PROPS.map(
     (item: IKeyFactProps<IKeyFactsChar>) => item.key as string,
@@ -104,7 +101,6 @@ export default class EditKeyFacts extends Component<IEditKeyFactsProps, IEditKey
 
     public getList = (): JSX.Element => {
         const results: JSX.Element[] = [];
-        // const keyFactsNum: IKeyFactsNum = this.props.itemDetails.key_facts_num;
         const keyFactsChar: IKeyFactsChar = this.props.keyFactsChar;
 
         let keys: string[] = Object.keys(keyFactsChar);
@@ -131,7 +127,6 @@ export default class EditKeyFacts extends Component<IEditKeyFactsProps, IEditKey
                 </Tooltip>
             </ListItem></Grid>);
             results.push(result);
-
         }
 
         const keyFactsNum: IKeyFactsNum = this.props.keyFactsNum;

@@ -11,7 +11,7 @@ export const ACTIVITY_MENU: Array<{name: string, id: string}> = [
     {name: "White water", id: "kayaking"},
     {name: "Fishing", id: "fishing"},
     {name: "Swimming", id: "swimming"},
-    {name: "Select an activity", id: "all"},
+    {name: "Filter by activity", id: "all"},
 ];
 
 interface IActivityFilterStateProps {
@@ -47,13 +47,14 @@ class ActivityFilter extends Component<IActivityFilterProps> {
     }
 
     public render(): JSX.Element {
+        const icon: any = this.props.filters.activity === "all" ? undefined : (): any => (null);
         return (
             <Select
                 disableUnderline
                 value={this.props.filters.activity}
                 style={{fontStyle: "italic"}}
                 onChange={this.handleTypeChange}
-                IconComponent={(): any => (null)}
+                IconComponent={icon}
                 inputProps={{style: {fontStyle: "italic"}}}
             >
                 {ACTIVITY_MENU.map((item: {name: string, id: string}) =>

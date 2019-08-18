@@ -1,4 +1,3 @@
-import { Typography } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
@@ -18,6 +17,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { closeInfoPage, setTabIndex, toggleModal } from "../actions/actions";
 import { updateCategory } from "../actions/getGuides";
+import headerText from "../img/RiverGuideHeader.png";
 import logo from "../img/RiverWikiLogo.png";
 import { IState } from "../reducers/index";
 import { IAuth, IFilter, IGauge, IListEntry, IMapBounds } from "../utils/types";
@@ -347,17 +347,6 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                     >
                         {"Logout"}
                     </MenuItem>
-                    {/* {this.props.auth.user.role === "riverguide_editor" && */}
-                        <MenuItem
-                            key={"addGuide"}
-                            onClick={(event: any): void => {
-                                this.openModal("addGuideModal");
-                                this.setState({ anchorEl: null });
-                            }}
-                        >
-                            {"Add guide"}
-                        </MenuItem>
-                    {/* } */}
                 </Menu>
             </div>
         );
@@ -395,14 +384,17 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                                         alt=""
                                         className="nav-logo"
                                     />
-
                                 </div>
                             </Link>
                             <div style={{display: "flex", flexDirection: "column"}}>
                             <Link to="/" onClick={this.handleMapLink}>
-                            <Typography color="primary" variant="h3">
-                                RiverGuide
-                            </Typography>
+                                <div style={{marginTop: "3px"}}>
+                                    <img
+                                        src={headerText}
+                                        height="30px"
+                                        alt=""
+                                    />
+                                </div>
                             </Link>
                             <ActivityFilter/>
                             </div>
@@ -448,6 +440,17 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                             {item.name}
                         </MenuItem>
                     ))}
+                    {this.props.auth.isAuthenticated &&
+                        <MenuItem
+                            key={"addGuide"}
+                            onClick={(event: any): void => {
+                                this.openModal("addGuideModal");
+                                this.setState({ anchorElAbout: null });
+                            }}
+                        >
+                            {"Add Guide"}
+                        </MenuItem>
+                    }
                 </Menu>
             </div>
         );

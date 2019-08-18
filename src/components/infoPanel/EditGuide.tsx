@@ -1,22 +1,23 @@
+import { FormControl, InputLabel, OutlinedInput } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import TextField from "@material-ui/core/TextField";
 import { ContentState, convertFromHTML, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import React from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-
-import Dialog from "@material-ui/core/Dialog";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import TextField from "@material-ui/core/TextField";
 import { connect } from "react-redux";
 import uuid from "uuidv4";
 import { IState } from "../../reducers";
 import DialogTitle from "../../utils/dialogTitle";
-import { IAuth, IGauge, IInfoPage, IKeyFactsChar, IKeyFactsNum, IMarker } from "../../utils/types";
+import { IKeyFactsChar, IKeyFactsNum } from "../../utils/keyFacts";
+import { IAuth, IGauge, IInfoPage, IMarker } from "../../utils/types";
 import { ACTIVITY_MENU } from "../ActivityFilter";
 import EditMapComponent from "../map/EditMapComponent";
 import EditKeyFacts from "./EditKeyFacts";
@@ -29,10 +30,12 @@ export interface IEditGuideState {
     activity?: string;
     description: string;
     attribution: string;
+    directions: string;
     gaugeId: string | undefined;
     id: string | undefined;
     markers: {[key: string]: IMarker};
     editorState: EditorState;
+    editorStateDirections: EditorState;
     keyFactsNum: Partial<IKeyFactsNum>;
     keyFactsChar: Partial<IKeyFactsChar>;
     locationMarker?: IMarker;
@@ -44,6 +47,7 @@ interface IEditGuideProps extends IEditGuideStateProps {
     infoPage?: IInfoPage;
     handleSave: (result: IEditGuideState) => void;
     handleDelete?: () => void;
+    title: string;
 }
 
 interface IEditGuideStateProps {
@@ -55,10 +59,14 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
     constructor(props: IEditGuideProps) {
         super(props);
         let description: string = "Write a description here";
+        let directions: string = "Give directions here";
 
         if (this.props.infoPage && this.props.infoPage.itemDetails) {
             if (this.props.infoPage.itemDetails.description) {
                 description = this.props.infoPage.itemDetails.description;
+            }
+            if (this.props.infoPage.itemDetails.directions) {
+                directions = this.props.infoPage.itemDetails.directions;
             }
         }
         let gaugeId: string | undefined;
@@ -85,11 +93,15 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
             activity: this.props.infoPage ? this.props.infoPage.selectedGuide.activity : undefined,
             markers,
             description,
+            directions,
             attribution:  this.props.infoPage ? this.props.infoPage.itemDetails.attribution : "",
             gaugeId,
             id,
             editorState: EditorState.createWithContent(
                 ContentState.createFromBlockArray(convertFromHTML(description).contentBlocks),
+            ),
+            editorStateDirections: EditorState.createWithContent(
+                ContentState.createFromBlockArray(convertFromHTML(directions).contentBlocks),
             ),
             locationMarker: this.getLocation(),
             openDeleteDialog: false,
@@ -186,6 +198,13 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
         });
     }
 
+    public onEditorStateChangeDirections = (editorStateDirections: EditorState): void => {
+        this.setState({
+          editorStateDirections,
+          directions: draftToHtml(convertToRaw(editorStateDirections.getCurrentContent())),
+        });
+    }
+
     public handleTextChange = (event: any, field: keyof IEditGuideState): void => {
         this.setState({
             ...this.state,
@@ -203,49 +222,40 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
     public render(): JSX.Element {
         return (
             <div>
-                <DialogTitle title={"Add or edit guide"} handleClose={this.props.handleClose}/>
+                <DialogTitle title={this.props.title} handleClose={this.props.handleClose}/>
                 <DialogActions>
                     <Button variant="outlined" onClick={this.props.handleClose} color="primary">
-                    Cancel
+                        Cancel
                     </Button>
-                    {this.props.handleDelete && this.props.auth.user.role === "riverguide_editor" &&
-                            <Button
-                                variant="outlined"
-                                onClick={(): void => {this.setState({openDeleteDialog: true}); }}
-                            >
-                                Delete guide
-                            </Button>
-                   }
                     <Button variant="outlined" onClick={this.handleSave} color="primary">
-                    Submit
+                        Submit
                     </Button>
                 </DialogActions>
                 <DialogContent>
                 <DialogContentText variant = "h5" color="textPrimary">
                         {"Activity"}
                 </DialogContentText>
+                <FormControl variant="outlined" style={{width: "200px", paddingBottom: "20px"}}>
+                    <InputLabel htmlFor="outlined-age-simple">
+                        Activity
+                    </InputLabel>
                     <Select
-                        style={{margin: "20px"}}
-                        variant="outlined"
                         value={this.state.activity || null}
-                        placeholder={"Select a type"}
                         onChange={(e: any): void => {this.setState({
-                        activity: e.target.value,
-                        }); }}
-                        inputProps={{
-                            name: "Activity",
-                            id: "activity",
-                        }}
+                            activity: e.target.value,
+                            }); }}
+                        input={<OutlinedInput labelWidth={50} name="age" id="outlined-age-simple" />}
                     >
-                {ACTIVITY_MENU.map((item: {name: string, id: string}) => (
-                    <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
-                ))}
-                </Select>
+                    {ACTIVITY_MENU.map((item: {name: string, id: string}) => (
+                        <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
+                    ))}
+                    </Select>
+                </FormControl>
                 <DialogContentText variant = "h5" color="textPrimary">
                         {"Title and location"}
                 </DialogContentText>
                 <TextField
-                    style={{margin: "20px"}}
+                    style={{marginRight: "20px"}}
                     id="standard-name"
                     label="Title"
                     value={this.state.displayName}
@@ -255,7 +265,7 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
                 />
                 <TextField
                     id="standard-name"
-                    style={{margin: "20px"}}
+                    style={{marginRight: "20px"}}
                     label="Region"
                     value={this.state.region}
                     onChange={(e: any): void => {this.handleTextChange(e, "region"); }}
@@ -264,7 +274,7 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
                 />
                 <TextField
                     id="standard-name"
-                    style={{margin: "20px"}}
+                    style={{marginRight: "20px"}}
                     label="River name"
                     value={this.state.riverName}
                     onChange={(e: any): void => {this.handleTextChange(e, "riverName"); }}
@@ -283,16 +293,61 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
                     <DialogContentText variant = "h5" color="textPrimary">
                         {"Description"}
                     </DialogContentText>
-                    <Editor
-                        editorState={this.state.editorState}
-                        toolbarClassName="toolbarClassName"
-                        wrapperClassName="wrapperClassName"
-                        editorClassName="editorClassName"
-                        onEditorStateChange={this.onEditorStateChange}
-                    />
+                    <div style={{
+                        borderStyle: "solid",
+                        borderRadius: "4px",
+                        borderWidth: "1px",
+                        padding: "5px",
+                        borderColor: "rgba(0, 0, 0, 0.23)",
+                        minHeight: "200px",
+                        marginBottom: "20px",
+                    }}>
+                        <Editor
+                            editorState={this.state.editorState}
+                            toolbarClassName="toolbarClassName"
+                            wrapperClassName="wrapperClassName"
+                            editorClassName="editorClassName"
+                            onEditorStateChange={this.onEditorStateChange}
+                            toolbar={{
+                                options: ["inline", "link", "history"],
+                                inline: {
+                                    options: ["bold", "italic", "superscript", "subscript"],
+                                },
+                            }}
+                        />
+                    </div>
+                    <DialogContentText variant = "h5" color="textPrimary">
+                        {"Directions"}
+                    </DialogContentText>
+                    <div style={{
+                        borderStyle: "solid",
+                        borderRadius: "4px",
+                        borderWidth: "1px",
+                        padding: "5px",
+                        borderColor: "rgba(0, 0, 0, 0.23)",
+                        minHeight: "100px",
+                        marginBottom: "20px",
+                    }}>
+                        <Editor
+                            editorState={this.state.editorStateDirections}
+                            toolbarClassName="toolbarClassName"
+                            wrapperClassName="wrapperClassName"
+                            editorClassName="editorClassName"
+                            onEditorStateChange={this.onEditorStateChangeDirections}
+                            toolbar={{
+                                options: ["inline", "link", "history"],
+                                inline: {
+                                    options: ["bold", "italic", "superscript", "subscript"],
+                                },
+                            }}
+                        />
+                    </div>
+                    <DialogContentText variant = "h5" color="textPrimary">
+                        {"Attribution"}
+                    </DialogContentText>
                     <TextField
                         id="standard-name"
-                        label="Attribution (add your name if you want it displayed with this guide)"
+                        label="Add your name if you want it displayed with this guide"
                         value={this.state.attribution}
                         onChange={(e: any): void => {this.handleTextChange(e, "attribution"); }}
                         margin="normal"
@@ -302,20 +357,38 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
                 <DialogContentText variant = "h5" color="textPrimary">
                         {"Gauge"}
                 </DialogContentText>
-                        <GaugeSelect
-                            handleChange={this.handleGaugeChange}
-                            selectedGaugeId={this.state.gaugeId}
+                    <GaugeSelect
+                        handleChange={this.handleGaugeChange}
+                        selectedGaugeId={this.state.gaugeId}
                     />
                 <DialogContentText variant = "h5" color="textPrimary">
                         {"Local Map" + this.getWarningLocationText()}
                 </DialogContentText>
-                    <EditMapComponent
-                        markers={this.state.markers}
-                        gaugeMarkers={this.getGaugeLocation()}
-                        locationMarker={this.state.locationMarker}
-                        updateMarkers={this.updateMarkers}
-                        updateLocationMarker={this.updateLocationMarker}
-                    />
+                <EditMapComponent
+                    markers={this.state.markers}
+                    gaugeMarkers={this.getGaugeLocation()}
+                    locationMarker={this.state.locationMarker}
+                    updateMarkers={this.updateMarkers}
+                    updateLocationMarker={this.updateLocationMarker}
+                />
+                <DialogContentText variant = "body1" color="textPrimary">
+                    {"Submitted content will be reviewed by the RiverGuide team and published as soon as possible. "}
+                    {"If you have any questions about the process or content you "}
+                    {"have already submitted then contact us at info@dataforgood.nz"}
+                </DialogContentText>
+                {this.props.handleDelete && this.props.auth.user.role === "riverguide_editor" &&
+                    <div>
+                        <DialogContentText variant = "h5" color="textPrimary">
+                            {"Danger Zone"}
+                        </DialogContentText>
+                        <Button
+                            variant="outlined"
+                            onClick={(): void => {this.setState({openDeleteDialog: true}); }}
+                        >
+                            Delete guide
+                        </Button>
+                    </div>
+                }
                 </DialogContent>
                 <Dialog open={this.state.openDeleteDialog}>
                     <DialogTitle

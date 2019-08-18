@@ -72,14 +72,15 @@ class AddModal extends Component<IEditModalProps, IAddModalState> {
         return (
             <Dialog
                 onClose={(): void => this.props.toggleModal()}
-                aria-labelledby="example dialog"
                 open={this.props.isOpen}
                 fullWidth={true}
-                fullScreen={true}
+                fullScreen={false}
+                maxWidth={"xl"}
             >
                 <EditGuide
                     handleClose = {(): void => this.props.toggleModal()}
                     handleSave = {this.handleSave}
+                    title={"Add guide"}
                 />
                     <Dialog
                         onClose={(): void => this.setState({errorOpen: false})}

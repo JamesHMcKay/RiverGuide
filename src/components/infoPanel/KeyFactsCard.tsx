@@ -1,32 +1,12 @@
 import Grid from "@material-ui/core/Grid";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import LandscapeRounded from "@material-ui/icons/LandscapeRounded";
-import QueryBuilder from "@material-ui/icons/QueryBuilder";
-import Timeline from "@material-ui/icons/Timeline";
-import WarningRounded from "@material-ui/icons/WarningRounded";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { IState } from "../../reducers";
-import { IExpansionPanels, IItemDetails, IKeyFactsChar, IKeyFactsNum, IKeyFactsNumItem } from "../../utils/types";
+import { IExpansionPanels, IItemDetails, IKeyFactProps, IKeyFactsNumItem } from "../../utils/types";
+import { IKeyFactsChar, IKeyFactsNum, KEY_FACTS_CHAR_PROPS, KEY_FACTS_NUM_PROPS } from "./../../utils/keyFacts";
 import ExpansionHead from "./ExpansionHead";
-
-export interface IKeyFactProps<T> {
-    key: keyof T;
-    name: string;
-    icon: JSX.Element;
-}
-
-export const KEY_FACTS_NUM_PROPS: Array<IKeyFactProps<IKeyFactsNum>> = [
-    {key: "gradient", name: "Gradient", icon: <LandscapeRounded fontSize="large" />},
-    {key: "time", name: "Time", icon: <QueryBuilder fontSize="large" />},
-    {key: "section_length", name: "Length", icon: <Timeline fontSize="large" />},
-];
-
-export const KEY_FACTS_CHAR_PROPS: Array<IKeyFactProps<IKeyFactsChar>> = [
-    {key: "grade_overall", name: "Grade", icon: <WarningRounded fontSize="large" />},
-    {key: "grade_hardest", name: "Grade (hardest)", icon: <WarningRounded fontSize="large" />},
-];
 
 interface IKeyFactsCardState {
     editIconShowing: boolean;
