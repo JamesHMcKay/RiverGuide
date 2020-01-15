@@ -3,6 +3,7 @@ import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import InsertChartOutlinedRoundedIcon from "@material-ui/icons/InsertChartOutlinedRounded";
 import RateReviewOutlinedIcon from "@material-ui/icons/RateReviewOutlined";
+import SubjectRoundedIcon from "@material-ui/icons/SubjectRounded";
 import axios from "axios";
 import { CancelTokenSource } from "axios";
 import React, { Component } from "react";
@@ -14,13 +15,14 @@ import {
 } from "../../actions/actions";
 import { setCategory, updateCategory } from "../../actions/getGuides";
 import { IState } from "../../reducers";
-import { IFilter, IGauge, IListEntry, IMapBounds } from "../../utils/types";
+import { IFilter, IGauge, IListEntry, IMapBounds, IAuth } from "../../utils/types";
 import { categories, ITabCategory, tabIds } from "../ControlBar";
 import ToggleList from "./ToggleList";
 
 const ICONS: Array<{id: string, icon: JSX.Element} > = [
     {id: "riverflow", icon: <InsertChartOutlinedRoundedIcon />},
     {id: "guides", icon: <InfoOutlinedIcon />},
+    {id: "all", icon: <SubjectRoundedIcon />},
     {id: "trips", icon: <RateReviewOutlinedIcon />},
 ];
 
@@ -46,6 +48,7 @@ interface IBottomNavStateProps {
     filters: IFilter;
     guides: IListEntry[];
     gauges: IGauge[];
+    auth: IAuth;
 }
 
 interface IBottomNavState {
@@ -78,6 +81,8 @@ class BottomNav extends Component<IBottomNavProps, IBottomNavState> {
     }
 
     public render(): JSX.Element {
+        const categoriesFiltered: ITabCategory[] = this.props.auth.isAuthenticated ?
+            categories : categories.filter(item => !item.authOnly);
         return (
             <div style={{width: "100%", marginTop: "auto"}}>
                 <ToggleList/>
@@ -86,7 +91,7 @@ class BottomNav extends Component<IBottomNavProps, IBottomNavState> {
                     showLabels
                     style={{width: "100%", minHeight: "60px", marginTop: "auto"}}
                 >
-                    {categories.map((item: ITabCategory) => (
+                    {categoriesFiltered.map((item: ITabCategory) => (
                         <BottomNavigationAction
                             key={item.name}
                             component={Link}
@@ -111,6 +116,7 @@ function mapStateToProps(state: IState): IBottomNavStateProps {
         filters: state.filters,
         guides: state.guides,
         gauges: state.gauges,
+        auth: state.auth,
     });
 }
 

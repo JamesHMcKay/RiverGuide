@@ -1,15 +1,18 @@
 import axios from "axios";
+import { openInfoPage } from "./getGuides";
 
 import {
     GET_GAUGES,
     GET_GAUGE_DISCLAIMER,
-    CLEAR_GAUGE_DISCLAIMER
+    CLEAR_GAUGE_DISCLAIMER,
+    APPEND_ENTRIES,
+    GENERATE_FILTERED_LIST_APPEND,
 } from "./types";
 
 const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
 const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
-export const makeGaugeRequest = () => dispatch => {
+export const makeGaugeRequest = (generateList, filters, mapBounds, cancelToken, guideId) => dispatch => {
     const request = {
         action: "get_features",
         filters: ["flow", "rainfall", "stage_height"],
@@ -36,6 +39,24 @@ export const makeGaugeRequest = () => dispatch => {
                 type: GET_GAUGES,
                 payload: result,
             });
+            if (generateList) {
+                dispatch({
+                    type: APPEND_ENTRIES,
+                    payload: result,
+                });
+                if (guideId) {
+                    const selectedGuide = result.filter(item => item.id === guideId);
+                    selectedGuide.length > 0 && dispatch(openInfoPage(selectedGuide[0]));
+                }
+                dispatch({
+                    type: GENERATE_FILTERED_LIST_APPEND,
+                    payload: {
+                        entries: result,
+                        filters,
+                        mapBounds,
+                    },
+                });
+            }
         });
 };
 

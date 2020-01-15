@@ -18,10 +18,8 @@ import { Link } from "react-router-dom";
 import { closeInfoPage, setTabIndex, toggleModal } from "../actions/actions";
 import { updateCategory } from "../actions/getGuides";
 import headerText from "../img/RiverGuideHeader.png";
-import logo from "../img/RiverWikiLogo.png";
 import { IState } from "../reducers/index";
 import { IAuth, IFilter, IGauge, IListEntry, IMapBounds } from "../utils/types";
-import ActivityFilter from "./ActivityFilter";
 import "./Navbar.css";
 
 export interface IMenuItem {
@@ -376,27 +374,17 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                             flexDirection: "row",
                         }}
                     >
-                        <div style={{marginRight: "auto", marginLeft: "2%", display: "flex", flexDirection: "row"}} >
-                            <Link to="/" onClick={this.handleMapLink}>
-                                <div>
-                                    <img
-                                        src={logo}
-                                        alt=""
-                                        className="nav-logo"
-                                    />
-                                </div>
-                            </Link>
+                        <div style={{marginRight: "auto", marginLeft: "1%", display: "flex", flexDirection: "row"}} >
                             <div style={{display: "flex", flexDirection: "column"}}>
                             <Link to="/" onClick={this.handleMapLink}>
                                 <div style={{marginTop: "3px"}}>
                                     <img
                                         src={headerText}
-                                        height="30px"
+                                        height="35px"
                                         alt=""
                                     />
                                 </div>
                             </Link>
-                            <ActivityFilter/>
                             </div>
                         </div>
                         <Hidden smDown>

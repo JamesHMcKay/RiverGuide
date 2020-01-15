@@ -10,6 +10,7 @@ const initialState: IExpansionPanels = {
     logBook: true,
     latestData: true,
     flowHistory: true,
+    flowDetails: true,
 };
 
 export default function(state: IExpansionPanels = initialState, action: any): IExpansionPanels {

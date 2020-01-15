@@ -7,17 +7,20 @@ import { Link as RouterLink } from "react-router-dom";
 
 import { IState } from "../reducers/index";
 import SearchBox from "./common/SearchBox";
+import { IAuth } from "../utils/types";
 
 export interface ITabCategory {
     name: string;
     route: string;
     id: string;
+    authOnly: boolean;
 }
 
 export const categories: ITabCategory[] = [
-    {name: "Guides", route: "/guides", id: "guides"},
-    {name: "River Flows", route: "/riverflow", id: "riverflow"},
-    {name: "My Trips", route: "/trips", id: "trips"},
+    {name: "All", route: "/all", id: "all", authOnly: false},
+    {name: "River guides", route: "/guides", id: "guides", authOnly: false},
+    {name: "Flow and rain", route: "/riverflow", id: "riverflow", authOnly: false},
+    {name: "Trips", route: "/trips", id: "trips", authOnly: true},
 ];
 
 export const tabIds: string[] = categories.map((item: ITabCategory) => item.id);
@@ -29,6 +32,7 @@ interface IControlBarProps extends IControlBarStateToProps {
 
 interface IControlBarStateToProps {
     index: string;
+    auth: IAuth;
 }
 
 interface IControlBarState {
@@ -38,9 +42,11 @@ interface IControlBarState {
 
 class ControlBar extends Component<IControlBarProps, IControlBarState> {
     public render(): JSX.Element {
+        const categoriesFiltered: ITabCategory[] = this.props.auth.isAuthenticated ?
+            categories : categories.filter(item => !item.authOnly);
         return (
             <Toolbar style = {{minHeight: "55px"}}>
-                <SearchBox/>
+                <SearchBox value ={categories[tabIds.indexOf(this.props.index)].name.toLowerCase()}/>
                 <Hidden smDown>
                 <div
                     style={{
@@ -56,7 +62,7 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
                             color: "#fff",
                         }}
                     >
-                        {categories.map((item: ITabCategory) => (
+                        {categoriesFiltered.map((item: ITabCategory) => (
                             <Tab
                                 component={RouterLink}
                                 to={item.route}
@@ -77,6 +83,7 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
 function mapStateToProps(state: IState): IControlBarStateToProps {
     return ({
         index: state.tabIndex,
+        auth: state.auth,
     });
 }
 

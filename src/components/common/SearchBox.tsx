@@ -45,6 +45,7 @@ interface ISearchBoxProps extends ISearchBoxStateToProps {
         guides: IListEntry[] | ILogEntry[],
         filter: IFilter,
         mapBounds: IMapBounds) => void;
+    value: string;
 }
 
 interface ISearchBoxStateToProps {
@@ -102,7 +103,7 @@ class SearchBox extends Component<ISearchBoxProps, ISearchBoxState> {
                 <TextField
                     id="standard-search"
                     style={{width: "100%"}}
-                    label="Search..."
+                    label={"Search " + this.props.value + "..."}
                     // type="search"
                     margin="dense"
                     variant="outlined"

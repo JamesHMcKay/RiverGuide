@@ -62,7 +62,7 @@ class TabBar extends Component<ITabBarProps, ITabBarState> {
             guideId = path[4];
         }
 
-        let defaultIndex: number = 1;
+        let defaultIndex: number = 2;
         if (index >= 0) {
             defaultIndex = index;
         }

@@ -216,4 +216,5 @@ export interface IExpansionPanels {
     logBook: boolean;
     latestData: boolean;
     flowHistory: boolean;
+    flowDetails: boolean;
 }

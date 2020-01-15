@@ -202,7 +202,7 @@ class Info extends Component<IInfoProps, IInfoState> {
         );
     }
 
-    public getFlowChart = (entry: IListEntry): JSX.Element | null => {
+    public getFlowChart = (entry: IListEntry, isData: boolean): JSX.Element | null => {
         if (entry.gauge_id) {
             return (
                     <Grid
@@ -217,7 +217,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                             width: "100%",
                         }}
                     >
-                        <LatestData />
+                        <LatestData isData={isData} />
                         <FlowChart gaugeId={entry.gauge_id} />
                     </Grid>
                 );
@@ -306,10 +306,8 @@ class Info extends Component<IInfoProps, IInfoState> {
         } else if (this.props.auth.isAuthenticated) {
             return (
                     <Button
-                        // className="reporting-button"
                         variant="contained"
                         color="primary"
-                        style={{margin: "auto"}}
                         onClick={this.openModal.bind(this, "addTripInfoPage")}
                     >
                         {"There are no reported trips here yet, log yours now!"}
@@ -324,11 +322,10 @@ class Info extends Component<IInfoProps, IInfoState> {
                     style={{margin: "auto"}}
                     onClick={this.openModal.bind(this, "loginModal")}
                 >
-                    {"There are no reported trips here yet, sign in to log yours now!"}
+                    {"This logbook is empty, click here to report a trip!"}
                 </Button>
         );
         }
-
     }
 
     public getLogbook = (): JSX.Element => {
@@ -349,7 +346,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                         </div>
                     }
                     {visible &&
-                        <div>
+                        <div style={{margin: "auto", display: "flex"}}>
                             <Hidden smDown>
                                 {this.getLogBookOrMessage(columnOrder, logs)}
                             </Hidden>
@@ -519,7 +516,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                 {/* {isLogbookInfo && this.getLogbook()} */}
                 {!isLogbookInfo && this.getKeyFacts()}
                 {!isLogbookInfo && this.getDescription()}
-                {!isLogbookInfo && this.getFlowChart(entry)}
+                {!isLogbookInfo && this.getFlowChart(entry, isData)}
                 {!isLogbookInfo && this.getMap(entry)}
                 {!isData && this.getLogbook()}
                 {/* <Grid

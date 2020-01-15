@@ -16,13 +16,13 @@ import {
     CLEAR_ERRORS,
     GENERATE_FILTERED_LIST,
     GET_GUIDES,
-    GET_GAUGES,
+    GENERATE_FILTERED_LIST_APPEND,
 } from "./types";
 
 const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
 const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
-export const makeGuideRequest = () => dispatch => {
+export const makeGuideRequest = (generateList, filters, mapBounds, cancelToken, guideId) => dispatch => {
     axios
     .get(`${rapidsApiUrl}graphql`,
         {
@@ -46,6 +46,24 @@ export const makeGuideRequest = () => dispatch => {
             type: GET_GUIDES,
             payload: result,
         });
+        if (generateList) {
+                dispatch({
+                    type: GET_ENTRIES,
+                    payload: result,
+                });
+                if (guideId) {
+                    const selectedGuide = result.filter(item => item.id === guideId);
+                    selectedGuide.length > 0 && dispatch(openInfoPage(selectedGuide[0]));
+                }
+                dispatch({
+                    type: GENERATE_FILTERED_LIST_APPEND,
+                    payload: {
+                        entries: result,
+                        filters,
+                        mapBounds,
+                    },
+                });
+        }
     })
     .catch(error => {
         dispatch({
@@ -67,6 +85,8 @@ export const updateCategory = (category, filters, mapBounds, guides, gauges) => 
     let result = [];
     if (category === "riverflow") {
         result = gauges;
+    } else if (category === "all") {
+        result = gauges.concat(guides);
     } else {
         result = guides;
     }
@@ -94,107 +114,8 @@ export const setCategory = (category, filters, mapBounds, cancelToken, guideId) 
         type: CLOSE_INFO,
     });
 
-    if (category === "riverflow") {
-        dispatch(makeGuideRequest());
-        const request = {
-            action: "get_features",
-            filters: ["flow", "rainfall"],
-            crossDomain: true,
-        }
-        axios
-            .post(riverServiceUrl, request, {cancelToken: cancelToken.token})
-            .then(res => {
-                let data = res.data.features;
-                let result = data.map(item => (
-                    {
-                        id: item.id,
-                        gauge_id: item.id,
-                        display_name: item.name,
-                        position: {lat: item.location.lat, lon: item.location.lon },
-                        observables: item.observables,
-                        region: item.region,
-                        river_name: item.river_name,
-                        activity: "data",
-                        lastUpdated: item.last_updated,
-                        source: item.data_source,
-                    }));
-                if (guideId) {
-                    const selectedGuide = result.filter(item => item.id === guideId);
-                    selectedGuide.length > 0 && dispatch(openInfoPage(selectedGuide[0]));
-                }
-                dispatch({
-                    type: GET_ENTRIES,
-                    payload: result,
-                });
-                dispatch({
-                    type: GET_GAUGES,
-                    payload: result,
-                });
-                dispatch({
-                    type: GENERATE_FILTERED_LIST,
-                    payload: {
-                        entries: result,
-                        filters,
-                        mapBounds,
-                    },
-                });
-            }).catch(error => {
-                dispatch({
-                    type: GET_ERRORS,
-                    payload: {message: "Request failed"}
-                });
-            });
-    } else {
-        dispatch(makeGaugeRequest());
-        axios
-        .get(`${rapidsApiUrl}graphql`,
-            {
-                headers: {'Authorization': ''},
-                params: {query: '{guides(limit:999){id,river_name,section_name,region,latitude,longitude,gauge_id, activity}}'},
-                cancelToken: cancelToken.token
-            }
-        )
-        .then(res => {
-            let data = res.data.data.guides;
-            let result = data.map(item => (
-                {
-                    id: item.id,
-                    display_name: item.section_name,
-                    river_name: item.river_name,
-                    position: {lat: item.latitude < 90 ? item.latitude : -45, lon: item.longitude },
-                    region: item.region,
-                    gauge_id: item.gauge_id,
-                    activity: item.activity,
-                }));
-
-            if (guideId) {
-                const selectedGuide = result.filter(item => item.id === guideId);
-                selectedGuide.length > 0 && dispatch(openInfoPage(selectedGuide[0]));
-            }
-            dispatch({
-                type: GET_ENTRIES,
-                payload: result,
-            });
-            dispatch({
-                type: GET_GUIDES,
-                payload: result,
-            });
-            dispatch({
-                type: GENERATE_FILTERED_LIST,
-                payload: {
-                    entries: result,
-                    filters,
-                    mapBounds,
-                },
-            });
-        })
-        .catch(error => {
-            dispatch({
-                type: GET_ERRORS,
-                payload: {message: "Request failed"}
-            });
-        });
-    }
+    dispatch(makeGuideRequest(category === "guides" || category === "all", filters, mapBounds, cancelToken, guideId));
+    dispatch(makeGaugeRequest(category === "riverflow" || category === "all", filters, mapBounds, cancelToken, guideId));
 };
 
 export const openLogInfoPage = guide => dispatch => {

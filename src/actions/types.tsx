@@ -48,3 +48,5 @@ export const SET_EXPANSION_PANELS: string = "SET_EXPANSION_PANELS";
 export const ADD_TO_RECENTS: string = "ADD_TO_RECENTS";
 export const GET_GUIDES: string = "GET_GUIDES";
 export const SET_VIEWPORT: string = "SET_VIEWPORT";
+export const APPEND_ENTRIES: string = "APPEND_ENTRIES";
+export const GENERATE_FILTERED_LIST_APPEND: string = "GENERATE_FILTERED_LIST_APPEND";

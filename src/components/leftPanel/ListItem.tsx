@@ -2,6 +2,8 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import PlaceIcon from "@material-ui/icons/PlaceOutlined";
+import ShowChart from "@material-ui/icons/ShowChartRounded";
+import BarChart from "@material-ui/icons/BarChartRounded";
 import Pool from "@material-ui/icons/Pool";
 import React, { Component } from "react";
 import ReactGA from "react-ga";
@@ -16,6 +18,9 @@ import FlowBadge from "../common/FlowBadge";
 const ACTIVITY_ICONS: Array<{id: string; icon: JSX.Element}> = [
     {id: "kayaking", icon: <img src={kayakerIcon} alt="" className="kayaker-icon"/>},
     {id: "swimming", icon: <Pool />},
+    {id: "flow", icon: <ShowChart />},
+    {id: "stage_height", icon: <ShowChart />},
+    {id: "rainfall", icon: <BarChart />},
 ];
 
 interface IGuideItemProps extends IGuideItemStateProps {
@@ -40,10 +45,12 @@ class GuideItem extends Component<IGuideItemProps, {}> {
     }
 
     public render(): JSX.Element {
-        const iconList: Array<{id: string; icon: JSX.Element}> = ACTIVITY_ICONS.filter(
-            (item: {id: string; icon: JSX.Element}) => item.id === this.props.guide.activity);
-        const icon: JSX.Element = iconList.length > 0 ? iconList[0].icon : <PlaceIcon />;
         const guide: IListEntry = this.props.guide;
+        const type: string = guide.observables && guide.observables.length > 0 ? guide.observables[0].type : "";
+        const iconList: Array<{id: string; icon: JSX.Element}> = ACTIVITY_ICONS.filter(
+            (item: {id: string; icon: JSX.Element}) => item.id === this.props.guide.activity || item.id === type);
+        let icon: JSX.Element = iconList.length > 0 ? iconList[0].icon : <PlaceIcon />;
+ 
         return (
             <div>
                 <ListItem

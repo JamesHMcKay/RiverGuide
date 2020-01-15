@@ -11,6 +11,7 @@ import { getGaugeDisclaimer } from "../../actions/getGauges";
 import { IState } from "../../reducers/index";
 import { dataTypeParser, unitParser } from "../../utils/dataTypeParser";
 import { IExpansionPanels, IGauge, IInfoPage, IObservable } from "../../utils/types";
+import ExpansionHead from "./ExpansionHead";
 
 interface ILatestDataStateProps {
     infoPage: IInfoPage;
@@ -21,6 +22,7 @@ interface ILatestDataStateProps {
 interface ILatestDataProps extends ILatestDataStateProps {
     toggleModal: (modal: string) => void;
     getGaugeDisclaimer: (agencyName: string) => void;
+    isData: boolean;
 }
 
 class LatestData extends Component<ILatestDataProps> {
@@ -41,8 +43,7 @@ class LatestData extends Component<ILatestDataProps> {
         this.props.toggleModal("DataInfoModal");
     }
 
-    public getData = (): JSX.Element | null => {
-        const gauge: IGauge | undefined = this.getGauge(this.props.infoPage.selectedGuide.gauge_id);
+    public getData = (gauge: IGauge | undefined ): JSX.Element | null => {
         if (gauge) {
             return (
                 <Grid container spacing={2} justify="flex-start">
@@ -101,10 +102,14 @@ class LatestData extends Component<ILatestDataProps> {
         return null;
       }
     public render(): JSX.Element {
+        const visible: boolean = this.props.expansionPanels.flowDetails;
+        const gauge: IGauge | undefined = this.getGauge(this.props.infoPage.selectedGuide.gauge_id);
+        const gaugeName: string = gauge ? gauge.display_name : "";
         return (
             <div>
                 {/* <ExpansionHead title={""} panelName={"latestData"}/> */}
-                    {this.props.expansionPanels.latestData && this.getData()}
+                {!this.props.isData && <ExpansionHead title={gaugeName} panelName={"flowDetails"}/>}
+                {(this.props.isData || visible) && this.props.expansionPanels.latestData && this.getData(gauge)}
             </div>
         );
     }
