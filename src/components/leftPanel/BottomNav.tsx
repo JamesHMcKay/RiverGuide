@@ -15,7 +15,7 @@ import {
 } from "../../actions/actions";
 import { setCategory, updateCategory } from "../../actions/getGuides";
 import { IState } from "../../reducers";
-import { IFilter, IGauge, IListEntry, IMapBounds, IAuth } from "../../utils/types";
+import { IAuth, IFilter, IGauge, IListEntry, IMapBounds } from "../../utils/types";
 import { categories, ITabCategory, tabIds } from "../ControlBar";
 import ToggleList from "./ToggleList";
 
@@ -82,7 +82,7 @@ class BottomNav extends Component<IBottomNavProps, IBottomNavState> {
 
     public render(): JSX.Element {
         const categoriesFiltered: ITabCategory[] = this.props.auth.isAuthenticated ?
-            categories : categories.filter(item => !item.authOnly);
+            categories : categories.filter((item: ITabCategory) => !item.authOnly);
         return (
             <div style={{width: "100%", marginTop: "auto"}}>
                 <ToggleList/>

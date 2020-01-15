@@ -1,10 +1,10 @@
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import PlaceIcon from "@material-ui/icons/PlaceOutlined";
-import ShowChart from "@material-ui/icons/ShowChartRounded";
 import BarChart from "@material-ui/icons/BarChartRounded";
+import PlaceIcon from "@material-ui/icons/PlaceOutlined";
 import Pool from "@material-ui/icons/Pool";
+import ShowChart from "@material-ui/icons/ShowChartRounded";
 import React, { Component } from "react";
 import ReactGA from "react-ga";
 import { connect } from "react-redux";
@@ -49,8 +49,8 @@ class GuideItem extends Component<IGuideItemProps, {}> {
         const type: string = guide.observables && guide.observables.length > 0 ? guide.observables[0].type : "";
         const iconList: Array<{id: string; icon: JSX.Element}> = ACTIVITY_ICONS.filter(
             (item: {id: string; icon: JSX.Element}) => item.id === this.props.guide.activity || item.id === type);
-        let icon: JSX.Element = iconList.length > 0 ? iconList[0].icon : <PlaceIcon />;
- 
+        const icon: JSX.Element = iconList.length > 0 ? iconList[0].icon : <PlaceIcon />;
+
         return (
             <div>
                 <ListItem

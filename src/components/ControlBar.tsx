@@ -6,8 +6,8 @@ import { connect } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
 
 import { IState } from "../reducers/index";
-import SearchBox from "./common/SearchBox";
 import { IAuth } from "../utils/types";
+import SearchBox from "./common/SearchBox";
 
 export interface ITabCategory {
     name: string;
@@ -43,7 +43,7 @@ interface IControlBarState {
 class ControlBar extends Component<IControlBarProps, IControlBarState> {
     public render(): JSX.Element {
         const categoriesFiltered: ITabCategory[] = this.props.auth.isAuthenticated ?
-            categories : categories.filter(item => !item.authOnly);
+            categories : categories.filter((item: ITabCategory) => !item.authOnly);
         return (
             <Toolbar style = {{minHeight: "55px"}}>
                 <SearchBox value ={categories[tabIds.indexOf(this.props.index)].name.toLowerCase()}/>
