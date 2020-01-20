@@ -13,7 +13,6 @@ import { connect } from "react-redux";
 import { IState } from "../../reducers/index";
 import { dataTypeParser, unitParser } from "../../utils/dataTypeParser";
 import { IExpansionPanels, IGauge, IHistory, IInfoPage, IObservable, IObsValue } from "../../utils/types";
-import DataDropDown from "./DataDropDown";
 import ExpansionHead from "./ExpansionHead";
 
 Am4core.useTheme(Am4themes_animated);
@@ -287,7 +286,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
                     {this.getFormSelect()}
                 </Hidden>,
             );
-            const gauge: IGauge | undefined = this.getGauge(this.props.gaugeId);
+            //const gauge: IGauge | undefined = this.getGauge(this.props.gaugeId);
             // result.push(<DataDropDown key = "data-drop-down" agencyName={gauge ? gauge.source : ""}/>);
             return result;
         } else {
