@@ -205,6 +205,7 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
             log_id: item.log_id,
             id: item.id,
             flow: item.flow,
+            stage_height: item.stage_height,
             username: item.username,
             river_name: item.river_name,
         }));

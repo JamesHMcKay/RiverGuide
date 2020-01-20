@@ -126,8 +126,8 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
                 const flows: number[] = result;
                 if (key === "rainfall") {
                     let sum: number = 0;
-                    for (flow of flows)  {
-                        sum += flow;
+                    for (const flow of flows)  {
+                        sum += flow ;
                     }
                     output[key] = Math.round(sum *  10) / 10;
                 } else {
