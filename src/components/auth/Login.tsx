@@ -95,7 +95,7 @@ class Login extends Component<ILoginProps, ILoginState> {
 
     public render(): JSX.Element {
         const providers: string[] = ["facebook", "google"];
-
+        const errorBoxColor: string = !this.state.errors || !this.state.errors.message ? "white" : "orange";
         return (
             <div>
                 <Dialog
@@ -151,7 +151,7 @@ class Login extends Component<ILoginProps, ILoginState> {
                     />
                 </div>
                 {this.state.errors &&
-                <div>
+                <div style={{backgroundColor: errorBoxColor, borderRadius: "5px", padding: "5px"}}>
                     {this.state.errors.message}
                 </div>}
                 <div

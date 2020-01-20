@@ -140,6 +140,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
     public render(): JSX.Element {
         const height: string = this.state.windowHeight > 821 ?
             CONTENT_HEIGHT : (this.state.windowHeight - 115).toString() + "px";
+        const mobileHeight: string = (this.state.windowHeight - 115 - 95).toString() + "px";
 
         return (
             <Grid container spacing={0} className="panel-container">
@@ -155,7 +156,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
             <Hidden mdUp>
                 {this.props.infoPage.infoSelected ? this.getInfoPage("72vh") :
                     this.props.searchPanel === "list" ?
-                    this.getleftPanel() : this.getMapPage(CONTENT_HEIGHT_MOBILE)}
+                    this.getleftPanel() : this.getMapPage(mobileHeight)}
             </Hidden>
             </Grid>
         );

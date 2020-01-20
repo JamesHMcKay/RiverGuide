@@ -210,14 +210,20 @@ export const providerLogin = (action, history) => dispatch => {
         dispatch({ type: CLEAR_ERRORS });
     })
     .catch(error => {
-        dispatch({
-            type: GET_ERRORS,
-            payload: {message: error.response.data.message}
-        });
+        let errorMessage = "Unknown login error";
+        if (error.response.data.message[0].messages[0].id === "Auth.form.error.email.taken") {
+            errorMessage = "Email already used with another login provider, try with Google/Facebook or standard login."
+        }
+        history.push("/");
         dispatch({
             type: OPEN_MODAL,
-            payload: "registerModal",
+            payload: "loginModal",
         });
+        dispatch({
+            type: GET_ERRORS,
+            payload: {message:  errorMessage}
+        });
+
     });
 };
 

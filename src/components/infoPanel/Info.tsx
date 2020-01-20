@@ -308,9 +308,10 @@ class Info extends Component<IInfoProps, IInfoState> {
                     <Button
                         variant="contained"
                         color="primary"
+                        style={{margin: "auto"}}
                         onClick={this.openModal.bind(this, "addTripInfoPage")}
                     >
-                        {"There are no reported trips here yet, log yours now!"}
+                        {"This logbook is empty, click here to report a trip"}
                     </Button>
             );
         } else {
@@ -322,7 +323,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                     style={{margin: "auto"}}
                     onClick={this.openModal.bind(this, "loginModal")}
                 >
-                    {"This logbook is empty, click here to report a trip!"}
+                    {"This logbook is empty, click here to log in and start reporting yours"}
                 </Button>
         );
         }

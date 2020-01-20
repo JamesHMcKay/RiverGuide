@@ -11,7 +11,7 @@ const ITEM_HEIGHT: number = 48;
 
 const options: Array<{name: string, id: string}> = [
     {name: "Infomation", id: "DataInfoModal"},
-    {name: "Download", id: "DownloadModal"},
+//    {name: "Download", id: "DownloadModal"},
 ];
 
 interface IDataDropDownProps {

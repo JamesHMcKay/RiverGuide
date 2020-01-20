@@ -108,7 +108,7 @@ class LatestData extends Component<ILatestDataProps> {
         return (
             <div>
                 {/* <ExpansionHead title={""} panelName={"latestData"}/> */}
-                {!this.props.isData && <ExpansionHead title={gaugeName} panelName={"flowDetails"}/>}
+                {!this.props.isData && <ExpansionHead title={"Conditions at: " + gaugeName} panelName={"flowDetails"}/>}
                 {(this.props.isData || visible) && this.props.expansionPanels.latestData && this.getData(gauge)}
             </div>
         );

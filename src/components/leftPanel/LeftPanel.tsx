@@ -54,7 +54,7 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
         />
 
     public loadingOrEmpty = (noResults: boolean, isLoading: boolean): JSX.Element => {
-        if (this.props.errors.message === "Request failed" && isLoading) {
+        if (this.props.errors && this.props.errors.message === "Request failed" && isLoading) {
             return (
                 <div style={{width: "100%", paddingLeft: "10%", paddingTop: "30%"}}>
                     {"Request failed, refresh page and check your network connection."}

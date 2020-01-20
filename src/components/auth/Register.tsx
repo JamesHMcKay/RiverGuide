@@ -151,6 +151,7 @@ class Register extends Component<IReigsterProps, IRegisterState> {
     public render(): JSX.Element {
         const { classes } = this.props;
         const providers: string[] = ["facebook", "google"];
+        const errorBoxColor: string = !this.state.errors || !this.state.errors.message ? "white" : "orange";
         return (
             <div>
                 <Dialog
@@ -254,7 +255,7 @@ class Register extends Component<IReigsterProps, IRegisterState> {
                     />
                 </div>
                 {this.state.errors &&
-                <div>
+                <div style={{backgroundColor: errorBoxColor, borderRadius: "5px", padding: "5px"}}>
                     {this.state.errors.message}
                 </div>}
                 {this.state.preError !== "" &&

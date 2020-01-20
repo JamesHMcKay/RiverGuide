@@ -18,6 +18,7 @@ interface IUnitSelection {
 const UNIT_OPTIONS: IUnitSelection[] = [
     {label: "cumecs", value: "cumecs"},
     {label: "stage height (meters)", value: "meters"},
+    {label: "rainfall (millimetres)", value: "millimetres"},
 ];
 
 interface IFlowReportProps extends IFlowReportStateProps {
@@ -49,11 +50,11 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
 
         const gauge: IGauge | undefined = this.props.gauges.filter(
             (gauge: IGauge): boolean => (gauge.id === this.props.selectedGuide.gauge_id))[0];
-
+        const type: keyof IObsValue = gauge ? gauge.observables[0].type : "flow";
         this.state = {
             manualySet: true,
             unit: UNIT_OPTIONS[0],
-            type: "flow",
+            type,
             gauge,
             flowTimeDiff: 0,
         };
@@ -65,6 +66,9 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
 
     public computeMean = (values: number[]): number => values.reduce(
         (a: number, b: number): number => a + b) / values.length
+
+    public computeSum = (values: number[]): number => values.reduce(
+        (a: number, b: number): number => a + b)
 
     public historyToNumber = (item: IHistory): number => {
         const dateParsed: Date = new Date(item.time);
@@ -103,6 +107,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         const filteredHistory: IHistory[] = history.filter(
             (item: IHistory) => this.filterHistory(item, lower, upper),
         );
+
         if (filteredHistory.length === 0 && history.length > 0 && this.state.gauge) {
             const midpoint: number = 0.5 * (upper + lower);
             const nearest: IHistory = this.getNearestFlow(history, midpoint);
@@ -112,14 +117,22 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         }
         if (filteredHistory.length > 0 && this.state.gauge) {
             this.setState({flowTimeDiff: 0});
-            const output: Partial<IObsValue> = filteredHistory[0].values;
+            const output: Partial<IObsValue> = {...filteredHistory[0].values};
             const gauge: IGauge = this.state.gauge;
             const types: string[] = gauge.observables.map((item: IObservable) => item.type);
             for (const type of types) {
                 const key: keyof IObsValue = type as keyof IObsValue;
                 const result: number[] = filteredHistory.map((reading: IHistory): number => reading.values[key] || 0);
                 const flows: number[] = result;
-                output[key] = Math.round(this.computeMean(flows) * 10) / 10;
+                if (key === "rainfall") {
+                    let sum: number = 0;
+                    for (flow of flows)  {
+                        sum += flow;
+                    }
+                    output[key] = Math.round(sum *  10) / 10;
+                } else {
+                    output[key] = Math.round(this.computeMean(flows) * 10) / 10;
+                }
             }
             return output;
         }
@@ -192,7 +205,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
 
     public displayFlow = (): string | undefined => {
         const result: number | undefined = this.props.observables[this.state.type];
-        return result ? result.toString() : undefined;
+        return result || result === 0 ? result.toString() : undefined;
     }
 
     public displayFlowNumber = (): number | undefined => {
@@ -222,7 +235,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
     public warningText = (): JSX.Element => {
         if (this.state.gauge && this.isFlowComputed()) {
             return (<Chip
-                        label="Flow computed based on your trip date"
+                        label="Conditions calculated based on your trip date and time"
                         style={{margin: "10px"}}
                         onClick={(): void => {
                             this.setState({manualySet: true}); }}
@@ -230,7 +243,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         } else if (this.state.gauge && this.state.flowTimeDiff < 8.64e7) {
             return (
                 <Chip
-                label="Click here to compute flow"
+                label="Click here to compute based on your date and time"
                 style={{margin: "10px"}}
                 onClick={(): void => {
                     this.setState({manualySet: false});
@@ -238,14 +251,14 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
             />
             );
         } else if (this.state.gauge) {
-            return (<div>{"No automatic flow calculations available for this date"}</div>);
+            return (<div>{"No automatic calculations available for this date"}</div>);
         }
         return (<div></div>);
     }
 
     public timeWarningText = (): JSX.Element | null => {
         if (this.state.flowTimeDiff > 8.64e7 && !this.state.manualySet) {
-            return (<div>{"Computed flow is more than 24 hours from your trip date."}</div>);
+            return (<div>{"Conditions based on data that is more than 24 hours from your date."}</div>);
         }
         return null;
     }

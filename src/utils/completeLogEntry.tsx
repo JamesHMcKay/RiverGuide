@@ -6,7 +6,16 @@ export function getFlow(observables: IObsValue | undefined): string {
     } else {
       if (observables.flow) {
         return observables.flow.toFixed(1);
-      } else if (observables.stage_height) {
+      }
+    }
+    return "";
+}
+
+export function getStageHeight(observables: IObsValue | undefined): string {
+    if (!observables) {
+      return "";
+    } else {
+      if (observables.stage_height) {
         return observables.stage_height.toFixed(1);
       }
     }
@@ -19,6 +28,7 @@ function completeLogEntry(listEntries: IListEntry[] | undefined, logs: ILogEntry
         guide_name: "",
         river_name: "",
         flow: getFlow(item.observables),
+        stage_height: getStageHeight(item.observables),
     }));
     if (listEntries) {
         for (const log of result) {

@@ -428,7 +428,7 @@ class TripDetailsModal extends Component<ITripDetailsModelProps, ITripDetailsMod
                     </MuiPickersUtilsProvider>
                     </div>
                     <DialogContentText>
-                        {"Flow"}
+                        {"Conditions"}
                     </DialogContentText>
                     {(selectedGuide && this.state.date) &&
                     <div

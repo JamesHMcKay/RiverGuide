@@ -22,7 +22,8 @@ const SHOW_ITEMS: IViewLogItem[] = [
     {key: "description", title: "Comments"},
     // {key: "start_date_time", title: "Date"},
     {key: "participants", title: "Participants"},
-    {key: "flow", title: "Flow"},
+    {key: "flow", title: "Flow (m\u00B3/s)"},
+    {key: "stage_height", title: "Stage height (m)"},
     {key: "rating", title: "Rating"},
 ];
 
@@ -49,7 +50,7 @@ function computeDuration(logEntry: ILogComplete): string {
     const endDate: Date = new Date(logEntry.end_date_time);
 
     const duration: number = (endDate.getTime() - startDate.getTime()) / _MS_PER_HOUR;
-    return duration.toFixed(1) + " hours";
+    return duration.toFixed(1);
 }
 
 class TripDetailsView extends Component<ITripDetailsViewProps> {
@@ -109,7 +110,7 @@ class TripDetailsView extends Component<ITripDetailsViewProps> {
                     }
                         <div>
                             <DialogContentText>
-                                {"Duration"}
+                                {"Duration (hours)"}
                              </DialogContentText>
                             <DialogContentText align = "left" color="textPrimary">
                                 {logEntry ? computeDuration(logEntry) : ""}

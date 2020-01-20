@@ -47,7 +47,7 @@ const headRows: IHeadRow[] = [
     { id: "guide_name", numeric: false, disablePadding: true, label: "Guide name", align: "left"},
     { id: "rating", numeric: true, disablePadding: false, label: "Rating", align: "right"},
     { id: "participants", numeric: true, disablePadding: false, label: "Participants", align: "right"},
-    { id: "flow", numeric: true, disablePadding: false, label: "Flow", align: "right"},
+    { id: "flow", numeric: true, disablePadding: false, label: "Flow (m\u00B3/s)", align: "right"},
     { id: "username", numeric: false, disablePadding: true, label: "User name", align: "left"},
 ];
 
@@ -174,7 +174,7 @@ class Logbook extends Component<ILogBookProps, ILogBookState> {
         super(props);
         this.state = {
             page: 0,
-            order: "asc",
+            order: "desc",
             rowsPerPage: 5,
             orderBy: "start_date_time",
             listItems: this.createList(this.props.log),
