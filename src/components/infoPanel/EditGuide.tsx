@@ -65,7 +65,7 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
             if (this.props.infoPage.itemDetails.description) {
                 description = this.props.infoPage.itemDetails.description;
             }
-            if (this.props.infoPage.itemDetails.directions) {
+            if (!!convertFromHTML(this.props.infoPage.itemDetails.directions).contentBlocks) {
                 directions = this.props.infoPage.itemDetails.directions;
             }
         }

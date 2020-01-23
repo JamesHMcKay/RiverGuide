@@ -286,7 +286,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
                     {this.getFormSelect()}
                 </Hidden>,
             );
-            //const gauge: IGauge | undefined = this.getGauge(this.props.gaugeId);
+            // const gauge: IGauge | undefined = this.getGauge(this.props.gaugeId);
             // result.push(<DataDropDown key = "data-drop-down" agencyName={gauge ? gauge.source : ""}/>);
             return result;
         } else {

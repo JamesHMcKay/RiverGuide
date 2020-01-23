@@ -11,7 +11,7 @@ export const ACTIVITY_MENU: Array<{name: string, id: string}> = [
     {name: "White water", id: "kayaking"},
     {name: "Fishing", id: "fishing"},
     {name: "Swimming", id: "swimming"},
-    {name: "Filter by activity", id: "all"},
+    // {name: "Filter by activity", id: "all"},
 ];
 
 interface IActivityFilterStateProps {

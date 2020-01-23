@@ -276,7 +276,16 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                 >
                     Log in
                 </Button>
-                <Button
+
+                <IconButton
+                    color="primary"
+                    onClick={this.handleAboutMenu}
+                    edge="start"
+                    // style={{float: "right", right: "10px", position: "relative"}}
+                >
+                    <MenuIcon />
+                </IconButton>
+                {/* <Button
                     color="primary"
                     variant="outlined"
                     onClick={this.handleAboutMenu}
@@ -285,7 +294,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                     }}
                 >
                     About
-                </Button>
+                </Button> */}
             </div>
         );
 
@@ -311,16 +320,14 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                 >
                     Profile
                 </Button>
-                <Button
+                <IconButton
                     color="primary"
-                    variant="outlined"
                     onClick={this.handleAboutMenu}
-                    style={{
-                        marginRight: "2em",
-                    }}
+                    edge="start"
+                    // style={{float: "right", right: "10px", position: "relative"}}
                 >
-                    About
-                </Button>
+                    <MenuIcon />
+                </IconButton>
                 <Menu
                     id="simple-menu"
                     anchorEl={anchorEl}
