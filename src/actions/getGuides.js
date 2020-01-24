@@ -17,6 +17,7 @@ import {
     GENERATE_FILTERED_LIST,
     GET_GUIDES,
     GENERATE_FILTERED_LIST_APPEND,
+    APPEND_ENTRIES,
 } from "./types";
 
 const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
@@ -48,7 +49,7 @@ export const makeGuideRequest = (generateList, filters, mapBounds, cancelToken, 
         });
         if (generateList) {
                 dispatch({
-                    type: GET_ENTRIES,
+                    type: APPEND_ENTRIES,
                     payload: result,
                 });
                 if (guideId) {
