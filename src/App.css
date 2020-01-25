@@ -105,9 +105,18 @@ h1 {
 }
 
 .map-cluster {
+    color: white;
+    cursor: pointer;
+    border-radius: 50%;
     background-color: #1e87e5;
-    text-align: center;
-    align-content: center;
-    color: "white";
-    cursor: "zoom-in";
+    opacity: 0.7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 5px solid #78b7ef;
+
+    min-width: 30px;
+    min-height: 30px;
+    max-width: 70px;
+    max-height: 70px;
 }
