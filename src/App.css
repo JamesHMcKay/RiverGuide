@@ -75,21 +75,8 @@ h1 {
     }
 }
 
-
-/* 
-.search-field {
-    width: 100%;
-} */
-/* Media Querys */
-.search-field {
-    width: 100%;
-}
-
 /* Media Querys */
 @media only screen and (min-width: 960px) {
-    .search-field {
-        width: 33%;
-    }
     .list-container {
         height: 86vh;
     }

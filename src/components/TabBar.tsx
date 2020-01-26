@@ -105,7 +105,7 @@ class TabBar extends Component<ITabBarProps, ITabBarState> {
 
     public render(): JSX.Element {
         return (
-            <AppBar position="static" style={{ zIndex: 2, minHeight: "55px", height: "6vh"}}>
+            <AppBar position="static">
                 <Hidden smDown>
                     <ControlBar location={this.props.location} handleSelect={this.handleSelect}/>
                 </Hidden>
