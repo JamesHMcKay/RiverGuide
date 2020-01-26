@@ -1,12 +1,16 @@
-import { Tab, Tabs, Toolbar } from "@material-ui/core";
-import Hidden from "@material-ui/core/Hidden";
-import { CancelTokenSource } from "axios";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
 
+// Utils
+import { CancelTokenSource } from "axios";
+
+// Types/Interfaces
 import { IState } from "../reducers/index";
 import { IAuth } from "../utils/types";
+
+// Components
+import { Tab, Tabs, Toolbar, Hidden, Grid } from "@material-ui/core";
 import SearchBox from "./common/SearchBox";
 
 export interface ITabCategory {
@@ -45,36 +49,31 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
         const categoriesFiltered: ITabCategory[] = this.props.auth.isAuthenticated ?
             categories : categories.filter((item: ITabCategory) => !item.authOnly);
         return (
-            <Toolbar style = {{minHeight: "55px"}}>
-                <SearchBox value ={categories[tabIds.indexOf(this.props.index)].name.toLowerCase()}/>
-                <Hidden smDown>
-                <div
-                    style={{
-                        width: "73%",
-                        // margin: "0 auto",
-                        marginLeft: "5%",
-                        color: "#fff",
-                    }}
-                >
-                    <Tabs
-                        value={tabIds.indexOf(this.props.index)}
-                        style={{
-                            color: "#fff",
-                        }}
-                    >
-                        {categoriesFiltered.map((item: ITabCategory) => (
-                            <Tab
-                                component={RouterLink}
-                                to={item.route}
-                                label={item.name}
-                                key={item.name}
-                                onClick={(event: any): void => this.props.handleSelect(event, item.id)}
-                                style={{color: "white"}}
-                            />
-                        ))}
-                    </Tabs>
-                </div>
-                </Hidden>
+            <Toolbar>
+                <Grid container>
+                    <Grid item xs={12} sm={12} md={4}>
+                        <SearchBox value ={categories[tabIds.indexOf(this.props.index)].name.toLowerCase()}/>
+                    </Grid>
+                    <Grid item sm={8}>
+                        <Hidden smDown>
+                            <Tabs
+                                value={tabIds.indexOf(this.props.index)}
+                                variant="fullWidth"
+                                style={{ marginTop: '2em' }}
+                            >
+                                {categoriesFiltered.map((item: ITabCategory) => (
+                                    <Tab
+                                        component={RouterLink}
+                                        to={item.route}
+                                        label={item.name}
+                                        key={item.name}
+                                        onClick={(event: any): void => this.props.handleSelect(event, item.id)}
+                                    />
+                                ))}
+                            </Tabs>
+                        </Hidden>
+                    </Grid>
+                </Grid>
             </Toolbar>
         );
     }
@@ -88,6 +87,5 @@ function mapStateToProps(state: IState): IControlBarStateToProps {
 }
 
 export default connect(
-    mapStateToProps,
-    { },
+    mapStateToProps, { },
 )(ControlBar);

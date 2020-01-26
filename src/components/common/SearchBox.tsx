@@ -1,42 +1,35 @@
-import { createStyles, IconButton, TextField, Theme } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
-import CloseIcon from "@material-ui/icons/Close";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-    generateFilteredList,
-} from "../../actions/actions";
+
+// Types/Interfaces
 import { IState } from "../../reducers/index";
 import { IFilter, IListEntry, ILogEntry, IMapBounds } from "./../../utils/types";
 
+// Actions
+import { generateFilteredList } from "../../actions/actions";
+
+// Components
+import { createStyles, IconButton, Theme, Paper, InputBase } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+
+// Icons
+import CloseIcon from "@material-ui/icons/Close";
+import SearchIcon from "@material-ui/icons/Search";
+
 const styles: any = (theme: Theme): any => createStyles({
-    container: {
-      display: "flex",
-      flexWrap: "wrap",
-    },
+    paper: {
+        display: "flex",
+        alignItems: "center",
+        margin: theme.spacing(2, 0),
+        [theme.breakpoints.up("md")]: {
+            marginRight: theme.spacing(4)
+        }
+    }, 
 
-    cssLabel: {
-      color : "rgba(255, 255, 255, 0.6)",
-    },
-
-    cssOutlinedInput: {
-      "&$cssFocused $notchedOutline": {
-        borderColor: "black !important",
-        borderWidth: "0px",
-      },
-    },
-
-    cssFocused: {
-        borderColor: "white !important",
-        color : "white",
-    },
-
-    notchedOutline: {
-      borderWidth: "0px",
-      borderColor: "black !important",
-      backgroundColor: "rgba(255, 255, 255, 0.15)",
-    },
-
+    input: {
+        marginLeft: theme.spacing(2),
+        flex: 1
+    }
 });
 
 interface ISearchBoxProps extends ISearchBoxStateToProps {
@@ -97,43 +90,25 @@ class SearchBox extends Component<ISearchBoxProps, ISearchBoxState> {
     }
 
     public render(): JSX.Element {
-        const { classes } = this.props;
+        const { classes, value, filters: { searchString } } = this.props;
+        const containsSearch = searchString !== "";
         return (
-            <div  className="search-field" style={{position: "relative", display: "inline-block"}}>
-                <TextField
-                    id="standard-search"
-                    style={{width: "100%"}}
-                    label={"Search " + this.props.value + "..."}
-                    // type="search"
-                    margin="dense"
-                    variant="outlined"
+            <Paper className={classes.paper} elevation={4}>
+                <InputBase
+                    value={searchString}
+                    className={classes.input}
+                    placeholder={`Search ${value}...`}
+                    inputProps={{ "aria-label": `search ${value}` }}
                     onChange={this.handleSearch}
-                    value={this.props.filters.searchString}
-                    InputLabelProps={{
-                        classes: {
-                          root: classes.cssLabel,
-                          focused: classes.cssFocused,
-                        },
-                      }}
-                      InputProps={{
-                        classes: {
-                          root: classes.cssOutlinedInput,
-                          focused: classes.cssFocused,
-                          notchedOutline: classes.notchedOutline,
-                        },
-                        // inputMode: "numeric",
-                      }}
                 />
-                {this.props.filters.searchString !== "" &&
                 <IconButton
+                    className={classes.iconButton}
                     onClick={this.clearSearch}
-                    style={{position: "absolute", right: 0, top: "3px"}}
-                    aria-label="Cancel"
+                    aria-label={containsSearch ? "Clear Search" : "Search"}
                 >
-                    <CloseIcon fontSize="default" style={{color: "white"}} />
+                    {containsSearch ? <CloseIcon /> : <SearchIcon />}
                 </IconButton>
-                }
-            </div>
+            </Paper>
         );
     }
 }
