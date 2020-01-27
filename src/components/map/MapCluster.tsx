@@ -22,7 +22,7 @@ export default class MapCluster extends PureComponent<IMapClusterProps> {
                 )}
                 style={{
                     width: `${width}px`,
-                    height: `${width}px`
+                    height: `${width}px`,
                 }}
             >
                 {this.props.count}
