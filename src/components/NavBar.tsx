@@ -276,7 +276,16 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                 >
                     Log in
                 </Button>
-
+                <Button
+                    color="primary"
+                    variant="outlined"
+                    onClick={this.openModal.bind(this, "contactModal")}
+                    style={{
+                        marginRight: "2em",
+                    }}
+                >
+                    Feedback
+                </Button>
                 <IconButton
                     color="primary"
                     onClick={this.handleAboutMenu}
@@ -285,16 +294,6 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                 >
                     <MenuIcon />
                 </IconButton>
-                {/* <Button
-                    color="primary"
-                    variant="outlined"
-                    onClick={this.handleAboutMenu}
-                    style={{
-                        marginRight: "2em",
-                    }}
-                >
-                    About
-                </Button> */}
             </div>
         );
 
@@ -319,6 +318,16 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                     }}
                 >
                     Profile
+                </Button>
+                <Button
+                    color="primary"
+                    variant="outlined"
+                    onClick={this.openModal.bind(this, "contactModal")}
+                    style={{
+                        marginRight: "2em",
+                    }}
+                >
+                    Feedback
                 </Button>
                 <IconButton
                     color="primary"

@@ -2,6 +2,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import BarChart from "@material-ui/icons/BarChartRounded";
+import Place from "@material-ui/icons/Place";
 import PlaceIcon from "@material-ui/icons/PlaceOutlined";
 import Pool from "@material-ui/icons/Pool";
 import ShowChart from "@material-ui/icons/ShowChartRounded";
@@ -10,13 +11,14 @@ import ReactGA from "react-ga";
 import { connect } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
 import { openInfoPage, openLogInfoPage } from "../../actions/getGuides";
-import kayakerIcon from "../../img/kayakerIcon.svg";
+// import kayakerIcon from "../../img/kayakerIcon.svg";
 import { IState } from "../../reducers";
 import { IListEntry } from "../../utils/types";
 import FlowBadge from "../common/FlowBadge";
 
 const ACTIVITY_ICONS: Array<{id: string; icon: JSX.Element}> = [
-    {id: "kayaking", icon: <img src={kayakerIcon} alt="" className="kayaker-icon"/>},
+    // {id: "kayaking", icon: <img src={kayakerIcon} alt="" className="kayaker-icon"/>},
+    {id: "kayaking", icon: <Place />},
     {id: "swimming", icon: <Pool />},
     {id: "flow", icon: <ShowChart />},
     {id: "stage_height", icon: <ShowChart />},
