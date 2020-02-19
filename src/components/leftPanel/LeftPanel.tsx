@@ -81,7 +81,7 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
         const noResults: boolean = !isLoading && this.props.filteredList.length < 1;
         let favourites: string[] = [];
         if (this.props.auth.isAuthenticated && this.props.auth.user.user_favourites) {
-            favourites = this.props.auth.user.user_favourites;
+            favourites = this.props.auth.user.user_favourites.concat(this.props.recentItems);
         } else if (!this.props.auth.isAuthenticated) {
             favourites = this.props.recentItems;
         }

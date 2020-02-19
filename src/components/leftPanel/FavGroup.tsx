@@ -57,7 +57,7 @@ class FavGroup extends Component<IFavGroupProps, IFavGroupState> {
         const children: IListEntry[] = this.getChildren();
         const isExpanded: boolean = this.props.filters.searchString !== "" || this.state.isExpanded;
         // const isSelected: boolean = this.props.filters.searchString === "" && this.state.isExpanded;
-        const title: string = this.props.auth.isAuthenticated ? "Favourites" : "Recently viewed";
+        const title: string = this.props.auth.isAuthenticated ? "Favourites & Recently Viewed" : "Recently viewed";
         return (
             <div>
                 <ListItem

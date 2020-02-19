@@ -43,7 +43,6 @@ class DeleteModal extends Component<IDeleteModalProps> {
             open={this.props.isOpen}
             >
             <DialogTitle handleClose={(): void => this.props.toggleModal()} title={"Delete this Log Entry?"}/>
-
                 <DialogContent>
                     <Button onClick={this.handleDelete}>
                         Delete

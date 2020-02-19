@@ -1,4 +1,6 @@
 import { Button, Divider, List, ListItem, ListItemText, TextField, Typography } from "@material-ui/core";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -11,6 +13,7 @@ import {
     openLogInfoPage,
 } from "../../actions/getGuides";
 import { IState } from "../../reducers/index";
+import DialogTitle from "../../utils/dialogTitle";
 import loadingButton from "../../utils/loadingButton";
 import { IAuth, IGauge, IInfoPage, IListEntry, ILogComplete, IMapBounds, IUser } from "../../utils/types";
 import "./profile.css";
@@ -18,6 +21,7 @@ import "./profile.css";
 interface IProfilePageState {
     user: IUser;
     editMode: boolean;
+    deleteModalOpen: boolean;
 }
 
 interface IProfilePageProps extends IProfilePageStateProps {
@@ -55,6 +59,7 @@ class ProfilePage extends Component<IProfilePageProps, IProfilePageState> {
         this.state = {
             user: this.props.auth.user,
             editMode: false,
+            deleteModalOpen: false,
         };
     }
 
@@ -73,6 +78,7 @@ class ProfilePage extends Component<IProfilePageProps, IProfilePageState> {
 
     public onDeleteClick = (event: any): void => {
         this.props.deleteUser(this.state.user);
+        this.setState({deleteModalOpen: false});
     }
 
     public onEditClick = (event: any): void => {
@@ -140,7 +146,22 @@ class ProfilePage extends Component<IProfilePageProps, IProfilePageState> {
         const dateParsed: Date = new Date(this.props.auth.user.createdAt);
         return (
             <Grid container spacing={0} justify={"center"} style={{height: "82vh", borderTop: "1px solid #e6e6eb"}}>
-                <List style={{ width: "100%", maxWidth: 360}}>
+                <Dialog
+                    onClose={(): void => this.setState({deleteModalOpen: false})}
+                    open={this.state.deleteModalOpen}
+                >
+                    <DialogTitle
+                        handleClose={(): void => this.setState({deleteModalOpen: false})}
+                        title={"Are you sure you want to delete your account?"}
+                    />
+                    <DialogContent>
+                    <Button onClick={this.onDeleteClick}>
+                        Delete
+                    </Button>{" "}
+                    <Button onClick={(): void => this.setState({deleteModalOpen: false})}>Cancel</Button>
+                    </DialogContent>
+                </Dialog>
+                <List style={{ width: "100%I ", maxWidth: 360}}>
                 {!this.props.auth.isAuthenticated &&
                     <ListItem>
                         <ListItemText primary={"You are not logged in"}/>
@@ -183,7 +204,7 @@ class ProfilePage extends Component<IProfilePageProps, IProfilePageState> {
                     <Button
                         variant="outlined"
                         disabled={this.state.editMode || !this.props.auth.isAuthenticated}
-                        onClick={this.onDeleteClick}
+                        onClick={(): void => this.setState({deleteModalOpen: true})}
                     >
                         Delete account
                     </Button>
