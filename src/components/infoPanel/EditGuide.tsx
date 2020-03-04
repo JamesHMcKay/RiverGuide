@@ -374,7 +374,7 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
                 <DialogContentText variant = "body1" color="textPrimary">
                     {"Submitted content will be reviewed by the RiverGuide team and published as soon as possible. "}
                     {"If you have any questions about the process or content you "}
-                    {"have already submitted then contact us at info@dataforgood.nz"}
+                    {"have already submitted then contact us at riverguide@whitewater.nz"}
                 </DialogContentText>
                 {this.props.handleDelete && this.props.auth.user.role === "riverguide_editor" &&
                     <div>

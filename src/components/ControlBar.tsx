@@ -4,7 +4,6 @@ import { CancelTokenSource } from "axios";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
-
 import { IState } from "../reducers/index";
 import { IAuth } from "../utils/types";
 import SearchBox from "./common/SearchBox";
@@ -74,6 +73,17 @@ class ControlBar extends Component<IControlBarProps, IControlBarState> {
                         ))}
                     </Tabs>
                 </div>
+                {/* <div style={{marginRight: "auto", marginLeft: "1%", display: "flex", flexDirection: "column"}} >
+                            <Link to="/">
+                                <div style={{marginTop: "3px"}}>
+                                    <img
+                                        src={wwnzLogo}
+                                        height="55px"
+                                        alt=""
+                                    />
+                                </div>
+                            </Link>
+                    </div> */}
                 </Hidden>
             </Toolbar>
         );

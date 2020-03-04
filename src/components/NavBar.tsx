@@ -10,6 +10,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Toolbar from "@material-ui/core/Toolbar";
+import Tooltip from "@material-ui/core/Tooltip";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import MenuIcon from "@material-ui/icons/Menu";
 import React, { Component } from "react";
@@ -18,9 +19,13 @@ import { Link } from "react-router-dom";
 import { closeInfoPage, setTabIndex, toggleModal } from "../actions/actions";
 import { updateCategory } from "../actions/getGuides";
 import headerText from "../img/RiverGuideHeader.png";
+import wwnzLogo from "../img/wn-logo.png";
 import { IState } from "../reducers/index";
 import { IAuth, IFilter, IGauge, IListEntry, IMapBounds } from "../utils/types";
 import "./Navbar.css";
+
+const WWNZ_TOOLTIP: string = "Join WWNZ to help support the RiverGuide and freshwater recreation in New Zealand";
+const JOIN_TOOLTIP: string = "Sign up for free and start building a log book of trips combined with live flow data";
 
 export interface IMenuItem {
     name: string;
@@ -139,8 +144,8 @@ class NavBar extends Component<INavBarProps, INavBarState> {
 
     public handleMapLink = (): void => {
         this.props.closeInfoPage();
-        this.props.setTabIndex("riverflow");
-        this.props.updateCategory("riverflow", this.props.filters, null, this.props.guides, this.props.gauges);
+        this.props.setTabIndex("all");
+        this.props.updateCategory("all", this.props.filters, null, this.props.guides, this.props.gauges);
     }
 
     public handleProfileLink = (): void => {
@@ -255,17 +260,19 @@ class NavBar extends Component<INavBarProps, INavBarState> {
 
         const noAuthButtons: JSX.Element = (
             <div className="no-auth-buttons">
-                <Button
-                    onClick={this.openModal.bind(this, "registerModal")}
-                    color="primary"
-                    variant="contained"
-                    style={{
-                        marginRight: "2em",
-                        color: "white",
-                    }}
-                >
-                    Sign up
-                </Button>
+                <Tooltip title={JOIN_TOOLTIP}>
+                    <Button
+                        onClick={this.openModal.bind(this, "registerModal")}
+                        color="primary"
+                        variant="contained"
+                        style={{
+                            marginRight: "2em",
+                            color: "white",
+                        }}
+                    >
+                        Sign up
+                    </Button>
+                </Tooltip>
                 <Button
                     color="primary"
                     variant="outlined"
@@ -390,7 +397,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                             flexDirection: "row",
                         }}
                     >
-                        <div style={{marginRight: "auto", marginLeft: "1%", display: "flex", flexDirection: "row"}} >
+                        <div style={{marginLeft: "1%", display: "flex", flexDirection: "row"}} >
                             <div style={{display: "flex", flexDirection: "column"}}>
                             <Link to="/" onClick={this.handleMapLink}>
                                 <div style={{marginTop: "3px"}}>
@@ -402,6 +409,19 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                                 </div>
                             </Link>
                             </div>
+                        </div>
+                        <div style={{marginRight: "auto", marginLeft: "1%", display: "flex", flexDirection: "row"}} >
+                            <Tooltip title={WWNZ_TOOLTIP}>
+                                <Link to="/">
+                                    <div style={{marginTop: "3px"}}>
+                                        <img
+                                            src={wwnzLogo}
+                                            height="55px"
+                                            alt=""
+                                        />
+                                    </div>
+                                </Link>
+                            </Tooltip>
                         </div>
                         <Hidden smDown>
                             {isAuthenticated ? authButtons : noAuthButtons}
