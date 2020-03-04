@@ -412,7 +412,7 @@ class NavBar extends Component<INavBarProps, INavBarState> {
                         </div>
                         <div style={{marginRight: "auto", marginLeft: "1%", display: "flex", flexDirection: "row"}} >
                             <Tooltip title={WWNZ_TOOLTIP}>
-                                <a href="https://www.whitewater.nz" target='_blank' rel='noopener noreferrer'>
+                                <a href="https://www.whitewater.nz" target="_blank" rel="noopener noreferrer">
                                     <div style={{marginTop: "3px"}}>
                                         <img
                                             src={wwnzLogo}
