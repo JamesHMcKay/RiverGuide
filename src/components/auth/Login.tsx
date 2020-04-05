@@ -13,7 +13,7 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
-import { loginUser, registerUser } from "../../actions/getAuth";
+import { loginUser, registerUser, sendResetPasswordEmail } from "../../actions/getAuth";
 import { IState } from "../../reducers/index";
 import DialogTitle from "../../utils/dialogTitle";
 import { IErrors, ILoginDetails, IRegisterData } from "../../utils/types";
@@ -30,12 +30,15 @@ interface ILoginState {
 interface ILoginStateProps {
     errors: IErrors;
     isOpen: boolean;
+    passwordResetSent: boolean;
+    loadingSpinner: string;
 }
 
 interface ILoginProps extends ILoginStateProps {
     toggleModal: (modal?: string) => void;
     loginUser: (details: ILoginDetails) => void;
     registerUser: (userData: IRegisterData) => void;
+    sendResetPasswordEmail: (email: string) => void;
     fullScreen: boolean;
 }
 
@@ -181,6 +184,46 @@ class Login extends Component<ILoginProps, ILoginState> {
                             }}
                         />
                     }
+                    {(this.state.errors &&
+                        this.state.errors.id === "Auth.form.error.invalid" &&
+                        !this.props.passwordResetSent
+                    ) &&
+                        <Button
+                        style = {{marginTop: 12}}
+                        variant = "contained"
+                        color="primary"
+                        onClick={(): void => {this.props.sendResetPasswordEmail(this.state.identifier); }}
+                        disabled={this.props.loadingSpinner === "sendResetPasswordLink"}
+                        fullWidth>
+                                Email reset password link
+                        </Button>
+                    }
+                    {(this.state.errors &&
+                    this.state.errors.id === "Auth.form.error.invalid" &&
+                    this.props.passwordResetSent
+                    ) &&
+                        <Button
+                        style = {{marginTop: 12}}
+                        variant = "contained"
+                        color="primary"
+                        disabled={true}
+                        fullWidth>
+                                Email sent - check your spam folder
+                        </Button>
+                    }
+                    {this.props.loadingSpinner === "sendResetPasswordLink" &&
+                        <CircularProgress
+                            size={24}
+                            style={{
+                                color: green[500],
+                                position: "absolute",
+                                top: "50%",
+                                left: "50%",
+                                marginTop: -12,
+                                marginLeft: -12,
+                            }}
+                        />
+                    }
                 </div>
                 <DialogContentText align = "center" variant = "h6">
                         {"- or -"}
@@ -212,10 +255,12 @@ function mapStateToProps(state: IState): ILoginStateProps {
     return ({
         isOpen: state.openModal === "loginModal",
         errors: state.errors,
+        passwordResetSent: state.passwordResetSent,
+        loadingSpinner: state.loadingSpinner,
     });
 }
 
 export default connect(
     mapStateToProps,
-    { toggleModal, loginUser, registerUser},
+    { toggleModal, loginUser, registerUser, sendResetPasswordEmail},
 )(withMobileDialog()(Login));

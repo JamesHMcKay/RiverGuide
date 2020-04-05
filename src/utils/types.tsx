@@ -167,6 +167,12 @@ export interface ILogListItem extends ILogBase {
     river_name: string;
 }
 
+export interface IResetPasswordDetails {
+    code: string;
+    password: string;
+    confirmPassword: string;
+}
+
 export interface ILogEntry extends ILogBase {
     user_id: string;
     observables?: IObsValue;
@@ -188,6 +194,7 @@ export interface ILogBase {
 
 export interface IErrors {
     message: string;
+    id?: string;
 }
 
 export enum IThemeColor {

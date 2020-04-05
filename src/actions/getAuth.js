@@ -15,6 +15,9 @@ import {
     CLEAR_USER_DETAILS,
     ADD_TO_FAVOURITES,
     CLEAR_LOGS,
+    RESET_PASSWORD_SUCCESS,
+    RESET_PASSWORD_FAIL,
+    RESET_PASSWORD_SENT,
 } from "./types";
 import parseUserObject from "../utils/parseUserObject";
 
@@ -42,19 +45,26 @@ export const registerUser = (userData) => dispatch => {
         dispatch({ type: CLEAR_ERRORS });
     })
     .catch(error => {
-        dispatch({
-            type: GET_ERRORS,
-            payload: {message: error.response.data.message}
-        });
+        let errorMessage = "Unknown login error";
+        if (error.response.data.message[0].messages[0].id === "Auth.form.error.email.taken") {
+            errorMessage = "Email already used with another login provider, try with Google/Facebook or standard login."
+        } else if (error.response.data.message[0].messages[0]) {
+            errorMessage = error.response.data.message[0].messages[0].message
+        }
         dispatch({
             type: OPEN_MODAL,
             payload: "registerModal",
         });
+        dispatch({
+            type: GET_ERRORS,
+            payload: {message:  errorMessage}
+        });
+
     });
 };
 
 // Login - Get User Token
-export const loginUser = userData => dispatch => {
+export const loginUser = (userData) => dispatch => {
     axios
     .post(rapidsApiUrl + 'auth/local/', {
         identifier: userData.identifier,
@@ -75,13 +85,24 @@ export const loginUser = userData => dispatch => {
         dispatch({ type: CLEAR_ERRORS });
     })
     .catch(error => {
-        dispatch({
-            type: GET_ERRORS,
-            payload: {message: error.response.data.message}
-        });
+        let errorMessage = "Unknown login error";
+        let errorId = "";
+        if (error.response.data.message[0].messages[0].id === "Auth.form.error.email.taken") {
+            errorMessage = "Email already used with another login provider, try with Google/Facebook or standard login."
+        } else if (error.response.data.message[0].messages[0]) {
+            errorMessage = error.response.data.message[0].messages[0].message
+            errorId = error.response.data.message[0].messages[0].id
+        }
         dispatch({
             type: OPEN_MODAL,
             payload: "loginModal",
+        });
+        dispatch({
+            type: GET_ERRORS,
+            payload: {
+                message:  errorMessage,
+                id: errorId,
+            }
         });
     });
 };
@@ -263,4 +284,87 @@ export const deleteUser = (userDetails) => dispatch => {
     });
 
     dispatch(logoutUser());
+};
+
+export const sendResetPasswordEmail = (email) => dispatch => {
+    dispatch({
+        type: SET_LOADING_SPINNER,
+        payload: "sendResetPasswordLink",
+    });
+    axios
+    .post(rapidsApiUrl + 'auth/forgot-password/', {
+        email: email
+    })
+    .then(response => {
+       dispatch({
+        type: RESET_PASSWORD_SENT,
+        });
+        dispatch({
+            type: CLEAR_LOADING_SPINNER
+        });
+    })
+    .catch(error => {
+        let errorMessage = "Unknown login error";
+        let errorId = "";
+        if (error.response.data.message[0].messages[0].id === "Auth.form.error.email.taken") {
+            errorMessage = "Email already used with another login provider, try with Google/Facebook or standard login."
+        } else if (error.response.data.message[0].messages[0]) {
+            errorMessage = error.response.data.message[0].messages[0].message
+            errorId = error.response.data.message[0].messages[0].id
+        }
+        dispatch({
+            type: GET_ERRORS,
+            payload: {
+                message:  errorMessage,
+                id: errorId,
+            }
+        });
+        dispatch({
+            type: CLEAR_LOADING_SPINNER
+        });
+    });
+};
+
+export const resetPassword = (userData) => dispatch => {
+    dispatch({
+        type: SET_LOADING_SPINNER,
+        payload: "resetPassword",
+    });
+    axios
+    .post(rapidsApiUrl + 'auth/reset-password/', {
+        code: userData.code,
+        password: userData.password,
+        passwordConfirmation: userData.confirmPassword,
+    })
+    .then(response => {
+       dispatch({
+           type: RESET_PASSWORD_SUCCESS,
+       });
+       dispatch({
+         type: CLEAR_LOADING_SPINNER
+    });
+    })
+    .catch(error => {
+        let errorMessage = "Unknown login error";
+        let errorId = "";
+        if (error.response.data.message[0].messages[0].id === "Auth.form.error.email.taken") {
+            errorMessage = "Email already used with another login provider, try with Google/Facebook or standard login."
+        } else if (error.response.data.message[0].messages[0]) {
+            errorMessage = error.response.data.message[0].messages[0].message
+            errorId = error.response.data.message[0].messages[0].id
+        }
+        dispatch({
+            type: GET_ERRORS,
+            payload: {
+                message:  errorMessage,
+                id: errorId,
+            }
+        });
+        dispatch({
+            type: RESET_PASSWORD_FAIL,
+        });
+        dispatch({
+            type: CLEAR_LOADING_SPINNER
+        });
+    });
 };

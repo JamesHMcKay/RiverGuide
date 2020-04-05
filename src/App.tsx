@@ -15,6 +15,7 @@ import NavBar from "./components/NavBar";
 import Panel from "./components/Panel";
 import ProfileContainer from "./components/profile/ProfileContainer";
 import ProfilePage from "./components/profile/ProfilePage";
+import ResetPasswordPage from "./components/profile/ResetPasswordPage";
 import Modals from "./components/utils/Modals";
 
 import createHistory from "history/createBrowserHistory";
@@ -114,6 +115,10 @@ class App extends Component {
                                 <Route
                                     path="/profile"
                                     component={ProfilePage}
+                                />
+                                <Route
+                                    path="/reset-password"
+                                    component={ResetPasswordPage}
                                 />
                                 <Route exact path="/connect/:provider" component={ConnectPage} />
                                 <Route

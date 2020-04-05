@@ -36,6 +36,8 @@ import mapBoundsReducer from "./mapBoundsReducer";
 import mapViewportReducer from "./mapViewportReducer";
 import modalReducer from "./modalReducer";
 import openLogReducer from "./openLogReducer";
+import passwordResetSentReducer from "./passwordResetSentReducer";
+import passwordResetSuccessReducer from "./passwordResetSuccessReducer";
 import recentItemsReducer from "./recentItemsReducer";
 import searchPanelReducer from "./searchPanelReducer";
 import selectedLogIdReducer from "./selectedLogIdReducer";
@@ -72,6 +74,8 @@ export interface IState {
     recentItems: string[];
     guides: IListEntry[];
     mapViewport: IViewport;
+    passwordResetSuccess: boolean;
+    passwordResetSent: boolean;
 }
 
 export default combineReducers({
@@ -103,4 +107,6 @@ export default combineReducers({
     recentItems: recentItemsReducer,
     guides: guideReducer,
     mapViewport: mapViewportReducer,
+    passwordResetSuccess: passwordResetSuccessReducer,
+    passwordResetSent: passwordResetSentReducer,
 });
