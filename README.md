@@ -3,6 +3,21 @@
 
 # RiverGuide
 
+The purpose of the RiverGuide is to provide the largest collection of guides for freshwater recreation in New Zealand, while also providing a single place to access flow, rainfall and other environmental data.  The RiverGuide is an evolving guide book for all of New Zealand's water related activities.
+
+By allowing users to log trips we can find out just how valuable and popular freshwater recreation in New Zealand is. These insights help us to ensure our rivers are protected for future generations to enjoy.
+
+## Live data
+
 This application provides up to date and detailed information on New Zealand rivers.  This includes river flow, weather and descriptions.  Registered users can log their trips with automatically computed river flow information.
 
-The RiverGuide front-end uses flow information from the RiverService, running at https://www.openriverdata.com and activity guides and user details from the content management system running at https://rapidsapi.herokuapp.com/.
+The RiverGuide front-end uses flow information from the RiverService (https://github.com/JamesHMcKay/RiverService), running at https://www.openriverdata.com.
+
+
+## Contributing to the development of the RiverGuide
+
+The RiverGuide is developed and maintained by volunteers and supported by White Water New Zealand.  If you are interested in contributing to the development of this application then please get in touch at riverguide@whitewater.nz.  We have a list of planned feature developments and improvements, and are welcome to new suggestions for ways to improve the RiverGuide.
+
+## Reporting issues
+
+Please report issues or bugs using the issues tab or send us a message.
