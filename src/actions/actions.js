@@ -199,6 +199,7 @@ export const updateOpenLog = openLog => dispatch => {
 
 // Create logbook entry
 export const createLogEntry = (logEntry, guide) => dispatch => {
+    delete logEntry.id;
     dispatch({
         type: SET_LOADING_SPINNER,
         payload: "logTrip",
@@ -227,6 +228,7 @@ export const createLogEntry = (logEntry, guide) => dispatch => {
 
 // Edit logbook entry
 export const editLogEntry = updatedLogEntry => dispatch => {
+    delete updatedLogEntry.id;
     dispatch({
         type: SET_LOADING_SPINNER,
         payload: "logTrip",
