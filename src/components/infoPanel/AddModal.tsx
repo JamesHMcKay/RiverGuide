@@ -8,7 +8,6 @@ import { addGuide } from "../../actions/updateGuide";
 import { IState } from "../../reducers/index";
 import { IAuth, IListEntry, IUser } from "../../utils/types";
 import DraftGuide, { IDraftGuideState } from "../draftGuide/DraftGuide";
-import EditGuide, { IEditGuideState } from "./EditGuide";
 
 interface IEditModalProps extends IAddModalStateProps {
     toggleModal: (modal?: string) => void;

@@ -11,7 +11,6 @@ import {
     Typography,
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -580,7 +579,11 @@ class DraftGuide extends React.Component<IDraftGuideProps, IDraftGuideState> {
                     Please see our guide to submitting content if you are new here:
                     </Typography>
                     <p style={{marginBottom: "30px"}}>
-                        <a href="https://riverguide.co.nz/help/guide_submission" target="_blank">
+                        <a
+                            href="https://riverguide.co.nz/help/guide_submission"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                             Submission instructions and guidelines
                         </a>
                     </p>

@@ -1,4 +1,4 @@
-import { Button, createStyles, DialogActions, DialogContent, DialogContentText, Theme } from "@material-ui/core";
+import { createStyles, Theme } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import { withStyles } from "@material-ui/core/styles";
 import React, { Component } from "react";
@@ -6,10 +6,8 @@ import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 import { deleteGuide, updateGuide } from "../../actions/updateGuide";
 import { IState } from "../../reducers/index";
-import DialogTitle from "../../utils/dialogTitle";
 import { IAuth, IInfoPage, IListEntry, IUser } from "../../utils/types";
 import DraftGuide, { IDraftGuideState } from "../draftGuide/DraftGuide";
-import EditGuide, { IEditGuideState } from "./EditGuide";
 
 const styles: any = (theme: Theme): any => createStyles({
     dialogPaper: {
