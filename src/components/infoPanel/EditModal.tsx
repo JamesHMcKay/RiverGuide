@@ -1,22 +1,33 @@
-import { Button, DialogActions, DialogContentText } from "@material-ui/core";
+import { Button, createStyles, DialogActions, DialogContent, DialogContentText, Theme } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
+import { withStyles } from "@material-ui/core/styles";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 import { deleteGuide, updateGuide } from "../../actions/updateGuide";
 import { IState } from "../../reducers/index";
-import { IAuth, IInfoPage, IListEntry } from "../../utils/types";
+import DialogTitle from "../../utils/dialogTitle";
+import { IAuth, IInfoPage, IListEntry, IUser } from "../../utils/types";
+import DraftGuide, { IDraftGuideState } from "../draftGuide/DraftGuide";
 import EditGuide, { IEditGuideState } from "./EditGuide";
+
+const styles: any = (theme: Theme): any => createStyles({
+    dialogPaper: {
+        minHeight: "80vh",
+        maxHeight: "80vh",
+    },
+});
 
 interface IEditModalProps extends IEditModalStateProps {
     toggleModal: (modal?: string) => void;
     updateGuide: (
-        item: IEditGuideState,
+        item: IDraftGuideState,
         selectedGuide: IListEntry,
         listEntries: IListEntry[],
-        userRole: string,
+        userRole: IUser,
     ) => void;
     deleteGuide: (selectedGuideId: string, listEntries: IListEntry[]) => void;
+    classes: any;
 }
 
 interface IEditModalStateProps {
@@ -26,15 +37,10 @@ interface IEditModalStateProps {
     auth: IAuth;
 }
 
-interface IEditModalState {
-    thanksOpen: boolean;
-}
-
-class EditModal extends Component<IEditModalProps, IEditModalState> {
+class EditModal extends Component<IEditModalProps, {}> {
     constructor(props: IEditModalProps) {
         super(props);
         this.state = {
-            thanksOpen: false,
         };
     }
 
@@ -42,12 +48,12 @@ class EditModal extends Component<IEditModalProps, IEditModalState> {
         this.props.toggleModal();
     }
 
-    public closeModal(): void {
+    public closeModal = (): void => {
         this.setState({thanksOpen: false});
         this.props.toggleModal();
     }
 
-    public handleSave = (result: IEditGuideState): void => {
+    public handleSave = (result: IDraftGuideState): void => {
         const selectedGuide: IListEntry = {
             ...this.props.infoPage.selectedGuide,
             display_name: result.displayName,
@@ -60,11 +66,7 @@ class EditModal extends Component<IEditModalProps, IEditModalState> {
             } : this.props.infoPage.selectedGuide.position,
             activity: result.activity ? result.activity : this.props.infoPage.selectedGuide.activity,
         };
-        const userRole: string = this.props.auth.user.role;
-        this.props.updateGuide(result, selectedGuide, this.props.listEntries, userRole);
-        this.setState({
-            thanksOpen: true,
-        });
+        this.props.updateGuide(result, selectedGuide, this.props.listEntries, this.props.auth.user);
     }
 
     public handleDelete = (): void => {
@@ -73,6 +75,7 @@ class EditModal extends Component<IEditModalProps, IEditModalState> {
     }
 
     public render(): JSX.Element {
+        const { classes } = this.props;
         return (
             <Dialog
                 onClose={(): void => this.props.toggleModal()}
@@ -80,37 +83,16 @@ class EditModal extends Component<IEditModalProps, IEditModalState> {
                 open={this.props.isOpen}
                 fullWidth={true}
                 fullScreen={false}
-                maxWidth={"xl"}
+                maxWidth={"md"}
+                classes={{ paper: classes.dialogPaper }}
             >
-                <EditGuide
+                <DraftGuide
                     handleClose = {(): void => this.props.toggleModal()}
                     infoPage = {this.props.infoPage}
                     handleSave = {this.handleSave}
                     handleDelete = {this.handleDelete}
                     title={"Edit guide"}
                 />
-                    <Dialog
-                        onClose={(): void => this.closeModal()}
-                        open={this.state.thanksOpen}
-                    >
-                        <DialogContentText
-                            color="textPrimary"
-                            style={{width: "90%", margin: "auto", padding: "40px"}}
-                        >
-                            {"Thanks for submitting a guide, we will review it and publish it as soon as possible."}
-                            {" We reserve the right to edit the material if necessary. If it is innappropriate, "}
-                            {"we may reject or modify the content. In this case, we will contact you to clarify."}
-                        </DialogContentText>
-                        <DialogActions>
-                        <Button
-                                style={{width: "90%", margin: "auto"}}
-                                variant="outlined"
-                                onClick={(): void => {this.closeModal(); }}
-                            >
-                                Okay
-                        </Button>
-                        </DialogActions>
-                    </Dialog>
             </Dialog>
         );
     }
@@ -128,4 +110,4 @@ function mapStateToProps(state: IState): IEditModalStateProps {
 export default connect(
     mapStateToProps,
     { toggleModal, updateGuide, deleteGuide },
-)(EditModal);
+)(withStyles(styles)(EditModal));

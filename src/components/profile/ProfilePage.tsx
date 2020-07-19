@@ -1,4 +1,4 @@
-import { Button, Divider, List, ListItem, ListItemText, TextField, Typography } from "@material-ui/core";
+import { Button, DialogActions, Divider, List, ListItem, ListItemText, TextField, Typography } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
@@ -155,11 +155,19 @@ class ProfilePage extends Component<IProfilePageProps, IProfilePageState> {
                         title={"Are you sure you want to delete your account?"}
                     />
                     <DialogContent>
-                    <Button onClick={this.onDeleteClick}>
-                        Delete
-                    </Button>{" "}
-                    <Button onClick={(): void => this.setState({deleteModalOpen: false})}>Cancel</Button>
                     </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={(): void => this.setState({deleteModalOpen: false})}
+                            color="primary"
+                            variant="outlined"
+                        >
+                            Cancel
+                        </Button>
+                        <Button onClick={this.onDeleteClick} color="primary" variant="outlined">
+                            Delete
+                        </Button>{" "}
+                    </DialogActions>
                 </Dialog>
                 <List style={{ width: "100%I ", maxWidth: 360}}>
                 {!this.props.auth.isAuthenticated &&

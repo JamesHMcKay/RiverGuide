@@ -42,14 +42,14 @@ export interface IKeyFactsChar {
 }
 
 export const KEY_FACTS_NUM_PROPS: Array<IKeyFactProps<IKeyFactsNum>> = [
-    {key: "gradient", name: "Gradient", icon: <LandscapeRounded fontSize="large" />},
-    {key: "time", name: "Time", icon: <QueryBuilder fontSize="large" />},
-    {key: "section_length", name: "Length", icon: <Timeline fontSize="large" />},
+    {key: "gradient", name: "Gradient", icon: <LandscapeRounded fontSize="large" />, activity: "kayaking"},
+    {key: "time", name: "Time", icon: <QueryBuilder fontSize="large" />, activity: "kayaking"},
+    {key: "section_length", name: "Length", icon: <Timeline fontSize="large" />, activity: "kayaking"},
 ];
 
 export const KEY_FACTS_CHAR_PROPS: Array<IKeyFactProps<IKeyFactsChar>> = [
-    {key: "grade_overall", name: "Grade", icon: <WarningRounded fontSize="large" />},
-    {key: "grade_hardest", name: "Grade (hardest)", icon: <WarningRounded fontSize="large" />},
-    {key: "toilet", name: "Toilet facilities", icon: <Wc fontSize="large" />},
-    {key: "catch_type", name: "Catch type", icon: <LocalDining fontSize="large" />},
+    {key: "grade_overall", name: "Grade", icon: <WarningRounded fontSize="large" />, activity: "kayaking"},
+    {key: "grade_hardest", name: "Grade (hardest)", icon: <WarningRounded fontSize="large" />, activity: "kayaking"},
+    {key: "toilet", name: "Toilet facilities", icon: <Wc fontSize="large" />, activity: "swimming"},
+    {key: "catch_type", name: "Catch type", icon: <LocalDining fontSize="large" />, activity: "fishing"},
 ];

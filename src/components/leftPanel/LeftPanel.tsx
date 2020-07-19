@@ -8,6 +8,7 @@ import { CircularProgress, List } from "@material-ui/core";
 // Components
 import { IState } from "../../reducers/index";
 import { IAuth, IErrors, IFilter, IGauge, IInfoPage, IListEntry, IUserDetails } from "./../../utils/types";
+import DraftGroup from "./DraftGroup";
 import FavGroup from "./FavGroup";
 // Styles
 import "./LeftPanel.css";
@@ -29,6 +30,7 @@ interface ILeftPanelStateProps {
     filters: IFilter;
     recentItems: string[];
     errors: IErrors;
+    guideDrafts: IListEntry[];
 }
 
 class LeftPanel extends Component<ILeftPanelProps, {}> {
@@ -93,6 +95,7 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
             <List>
                 {this.props.specialItem && this.props.specialItem}
                 {(!noResults) && <FavGroup listEntries={favList}/>}
+                {(!noResults) && <DraftGroup listEntries={this.props.guideDrafts}/>}
                 {this.props.filteredList
                     .map(this.getRegion)
                     .filter(this.onlyUnique)
@@ -120,6 +123,7 @@ function mapStateToProps(state: IState): ILeftPanelStateProps {
         filters: state.filters,
         recentItems: state.recentItems,
         errors: state.errors,
+        guideDrafts: state.guideDrafts,
     });
 }
 

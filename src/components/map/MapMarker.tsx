@@ -1,6 +1,6 @@
 import Tooltip from "@material-ui/core/Tooltip";
+import LocationOn from "@material-ui/icons/LocationOn";
 import React, { PureComponent } from "react";
-import IoIosLocation from "react-icons/lib/io/ios-location";
 import { IObservable } from "../../utils/types";
 import FlowBadge from "../common/FlowBadge";
 
@@ -51,10 +51,10 @@ export default class MapMarker extends PureComponent<IMapMarkerProps> {
                 style={{...pinStyle, transform: `translate(${-size / 2}px,${-size}px)`}}
             >
                 {this.props.icon ? this.props.icon :
-                    <IoIosLocation
-                        size={80}
+                    <LocationOn
+                        // size={80}
                         className="map-marker"
-                        style={{color: "#1e87e5"}}
+                        style={{color: this.props.color ? this.props.color : "#1e87e5"}}
                     />
                 }
             </svg>

@@ -5,7 +5,7 @@ import { IState } from "../../reducers/index";
 import { IGauge, IListEntry } from "../../utils/types";
 
 interface IGaugeSelectProps extends IGaugeSelectStateProps {
-    handleChange: (selectedGuide: IGauge) => void;
+    handleChange: (selectedGaugeId: string) => void;
     selectedGaugeId?: string;
 }
 
@@ -29,7 +29,7 @@ class SectionSelect extends Component<IGaugeSelectProps> {
         const selectedGauge: IGauge[] = this.props.gauges.filter(
             (gauge: IGauge) => gauge.id === selectedId);
         if (selectedGauge.length === 1) {
-            this.props.handleChange(selectedGauge[0]);
+            this.props.handleChange(selectedGauge[0].id);
         }
     }
 

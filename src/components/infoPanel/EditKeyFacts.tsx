@@ -35,6 +35,7 @@ interface IEditKeyFactsProps {
     onChangeChar: (keyFacts: IKeyFactsChar) => void;
     keyFactsNum: IKeyFactsNum;
     keyFactsChar: IKeyFactsChar;
+    activity: string;
 }
 
 interface IEditKeyFactsState {
@@ -357,10 +358,16 @@ export default class EditKeyFacts extends Component<IEditKeyFactsProps, IEditKey
 
     public getKeyFactTypeSelector = (): JSX.Element => {
         const numOptions: Array<IKeyFactProps<IKeyFactsNum>> = KEY_FACTS_NUM_PROPS.filter(
-            (item: IKeyFactProps<IKeyFactsNum>) => Object.keys(this.props.keyFactsNum).indexOf(item.key) === -1,
+            (item: IKeyFactProps<IKeyFactsNum>) => (
+                Object.keys(this.props.keyFactsNum).indexOf(item.key) === -1 &&
+                    item.activity === this.props.activity
+            ),
         );
         const charOptions: Array<IKeyFactProps<IKeyFactsChar>> = KEY_FACTS_CHAR_PROPS.filter(
-            (item: IKeyFactProps<IKeyFactsChar>) => Object.keys(this.props.keyFactsChar).indexOf(item.key) === -1,
+            (item: IKeyFactProps<IKeyFactsChar>) => (
+                Object.keys(this.props.keyFactsChar).indexOf(item.key) === -1 &&
+                    item.activity === this.props.activity
+            ),
         );
         return (
             <div>

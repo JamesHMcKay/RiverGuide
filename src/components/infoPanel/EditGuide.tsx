@@ -120,9 +120,9 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
         });
     }
 
-    public handleGaugeChange = (selectedGauge: IGauge): void => {
+    public handleGaugeChange = (selectedGaugeId: string): void => {
         this.setState({
-            gaugeId: selectedGauge.id,
+            gaugeId: selectedGaugeId,
         });
     }
 
@@ -289,6 +289,7 @@ class EditGuide extends React.Component<IEditGuideProps, IEditGuideState> {
                         keyFactsChar={this.state.keyFactsChar as IKeyFactsChar}
                         onChangeNum={this.onChangeNum}
                         onChangeChar={this.onChangeChar}
+                        activity={this.state.activity || ""}
                     />
                     <DialogContentText variant = "h5" color="textPrimary">
                         {"Description"}

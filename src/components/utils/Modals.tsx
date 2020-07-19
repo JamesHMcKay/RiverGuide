@@ -14,6 +14,7 @@ import MapModal from "../map/MapModal";
 import AboutModal from "../modals/AboutModal";
 import ContactModal from "../modals/ContactModal";
 import ProtectedModal from "../modals/ProtectedModal";
+import DeleteDraftModal from "../profile/DeleteDraftModal";
 import TripDetailsAnyPage from "../profile/TripDetailsAnyPage";
 import TripDetailsEdit from "../profile/TripDetailsEdit";
 import TripDetailsInfoPage from "../profile/TripDetailsInfoPage";
@@ -39,6 +40,7 @@ class Modals extends Component {
                 <AboutModal />
                 <MapModal />
                 <ProtectedModal />
+                <DeleteDraftModal />
             </div>
         );
     }

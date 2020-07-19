@@ -64,7 +64,6 @@ export const toggleModal = modal => dispatch => {
     }
 };
 
-// Get logbook logs
 export const makeLogbookRequest = (user_id) => dispatch => {
     let req = [
         axios.get(`${rapidsApiUrl}graphql`,
@@ -109,27 +108,12 @@ export const makeLogbookRequest = (user_id) => dispatch => {
       });
 };
 
-// set map bounds
 export const setMapBounds = mapBounds => dispatch => {
     dispatch({
         type: SET_MAP_BOUNDS,
         payload: mapBounds,
     });
 };
-
-// export const setSearchString = (searchString) => dispatch => {
-//     dispatch({
-//         type: SET_SEARCH_STRING_FILTER,
-//         payload: searchString,
-//     });
-// };
-
-// export const setActivityFilter = (activity) => dispatch => {
-//     dispatch({
-//         type: SET_ACTIVITY_FILTER,
-//         payload: activity,
-//     });
-// };
 
 export const generateFilteredList = (entries, filters, mapBounds) => dispatch => {
     dispatch({
@@ -182,14 +166,12 @@ export const getGaugeHistory = gaugeId => dispatch => {
     }
 }
 
-// close info page
 export const closeInfoPage = () => dispatch => {
     dispatch({
         type: CLOSE_INFO,
     });
 };
 
-// Update pre-edit state
 export const updateOpenLog = openLog => dispatch => {
     dispatch({
         type: UPDATE_OPEN_LOG,
@@ -197,7 +179,6 @@ export const updateOpenLog = openLog => dispatch => {
     });
 };
 
-// Create logbook entry
 export const createLogEntry = (logEntry, guide) => dispatch => {
     delete logEntry.id;
     dispatch({
@@ -226,7 +207,6 @@ export const createLogEntry = (logEntry, guide) => dispatch => {
     });
 };
 
-// Edit logbook entry
 export const editLogEntry = updatedLogEntry => dispatch => {
     delete updatedLogEntry.id;
     dispatch({
@@ -252,7 +232,6 @@ export const editLogEntry = updatedLogEntry => dispatch => {
         });
 };
 
-// Delete logbook entry
 export const deleteLogEntry = logId => dispatch => {
     axios.delete(rapidsApiUrl + "logs/" + logId).then(res => {
         dispatch({

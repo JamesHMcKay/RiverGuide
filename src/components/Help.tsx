@@ -8,6 +8,7 @@ import { Link, Route, Switch } from "react-router-dom";
 import uuidv1 from "uuid";
 import about from "../content/about.json";
 import code_of_conduct from "../content/code_of_conduct.json";
+import guide_submission from "../content/guide_submission.json";
 import privacy_statement from "../content/privacy_statement.json";
 import terms_of_service from "../content/terms_of_service.json";
 
@@ -49,13 +50,19 @@ export const helpPages: IHelpPages[] = [
         effectiveDate: "August 3 2019",
         linkTitle: "Code of Conduct",
     },
+    {
+        route: "/help/guide_submission",
+        content: [guide_submission.introduction, guide_submission.body],
+        title: "Submitting and editing guide content",
+        linkTitle: "Submitting guides",
+    },
 ];
 
 const styles: any = (theme: Theme): any => createStyles({
     root: {
         display: "flex",
         borderTop: "1px solid #e6e6eb",
-        overflowY: "scroll",
+        height: "90vh",
       },
       drawer: {
         [theme.breakpoints.up("sm")]: {
@@ -129,6 +136,7 @@ class Help extends Component<IHelpProps, IHelpState> {
         const { classes } = this.props;
         return (
             <div className={classes.root}>
+                <div style={{overflowY: "scroll"}}>
                 <div className={classes.textBody}>
                     <nav className={classes.drawer} aria-label="mailbox folders">
                         <Hidden xsDown implementation="css">
@@ -191,6 +199,7 @@ class Help extends Component<IHelpProps, IHelpState> {
                                 </Route>,
                         )}
                     </Switch>
+                    </div>
                     </div>
             </div>
         );

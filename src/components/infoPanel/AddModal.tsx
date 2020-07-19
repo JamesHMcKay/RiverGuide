@@ -6,12 +6,13 @@ import uuid from "uuidv4";
 import { toggleModal } from "../../actions/actions";
 import { addGuide } from "../../actions/updateGuide";
 import { IState } from "../../reducers/index";
-import { IAuth, IListEntry } from "../../utils/types";
+import { IAuth, IListEntry, IUser } from "../../utils/types";
+import DraftGuide, { IDraftGuideState } from "../draftGuide/DraftGuide";
 import EditGuide, { IEditGuideState } from "./EditGuide";
 
 interface IEditModalProps extends IAddModalStateProps {
     toggleModal: (modal?: string) => void;
-    addGuide: (item: IEditGuideState, selectedGuide: IListEntry, listEntries: IListEntry[], userRole: string) => void;
+    addGuide: (item: IDraftGuideState, selectedGuide: IListEntry, listEntries: IListEntry[], userRole: IUser) => void;
 }
 
 interface IAddModalStateProps {
@@ -42,7 +43,7 @@ class AddModal extends Component<IEditModalProps, IAddModalState> {
         this.props.toggleModal();
     }
 
-    public handleSave = (result: IEditGuideState): void => {
+    public handleSave = (result: IDraftGuideState): void => {
         if (result.locationMarker && result.activity) {
             const selectedGuide: IListEntry = {
                 id: uuid(),
@@ -56,8 +57,7 @@ class AddModal extends Component<IEditModalProps, IAddModalState> {
                 },
                 activity: result.activity,
             };
-            const userRole: string = this.props.auth.user.role;
-            this.props.addGuide(result, selectedGuide, this.props.listEntries, userRole);
+            this.props.addGuide(result, selectedGuide, this.props.listEntries, this.props.auth.user);
             this.setState({
                 thanksOpen: true,
             });
@@ -75,9 +75,9 @@ class AddModal extends Component<IEditModalProps, IAddModalState> {
                 open={this.props.isOpen}
                 fullWidth={true}
                 fullScreen={false}
-                maxWidth={"xl"}
+                maxWidth={"md"}
             >
-                <EditGuide
+                <DraftGuide
                     handleClose = {(): void => this.props.toggleModal()}
                     handleSave = {this.handleSave}
                     title={"Add guide"}

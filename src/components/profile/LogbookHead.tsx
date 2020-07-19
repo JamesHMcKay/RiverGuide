@@ -1,4 +1,14 @@
-import { Button, Dialog, DialogActions, DialogTitle, IconButton, Tooltip, Typography } from "@material-ui/core";
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    IconButton,
+    Tooltip,
+    Typography,
+} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import React, { Component } from "react";
@@ -125,12 +135,17 @@ class LogbookHead extends Component<ILogbookHeadProps, ILogbookHeadState> {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle id="alert-dialog-title">{`Delete ${numSelected} log book entries?`}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{"Confirm delete"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {`Delete ${numSelected} log book entries?`}
+                        </DialogContentText>
+                    </DialogContent>
                     <DialogActions>
-                    <Button onClick={this.handleClose} color="primary">
+                    <Button onClick={this.handleClose} color="primary" variant="outlined">
                         Cancel
                     </Button>
-                    <Button onClick={this.deleteLogs} color="primary" autoFocus>
+                    <Button onClick={this.deleteLogs} color="primary" variant="outlined">
                         Okay
                     </Button>
                     </DialogActions>

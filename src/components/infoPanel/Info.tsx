@@ -1,6 +1,10 @@
-import { Button, Hidden, IconButton, Tooltip } from "@material-ui/core";
+import { Button, Chip, createStyles, Hidden, IconButton, Theme, Tooltip } from "@material-ui/core";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
+import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -18,6 +22,7 @@ import { IState } from "../../reducers/index";
 import {
     IAuth,
     IExpansionPanels,
+    IGuideDraftDetails,
     IInfoPage,
     IListEntry,
     ILogComplete,
@@ -35,6 +40,18 @@ import KeyFactsCard from "./KeyFactsCard";
 import LatestData from "./LatestData";
 import MapCard from "./MapCard";
 import { WeatherStore } from "./WeatherStore";
+
+const styles: any = (theme: Theme): any => createStyles({
+    root: {
+        minWidth: 275,
+      },
+      title: {
+        fontSize: 14,
+      },
+      pos: {
+        marginBottom: 12,
+      },
+});
 
 const logTypes: string[] = [
     "Public",
@@ -71,6 +88,7 @@ interface IInfoStateProps {
 }
 
 interface IInfoProps extends IInfoStateProps {
+    classes: any;
     toggleModal: (modal?: string) => void;
     closeInfoPage: () => void;
     addToFavourites: (userDetails: IUser) => void;
@@ -393,7 +411,7 @@ class Info extends Component<IInfoProps, IInfoState> {
         );
     }
 
-    public getHeaderMobile = (entry: IListEntry, isData: boolean): JSX.Element => {
+    public getHeaderMobile = (entry: IListEntry, showGuideButtons: boolean): JSX.Element => {
         return (
             <Grid
                 container
@@ -413,7 +431,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                             </Typography>
                     </div>
             </Grid>
-            {!isData &&
+            {!showGuideButtons &&
                         <Grid
                         container
                         item
@@ -441,7 +459,80 @@ class Info extends Component<IInfoProps, IInfoState> {
         );
     }
 
-    public getHeader = (entry: IListEntry, isData: boolean): JSX.Element => {
+    public getDraftInfo = (draftDetails: IGuideDraftDetails): JSX.Element => {
+        const status: string = draftDetails.status ? draftDetails.status : "Pending review";
+        const { classes } = this.props;
+        const dateParsed: Date = new Date(draftDetails.createdAt);
+        return (
+            <Grid
+            item
+            xs={12}
+            sm={12}
+            style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "2%"}}
+        >
+            <Card className={classes.root}>
+            <CardContent>
+                <Typography variant="h5" component="h2">
+                Guide submission
+                </Typography>
+                <Typography className={classes.pos} color="textSecondary">
+                Status
+                </Typography>
+                <Chip label={status} variant="outlined" color="primary"/>
+                <Grid container spacing={3} style={{marginTop: "10px"}}>
+                <Grid item xs={4}>
+                <Typography className={classes.pos} color="textSecondary">
+                Contact email
+                </Typography>
+                <Typography variant="body2" component="p">{draftDetails.userEmail}</Typography>
+                </Grid>
+                <Grid item xs={4}>
+                <Typography className={classes.pos} color="textSecondary">
+                Contact user name
+                </Typography>
+                <Typography variant="body2" component="p">{draftDetails.userName}</Typography>
+                </Grid>
+                <Grid item xs={4}>
+                <Typography className={classes.pos} color="textSecondary">
+                Created at
+                </Typography>
+                <Typography variant="body2" component="p">{dateParsed.toDateString()}</Typography>
+                </Grid>
+                </Grid>
+                <Typography className={classes.pos} color="textSecondary" style={{marginTop: "10px"}}>
+                Moderator comments
+                </Typography>
+                <Typography variant="body2" component="p">
+                {draftDetails.moderatorComments ? draftDetails.moderatorComments :
+                    "There are no comments from a moderator."}
+                </Typography>
+            </CardContent>
+            <CardActions style={{justifyContent: "center"}}>
+            <Button
+                    className="reporting-button"
+                    variant="outlined"
+                    color="primary"
+                    style={{height: "fit-content", marginRight: "10px"}}
+                    onClick={this.openModal.bind(this, "editModal")}
+                >
+                    Edit submission
+            </Button>
+            <Button
+                    className="reporting-button"
+                    variant="outlined"
+                    color="primary"
+                    style={{height: "fit-content", marginRight: "10px"}}
+                    onClick={this.openModal.bind(this, "deleteDraft")}
+                >
+                    Delete submission
+            </Button>
+            </CardActions>
+            </Card>
+            </Grid>
+        );
+    }
+
+    public getHeader = (entry: IListEntry, showGuideButtons: boolean): JSX.Element => {
         const titleLength: number = entry.display_name.length;
         const titleSize: string = titleLength > 40 ? "h4" : "h1";
         return (
@@ -488,8 +579,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                         iconHeight={"60px"}
                         tempSize={"20px"}
                     />
-                    {/* {(this.props.auth.isAuthenticated && !isData) && this.getEditButton("white")} */}
-                    {(this.props.auth.isAuthenticated && !isData) && this.getReportButton("white", false)}
+                    {(this.props.auth.isAuthenticated && !showGuideButtons) && this.getReportButton("white", false)}
             </Grid>
         </Grid>
         );
@@ -499,6 +589,8 @@ class Info extends Component<IInfoProps, IInfoState> {
         const entry: IListEntry = this.props.infoPage.selectedGuide;
         const isData: boolean = entry.activity === "data";
         const isLogbookInfo: boolean = this.props.isLogbookInfo;
+        const draftDetails: IGuideDraftDetails | undefined = this.props.infoPage.itemDetails &&
+            this.props.infoPage.itemDetails.draftDetails;
         return (
             <Grid
                 container
@@ -509,24 +601,17 @@ class Info extends Component<IInfoProps, IInfoState> {
                 className="right-panel"
             >
                 <Hidden smDown>
-                    {this.getHeader(entry, isData)}
+                    {this.getHeader(entry, isData || !!draftDetails)}
                 </Hidden>
                 <Hidden mdUp>
-                    {this.getHeaderMobile(entry, isData)}
+                    {this.getHeaderMobile(entry, isData || !!draftDetails)}
                 </Hidden>
-                {/* {isLogbookInfo && this.getLogbook()} */}
+                {draftDetails && this.getDraftInfo(draftDetails)}
                 {!isLogbookInfo && this.getKeyFacts()}
                 {!isLogbookInfo && this.getDescription()}
                 {!isLogbookInfo && this.getFlowChart(entry, isData)}
                 {!isLogbookInfo && this.getMap(entry)}
-                {!isData && this.getLogbook()}
-                {/* <Grid
-                    item
-                    md={12}
-                    lg={12}
-                    style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "0"}}
-                >
-                </Grid> */}
+                {(!isData && !draftDetails) && this.getLogbook()}
             </Grid>
         );
     }
@@ -548,4 +633,4 @@ function mapStateToProps(state: IState): IInfoStateProps {
 export default connect(
     mapStateToProps,
     { closeInfoPage, addToFavourites, toggleModal },
-)(Info);
+)(withStyles(styles)(Info));

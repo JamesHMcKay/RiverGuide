@@ -24,6 +24,7 @@ import filterReducer from "./filterReducer";
 import gaugeDisclaimerReducer from "./gaugeDisclaimerReducer";
 import gaugeHistoryReducer from "./gaugeHistoryReducer";
 import gaugeReducer from "./gaugeReducer";
+import guideDraftReducer from "./guideDraftReducer";
 import guideReducer from "./guideReducer";
 import infoReducer from "./infoReducer";
 import listEntryReducer from "./listEntryReducer";
@@ -76,6 +77,7 @@ export interface IState {
     mapViewport: IViewport;
     passwordResetSuccess: boolean;
     passwordResetSent: boolean;
+    guideDrafts: IListEntry[];
 }
 
 export default combineReducers({
@@ -109,4 +111,5 @@ export default combineReducers({
     mapViewport: mapViewportReducer,
     passwordResetSuccess: passwordResetSuccessReducer,
     passwordResetSent: passwordResetSentReducer,
+    guideDrafts: guideDraftReducer,
 });

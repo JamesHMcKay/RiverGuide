@@ -60,6 +60,7 @@ export interface IListEntry {
     observables?: IObservable[];
     latest_flow?: number;
     activity: string;
+    status?: string;
 }
 
 export interface IKeyFactsNumItem {
@@ -71,6 +72,7 @@ export interface IKeyFactProps<T> {
     key: keyof T;
     name: string;
     icon: JSX.Element;
+    activity: string;
 }
 
 export interface IItemDetails {
@@ -84,6 +86,7 @@ export interface IItemDetails {
     position: ILatLon;
     attribution: string;
     directions: string;
+    draftDetails?: IGuideDraftDetails;
 }
 
 export interface IGauge extends IListEntry {
@@ -150,12 +153,6 @@ export interface IUser {
 export interface IAuth {
     isAuthenticated: boolean;
     user: IUser;
-}
-
-export interface ILatLon {
-    lat: number;
-    lon?: number;
-    lng?: number;
 }
 
 export interface ILogComplete extends ILogListItem, ILogEntry {}
@@ -225,4 +222,12 @@ export interface IExpansionPanels {
     latestData: boolean;
     flowHistory: boolean;
     flowDetails: boolean;
+}
+
+export interface IGuideDraftDetails {
+    userName: string;
+    userEmail: string;
+    status: string;
+    moderatorComments: string;
+    createdAt: string;
 }

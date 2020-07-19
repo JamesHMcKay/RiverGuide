@@ -28,6 +28,7 @@ import Hidden from "@material-ui/core/Hidden";
 import axios from "axios";
 import * as darksky from "dark-sky-api";
 import * as weather from "openweather-apis";
+import { getGuideDrafts } from "./actions/updateGuide";
 import { ACTIVITY_MENU } from "./components/ActivityFilter";
 import { categories, ITabCategory } from "./components/ControlBar";
 import Help, { helpPages, IHelpPages } from "./components/Help";
@@ -51,6 +52,7 @@ if (localStorage.jwtToken) {
     if (localStorage.user) {
         const user: IUser = JSON.parse(localStorage.user);
         store.dispatch(setCurrentUser(user));
+        store.dispatch(getGuideDrafts(user.id));
         ReactGA.set({userId: user.id});
         setAuthToken(localStorage.jwtToken);
     }

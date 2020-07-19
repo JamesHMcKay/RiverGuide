@@ -1,6 +1,8 @@
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { deleteLogEntry, toggleModal } from "../../actions/actions";
@@ -42,13 +44,18 @@ class DeleteModal extends Component<IDeleteModalProps> {
             onClose={(): void => this.props.toggleModal()}
             open={this.props.isOpen}
             >
-            <DialogTitle handleClose={(): void => this.props.toggleModal()} title={"Delete this Log Entry?"}/>
+            <DialogTitle handleClose={(): void => this.props.toggleModal()} title={"Delete entry?"}/>
                 <DialogContent>
-                    <Button onClick={this.handleDelete}>
+                <DialogContentText>
+                    Are you sure you want to delete this log entry?
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={this.closeModal} color="primary" variant="outlined">Cancel</Button>
+                    <Button onClick={(): void => this.handleDelete()} color="primary" variant="outlined">
                         Delete
                     </Button>{" "}
-                    <Button onClick={this.closeModal}>Cancel</Button>
-                </DialogContent>
+                </DialogActions>
             </Dialog>
         );
     }

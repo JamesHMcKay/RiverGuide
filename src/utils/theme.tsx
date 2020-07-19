@@ -33,6 +33,11 @@ const { breakpoints } = defaultTheme;
 const theme: Theme = {
   ...defaultTheme,
   overrides: {
+    MuiInputBase: {
+        root: {
+          lineHeight: undefined,
+        },
+      },
     MuiTypography: {
         subtitle1: {
         fontSize: "16px",

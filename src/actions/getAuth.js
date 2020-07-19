@@ -3,6 +3,7 @@ import setAuthToken from "../utils/setAuthToken";
 import ReactGA from 'react-ga';
 
 import { makeLogbookRequest } from "./actions";
+import { getGuideDrafts } from "./updateGuide";
 
 import {
     CLEAR_ERRORS,
@@ -78,6 +79,7 @@ export const loginUser = (userData) => dispatch => {
         dispatch(setCurrentUser(userObject));
         ReactGA.set({userId: userObject.id});
         dispatch(makeLogbookRequest(userObject.id));
+        dispatch(getGuideDrafts(userObject.id));
         dispatch({
             type: CLOSE_MODAL,
             payload: "loginModal",
@@ -224,6 +226,7 @@ export const providerLogin = (action, history) => dispatch => {
         ReactGA.set({userId: userObject.id});
         // dispatch(getUserDetails(userObject.id));
         dispatch(makeLogbookRequest(userObject.id));
+        dispatch(getGuideDrafts(userObject.id));
         dispatch({
             type: CLOSE_MODAL,
             payload: "registerModal",
