@@ -1,0 +1,17 @@
+image: docker:latest
+services:
+    - docker:19.03.5-dind
+
+variables:
+  DOCKER_DRIVER: overlay
+
+stages:
+  - build
+
+docker-build:
+  stage: build
+  script:
+  - echo "$DOCKER_PASSWORD" | docker login --username jhmckay93 --password-stdin
+  - docker pull jhmckay93/riverguide:latest || true
+  - docker build --cache-from jhmckay93/riverguide:latest --tag jhmckay93/riverguide --iidfile imageid.txt .
+  - docker push jhmckay93/riverguide

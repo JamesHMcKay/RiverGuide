@@ -3,6 +3,8 @@
 
 # RiverGuide
 
+https://www.riverguide.co.nz/
+
 The purpose of the RiverGuide is to provide the largest collection of guides for freshwater recreation in New Zealand, while also providing a single place to access flow, rainfall and other environmental data.  The RiverGuide is an evolving guide book for all of New Zealand's water related activities.
 
 By allowing users to log trips we can find out just how valuable and popular freshwater recreation in New Zealand is. These insights help us to ensure our rivers are protected for future generations to enjoy.
