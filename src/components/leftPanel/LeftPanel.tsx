@@ -91,8 +91,7 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
             <List>
                 {this.props.specialItem && this.props.specialItem}
                 {(!noResults) && <FavGroup listEntries={favList}/>}
-
-                {(!noResults) && <DraftGroup listEntries={this.props.guideDrafts}/>}
+                {(!noResults && this.props.auth.isAuthenticated) && <DraftGroup listEntries={this.props.guideDrafts}/>}
                 {this.props.filteredList
                     .map(this.getRegion)
                     .filter(this.onlyUnique)

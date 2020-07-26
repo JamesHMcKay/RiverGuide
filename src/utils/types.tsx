@@ -229,6 +229,7 @@ export interface IExpansionPanels {
 export interface IGuideDraftDetails {
     userName: string;
     userEmail: string;
+    userId: string;
     status: string;
     moderatorComments: string;
     createdAt: string;

@@ -10,7 +10,7 @@ import {
     CLEAR_LOADING_SPINNER,
     CLEAR_ERRORS,
 } from "./types";
-import { openDraftInfoPage } from "./getGuides";
+import { openDraftInfoPage, openInfoPage } from "./getGuides";
 
 const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
@@ -105,8 +105,6 @@ export const updateDraftStatus = (id, status, user, selectedGuide, comments) => 
     }); 
 };
 
-
-
 export const updateGuide = (item, selectedGuide, listEntries, user, userEmail, appId, updateDraft) => dispatch => {
     dispatch({
         type: SET_LOADING_SPINNER,
@@ -163,7 +161,7 @@ export const updateGuide = (item, selectedGuide, listEntries, user, userEmail, a
                 type: CLEAR_LOADING_SPINNER,
             });
             dispatch(getGuideDrafts(user));
-            dispatch(openDraftInfoPage(selectedGuide));
+            dispatch(openInfoPage(selectedGuide));
             dispatch({ type: CLEAR_ERRORS });
         }).catch(error => {
             dispatch({

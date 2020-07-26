@@ -11,8 +11,7 @@ import DraftGuide, { IDraftGuideState } from "../draftGuide/DraftGuide";
 
 const styles: any = (theme: Theme): any => createStyles({
     dialogPaper: {
-        minHeight: "80vh",
-        maxHeight: "80vh",
+        maxHeight: "90vh",
     },
 });
 

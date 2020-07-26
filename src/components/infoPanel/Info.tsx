@@ -181,33 +181,35 @@ class Info extends Component<IInfoProps, IInfoState> {
         return (
             <div style={{float: "right", display: "flex"}}>
                 {this.getNoticeAddButton(color)}
-                {!isMobile &&
+                {(!isMobile && this.props.auth.isAuthenticated) &&
                     <Tooltip
                         title={"Suggest an edit to this guide book entry."}
                         placement="top"
                     >
                     <Button
-                    variant="outlined"
-                    style={{height: "fit-content", color, borderColor: color, marginRight: "10px"}}
-                    onClick={(): void => {this.props.toggleModal("editModal"); }}
+                        variant="outlined"
+                        style={{height: "fit-content", color, borderColor: color, marginRight: "10px"}}
+                        onClick={(): void => {this.props.toggleModal("editModal"); }}
                     >
                         Edit
                     </Button>
                     </Tooltip>
                 }
-                <Tooltip
-                    title={"Log a trip at this location."}
-                    placement="top"
-                >
-                <Button
-                    className="reporting-button"
-                    variant="outlined"
-                    style={{height: "fit-content", color, borderColor: color, marginRight: "10px"}}
-                    onClick={(): void => {this.openModal("addTripInfoPage"); }}
-                >
-                    Log a trip
-                </Button>
-                </Tooltip>
+                {this.props.auth.isAuthenticated &&
+                    <Tooltip
+                        title={"Log a trip at this location."}
+                        placement="top"
+                    >
+                    <Button
+                        className="reporting-button"
+                        variant="outlined"
+                        style={{height: "fit-content", color, borderColor: color, marginRight: "10px"}}
+                        onClick={(): void => {this.openModal("addTripInfoPage"); }}
+                    >
+                        Log a trip
+                    </Button>
+                    </Tooltip>
+                }
             </div>
         );
     }
@@ -246,7 +248,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                     style={{height: "fit-content", color, borderColor: color, marginRight: "10px"}}
                     onClick={(): void => {this.openModal("addNoticeModal"); }}
                 >
-                    Report information
+                    Add a public notice
                 </Button>
             </div>
             </Tooltip>
@@ -647,7 +649,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                         iconHeight={"60px"}
                         tempSize={"20px"}
                     />
-                    {(this.props.auth.isAuthenticated && !showGuideButtons) && this.getReportButton("white", false)}
+                    {(!showGuideButtons) && this.getReportButton("white", false)}
             </Grid>
         </Grid>
         );

@@ -23,7 +23,7 @@ import DialogTitle from "../../utils/dialogTitle";
 import loadingButton from "../../utils/loadingButton";
 import { IAuth, IInfoPage, INotice, INoticeSubmission } from "../../utils/types";
 
-const PRIORITY_OPTIONS: string[] = ["Warning", "Hazard", "Information"];
+const PRIORITY_OPTIONS: string[] = ["Information", "Warning", "Hazard"];
 
 const styles: any = (theme: Theme): any => createStyles({
     dialogPaper: {
@@ -107,9 +107,17 @@ class AddNotice extends Component<IAddNoticeProps, IAddNoticeState> {
                 />
                 <DialogContent>
                         <Typography gutterBottom>
-                            Please post details in the box below, this will be posted on the guide immediately.  You
-                            will be able to edit this notice if you are signed in with a user account when you submit.
+                            Please give details in the box below, this will be posted on the guide immediately.
+                            If you are signed in then you can edit your notice, otherwise it will not be possible
+                            without contacting us to have it edited or removed.
                         </Typography>
+                        {!this.props.auth.isAuthenticated &&
+                            <Typography gutterBottom style={{backgroundColor: "orange"}}>
+                              Warning: Since you are not logged in you will not be able to edit or remove your notice.
+                              If required, you may contact us to have it removed or edited.
+                            </Typography>
+                        }
+
                         <DialogContentText variant = "h5" color="textPrimary">
                         {"Description"}
                         </DialogContentText>

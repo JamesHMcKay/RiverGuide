@@ -148,6 +148,7 @@ class DraftGuide extends React.Component<IDraftGuideProps, IDraftGuideState> {
             moderatorComments = this.props.infoPage.itemDetails.draftDetails.moderatorComments;
             userEmail = this.props.infoPage.itemDetails.draftDetails.userEmail;
             userName = this.props.infoPage.itemDetails.draftDetails.userName;
+            userId = this.props.infoPage.itemDetails.draftDetails.userId;
         } else {
             userName = this.props.auth.user.username || "User name not found, try signing in again.";
             userEmail = this.props.auth.user.email || "";
