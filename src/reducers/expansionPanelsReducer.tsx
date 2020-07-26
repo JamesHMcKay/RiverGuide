@@ -11,6 +11,7 @@ const initialState: IExpansionPanels = {
     latestData: true,
     flowHistory: true,
     flowDetails: true,
+    notices: true,
 };
 
 export default function(state: IExpansionPanels = initialState, action: any): IExpansionPanels {

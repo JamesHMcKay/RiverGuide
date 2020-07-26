@@ -52,7 +52,7 @@ if (localStorage.jwtToken) {
     if (localStorage.user) {
         const user: IUser = JSON.parse(localStorage.user);
         store.dispatch(setCurrentUser(user));
-        store.dispatch(getGuideDrafts(user.id));
+        store.dispatch(getGuideDrafts(user));
         ReactGA.set({userId: user.id});
         setAuthToken(localStorage.jwtToken);
     }

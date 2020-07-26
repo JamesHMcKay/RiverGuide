@@ -19,6 +19,7 @@ import {
     RESET_PASSWORD_SUCCESS,
     RESET_PASSWORD_FAIL,
     RESET_PASSWORD_SENT,
+    CLEAR_GUIDE_DRAFTS,
 } from "./types";
 import parseUserObject from "../utils/parseUserObject";
 
@@ -79,7 +80,7 @@ export const loginUser = (userData) => dispatch => {
         dispatch(setCurrentUser(userObject));
         ReactGA.set({userId: userObject.id});
         dispatch(makeLogbookRequest(userObject.id));
-        dispatch(getGuideDrafts(userObject.id));
+        dispatch(getGuideDrafts(userObject));
         dispatch({
             type: CLOSE_MODAL,
             payload: "loginModal",
@@ -198,6 +199,7 @@ export const logoutUser = () => dispatch => {
     setAuthToken(false);
     // Set current user to {} & isAuthenticated false
     dispatch(setCurrentUser({}));
+    
     dispatch({
         type: CLOSE_MODAL,
         payload: "logoutModal",
@@ -205,6 +207,9 @@ export const logoutUser = () => dispatch => {
     dispatch({
         type: CLEAR_USER_DETAILS,
     });
+    dispatch({
+        type: CLEAR_GUIDE_DRAFTS,
+    })
     dispatch({
         type: CLEAR_LOGS,
     });
@@ -226,7 +231,7 @@ export const providerLogin = (action, history) => dispatch => {
         ReactGA.set({userId: userObject.id});
         // dispatch(getUserDetails(userObject.id));
         dispatch(makeLogbookRequest(userObject.id));
-        dispatch(getGuideDrafts(userObject.id));
+        dispatch(getGuideDrafts(userObject));
         dispatch({
             type: CLOSE_MODAL,
             payload: "registerModal",

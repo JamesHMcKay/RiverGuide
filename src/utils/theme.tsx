@@ -20,7 +20,7 @@ const defaultTheme: Theme = createMuiTheme({
             main: "#1e87e5",
         },
         secondary: {
-            main: "#ffffff", // green: #28a745, orange: #ff5a10
+            main: "#248f24", // green: #28a745, orange: #ff5a10
         },
         // indicator: {
         //     main: "#fff"

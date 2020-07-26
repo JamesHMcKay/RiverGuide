@@ -19,6 +19,7 @@ import {
     GENERATE_FILTERED_LIST_APPEND,
     APPEND_ENTRIES,
 } from "./types";
+import { getNotices } from "./getNotices";
 
 const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
 const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
@@ -165,6 +166,7 @@ export const openInfoPage = guide => dispatch => {
 
     } else {
         let guideId = guide.id;
+        dispatch(getNotices(guideId));
         let query = "{guide(id:\"" + guideId + "\"){id, description,entry_details,exit_details,marker_list,key_facts_num,key_facts_char, latitude, longitude, attribution, entry_details}}"
         axios
         .get(`${rapidsApiUrl}graphql`,
@@ -244,7 +246,7 @@ export const openDraftInfoPage = guide => dispatch => {
     });
 
     let guideId = guide.id;
-    let query = "{guidedraft(id:\"" + guideId + "\"){id, description,entry_details,exit_details,marker_list,key_facts_num,key_facts_char, latitude, longitude, attribution, entry_details, user_name, user_email, status, moderator_comments, createdAt}}"
+    let query = "{guidedraft(id:\"" + guideId + "\"){id, app_id, description,entry_details,exit_details,marker_list,key_facts_num,key_facts_char, latitude, longitude, attribution, entry_details, user_name, user_email, status, moderator_comments, createdAt}}"
     axios
     .get(`${rapidsApiUrl}graphql`,
         {
@@ -272,6 +274,7 @@ export const openDraftInfoPage = guide => dispatch => {
                     status: item.status,
                     moderatorComments: item.moderator_comments,
                     createdAt: item.createdAt,
+                    appId: item.app_id,
                 }
             };
         dispatch({

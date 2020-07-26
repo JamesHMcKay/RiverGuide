@@ -98,6 +98,7 @@ export interface IDraftGuideState {
     activeStep: number;
     userEmail: string;
     userName: string;
+    userId: string;
     moderatorComments: string;
     seenWelcomePage: boolean;
 }
@@ -142,13 +143,15 @@ class DraftGuide extends React.Component<IDraftGuideProps, IDraftGuideState> {
         let moderatorComments: string = "";
         let userEmail: string = "";
         let userName: string = "";
+        let userId: string = "";
         if (this.props.infoPage && this.props.infoPage.itemDetails && this.props.infoPage.itemDetails.draftDetails) {
             moderatorComments = this.props.infoPage.itemDetails.draftDetails.moderatorComments;
             userEmail = this.props.infoPage.itemDetails.draftDetails.userEmail;
             userName = this.props.infoPage.itemDetails.draftDetails.userName;
         } else {
-            userName = this.props.auth.user.username || "User name missing, try signing in again";
+            userName = this.props.auth.user.username || "User name not found, try signing in again.";
             userEmail = this.props.auth.user.email || "";
+            userId = this.props.auth.user.id || "";
         }
 
         const markers: {[key: string]: IMarker } = {};
@@ -183,6 +186,7 @@ class DraftGuide extends React.Component<IDraftGuideProps, IDraftGuideState> {
             activeStep: 0,
             userEmail,
             userName,
+            userId,
             moderatorComments,
             seenWelcomePage: false,
         });
@@ -561,7 +565,7 @@ class DraftGuide extends React.Component<IDraftGuideProps, IDraftGuideState> {
                             margin="dense"
                             id="comments"
                             type="text"
-                            value={this.state.moderatorComments}
+                            value={this.state.moderatorComments || undefined}
                             onChange={(e: any): void => {this.handleTextChange(e, "moderatorComments"); }}
                             fullWidth={true}
                     />
@@ -646,7 +650,7 @@ class DraftGuide extends React.Component<IDraftGuideProps, IDraftGuideState> {
             handleClose={this.props.handleClose}
             title={"Submit content"}
         />
-        <DialogContent style={{height: "65vh"}}>
+        <DialogContent style={{height: "100%"}}>
         <div className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel>
         {STEPS.map((label: string) => (

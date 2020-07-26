@@ -10,16 +10,110 @@ import {
     CLEAR_LOADING_SPINNER,
     CLEAR_ERRORS,
 } from "./types";
-import { openInfoPage } from "./getGuides";
+import { openDraftInfoPage } from "./getGuides";
 
 const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
-export const updateGuide = (item, selectedGuide, listEntries, user) => dispatch => {
+export const acceptDraft = (draftGuide, listEntries, existingGuide, selectedGuide, user) => dispatch => {
+    dispatch({
+        type: SET_LOADING_SPINNER,
+        payload: "acceptDraftGuide",
+    });
+    const request = {
+        attribution: draftGuide.attribution,
+        entry_details: draftGuide.directions,
+        description: draftGuide.description,
+        marker_list: draftGuide.markerList,
+        key_facts_char: draftGuide.key_facts_char,
+        key_facts_num: draftGuide.key_facts_num,
+        activity: selectedGuide.activity,
+        section_name: selectedGuide.display_name,
+        gauge_id: selectedGuide.gauge_id,
+        region: selectedGuide.region,
+        river_name: selectedGuide.river_name,
+        latitude: selectedGuide.position.lat,
+        longitude: selectedGuide.position.lon,
+    };
+    if (existingGuide) {
+        axios
+        .put(rapidsApiUrl + 'guides/' + draftGuide.draftDetails.appId, request)
+        .then(res => {
+            dispatch({
+                type: GET_ENTRIES,
+                payload: listEntries.filter(entry => entry.id !== draftGuide.id).concat(selectedGuide),
+            });
+            dispatch({
+                type: CLEAR_LOADING_SPINNER,
+            });
+            dispatch(updateDraftStatus(selectedGuide.id, "accepted", user.id, selectedGuide));
+            dispatch({
+                type: CLOSE_MODAL,
+            });
+        });
+    } else {
+        axios
+        .post(rapidsApiUrl + 'guides', request)
+        .then(res => {
+            dispatch({
+                type: GET_ENTRIES,
+                payload: listEntries.filter(entry => entry.id !== draftGuide.id).concat(selectedGuide),
+            });
+            dispatch({
+                type: CLEAR_LOADING_SPINNER,
+            });
+            dispatch(updateDraftStatus(selectedGuide.id, "accepted", user.id, selectedGuide));
+            dispatch({
+                type: CLOSE_MODAL,
+            });
+        });
+    }
+}
+
+
+export const updateDraftStatus = (id, status, user, selectedGuide, comments) => dispatch => {
+    dispatch({
+        type: SET_LOADING_SPINNER,
+        payload: "updateDraftStatus",
+    });
+    const request = {
+        status: status,
+        moderator_comments: comments,
+    };
+    axios
+    .put(rapidsApiUrl + 'guidedrafts/' + id, request)
+    .then(res => {
+        dispatch({
+            type: CLEAR_LOADING_SPINNER,
+        });
+        dispatch(getGuideDrafts(user));
+        dispatch(openDraftInfoPage(selectedGuide));
+        dispatch({ type: CLEAR_ERRORS });
+        dispatch({
+            type: CLOSE_MODAL,
+        });
+    }).catch(error => {
+        dispatch({
+            type: CLEAR_LOADING_SPINNER,
+        });
+        dispatch({
+            type: GET_ERRORS,
+            payload: {
+                message: "An error occured, please try submitting again",
+                id: "draftSubmissionError",
+            }
+        });
+    }); 
+};
+
+
+
+export const updateGuide = (item, selectedGuide, listEntries, user, userEmail, appId, updateDraft) => dispatch => {
     dispatch({
         type: SET_LOADING_SPINNER,
         payload: "submitDraftGuide",
     });
     const request = {
+        app_id: appId,
         gauge_id: item.gaugeId,
         description: item.description,
         marker_list: Object.values(item.markers),
@@ -33,20 +127,32 @@ export const updateGuide = (item, selectedGuide, listEntries, user) => dispatch 
         longitude: item.locationMarker.lng,
         attribution: item.attribution,
         entry_details: item.directions,
-        user_id: user.id,
-        user_name: user.username
+        user_id: item.userId,
+        user_name: item.userName,
+        user_email: item.userEmail,
+        status: "pending_review",
+        moderator_comments: item.moderatorComments
     };
-    if (user.role === "riverguide_editor") {
+    if (updateDraft) {
         axios
-        .put(rapidsApiUrl + 'guides/' + item.id, request)
+        .put(rapidsApiUrl + 'guidedrafts/' + item.id, request)
         .then(res => {
-            dispatch(openInfoPage(selectedGuide));
-            dispatch({
-                type: GET_ENTRIES,
-                payload: listEntries.filter(entry => entry.id !== item.id).concat(selectedGuide),
-            });
             dispatch({
                 type: CLEAR_LOADING_SPINNER,
+            });
+            dispatch(getGuideDrafts(user));
+            dispatch(openDraftInfoPage(selectedGuide));
+            dispatch({ type: CLEAR_ERRORS });
+        }).catch(error => {
+            dispatch({
+                type: CLEAR_LOADING_SPINNER,
+            });
+            dispatch({
+                type: GET_ERRORS,
+                payload: {
+                    message: "An error occured, please try submitting again",
+                    id: "draftSubmissionError",
+                }
             });
         });
     } else {
@@ -56,6 +162,8 @@ export const updateGuide = (item, selectedGuide, listEntries, user) => dispatch 
             dispatch({
                 type: CLEAR_LOADING_SPINNER,
             });
+            dispatch(getGuideDrafts(user));
+            dispatch(openDraftInfoPage(selectedGuide));
             dispatch({ type: CLEAR_ERRORS });
         }).catch(error => {
             dispatch({
@@ -70,9 +178,10 @@ export const updateGuide = (item, selectedGuide, listEntries, user) => dispatch 
             });
         });
     }
+    
 };
 
-export const addGuide = (item, newGuide, listEntries, user) => dispatch => {
+export const addGuide = (item, newGuide, listEntries, user, userEmail) => dispatch => {
     dispatch({
         type: SET_LOADING_SPINNER,
         payload: "submitDraftGuide",
@@ -83,7 +192,6 @@ export const addGuide = (item, newGuide, listEntries, user) => dispatch => {
     }
 
     const request = {
-        app_id: newGuide.id,
         gauge_id: item.gaugeId,
         description: item.description,
         marker_list: Object.values(item.markers),
@@ -98,17 +206,16 @@ export const addGuide = (item, newGuide, listEntries, user) => dispatch => {
         attribution: item.attribution,
         entry_details: item.directions,
         user_id: user.id,
-        user_name: user.username
+        user_name: user.username,
+        user_email: userEmail,
+        status: "pending_review",
+        moderator_comments: item.moderatorComments,
     };
     axios
         .post(address, request)
         .then(res => {
             dispatch({ type: CLEAR_ERRORS });
-            newGuide.id = res.data.id;
-            dispatch({
-                type: GET_ENTRIES,
-                payload: listEntries.concat(newGuide)
-            });
+            dispatch(getGuideDrafts(user));
             dispatch({
                 type: CLEAR_LOADING_SPINNER,
             });
@@ -160,12 +267,20 @@ export const deleteDraft = (selectGuideId, listEntries) => dispatch => {
         });
 };
 
-export const getGuideDrafts = (userId) => dispatch => {
+export const getGuideDrafts = (user) => dispatch => {
+
+    let query_text = "";
+    if (user.role === "editor") {
+        query_text = `{guidedrafts(limit:999){id,river_name,section_name,region,latitude,longitude,gauge_id, activity, status}}`;
+    } else {
+        query_text = `{guidedrafts(where: {user_id: ["${user.id}"]}){id,river_name,section_name,region,latitude,longitude,gauge_id, activity, status}}`;
+    }
+
     axios
     .get(`${rapidsApiUrl}graphql`,
         {
             headers: {'Authorization': ''},
-            params: {query: `{guidedrafts(where: {user_id: ["${userId}"]}){id,river_name,section_name,region,latitude,longitude,gauge_id, activity, status}}`},
+            params: {query: query_text},
         }
     )
     .then(res => {

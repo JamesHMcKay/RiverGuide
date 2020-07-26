@@ -1,4 +1,4 @@
-import { Button, Chip, createStyles, Hidden, IconButton, Theme, Tooltip } from "@material-ui/core";
+import { Button, createStyles, Hidden, IconButton, Theme, Tooltip } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
@@ -30,6 +30,7 @@ import {
     IUser,
     IUserDetails,
 } from "../../utils/types";
+import StatusChip from "../common/StatusChip";
 import Logbook from "../profile/Logbook";
 import { CurrentWeather } from "./CurrentWeather";
 import ExpansionHead from "./ExpansionHead";
@@ -39,6 +40,7 @@ import InfoCard from "./InfoCard";
 import KeyFactsCard from "./KeyFactsCard";
 import LatestData from "./LatestData";
 import MapCard from "./MapCard";
+import NoticeCard from "./NoticeCard";
 import { WeatherStore } from "./WeatherStore";
 
 const styles: any = (theme: Theme): any => createStyles({
@@ -104,7 +106,7 @@ class Info extends Component<IInfoProps, IInfoState> {
         };
     }
 
-    public openModal(modalName: string): void {
+    public openModal = (modalName: string): void => {
         this.props.toggleModal(modalName);
     }
 
@@ -178,7 +180,12 @@ class Info extends Component<IInfoProps, IInfoState> {
     public getReportButton = (color: string, isMobile: boolean): JSX.Element => {
         return (
             <div style={{float: "right", display: "flex"}}>
+                {this.getNoticeAddButton(color)}
                 {!isMobile &&
+                    <Tooltip
+                        title={"Suggest an edit to this guide book entry."}
+                        placement="top"
+                    >
                     <Button
                     variant="outlined"
                     style={{height: "fit-content", color, borderColor: color, marginRight: "10px"}}
@@ -186,15 +193,21 @@ class Info extends Component<IInfoProps, IInfoState> {
                     >
                         Edit
                     </Button>
+                    </Tooltip>
                 }
+                <Tooltip
+                    title={"Log a trip at this location."}
+                    placement="top"
+                >
                 <Button
                     className="reporting-button"
                     variant="outlined"
                     style={{height: "fit-content", color, borderColor: color, marginRight: "10px"}}
-                    onClick={this.openModal.bind(this, "addTripInfoPage")}
+                    onClick={(): void => {this.openModal("addTripInfoPage"); }}
                 >
                     Log a trip
                 </Button>
+                </Tooltip>
             </div>
         );
     }
@@ -203,7 +216,7 @@ class Info extends Component<IInfoProps, IInfoState> {
         return (
             <Tooltip
                 title={"Close"}
-                placement="top"
+                placement="bottom"
             >
             <Button
                 onClick={this.handleClose}
@@ -216,6 +229,26 @@ class Info extends Component<IInfoProps, IInfoState> {
             >
                 <CloseIcon />
             </Button>
+            </Tooltip>
+        );
+    }
+
+    public getNoticeAddButton = (color: string): JSX.Element => {
+        return (
+            <Tooltip
+                title={"Add a notice or hazard warning"}
+                placement="top"
+            >
+            <div style={{float: "right", display: "flex"}}>
+                <Button
+                    className="reporting-button"
+                    variant="outlined"
+                    style={{height: "fit-content", color, borderColor: color, marginRight: "10px"}}
+                    onClick={(): void => {this.openModal("addNoticeModal"); }}
+                >
+                    Report information
+                </Button>
+            </div>
             </Tooltip>
         );
     }
@@ -327,7 +360,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                         variant="contained"
                         color="primary"
                         style={{margin: "auto"}}
-                        onClick={this.openModal.bind(this, "addTripInfoPage")}
+                        onClick={(): void => {this.openModal("addTripInfoPage"); }}
                     >
                         {"This logbook is empty, click here to report a trip"}
                     </Button>
@@ -339,7 +372,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                     variant="contained"
                     color="primary"
                     style={{margin: "auto"}}
-                    onClick={this.openModal.bind(this, "loginModal")}
+                    onClick={(): void => {this.openModal("loginModal"); }}
                 >
                     {"This logbook is empty, click here to log in and start reporting yours"}
                 </Button>
@@ -398,7 +431,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                 <Button
                     variant="outlined"
                     color="primary"
-                    onClick={(): void => {this.props.toggleModal("mapModal"); }}
+                    onClick={(): void => {this.openModal("mapModal"); }}
                     style={{
                         height: "fit-content",
                         color: "black",
@@ -452,17 +485,30 @@ class Info extends Component<IInfoProps, IInfoState> {
             <Button
                 variant="outlined"
                 style={{height: "fit-content", color, borderColor: color, float: "right"}}
-                onClick={(): void => {this.props.toggleModal("editModal"); }}
+                onClick={(): void => {this.openModal("editModal"); }}
             >
                Edit
             </Button>
         );
     }
 
+    public getNotices = (): JSX.Element => {
+        return (
+            <Grid
+            item
+            xs={12}
+            sm={12}
+            style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "2%"}}
+        >
+               <NoticeCard title={"Current notices"}/>
+            </Grid>
+        );
+    }
+
     public getDraftInfo = (draftDetails: IGuideDraftDetails): JSX.Element => {
-        const status: string = draftDetails.status ? draftDetails.status : "Pending review";
         const { classes } = this.props;
         const dateParsed: Date = new Date(draftDetails.createdAt);
+        const role: string = this.props.auth.user.role;
         return (
             <Grid
             item
@@ -478,7 +524,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                 <Typography className={classes.pos} color="textSecondary">
                 Status
                 </Typography>
-                <Chip label={status} variant="outlined" color="primary"/>
+                <StatusChip status={draftDetails.status}/>
                 <Grid container spacing={3} style={{marginTop: "10px"}}>
                 <Grid item xs={4}>
                 <Typography className={classes.pos} color="textSecondary">
@@ -513,7 +559,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                     variant="outlined"
                     color="primary"
                     style={{height: "fit-content", marginRight: "10px"}}
-                    onClick={this.openModal.bind(this, "editModal")}
+                    onClick={(): void => {this.openModal("editModal"); }}
                 >
                     Edit submission
             </Button>
@@ -522,10 +568,32 @@ class Info extends Component<IInfoProps, IInfoState> {
                     variant="outlined"
                     color="primary"
                     style={{height: "fit-content", marginRight: "10px"}}
-                    onClick={this.openModal.bind(this, "deleteDraft")}
+                    onClick={(): void => {this.openModal("deleteDraft"); }}
                 >
                     Delete submission
             </Button>
+            {role === "editor" &&
+            <div>
+                <Button
+                    className="reporting-button"
+                    variant="outlined"
+                    color="primary"
+                    style={{height: "fit-content", marginRight: "10px"}}
+                    onClick={(): void => {this.openModal("acceptDraft"); }}
+                >
+                Accept submission
+                </Button>
+                <Button
+                    className="reporting-button"
+                    variant="outlined"
+                    color="primary"
+                    style={{height: "fit-content", marginRight: "10px"}}
+                    onClick={(): void => {this.openModal("requestChangesModal"); }}
+                >
+                Request changes
+                </Button>
+            </div>
+            }
             </CardActions>
             </Card>
             </Grid>
@@ -574,7 +642,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                         lat={entry.position.lat || 0}
                         lon={entry.position.lon || 0}
                         weatherStore={this.props.weatherStore}
-                        onClick= {this.openModal.bind(this, "weatherModal")}
+                        onClick={(): void => {this.openModal("weatherModal"); }}
                         textColor = {"white"}
                         iconHeight={"60px"}
                         tempSize={"20px"}
@@ -606,6 +674,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                 <Hidden mdUp>
                     {this.getHeaderMobile(entry, isData || !!draftDetails)}
                 </Hidden>
+                {(!isLogbookInfo && !draftDetails) && this.getNotices()}
                 {draftDetails && this.getDraftInfo(draftDetails)}
                 {!isLogbookInfo && this.getKeyFacts()}
                 {!isLogbookInfo && this.getDescription()}

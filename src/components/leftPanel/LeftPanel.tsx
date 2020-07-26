@@ -2,15 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 
-// Material UI
 import { CircularProgress, List } from "@material-ui/core";
-
-// Components
 import { IState } from "../../reducers/index";
 import { IAuth, IErrors, IFilter, IGauge, IInfoPage, IListEntry, IUserDetails } from "./../../utils/types";
 import DraftGroup from "./DraftGroup";
 import FavGroup from "./FavGroup";
-// Styles
 import "./LeftPanel.css";
 import ListGroup from "./ListGroup";
 
@@ -95,6 +91,7 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
             <List>
                 {this.props.specialItem && this.props.specialItem}
                 {(!noResults) && <FavGroup listEntries={favList}/>}
+
                 {(!noResults) && <DraftGroup listEntries={this.props.guideDrafts}/>}
                 {this.props.filteredList
                     .map(this.getRegion)

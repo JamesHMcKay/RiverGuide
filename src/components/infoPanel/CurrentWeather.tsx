@@ -1,4 +1,4 @@
-import { Hidden } from "@material-ui/core";
+import { Hidden, Tooltip } from "@material-ui/core";
 import React from "react";
 import cloudy from "../../img/cloudy.svg";
 import fog from "../../img/fog.svg";
@@ -137,9 +137,14 @@ export class CurrentWeather extends React.Component<ICurrentWeatherProps, ICurre
 
     public render(): JSX.Element {
         return (
+            <Tooltip
+                title={"Click to see the weather forecast"}
+                placement="right"
+            >
             <div onClick = {this.props.onClick} style={{cursor: this.getCursor(), color: this.props.textColor}}>
                 {this.state.weather && this.getCurrentWeather()}
             </div>
+            </Tooltip>
         );
 
     }
