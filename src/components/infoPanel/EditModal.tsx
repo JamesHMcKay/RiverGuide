@@ -6,13 +6,12 @@ import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 import { deleteGuide, updateGuide } from "../../actions/updateGuide";
 import { IState } from "../../reducers/index";
-import { IAuth, IInfoPage, IListEntry, IUser } from "../../utils/types";
+import { IAuth, IGuideDraftDetails, IInfoPage, IListEntry, IUser } from "../../utils/types";
 import DraftGuide, { IDraftGuideState } from "../draftGuide/DraftGuide";
 
 const styles: any = (theme: Theme): any => createStyles({
     dialogPaper: {
-        minHeight: "80vh",
-        maxHeight: "80vh",
+        maxHeight: "90vh",
     },
 });
 
@@ -23,6 +22,9 @@ interface IEditModalProps extends IEditModalStateProps {
         selectedGuide: IListEntry,
         listEntries: IListEntry[],
         userRole: IUser,
+        userEmail: string,
+        appId: string,
+        updateDraft: boolean,
     ) => void;
     deleteGuide: (selectedGuideId: string, listEntries: IListEntry[]) => void;
     classes: any;
@@ -33,6 +35,7 @@ interface IEditModalStateProps {
     infoPage: IInfoPage;
     listEntries: IListEntry[];
     auth: IAuth;
+    guideDrafts: IListEntry[];
 }
 
 class EditModal extends Component<IEditModalProps, {}> {
@@ -64,7 +67,22 @@ class EditModal extends Component<IEditModalProps, {}> {
             } : this.props.infoPage.selectedGuide.position,
             activity: result.activity ? result.activity : this.props.infoPage.selectedGuide.activity,
         };
-        this.props.updateGuide(result, selectedGuide, this.props.listEntries, this.props.auth.user);
+        let appId: string = selectedGuide.id;
+        let updateDraft: boolean = false;
+        const draftDetails: IGuideDraftDetails | undefined = this.props.infoPage.itemDetails.draftDetails;
+        if (draftDetails) {
+            appId = draftDetails.appId;
+            updateDraft = true;
+        }
+        this.props.updateGuide(
+            result,
+            selectedGuide,
+            this.props.listEntries,
+            this.props.auth.user,
+            result.userEmail,
+            appId,
+            updateDraft,
+        );
     }
 
     public handleDelete = (): void => {
@@ -102,6 +120,7 @@ function mapStateToProps(state: IState): IEditModalStateProps {
         infoPage: state.infoPage,
         listEntries: state.listEntries,
         auth: state.auth,
+        guideDrafts: state.guideDrafts,
     });
 }
 

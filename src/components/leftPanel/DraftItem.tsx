@@ -1,9 +1,7 @@
-import Chip from "@material-ui/core/Chip";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import BarChart from "@material-ui/icons/BarChartRounded";
-// import Place from "@material-ui/icons/Place";
 import PlaceIcon from "@material-ui/icons/PlaceOutlined";
 import Pool from "@material-ui/icons/Pool";
 import ShowChart from "@material-ui/icons/ShowChartRounded";
@@ -15,6 +13,7 @@ import { openDraftInfoPage } from "../../actions/getGuides";
 import kayakerIcon from "../../img/kayakerIcon.svg";
 import { IState } from "../../reducers";
 import { IListEntry } from "../../utils/types";
+import StatusChip from "../common/StatusChip";
 
 const ACTIVITY_ICONS: Array<{id: string; icon: JSX.Element}> = [
     {id: "kayaking", icon: <img src={kayakerIcon} alt="" className="kayaker-icon"/>},
@@ -63,7 +62,7 @@ class DraftItem extends Component<IDraftItemProps, {}> {
                         {icon}
                     </ListItemIcon>
                     <ListItemText  primary={guide.display_name} />
-                    <Chip label={status} variant="outlined" color="primary" onClick={this.handleClick}/>
+                    <StatusChip status={status} handleClick={this.handleClick}/>
                 </ListItem>
                 {/* <Divider /> */}
             </div>

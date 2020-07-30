@@ -56,3 +56,5 @@ export const RESET_PASSWORD_SENT: string = "RESET_PASSWORD_SENT";
 export const RESET_PASSWORD_SENT_RESET: string = "RESET_PASSWORD_SENT_RESET";
 export const GET_GUIDE_DRAFTS: string = "GET_GUIDE_DRAFTS";
 export const CLEAR_GUIDE_DRAFTS: string = "CLEAR_GUIDE_DRAFTS";
+export const CLEAR_NOTICES: string = "CLEAR_NOTICES";
+export const GET_NOTICES: string = "GET_NOTICES";

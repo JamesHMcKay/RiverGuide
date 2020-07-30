@@ -1,3 +1,4 @@
+import { string } from "@amcharts/amcharts4/core";
 import { IWeather } from "../components/infoPanel/WeatherStore";
 import { IKeyFactsChar, IKeyFactsNum } from "./keyFacts";
 
@@ -222,12 +223,32 @@ export interface IExpansionPanels {
     latestData: boolean;
     flowHistory: boolean;
     flowDetails: boolean;
+    notices: boolean;
 }
 
 export interface IGuideDraftDetails {
     userName: string;
     userEmail: string;
+    userId: string;
     status: string;
     moderatorComments: string;
     createdAt: string;
+    appId: string;
+}
+
+export interface INotice extends INoticeSubmission {
+    id: string;
+    createdAt: string;
+}
+
+export interface INoticeSubmission {
+    guideId: string;
+    description: string;
+    userName: string;
+    priority: string;
+    active: boolean;
+    status: string;
+    endDate?: string;
+    startDate?: string;
+    userId: string;
 }

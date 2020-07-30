@@ -13,6 +13,7 @@ import {
     IListEntry,
     ILogComplete,
     IMapBounds,
+    INotice,
     IOpenLog,
     IUserDetails } from "../utils/types";
 import authReducer from "./authReducer";
@@ -36,6 +37,7 @@ import logReducer from "./logReducer";
 import mapBoundsReducer from "./mapBoundsReducer";
 import mapViewportReducer from "./mapViewportReducer";
 import modalReducer from "./modalReducer";
+import noticeReducer from "./noticeReducer";
 import openLogReducer from "./openLogReducer";
 import passwordResetSentReducer from "./passwordResetSentReducer";
 import passwordResetSuccessReducer from "./passwordResetSuccessReducer";
@@ -78,6 +80,7 @@ export interface IState {
     passwordResetSuccess: boolean;
     passwordResetSent: boolean;
     guideDrafts: IListEntry[];
+    notices: INotice[];
 }
 
 export default combineReducers({
@@ -112,4 +115,5 @@ export default combineReducers({
     passwordResetSuccess: passwordResetSuccessReducer,
     passwordResetSent: passwordResetSentReducer,
     guideDrafts: guideDraftReducer,
+    notices: noticeReducer,
 });

@@ -6,13 +6,16 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { toggleModal } from "../../actions/actions";
 
 // Components
+import { Button } from "@material-ui/core";
 import { IState } from "../../reducers/index";
 import { IAuth, IFilter, IListEntry, IRiverRegion } from "./../../utils/types";
 import DraftItem from "./DraftItem";
 
 interface IDraftGroupProps extends IDraftGroupStateProps {
+    toggleModal: (modal: string) => void;
     listEntries: IListEntry[];
 }
 
@@ -57,7 +60,7 @@ class DraftGroup extends Component<IDraftGroupProps, IDraftGroupState> {
         const children: IListEntry[] = this.getChildren();
         const isExpanded: boolean = this.props.filters.searchString !== "" || this.state.isExpanded;
         // const isSelected: boolean = this.props.filters.searchString === "" && this.state.isExpanded;
-        const title: string = "My edits";
+        const title: string = "My guide book submissions";
         return (
             <div>
                 <ListItem
@@ -81,6 +84,14 @@ class DraftGroup extends Component<IDraftGroupProps, IDraftGroupState> {
                     unmountOnExit
                 >
                     <List disablePadding>
+                    <Button
+                        fullWidth
+                        color="secondary"
+                        variant="outlined"
+                        onClick={(): void => {this.props.toggleModal("addGuideModal"); }}
+                    >
+                        Make a submission
+                    </Button>
                         {children
                             .sort(this.sortAlphbetically)
                             .map(this.renderListItem)}
@@ -98,4 +109,4 @@ function mapStateToProps(state: IState): IDraftGroupStateProps {
     });
 }
 
-export default connect(mapStateToProps)(DraftGroup);
+export default connect(mapStateToProps, { toggleModal })(DraftGroup);

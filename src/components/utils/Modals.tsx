@@ -5,10 +5,13 @@ import { IState } from "../../reducers/index";
 import Login from "../auth/Login";
 import Logout from "../auth/Logout";
 import Register from "../auth/Register";
+import AcceptDraft from "../infoPanel/AcceptDraft";
 import AddModal from "../infoPanel/AddModal";
+import AddNoticeModal from "../infoPanel/AddNoticeModal";
 import DataInfoModal from "../infoPanel/DataInfoModal";
 import DownloadModal from "../infoPanel/DownloadModal";
 import EditModal from "../infoPanel/EditModal";
+import RequestChangesModal from "../infoPanel/RequestChangesModal";
 import WeatherModal from "../infoPanel/WeatherModal";
 import MapModal from "../map/MapModal";
 import AboutModal from "../modals/AboutModal";
@@ -41,6 +44,9 @@ class Modals extends Component {
                 <MapModal />
                 <ProtectedModal />
                 <DeleteDraftModal />
+                <AcceptDraft />
+                <RequestChangesModal />
+                <AddNoticeModal />
             </div>
         );
     }
