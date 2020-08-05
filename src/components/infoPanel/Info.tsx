@@ -474,7 +474,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                         style={{display: "flex", flexDirection: "row"}}
                     >
                             {this.getMapButton()}
-                        {(this.props.auth.isAuthenticated) && this.getReportButton("black", true)}
+                        {this.getReportButton("black", true)}
                     </Grid>
             }
 

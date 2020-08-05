@@ -193,9 +193,10 @@ class Login extends Component<ILoginProps, ILoginState> {
                         variant = "contained"
                         color="primary"
                         onClick={(): void => {this.props.sendResetPasswordEmail(this.state.identifier); }}
-                        disabled={this.props.loadingSpinner === "sendResetPasswordLink"}
+                        // disabled={this.props.loadingSpinner === "sendResetPasswordLink"}
+                        disabled={true}
                         fullWidth>
-                                Email reset password link
+                                Password reset is currently unavailable - we are working urgently on fixing this.
                         </Button>
                     }
                     {(this.state.errors &&

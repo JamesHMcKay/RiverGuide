@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { toggleModal } from "../../actions/actions";
 
-import { CircularProgress, List } from "@material-ui/core";
+import { CircularProgress, Hidden, List } from "@material-ui/core";
 import { IState } from "../../reducers/index";
 import { IAuth, IErrors, IFilter, IGauge, IInfoPage, IListEntry, IUserDetails } from "./../../utils/types";
 import DraftGroup from "./DraftGroup";
@@ -91,7 +91,10 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
             <List>
                 {this.props.specialItem && this.props.specialItem}
                 {(!noResults) && <FavGroup listEntries={favList}/>}
-                {(!noResults && this.props.auth.isAuthenticated) && <DraftGroup listEntries={this.props.guideDrafts}/>}
+                <Hidden mdDown>
+                    {(!noResults && this.props.auth.isAuthenticated) &&
+                        <DraftGroup listEntries={this.props.guideDrafts}/>}
+                </Hidden>
                 {this.props.filteredList
                     .map(this.getRegion)
                     .filter(this.onlyUnique)
