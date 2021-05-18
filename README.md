@@ -23,3 +23,9 @@ The RiverGuide is developed and maintained by volunteers and supported by White 
 ## Reporting issues
 
 Please report issues or bugs using the issues tab or send us a message.
+
+## Deployment and certifcate updates
+
+sudo docker-compose down
+sudo certbot --standalone -d riverguide.co.nz -d www.riverguide.co.nz certonly
+sudo docker-compose up -d
