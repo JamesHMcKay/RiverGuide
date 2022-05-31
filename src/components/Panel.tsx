@@ -47,6 +47,7 @@ export interface IPanelMapStateToProps {
     searchPanel: string;
     filters: IFilter;
     tabIndex: string;
+    bannerPage: boolean;
 }
 
 export interface IPanelProps extends IPanelMapStateToProps {
@@ -184,6 +185,7 @@ const mapStateToProps: (state: IState) => IPanelMapStateToProps = (state: IState
     searchPanel: state.searchPanel,
     filters: state.filters,
     tabIndex: state.tabIndex,
+    bannerPage: state.bannerPage,
 });
 
 export default connect(

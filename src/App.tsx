@@ -12,6 +12,7 @@ import setAuthToken from "./utils/setAuthToken";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import NavBar from "./components/NavBar";
+import Banner from "./components/leftPanel/Banner";
 import Panel from "./components/Panel";
 import ProfileContainer from "./components/profile/ProfileContainer";
 import ProfilePage from "./components/profile/ProfilePage";
@@ -59,11 +60,9 @@ if (localStorage.jwtToken) {
 
     // Check for expired token
     const currentTime: number = Date.now() / 1000;
-    // TODO reinstate this
     if (decoded.exp < currentTime) {
         // Logout user
         store.dispatch(logoutUser());
-        // TODO: Clear current profile state
         // Redirect to login
         window.location.href = "/";
     }
@@ -104,6 +103,15 @@ class App extends Component {
                                     component={TabBar}
                                 />
                             </Switch>
+                            {/*<Hidden mdUp>*/}
+                            {/*    <Switch>*/}
+                            {/*        <Route*/}
+                            {/*            exact*/}
+                            {/*            path={routes.concat("/")}*/}
+                            {/*            component={Banner}*/}
+                            {/*        />*/}
+                            {/*    </Switch>*/}
+                            {/*</Hidden>*/}
                             <Switch>
                                 <Route
                                     exact
