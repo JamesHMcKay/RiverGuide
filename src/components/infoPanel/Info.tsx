@@ -262,13 +262,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                         item
                         md={12}
                         lg={12}
-                        style={{
-                            marginRight: "5%",
-                            marginLeft: "5%",
-                            marginTop: "2%",
-                            marginBottom: "2%",
-                            width: "100%",
-                        }}
+                        style={{ width: "100%" }}
                     >
                         <LatestData isData={isData} />
                         <FlowChart gaugeId={entry.gauge_id} />
@@ -500,7 +494,13 @@ class Info extends Component<IInfoProps, IInfoState> {
             item
             xs={12}
             sm={12}
-            style={{marginRight: "5%", marginLeft: "5%", marginTop: "2%", marginBottom: "2%"}}
+            style={{
+                marginRight: "5%",
+                marginLeft: "5%",
+                marginTop: "2%",
+                marginBottom: "2%",
+                width: "90%"
+            }}
         >
                <NoticeCard title={"Current notices"}/>
             </Grid>

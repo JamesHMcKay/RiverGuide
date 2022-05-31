@@ -24,11 +24,12 @@ import {
     IGauge,
     IInfoPage,
     IListEntry,
-    IMapBounds } from "./../utils/types";
+    IMapBounds,
+} from "./../utils/types";
 
 import "./Panel.css";
 
-export const CONTENT_HEIGHT_MOBILE: string = "67vh";
+export const CONTENT_HEIGHT_MOBILE: string = "71vh";
 export const CONTENT_HEIGHT: string = "86vh";
 
 export interface IPanelState {
@@ -40,6 +41,7 @@ export interface IPanelState {
 export interface IPanelMapStateToProps {
     gauges: IGauge[];
     infoPage: IInfoPage;
+    logPageOpen: boolean;
     filterdGuides: IListEntry[];
     listEntries: IListEntry[];
     searchPanel: string;
@@ -142,8 +144,18 @@ class Panel extends Component<IPanelProps, IPanelState> {
             CONTENT_HEIGHT : (this.state.windowHeight - 115).toString() + "px";
         const mobileHeight: string = (this.state.windowHeight - 115 - 95).toString() + "px";
 
+        let bottomNavHeight: number = 165;
+        if (this.props.infoPage.infoSelected || this.props.logPageOpen) {
+            bottomNavHeight = 130;
+        }
+
         return (
-            <Grid container spacing={0} className="panel-container">
+            <Grid
+                container
+                spacing={0}
+                className="panel-container"
+                style={{height: "calc(94vh - " + bottomNavHeight + "px)"}}
+            >
             <Hidden smDown>
                 <Grid item sm={4}>
                     {this.getleftPanel()}
@@ -166,6 +178,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
 const mapStateToProps: (state: IState) => IPanelMapStateToProps = (state: IState): IPanelMapStateToProps => ({
     gauges: state.gauges,
     infoPage: state.infoPage,
+    logPageOpen: state.logPageOpen,
     filterdGuides: state.filteredList,
     listEntries: state.listEntries,
     searchPanel: state.searchPanel,
