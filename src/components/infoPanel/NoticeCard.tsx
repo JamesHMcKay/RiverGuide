@@ -90,12 +90,12 @@ class NoticeCard extends Component<INoticeCardProps, INoticeCardState> {
                         onChange={(): void => {this.setPanel(item.id); }}
                     >
                     <ExpansionPanelSummary style={{backgroundColor: this.getNoticeColor(item.priority)}}>
-                    <Typography>{item.priority} notice issued on {this.dateWrapper(item.createdAt)}</Typography>
+                        <Typography>{item.priority} notice issued on {this.dateWrapper(item.createdAt)}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                    <Typography>
-                        {item.description}
-                    </Typography>
+                        <Typography style={{width: "100%", overflowWrap: "break-word"}}>
+                            {item.description}
+                        </Typography>
                     </ExpansionPanelDetails>
                     {item.userId === this.props.auth.user.id &&
                         <ExpansionPanelActions>

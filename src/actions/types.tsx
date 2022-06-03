@@ -58,3 +58,4 @@ export const GET_GUIDE_DRAFTS: string = "GET_GUIDE_DRAFTS";
 export const CLEAR_GUIDE_DRAFTS: string = "CLEAR_GUIDE_DRAFTS";
 export const CLEAR_NOTICES: string = "CLEAR_NOTICES";
 export const GET_NOTICES: string = "GET_NOTICES";
+export const SET_BANNER_PAGE: string = "SET_BANNER_PAGE";

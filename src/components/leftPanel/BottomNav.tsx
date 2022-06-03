@@ -84,7 +84,7 @@ class BottomNav extends Component<IBottomNavProps, IBottomNavState> {
         const categoriesFiltered: ITabCategory[] = this.props.auth.isAuthenticated ?
             categories : categories.filter((item: ITabCategory) => !item.authOnly);
         return (
-            <div style={{width: "100%", marginTop: "auto"}}>
+            <div style={{width: "100%", marginTop: "auto", position: "absolute", bottom: 0, zIndex: 1}}>
                 <ToggleList/>
                 <BottomNavigation
                     value={tabIds.indexOf(this.props.index)}

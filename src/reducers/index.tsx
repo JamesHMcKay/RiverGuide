@@ -15,7 +15,8 @@ import {
     IMapBounds,
     INotice,
     IOpenLog,
-    IUserDetails } from "../utils/types";
+    IUserDetails
+} from "../utils/types";
 import authReducer from "./authReducer";
 import categoryReducer from "./categoryReducer";
 import errorReducer from "./errorReducer";
@@ -43,6 +44,7 @@ import passwordResetSentReducer from "./passwordResetSentReducer";
 import passwordResetSuccessReducer from "./passwordResetSuccessReducer";
 import recentItemsReducer from "./recentItemsReducer";
 import searchPanelReducer from "./searchPanelReducer";
+import bannerReducer from "./bannerReducer";
 import selectedLogIdReducer from "./selectedLogIdReducer";
 import sensorDataReducer from "./sensorDataReducer";
 import tabIndexReducer from "./tabIndexReducer";
@@ -81,6 +83,7 @@ export interface IState {
     passwordResetSent: boolean;
     guideDrafts: IListEntry[];
     notices: INotice[];
+    bannerPage: boolean;
 }
 
 export default combineReducers({
@@ -116,4 +119,5 @@ export default combineReducers({
     passwordResetSent: passwordResetSentReducer,
     guideDrafts: guideDraftReducer,
     notices: noticeReducer,
+    bannerPage: bannerReducer,
 });

@@ -298,11 +298,19 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         const visible: boolean = this.props.expansionPanels.flowHistory;
         return (
             <div>
-                <ExpansionHead title={"Chart"} panelName={"flowHistory"}/>
-                {visible && <div className="flow-chart-buttons">
-                    {this.getButtons()}
-                </div>}
-                {visible && <div id="chartdiv" style={{width: "100%", height: "300px"}}></div>}
+                <div style={{
+                    marginRight: "5%",
+                    marginLeft: "5%",
+                    marginTop: "2%",
+                    marginBottom: "2%",
+                    width: "90%",
+                }}>
+                    <ExpansionHead title={"Chart"} panelName={"flowHistory"}/>
+                    {visible && <div className="flow-chart-buttons">
+                        {this.getButtons()}
+                    </div>}
+                </div>
+                {visible && <div id="chartdiv" style={{width: "100%", height: "300px"}}/>}
             </div>
         );
     }

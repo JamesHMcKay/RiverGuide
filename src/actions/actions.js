@@ -27,6 +27,7 @@ import {
     SET_EXPANSION_PANELS,
     ADD_TO_RECENTS,
     SET_VIEWPORT,
+    SET_BANNER_PAGE,
 } from "./types";
 
 const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
@@ -261,6 +262,13 @@ export const openLogPage = () => dispatch => {
 export const setSearchPanel = (value) => dispatch => {
     dispatch({
         type: SET_SEARCH_PANEL,
+        payload: value,
+    });
+}
+
+export const setBannerPage = (value) => dispatch => {
+    dispatch({
+        type: SET_BANNER_PAGE,
         payload: value,
     });
 }

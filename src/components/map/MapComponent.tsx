@@ -12,6 +12,8 @@ import { IViewport } from "./InfoMapComponent";
 import MapCluster from "./MapCluster";
 import MapMarker from "./MapMarker";
 import TileSelector from "./TileSelector";
+import Banner from "../leftPanel/Banner";
+import {Hidden} from "@material-ui/core";
 
 export const DEFAULT_LAT: number = -40.838875;
 export const DEFAULT_LON: number = 171.7799;
@@ -28,6 +30,7 @@ interface IMapClusterProps {
 
 interface IMapComponentStateProps {
     viewport: IViewport;
+    bannerPage: boolean;
 }
 
 interface IMapComponentProps extends IMapComponentStateProps {
@@ -181,6 +184,11 @@ class MapComponent extends Component<IMapComponentProps, IMapComponentState> {
                             ))}
                         </Cluster>
                         )}
+                    <Hidden mdDown>
+                        <div style={{position: "absolute", bottom: "20px", width: "50%", left: "25%"}}>
+                            {this.props.bannerPage && <Banner/>}
+                        </div>
+                    </Hidden>
                 </ReactMapGL>
             </div>
         );
@@ -190,6 +198,7 @@ class MapComponent extends Component<IMapComponentProps, IMapComponentState> {
 function mapStateToProps(state: IState): IMapComponentStateProps {
     return ({
         viewport: state.mapViewport,
+        bannerPage: state.bannerPage,
     });
 }
 

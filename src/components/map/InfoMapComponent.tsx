@@ -157,6 +157,10 @@ class InfoMapComponent extends Component<IInfoMapProps, IInfoMapState> {
                 description: "",
                 category: "",
             };
+
+            if (markerList === null) {
+                markerList = [];
+            }
             markerList = markerList.concat(marker);
         }
         if (this.props.infoPage.selectedGuide && this.props.infoPage.selectedGuide.activity !== "data") {

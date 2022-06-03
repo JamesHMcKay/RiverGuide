@@ -13,6 +13,8 @@ const styles: any = (theme: Theme): any => createStyles({
     dialogPaper: {
         minHeight: "80vh",
         maxHeight: "95vh",
+        width: "100%",
+        margin: "5px",
     },
 });
 
@@ -38,9 +40,6 @@ class TripDetailsAnyPage extends Component<ITripDetailsInfoPageProps> {
                 <Dialog
                     onClose={(): void => this.props.toggleModal()}
                     open={this.props.isOpen}
-                    fullScreen={this.props.fullScreen}
-                    fullWidth={true}
-                    maxWidth={"sm"}
                     classes={{ paper: classes.dialogPaper }}
                 >
                     <TripDetailsModal
