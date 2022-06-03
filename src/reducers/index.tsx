@@ -15,9 +15,10 @@ import {
     IMapBounds,
     INotice,
     IOpenLog,
-    IUserDetails
+    IUserDetails,
 } from "../utils/types";
 import authReducer from "./authReducer";
+import bannerReducer from "./bannerReducer";
 import categoryReducer from "./categoryReducer";
 import errorReducer from "./errorReducer";
 import expansionPanelsReducer from "./expansionPanelsReducer";
@@ -44,7 +45,6 @@ import passwordResetSentReducer from "./passwordResetSentReducer";
 import passwordResetSuccessReducer from "./passwordResetSuccessReducer";
 import recentItemsReducer from "./recentItemsReducer";
 import searchPanelReducer from "./searchPanelReducer";
-import bannerReducer from "./bannerReducer";
 import selectedLogIdReducer from "./selectedLogIdReducer";
 import sensorDataReducer from "./sensorDataReducer";
 import tabIndexReducer from "./tabIndexReducer";

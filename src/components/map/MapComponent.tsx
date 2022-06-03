@@ -1,3 +1,4 @@
+import { Hidden } from "@material-ui/core";
 import "mapbox-gl/dist/mapbox-gl.css";
 import React, { Component } from "react";
 import ReactGA from "react-ga";
@@ -6,14 +7,13 @@ import { connect } from "react-redux";
 import uuidv1 from "uuid";
 import { IState } from "../../reducers";
 import { IListEntry, IMapBounds } from "../../utils/types";
+import Banner from "../leftPanel/Banner";
 import { setViewport } from "./../../actions/actions";
 import Cluster from "./ClusterMapBox";
 import { IViewport } from "./InfoMapComponent";
 import MapCluster from "./MapCluster";
 import MapMarker from "./MapMarker";
 import TileSelector from "./TileSelector";
-import Banner from "../leftPanel/Banner";
-import {Hidden} from "@material-ui/core";
 
 export const DEFAULT_LAT: number = -40.838875;
 export const DEFAULT_LON: number = 171.7799;

@@ -499,7 +499,7 @@ class Info extends Component<IInfoProps, IInfoState> {
                 marginLeft: "5%",
                 marginTop: "2%",
                 marginBottom: "2%",
-                width: "90%"
+                width: "90%",
             }}
         >
                <NoticeCard title={"Current notices"}/>
