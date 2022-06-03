@@ -23,8 +23,8 @@ class MapCard extends Component<IMapCardProps> {
     public render(): JSX.Element {
         return (
             <div>
-                <Hidden smDown>
-                <ExpansionHead title={"Local Map"} panelName={"map"}/>
+                <Hidden>
+                    <ExpansionHead title={"Local Map"} panelName={"map"}/>
                     {this.props.expansionPanels.map && <InfoMapComponent
                             draggable={true}
                             guideId={this.props.guideId}

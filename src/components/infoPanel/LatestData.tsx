@@ -106,7 +106,12 @@ class LatestData extends Component<ILatestDataProps> {
         const gauge: IGauge | undefined = this.getGauge(this.props.infoPage.selectedGuide.gauge_id);
         const gaugeName: string = gauge ? gauge.display_name : "";
         return (
-            <div>
+            <div style={{marginRight: "5%",
+                marginLeft: "5%",
+                marginTop: "2%",
+                marginBottom: "2%",
+                width: "90%",
+            }}>
                 {/* <ExpansionHead title={""} panelName={"latestData"}/> */}
                 {!this.props.isData && <ExpansionHead title={"Conditions at: " + gaugeName} panelName={"flowDetails"}/>}
                 {(this.props.isData || visible) && this.props.expansionPanels.latestData && this.getData(gauge)}

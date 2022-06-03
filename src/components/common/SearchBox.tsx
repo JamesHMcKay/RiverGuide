@@ -16,25 +16,17 @@ const styles: any = (theme: Theme): any => createStyles({
     },
 
     cssLabel: {
-      color : "rgba(255, 255, 255, 0.6)",
+      color : "rgba(255, 255, 255, 0.6) !important",
     },
 
     cssOutlinedInput: {
-      "&$cssFocused $notchedOutline": {
-        borderColor: "black !important",
-        borderWidth: "0px",
-      },
+        borderRadius: "4px",
+        marginBottom: "4px !important",
+        backgroundColor: "rgba(255, 255, 255, 0.15) !important",
     },
 
     cssFocused: {
-        borderColor: "white !important",
         color : "white",
-    },
-
-    notchedOutline: {
-      borderWidth: "0px",
-      borderColor: "black !important",
-      backgroundColor: "rgba(255, 255, 255, 0.15)",
     },
 
 });
@@ -102,11 +94,11 @@ class SearchBox extends Component<ISearchBoxProps, ISearchBoxState> {
             <div  className="search-field" style={{position: "relative", display: "inline-block"}}>
                 <TextField
                     id="standard-search"
-                    style={{width: "100%"}}
+                    style={{width: "100%", marginBottom: "10px !important"}}
                     label={"Search " + this.props.value + "..."}
                     // type="search"
                     margin="dense"
-                    variant="outlined"
+                    variant="filled"
                     onChange={this.handleSearch}
                     value={this.props.filters.searchString}
                     InputLabelProps={{
@@ -116,12 +108,11 @@ class SearchBox extends Component<ISearchBoxProps, ISearchBoxState> {
                         },
                       }}
                       InputProps={{
+                          disableUnderline: true,
                         classes: {
                           root: classes.cssOutlinedInput,
                           focused: classes.cssFocused,
-                          notchedOutline: classes.notchedOutline,
                         },
-                        // inputMode: "numeric",
                       }}
                 />
                 {this.props.filters.searchString !== "" &&

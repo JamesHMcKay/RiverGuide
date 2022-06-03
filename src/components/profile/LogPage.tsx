@@ -89,7 +89,7 @@ class LogPage extends Component<ILogPageProps> {
             item
             md={12}
             lg={12}
-            style={{marginRight: "5%", marginLeft: "5%", marginTop: "0", marginBottom: "0"}}
+            style={{marginRight: "5%", marginLeft: "5%", marginTop: "0", marginBottom: "0", width: "100%"}}
         >
             <Logbook columnOrder={columns} publicPage={false} log={this.props.log}/>
         </Grid>

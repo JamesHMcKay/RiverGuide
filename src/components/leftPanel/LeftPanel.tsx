@@ -9,6 +9,7 @@ import DraftGroup from "./DraftGroup";
 import FavGroup from "./FavGroup";
 import "./LeftPanel.css";
 import ListGroup from "./ListGroup";
+import Banner from "./Banner";
 
 interface ILeftPanelProps extends ILeftPanelStateProps {
     gaugeList: IGauge[];
@@ -27,6 +28,7 @@ interface ILeftPanelStateProps {
     recentItems: string[];
     errors: IErrors;
     guideDrafts: IListEntry[];
+    bannerPage: boolean;
 }
 
 class LeftPanel extends Component<ILeftPanelProps, {}> {
@@ -105,6 +107,9 @@ class LeftPanel extends Component<ILeftPanelProps, {}> {
 
         return (
             <div className="list-container">
+                <Hidden mdUp>
+                    {this.props.bannerPage && <Banner/> }
+                </Hidden>
                 {isLoading || (noResults && !this.props.specialItem) ?
                     this.loadingOrEmpty(noResults, isLoading) :
                     renderedList}
@@ -123,6 +128,7 @@ function mapStateToProps(state: IState): ILeftPanelStateProps {
         recentItems: state.recentItems,
         errors: state.errors,
         guideDrafts: state.guideDrafts,
+        bannerPage: state.bannerPage,
     });
 }
 
