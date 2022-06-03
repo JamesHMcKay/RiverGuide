@@ -1,10 +1,9 @@
 import { Hidden } from "@material-ui/core";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { IState } from "../../reducers";
 import { setBannerPage } from "../../actions/actions";
 import closeIcon from "../../img/banners/x-solid.svg";
-
+import { IState } from "../../reducers";
 
 interface IBannerProps extends IBannerStateProps {
     setBannerPage: (value: boolean) => void;
@@ -22,9 +21,11 @@ class Banner extends Component<IBannerProps> {
     public render(): JSX.Element {
         return (
             <div style={{position: "relative", width: "100%", backgroundColor: "grey", textAlign: "center"}}>
-                <img src={closeIcon} className={"banner-close"} onClick={() => (this.props.setBannerPage(false))}/>
+                <img src={closeIcon} className={"banner-close"}
+                     onClick={(event: any): void => (this.props.setBannerPage(false))}/>
                 <a href={""}>
-                    <img src={require("../../img/banners/CCD banner landscape FINAL 2Mar2022.png")} style={{width: "100%"}}/>
+                    <img src={require("../../img/banners/CCD banner landscape FINAL 2Mar2022.png")}
+                        style={{width: "100%"}}/>
                 </a>
             </div>
         );

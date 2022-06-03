@@ -5,11 +5,11 @@ import { toggleModal } from "../../actions/actions";
 import { CircularProgress, Hidden, List } from "@material-ui/core";
 import { IState } from "../../reducers/index";
 import { IAuth, IErrors, IFilter, IGauge, IInfoPage, IListEntry, IUserDetails } from "./../../utils/types";
+import Banner from "./Banner";
 import DraftGroup from "./DraftGroup";
 import FavGroup from "./FavGroup";
 import "./LeftPanel.css";
 import ListGroup from "./ListGroup";
-import Banner from "./Banner";
 
 interface ILeftPanelProps extends ILeftPanelStateProps {
     gaugeList: IGauge[];
