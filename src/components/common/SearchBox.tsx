@@ -22,6 +22,7 @@ const styles: any = (theme: Theme): any => createStyles({
     cssOutlinedInput: {
         borderRadius: "4px",
         marginBottom: "4px !important",
+        color: "rgba(255, 255, 255, 0.8)",
         backgroundColor: "rgba(255, 255, 255, 0.15) !important",
     },
 

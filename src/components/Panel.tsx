@@ -145,9 +145,9 @@ class Panel extends Component<IPanelProps, IPanelState> {
             CONTENT_HEIGHT : (this.state.windowHeight - 115).toString() + "px";
         const mobileHeight: string = (this.state.windowHeight - 115 - 95).toString() + "px";
 
-        let bottomNavHeight: number = 165;
+        let bottomNavHeight: number = 90;
         if (this.props.infoPage.infoSelected || this.props.logPageOpen) {
-            bottomNavHeight = 130;
+            bottomNavHeight = 65;
         }
 
         return (
@@ -155,7 +155,7 @@ class Panel extends Component<IPanelProps, IPanelState> {
                 container
                 spacing={0}
                 className="panel-container"
-                style={{height: "calc(94vh - " + bottomNavHeight + "px)"}}
+                style={{paddingBottom: bottomNavHeight + "px"}}
             >
             <Hidden smDown>
                 <Grid item sm={4}>
