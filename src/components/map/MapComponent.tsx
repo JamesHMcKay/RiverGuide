@@ -185,7 +185,7 @@ class MapComponent extends Component<IMapComponentProps, IMapComponentState> {
                         </Cluster>
                         )}
                     <Hidden mdDown>
-                        <div style={{position: "absolute", bottom: "20px", width: "50%", left: "25%"}}>
+                        <div style={{position: "absolute", bottom: "20px", width: "40%", left: "30%"}}>
                             {this.props.bannerPage && <Banner/>}
                         </div>
                     </Hidden>
