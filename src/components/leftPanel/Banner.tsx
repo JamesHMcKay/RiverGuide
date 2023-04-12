@@ -1,4 +1,3 @@
-import { Hidden } from "@material-ui/core";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { setBannerPage } from "../../actions/actions";
@@ -14,19 +13,16 @@ interface IBannerStateProps {
 }
 
 class Banner extends Component<IBannerProps> {
-    constructor(props: IBannerProps) {
-        super(props);
-    }
-
     public render(): JSX.Element {
         return (
             <div style={{position: "relative", width: "100%", backgroundColor: "grey", textAlign: "center"}}>
                 <img src={closeIcon} className={"banner-close"}
-                     onClick={(event: any): void => (this.props.setBannerPage(false))}/>
-                <a href={""}>
+                     onClick={(event: any): void => (this.props.setBannerPage(false))} alt={""}/>
+                <div>
                     <img src={require("../../img/banners/20230412-BannerImage.jpg")}
-                        style={{width: "100%"}}/>
-                </a>
+                        style={{width: "100%"}}
+                        alt={""}/>
+                </div>
             </div>
         );
     }

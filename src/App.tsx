@@ -11,7 +11,6 @@ import configureStore from "./store";
 import setAuthToken from "./utils/setAuthToken";
 
 import "mapbox-gl/dist/mapbox-gl.css";
-import Banner from "./components/leftPanel/Banner";
 import NavBar from "./components/NavBar";
 import Panel from "./components/Panel";
 import ProfileContainer from "./components/profile/ProfileContainer";
