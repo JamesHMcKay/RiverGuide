@@ -24,7 +24,7 @@ class Banner extends Component<IBannerProps> {
                 <img src={closeIcon} className={"banner-close"}
                      onClick={(event: any): void => (this.props.setBannerPage(false))}/>
                 <a href={""}>
-                    <img src={require("../../img/banners/CCD banner landscape FINAL 2Mar2022.png")}
+                    <img src={require("../../img/banners/20230412-BannerImage.jpg")}
                         style={{width: "100%"}}/>
                 </a>
             </div>
