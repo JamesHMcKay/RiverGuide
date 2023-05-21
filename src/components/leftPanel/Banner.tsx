@@ -15,16 +15,15 @@ interface IBannerStateProps {
 class Banner extends Component<IBannerProps> {
     public render(): JSX.Element {
         return (
-            <div onClick={(): Window | null => window.open("https://www.thisisus.nz/check-clean-dry")}
-                 style={{position: "relative", width: "100%", backgroundColor: "grey", textAlign: "center"}}>
+            <div style={{position: "relative", width: "100%", backgroundColor: "grey", textAlign: "center"}}>
                 <img src={closeIcon} className={"banner-close"}
-                     onClick={(event: any): void => {event.stopPropagation(); this.props.setBannerPage(false); }}
+                     onClick={(event: any): void => (this.props.setBannerPage(false))}
                      alt={""}/>
-                <div>
+                <a href={"https://www.thisisus.nz/check-clean-dry"}>
                     <img src={require("../../img/banners/20230412-BannerImage.jpg")}
                         style={{width: "100%"}}
                         alt={""}/>
-                </div>
+                </a>
             </div>
         );
     }
