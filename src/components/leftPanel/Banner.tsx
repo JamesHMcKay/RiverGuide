@@ -17,12 +17,14 @@ class Banner extends Component<IBannerProps> {
         return (
             <div style={{position: "relative", width: "100%", backgroundColor: "grey", textAlign: "center"}}>
                 <img src={closeIcon} className={"banner-close"}
-                     onClick={(event: any): void => (this.props.setBannerPage(false))} alt={""}/>
-                <div>
+                     onClick={(event: any): void => (this.props.setBannerPage(false))}
+                     alt={""}/>
+                <a href={"https://www.thisisus.nz/check-clean-dry"}
+                    target={"_blank"}>
                     <img src={require("../../img/banners/20230412-BannerImage.jpg")}
                         style={{width: "100%"}}
                         alt={""}/>
-                </div>
+                </a>
             </div>
         );
     }
