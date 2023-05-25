@@ -10,6 +10,9 @@ stages:
 
 docker-build:
   stage: build
+  image: docker@sha256:c8bb6fa5388b56304dd770c4bc0478de81ce18540173b1a589178c0d31bfce90
+  services:
+    - docker:dind@sha256:c8bb6fa5388b56304dd770c4bc0478de81ce18540173b1a589178c0d31bfce90
   script:
   - echo "$DOCKER_PASSWORD" | docker login --username jhmckay93 --password-stdin
   - docker pull jhmckay93/riverguide:latest || true
