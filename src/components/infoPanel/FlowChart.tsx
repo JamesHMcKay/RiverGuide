@@ -52,7 +52,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
     const observables: IObservable[] | undefined = this.getObservables();
     if (observables) {
       const types: string[] = observables.map(
-        (item: IObservable): string => item.type
+        (item: IObservable): string => item.type,
       );
       if (types.indexOf("flow") >= 0) {
         selectedType = "flow";
@@ -72,14 +72,14 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
       return observables;
     } else {
       const gauges: IGauge[] = this.props.gauges.filter(
-        (item: IGauge) => item.id === this.props.infoPage.selectedGuide.gauge_id
+        (item: IGauge) => item.id === this.props.infoPage.selectedGuide.gauge_id,
       );
       if (gauges.length > 0) {
         return gauges[0].observables;
       }
     }
     return undefined;
-  };
+  }
 
   // public mapHistory = (history: IHistory[]): IChartData[] => {
   //     const type: string = this.state.selectedType || "flow";
@@ -109,10 +109,10 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
           value: reading.observed_value || 0,
           date: Moment.utc(Moment(reading.observation_time)).valueOf(),
         };
-      }
+      },
     );
     return result;
-  };
+  }
 
   public getUnit = (): string => {
     let unit: string = "";
@@ -120,45 +120,45 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
     const observables: IObservable[] | undefined = this.getObservables();
     if (observables) {
       const selObs: IObservable[] = observables.filter(
-        (item: IObservable) => item.type === type
+        (item: IObservable) => item.type === type,
       );
       if (observables.length > 0 && selObs[0]) {
         unit = selObs[0].units;
       }
     }
     return unitParser(unit);
-  };
+  }
 
   public getColumnSeries = (
-    chart: Am4charts.XYChart
+    chart: Am4charts.XYChart,
   ): Am4charts.ColumnSeries => {
     const series: Am4charts.ColumnSeries = chart.series.push(
-      new Am4charts.ColumnSeries()
+      new Am4charts.ColumnSeries(),
     );
     series.columns.template.width = Am4core.percent(100);
     series.fillOpacity = 1.0;
     series.columns.template.width = Am4core.percent(70);
     return series;
-  };
+  }
 
   public getLineSeries = (chart: Am4charts.XYChart): Am4charts.LineSeries => {
     const series: Am4charts.LineSeries = chart.series.push(
-      new Am4charts.LineSeries()
+      new Am4charts.LineSeries(),
     );
     series.fillOpacity = 0.0;
     series.width = 0.9;
     return series;
-  };
+  }
 
   public setChartOptions = (): void => {
     const chart: Am4charts.XYChart = Am4core.create(
       "chartdiv",
-      Am4charts.XYChart
+      Am4charts.XYChart,
     );
 
     chart.data = this.mapHistory(this.props.infoPage.history);
     const dateAxis: Am4charts.DateAxis = chart.xAxes.push(
-      new Am4charts.DateAxis()
+      new Am4charts.DateAxis(),
     );
     // dateAxis.renderer.grid.template.location = 0.5;
     // dateAxis.renderer.minGridDistance = 50;
@@ -168,7 +168,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
     // };
 
     const valueAxis: Am4charts.ValueAxis = chart.yAxes.push(
-      new Am4charts.ValueAxis()
+      new Am4charts.ValueAxis(),
     );
     if (valueAxis.tooltip) {
       valueAxis.tooltip.disabled = true;
@@ -192,7 +192,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
     if (window.innerWidth > 960) {
       chart.cursor = new Am4charts.XYCursor();
     }
-  };
+  }
 
   public componentDidUpdate(nextProps: IFlowChartProps): void {
     if (this.props.expansionPanels.flowHistory) {
@@ -204,7 +204,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         const observables: IObservable[] | undefined = this.getObservables();
         if (observables) {
           const types: string[] = observables.map(
-            (item: IObservable): string => item.type
+            (item: IObservable): string => item.type,
           );
           if (types.indexOf("flow") >= 0) {
             selectedType = "flow";
@@ -223,7 +223,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
   public compareValues = (
     valueOne: Partial<IObsValue>,
     valueTwo: Partial<IObsValue>,
-    keysOne: string[]
+    keysOne: string[],
   ): boolean => {
     for (const key of keysOne) {
       const itemOne: number | undefined = valueOne[key as keyof IObsValue];
@@ -233,20 +233,20 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
       }
     }
     return true;
-  };
+  }
 
   public historySame = (
     listOne: IHistoryNew,
-    listTwo: IHistoryNew
+    listTwo: IHistoryNew,
   ): boolean => {
     if (Object.keys(listOne).length !== Object.keys(listTwo).length) {
       return false;
     }
 
-    for (const _key of Object.keys(listOne)) {
-      const key = _key as keyof IHistoryNew;
-      const valuesListOne = listOne[key];
-      const valuesListTwo = listTwo[key];
+    for (const obsType of Object.keys(listOne)) {
+      const key: keyof IHistoryNew = obsType as keyof IHistoryNew;
+      const valuesListOne: IObservation[] = listOne[key];
+      const valuesListTwo: IObservation[] = listTwo[key];
       if (valuesListOne === null && !!valuesListTwo) {
         return false;
       }
@@ -261,7 +261,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
         return false;
       }
 
-      for (let i = 0; i < valuesListOne.length; i++) {
+      for (let i: number = 0; i < valuesListOne.length; i++) {
         if (
           valuesListOne[i].observation_time !==
           valuesListTwo[i].observation_time
@@ -272,7 +272,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
     }
 
     return true;
-  };
+  }
 
   public shouldComponentUpdate = (nextProps: IFlowChartProps): boolean => {
     if (this.props.gaugeId !== nextProps.gaugeId) {
@@ -287,13 +287,13 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
       return false;
     }
     return true;
-  };
+  }
 
   public handleTypeChange = (event: any): void => {
     this.setState({
       selectedType: event.target.value,
     });
-  };
+  }
 
   public selectTypeClick(type: string): void {
     this.setState({
@@ -302,7 +302,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
   }
 
   public getButtonColor(
-    type: string
+    type: string,
   ): "inherit" | "primary" | "secondary" | "default" | undefined {
     if (type === this.state.selectedType) {
       return "primary";
@@ -311,7 +311,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
   }
 
   public getButtonVariant(
-    type: string
+    type: string,
   ): "text" | "outlined" | "contained" | undefined {
     if (type === this.state.selectedType) {
       return "contained";
@@ -346,14 +346,14 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
       );
     }
     return null;
-  };
+  }
 
   public getGauge = (gaugeId: string | undefined): IGauge | undefined => {
     const gauges: IGauge[] = this.props.gauges.filter(
-      (item: IGauge) => item.id === gaugeId
+      (item: IGauge) => item.id === gaugeId,
     );
     return gauges[0];
-  };
+  }
 
   public getButtons = (): JSX.Element[] | null => {
     const observables: IObservable[] | undefined = this.getObservables();
@@ -373,7 +373,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
       result.push(
         <Hidden mdUp key={"formSelect"}>
           {this.getFormSelect()}
-        </Hidden>
+        </Hidden>,
       );
       // const gauge: IGauge | undefined = this.getGauge(this.props.gaugeId);
       // result.push(<DataDropDown key = "data-drop-down" agencyName={gauge ? gauge.source : ""}/>);
@@ -381,7 +381,7 @@ class FlowChart extends Component<IFlowChartProps, IFlowChartState> {
     } else {
       return null;
     }
-  };
+  }
 
   public render(): JSX.Element {
     const visible: boolean = this.props.expansionPanels.flowHistory;

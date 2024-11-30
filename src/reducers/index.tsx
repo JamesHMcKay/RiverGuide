@@ -25,6 +25,7 @@ import expansionPanelsReducer from "./expansionPanelsReducer";
 import filteredLogReducer from "./filteredLogReducer";
 import filterReducer from "./filterReducer";
 import gaugeDisclaimerReducer from "./gaugeDisclaimerReducer";
+import gaugeHistoryNewReducer from "./gaugeHistoryNewReducer";
 import gaugeHistoryReducer from "./gaugeHistoryReducer";
 import gaugeReducer from "./gaugeReducer";
 import guideDraftReducer from "./guideDraftReducer";
@@ -50,7 +51,6 @@ import sensorDataReducer from "./sensorDataReducer";
 import tabIndexReducer from "./tabIndexReducer";
 import userDetailsReducer from "./userDetailsReducer";
 import weatherReducer from "./weatherReducer";
-import gaugeHistoryNewReducer from "./gaugeHistoryNewReducer";
 
 export interface IState {
   gauges: IGauge[];
@@ -99,7 +99,7 @@ export default combineReducers({
   category: categoryReducer,
   mapBounds: mapBoundsReducer,
   gaugeHistory: gaugeHistoryReducer,
-  gaugeHistoryNewReducer: gaugeHistoryNewReducer,
+  gaugeHistoryNewReducer,
   sensorFeatureList: sensorDataReducer,
   listEntries: listEntryReducer,
   listItemDetails: listItemDetailsReducer,

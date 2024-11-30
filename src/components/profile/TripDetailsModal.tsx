@@ -140,7 +140,7 @@ class TripDetailsModal extends Component<
         selectedGuide,
       });
     }
-  };
+  }
 
   public handleSave = (): void => {
     let logEntry: ILogEntry = this.state.logEntry;
@@ -170,10 +170,10 @@ class TripDetailsModal extends Component<
     } else {
       this.props.createLogEntry(
         logEntry as ILogEntry,
-        this.props.infoPage.selectedGuide
+        this.props.infoPage.selectedGuide,
       );
     }
-  };
+  }
 
   public getValue = (key: string): string => {
     if (this.state.logEntry && key in Object.keys(this.state.logEntry)) {
@@ -181,7 +181,7 @@ class TripDetailsModal extends Component<
     } else {
       return "";
     }
-  };
+  }
 
   public setHover(key: number): void {
     if (!this.state.preventHoverChangePeople) {
@@ -201,14 +201,14 @@ class TripDetailsModal extends Component<
     this.setState({
       peopleCount: e.target.value,
     });
-  };
+  }
 
   public onSelectPeopleCount = (key: number): void => {
     this.setState({
       preventHoverChangePeople: true,
       peopleCount: key + 1,
     });
-  };
+  }
 
   public getPersonList(): JSX.Element {
     const size: number = window.innerWidth > 960 ? 40 : 30;
@@ -248,7 +248,7 @@ class TripDetailsModal extends Component<
             )}
           </span>
         </div>
-      </li>
+      </li>,
     );
 
     return (
@@ -276,7 +276,7 @@ class TripDetailsModal extends Component<
       preventHoverChangeRating: true,
       rating: key + 1,
     });
-  };
+  }
 
   public getRatingList(): JSX.Element {
     const size: number = window.innerWidth > 960 ? 40 : 30;
@@ -324,7 +324,7 @@ class TripDetailsModal extends Component<
       start_date: startDate,
       end_date: endDate,
     });
-  };
+  }
 
   public handleDateChange = (date: Date | null): void => {
     if (date) {
@@ -338,7 +338,7 @@ class TripDetailsModal extends Component<
         end_date: endDate,
       });
     }
-  };
+  }
 
   public updateDescription = (input: any): void => {
     const description: string = input.target.value;
@@ -350,7 +350,7 @@ class TripDetailsModal extends Component<
     this.setState({
       logEntry,
     });
-  };
+  }
 
   public handleFlowChange = (observables: IObsValue): void => {
     let logEntry: ILogEntry = this.state.logEntry;
@@ -361,14 +361,14 @@ class TripDetailsModal extends Component<
     this.setState({
       logEntry,
     });
-  };
+  }
 
   public getSelectedGuide = (): IListEntry | undefined => {
     if (this.props.selectedGuide) {
       return this.props.selectedGuide;
     }
     return this.state.selectedGuide;
-  };
+  }
 
   public getSelectedSection = (): JSX.Element => {
     if (this.props.selectedGuide) {
@@ -385,7 +385,7 @@ class TripDetailsModal extends Component<
         />
       );
     }
-  };
+  }
 
   public handlePublicChange = (event: any, value: string): void => {
     let logEntry: ILogEntry = this.state.logEntry;
@@ -396,17 +396,17 @@ class TripDetailsModal extends Component<
     this.setState({
       logEntry,
     });
-  };
+  }
 
   public getPublicValue = (): string => {
     if (this.state.logEntry.public) {
       return "public";
     }
     return "private";
-  };
+  }
 
   public getButtonColor(
-    type: string
+    type: string,
   ): "inherit" | "primary" | "secondary" | "default" | undefined {
     if (type === "public" && this.state.logEntry.public) {
       return "primary";
@@ -418,7 +418,7 @@ class TripDetailsModal extends Component<
   }
 
   public getButtonVariant(
-    type: string
+    type: string,
   ): "text" | "outlined" | "contained" | undefined {
     if (type === "public" && this.state.logEntry.public) {
       return "contained";

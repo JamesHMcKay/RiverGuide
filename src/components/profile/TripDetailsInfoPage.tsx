@@ -32,7 +32,7 @@ interface ITripDetailsInfoPageStateProps {
 class TripDetailsInfoPage extends Component<ITripDetailsInfoPageProps> {
   public handleClose = (): void => {
     this.props.toggleModal();
-  };
+  }
 
   public closeModal(): void {
     this.props.toggleModal();
@@ -69,5 +69,5 @@ function mapStateToProps(state: IState): ITripDetailsInfoPageStateProps {
 }
 
 export default connect(mapStateToProps, { toggleModal })(
-  withMobileDialog()(withStyles(styles)(TripDetailsInfoPage))
+  withMobileDialog()(withStyles(styles)(TripDetailsInfoPage)),
 );

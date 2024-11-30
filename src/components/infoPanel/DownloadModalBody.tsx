@@ -40,7 +40,7 @@ class DownloadModalBody extends Component<
   }
 
   public componentWillReceiveProps = (
-    nextProps: IDownloadModalBodyProps
+    nextProps: IDownloadModalBodyProps,
   ): void => {
     if (nextProps.errors) {
       this.setState({
@@ -48,7 +48,7 @@ class DownloadModalBody extends Component<
         loading: false,
       });
     }
-  };
+  }
 
   // public getData = (): Array<Partial<IObsValue>> => {
   //     const data: IHistoryNew = this.props.infoPage.history;

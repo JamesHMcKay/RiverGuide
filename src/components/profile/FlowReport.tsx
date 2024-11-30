@@ -62,7 +62,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
     super(props);
 
     const gauge: IGauge | undefined = this.props.gauges.filter(
-      (gauge: IGauge): boolean => gauge.id === this.props.selectedGuide.gauge_id
+      (gauge: IGauge): boolean => gauge.id === this.props.selectedGuide.gauge_id,
     )[0];
     const type: keyof IObsValue = gauge ? gauge.observables[0].type : "flow";
     this.state = {
@@ -78,54 +78,54 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
   }
 
   public computeMean = (values: number[]): number =>
-    values.reduce((a: number, b: number): number => a + b) / values.length;
+    values.reduce((a: number, b: number): number => a + b) / values.length
 
   public computeSum = (values: number[]): number =>
-    values.reduce((a: number, b: number): number => a + b);
+    values.reduce((a: number, b: number): number => a + b)
 
   public historyToNumber = (item: IObservation): number => {
     const dateParsed: Date = new Date(item.observation_time);
     return dateParsed.getTime();
-  };
+  }
 
   public filterHistory = (
     item: IObservation,
     lower: number,
-    upper: number
+    upper: number,
   ): boolean => {
     const time: number = this.historyToNumber(item);
     return time <= upper && time >= lower;
-  };
+  }
 
   public roundObsValues = (
-    values: Partial<IObservation>
+    values: Partial<IObservation>,
   ): Partial<IObservation> => {
     if (values.observed_value) {
       values.observed_value = Math.round(values.observed_value * 10) / 10;
     }
     return values;
-  };
+  }
 
   public getNearestFlow = (
     history: IObservation[],
-    time: number
+    time: number,
   ): IObservation => {
     const historyTimes: number[] = history.map((item: IObservation) =>
-      Math.abs(this.historyToNumber(item) - time)
+      Math.abs(this.historyToNumber(item) - time),
     );
     const minDifferance: number = Math.min(...historyTimes);
     const cloestPoint: number = historyTimes.indexOf(minDifferance);
     this.setState({ flowTimeDiff: minDifferance });
     return history[cloestPoint];
-  };
+  }
 
   public getAverageFlowForDay = (
-    history: IObservation[]
+    history: IObservation[],
   ): Partial<IObservation> | null => {
     const upper: number = this.props.end_date.getTime();
     const lower: number = this.props.start_date.getTime();
     const filteredHistory: IObservation[] = history.filter(
-      (item: IObservation) => this.filterHistory(item, lower, upper)
+      (item: IObservation) => this.filterHistory(item, lower, upper),
     );
 
     if (
@@ -144,12 +144,12 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
       const output: Partial<IObservation> = { ...filteredHistory[0] };
       const gauge: IGauge = this.state.gauge;
       const types: string[] = gauge.observables.map(
-        (item: IObservable) => item.type
+        (item: IObservable) => item.type,
       );
       for (const type of types) {
         const key: keyof IObsValue = type as keyof IObsValue;
         const result: number[] = filteredHistory.map(
-          (reading: IObservation): number => reading.observed_value || 0
+          (reading: IObservation): number => reading.observed_value || 0,
         );
         const flows: number[] = result;
         if (key === "rainfall") {
@@ -165,7 +165,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
       return output;
     }
     return null;
-  };
+  }
 
   public componentDidUpdate(prevProps: IFlowReportProps): void {
     const selectedGuide: string | undefined = this.props.selectedGuide.gauge_id;
@@ -183,7 +183,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
     const newEndDate: boolean = prevProps.end_date !== this.props.end_date;
     if (shouldUpdate && !!selectedGuide) {
       const gauge: IGauge = this.props.gauges.filter(
-        (item: IGauge): boolean => item.id === selectedGuide
+        (item: IGauge): boolean => item.id === selectedGuide,
       )[0];
       this.props.getGaugeHistory(selectedGuide);
       this.setState({
@@ -221,7 +221,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         {"Stage height"}
       </MenuItem>,
     ];
-  };
+  }
 
   public updateFlow = (): void => {
     const flow: Partial<IObservation> = { observed_value: 0 };
@@ -231,7 +231,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
       this.props.gaugeHistoryFromInfoPage.flow.length > 0
     ) {
       const compFlow: Partial<IObservation> | null = this.getAverageFlowForDay(
-        this.props.gaugeHistoryFromInfoPage.flow
+        this.props.gaugeHistoryFromInfoPage.flow,
       );
       this.props.handleChange(compFlow ? compFlow : flow);
       this.setState({ manualySet: !compFlow });
@@ -240,22 +240,22 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
       this.props.gaugeHistory.gaugeHistory.flow.length > 0
     ) {
       const compFlow: Partial<IObservation> | null = this.getAverageFlowForDay(
-        this.props.gaugeHistory.gaugeHistory.flow
+        this.props.gaugeHistory.gaugeHistory.flow,
       );
       this.props.handleChange(compFlow ? compFlow : flow);
       this.setState({ manualySet: !compFlow });
     }
-  };
+  }
 
   public displayFlow = (): string | undefined => {
     const result: number | undefined = this.props.observables[this.state.type];
     return result || result === 0 ? result.toString() : undefined;
-  };
+  }
 
   public displayFlowNumber = (): number | undefined => {
     const result: number | undefined = this.props.observables[this.state.type];
     return result;
-  };
+  }
 
   public handleChange = (event: any): void => {
     this.setState({
@@ -263,20 +263,20 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
     });
     const observables: Partial<IObsValue> = this.props.observables;
     observables[this.state.type as keyof IObsValue] = parseFloat(
-      event.target.value
+      event.target.value,
     );
     this.props.handleChange({ ...observables });
-  };
+  }
 
   public handleTypeChange = (event: any): void => {
     this.setState({
       type: event.target.value,
     });
-  };
+  }
 
   public isFlowComputed = (): boolean => {
     return !this.state.manualySet;
-  };
+  }
 
   public warningText = (): JSX.Element => {
     if (this.state.gauge && this.isFlowComputed()) {
@@ -304,7 +304,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
       return <div>{"No automatic calculations available for this date"}</div>;
     }
     return <div></div>;
-  };
+  }
 
   public timeWarningText = (): JSX.Element | null => {
     if (this.state.flowTimeDiff > 8.64e7 && !this.state.manualySet) {
@@ -317,7 +317,7 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
       );
     }
     return null;
-  };
+  }
 
   public getUnit = (): string => {
     let unit: string = "";
@@ -327,14 +327,14 @@ class FlowReport extends Component<IFlowReportProps, IFlowReportState> {
         this.state.gauge.observables;
       if (observables) {
         const selObs: IObservable[] = observables.filter(
-          (item: IObservable) => item.type === type
+          (item: IObservable) => item.type === type,
         );
         unit = selObs[0].units;
       }
       return unitParser(unit);
     }
     return dataTypeToUnit(type);
-  };
+  }
 
   public render(): JSX.Element {
     return (
