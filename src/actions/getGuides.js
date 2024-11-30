@@ -207,27 +207,17 @@ export const openInfoPage = guide => dispatch => {
     if (guide.gauge_id) {
         const request = {
             action: "get_flows",
-            id: [guide.gauge_id],
+            id: guide.gauge_id,
             crossDomain: true,
         }
         axios
-            .post(riverServiceUrl, request)
+            .post(riverServiceUrl + "observations/", request)
             .then(res => {
-                let data = res.data.flows;
+                let data = res.data;
                 if (data) {
-                    let result = data.map(item => (
-                        {
-                            time: item.time,
-                            values: {
-                                flow: item.flow,
-                                stage_height: item.stage_height,
-                                temperature: item.temperature,
-                                rainfall: item.rainfall,
-                            }
-                        }));
                     dispatch({
                         type: ADD_HISTORIC_FLOW,
-                        payload: result.reverse(),
+                        payload: data
                     });
                 }
             });
@@ -294,27 +284,17 @@ export const openDraftInfoPage = guide => dispatch => {
     if (guide.gauge_id) {
         const request = {
             action: "get_flows",
-            id: [guide.gauge_id],
+            id: guide.gauge_id,
             crossDomain: true,
         }
         axios
-            .post(riverServiceUrl, request)
+            .post(riverServiceUrl + "observations/", request)
             .then(res => {
-                let data = res.data.flows;
+                let data = res.data;
                 if (data) {
-                    let result = data.map(item => (
-                        {
-                            time: item.time,
-                            values: {
-                                flow: item.flow,
-                                stage_height: item.stage_height,
-                                temperature: item.temperature,
-                                rainfall: item.rainfall,
-                            }
-                        }));
                     dispatch({
                         type: ADD_HISTORIC_FLOW,
-                        payload: result.reverse(),
+                        payload: data
                     });
                 }
             });

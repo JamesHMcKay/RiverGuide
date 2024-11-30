@@ -3,252 +3,265 @@ import { IWeather } from "../components/infoPanel/WeatherStore";
 import { IKeyFactsChar, IKeyFactsNum } from "./keyFacts";
 
 export interface ILatLon {
-    lat: number;
-    lon?: number;
-    lng?: number;
+  lat: number;
+  lon?: number;
+  lng?: number;
 }
 
 export interface IMapBounds {
-    _ne: ILatLon;
-    _sw: ILatLon;
+  _ne: ILatLon;
+  _sw: ILatLon;
 }
 
 export interface IMarker {
-    name: string;
-    lat: number;
-    lng: number;
-    id: string;
-    description: string;
-    category: string;
-    icon?: JSX.Element;
+  name: string;
+  lat: number;
+  lng: number;
+  id: string;
+  description: string;
+  category: string;
+  icon?: JSX.Element;
 }
 
 export interface IGradeRange {
-    from: string;
-    to: string;
+  from: string;
+  to: string;
 }
 
 export interface IFlowLevel {
-    currentFlow: string;
-    currentLevel: string;
+  currentFlow: string;
+  currentLevel: string;
 }
 
 export interface IObsValue {
-    stage_height: number;
-    flow: number;
-    temperature: number;
-    rainfall: number;
+  stage_height: number;
+  flow: number;
+  temperature: number;
+  rainfall: number;
 }
 
 export interface IHistory {
-    time: string;
-    values: Partial<IObsValue>;
+  time: string;
+  values: Partial<IObsValue>;
+}
+
+export interface IObservation {
+  measure_id: string;
+  observation_time: string;
+  observed_value: number;
+}
+
+export interface IHistoryNew {
+  flow: IObservation[];
+  stage_height: IObservation[];
+  temperature: IObservation[];
+  rainfall: IObservation[];
 }
 
 export interface IObservable {
-    latest_value: number;
-    type: keyof IObsValue;
-    units: string;
+  latest_value: number;
+  type: keyof IObsValue;
+  units: string;
 }
 
 export interface IListEntry {
-    id: string;
-    display_name: string;
-    river_name?: string;
-    region: string;
-    gauge_id?: string;
-    position: ILatLon;
-    observables?: IObservable[];
-    latest_flow?: number;
-    activity: string;
-    status?: string;
+  id: string;
+  display_name: string;
+  river_name?: string;
+  region: string;
+  gauge_id?: string;
+  position: ILatLon;
+  observables?: IObservable[];
+  latest_flow?: number;
+  activity: string;
+  status?: string;
 }
 
 export interface IKeyFactsNumItem {
-    value: number | number[];
-    unit: string;
+  value: number | number[];
+  unit: string;
 }
 
 export interface IKeyFactProps<T> {
-    key: keyof T;
-    name: string;
-    icon: JSX.Element;
-    activity: string;
+  key: keyof T;
+  name: string;
+  icon: JSX.Element;
+  activity: string;
 }
 
 export interface IItemDetails {
-    id: string;
-    description: string;
-    entryDetails: string;
-    exitDetails: string;
-    markerList: IMarker[];
-    key_facts_num: Partial<IKeyFactsNum>;
-    key_facts_char: Partial<IKeyFactsChar>;
-    position: ILatLon;
-    attribution: string;
-    directions: string;
-    draftDetails?: IGuideDraftDetails;
+  id: string;
+  description: string;
+  entryDetails: string;
+  exitDetails: string;
+  markerList: IMarker[];
+  key_facts_num: Partial<IKeyFactsNum>;
+  key_facts_char: Partial<IKeyFactsChar>;
+  position: ILatLon;
+  attribution: string;
+  directions: string;
+  draftDetails?: IGuideDraftDetails;
 }
 
 export interface IGauge extends IListEntry {
-    observables: IObservable[];
-    source: string;
-    lastUpdated: string;
+  observables: IObservable[];
+  source: string;
+  lastUpdated: string;
 }
 
 export interface IGaugeHistory {
-    gaugeHistory: IHistory[];
+  gaugeHistory: IHistoryNew;
 }
 
 export interface IInfoPage {
-    selectedGuide: IListEntry;
-    infoSelected: boolean;
-    history: IHistory[];
-    selectedHistory: IHistory[];
-    itemDetails: IItemDetails;
-    logs?: ILogComplete[];
+  selectedGuide: IListEntry;
+  infoSelected: boolean;
+  history: IHistoryNew;
+  selectedHistory: IHistoryNew;
+  itemDetails: IItemDetails;
+  logs?: ILogComplete[];
 }
 
 export interface IFilter {
-    searchString: string;
-    activity: string;
+  searchString: string;
+  activity: string;
 }
 
 export interface ILoginDetails {
-    identifier: string;
-    password: string;
+  identifier: string;
+  password: string;
 }
 
 export interface IRegisterData {
-    name: string;
-    email: string;
-    password: string;
-    password2: string;
+  name: string;
+  email: string;
+  password: string;
+  password2: string;
 }
 
 export interface IUserData extends ILoginDetails {
-    newPassword: string;
-    newPassword2: string;
+  newPassword: string;
+  newPassword2: string;
 }
 
 export interface IOpenLog {
-    _id: string;
+  _id: string;
 }
 
 export interface IUserDetails {
-    id: string;
-    user_favourites: string[];
-    user_id: string;
+  id: string;
+  user_favourites: string[];
+  user_id: string;
 }
 
 export interface IUser {
-    email: string;
-    username: string;
-    createdAt: string;
-    id: string;
-    provider: string;
-    user_favourites: string[];
-    role: string;
+  email: string;
+  username: string;
+  createdAt: string;
+  id: string;
+  provider: string;
+  user_favourites: string[];
+  role: string;
 }
 
 export interface IAuth {
-    isAuthenticated: boolean;
-    user: IUser;
+  isAuthenticated: boolean;
+  user: IUser;
 }
 
 export interface ILogComplete extends ILogListItem, ILogEntry {}
 
 export interface ILogListItem extends ILogBase {
-    guide_name: string;
-    flow: string;
-    stage_height: string;
-    river_name: string;
+  guide_name: string;
+  flow: string;
+  stage_height: string;
+  river_name: string;
 }
 
 export interface IResetPasswordDetails {
-    code: string;
-    password: string;
-    confirmPassword: string;
+  code: string;
+  password: string;
+  confirmPassword: string;
 }
 
 export interface ILogEntry extends ILogBase {
-    user_id: string;
-    observables?: IObsValue;
-    weather?: IWeather;
-    public: boolean;
-    description: string;
+  user_id: string;
+  observables?: IObsValue;
+  weather?: IWeather;
+  public: boolean;
+  description: string;
 }
 
 export interface ILogBase {
-    username: string;
-    log_id: string;
-    id: string;
-    guide_id: string;
-    start_date_time: string;
-    end_date_time: string;
-    participants: number;
-    rating: number;
+  username: string;
+  log_id: string;
+  id: string;
+  guide_id: string;
+  start_date_time: string;
+  end_date_time: string;
+  participants: number;
+  rating: number;
 }
 
 export interface IErrors {
-    message: string;
-    id?: string;
+  message: string;
+  id?: string;
 }
 
 export enum IThemeColor {
-    primary = "primary",
-    secondary = "secondary",
+  primary = "primary",
+  secondary = "secondary",
 }
 
 export interface ISensorFeatureRequest {
-    action: string;
+  action: string;
 }
 
 export interface IFeatureOfInterest {
-    id: string;
-    latest_flow: number;
-    name: string;
+  id: string;
+  latest_flow: number;
+  name: string;
 }
 
 export interface IRiverRegion {
-    river: string;
-    region: string;
+  river: string;
+  region: string;
 }
 
 export interface IExpansionPanels {
-    description: boolean;
-    keyFacts: boolean;
-    map: boolean;
-    logBook: boolean;
-    latestData: boolean;
-    flowHistory: boolean;
-    flowDetails: boolean;
-    notices: boolean;
+  description: boolean;
+  keyFacts: boolean;
+  map: boolean;
+  logBook: boolean;
+  latestData: boolean;
+  flowHistory: boolean;
+  flowDetails: boolean;
+  notices: boolean;
 }
 
 export interface IGuideDraftDetails {
-    userName: string;
-    userEmail: string;
-    userId: string;
-    status: string;
-    moderatorComments: string;
-    createdAt: string;
-    appId: string;
+  userName: string;
+  userEmail: string;
+  userId: string;
+  status: string;
+  moderatorComments: string;
+  createdAt: string;
+  appId: string;
 }
 
 export interface INotice extends INoticeSubmission {
-    id: string;
-    createdAt: string;
+  id: string;
+  createdAt: string;
 }
 
 export interface INoticeSubmission {
-    guideId: string;
-    description: string;
-    userName: string;
-    priority: string;
-    active: boolean;
-    status: string;
-    endDate?: string;
-    startDate?: string;
-    userId: string;
+  guideId: string;
+  description: string;
+  userName: string;
+  priority: string;
+  active: boolean;
+  status: string;
+  endDate?: string;
+  startDate?: string;
+  userId: string;
 }
