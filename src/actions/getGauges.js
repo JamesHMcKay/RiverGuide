@@ -13,15 +13,10 @@ const riverServiceUrl = process.env.REACT_APP_RIVER_SERVICE_URL;
 const rapidsApiUrl = process.env.REACT_APP_RAPIDS_API_URL;
 
 export const makeGaugeRequest = (generateList, filters, mapBounds, cancelToken, guideId) => dispatch => {
-    const request = {
-        action: "get_features",
-        filters: ["flow", "rainfall", "stage_height"],
-        crossDomain: true,
-    }
     axios
-        .post(riverServiceUrl, request)
+        .get(riverServiceUrl + "features/gauges")
         .then(res => {
-            let data = res.data.features;
+            let data = res.data;
             let result = data.map(item => (
                 {
                     id: item.id,

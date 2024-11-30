@@ -13,6 +13,8 @@ import {
     SET_MAP_BOUNDS,
     GET_GAUGE_HISTORY,
     CLEAR_GAUGE_HISTORY,
+    GET_GAUGE_HISTORY_NEW,
+    CLEAR_GAUGE_HISTORY_NEW,
     SET_LOG_GUIDE_NAMES,
     SET_SELECTED_LOG_ID,
     GET_LOGS,
@@ -139,7 +141,7 @@ export const getGaugeHistory = gaugeId => dispatch => {
             crossDomain: true,
         }
         axios
-            .post(riverServiceUrl, request)
+            .post(riverServiceUrl + "observations/", request)
             .then(res => {
                 let data = res.data.flows;
                 if (data) {
@@ -163,6 +165,32 @@ export const getGaugeHistory = gaugeId => dispatch => {
     } else {
         dispatch({
             type: CLEAR_GAUGE_HISTORY
+        });
+    }
+}
+
+
+export const getGaugeHistoryNew = gaugeId => dispatch => {
+    if (gaugeId) {
+        const request = {
+            action: "get_flows",
+            id: gaugeId,
+            crossDomain: true,
+        }
+        axios
+            .post(riverServiceUrl + "/", request)
+            .then(res => {
+                let data = res.data;
+                if (data) {
+                    dispatch({
+                        type: GET_GAUGE_HISTORY_NEW,
+                        payload: data,
+                    });
+                }
+            });
+    } else {
+        dispatch({
+            type: CLEAR_GAUGE_HISTORY_NEW
         });
     }
 }
