@@ -39,7 +39,7 @@
     "@types/react-router-redux": "^5.0.18",
     "@types/supercluster": "^5.0.1",
     "@types/uuid": "^3.4.4",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "bootstrap": "^4.3.1",
     "dark-sky-api": "^0.6.32",
     "date-fns": "^2.0.0-alpha.27",
