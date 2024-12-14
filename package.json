@@ -47,7 +47,7 @@
     "draftjs-to-html": "^0.8.4",
     "font-awesome": "^4.7.0",
     "jwt-decode": "^2.2.0",
-    "marked": "^0.8.0",
+    "marked": "^4.0.10",
     "material-ui-next-pickers": "^0.0.21",
     "moment": "^2.22.2",
     "openweather-apis": "^3.3.5",
